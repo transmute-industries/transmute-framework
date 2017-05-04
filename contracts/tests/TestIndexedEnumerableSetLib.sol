@@ -1,8 +1,9 @@
 pragma solidity ^0.4.8;
 
-import './IndexedEnumerableSetLib.sol';
+import '../data-structures/IndexedEnumerableSetLib.sol';
+import '../zeppelin/lifecycle/Killable.sol';
 
-contract TestIndexedEnumerableSetLib {
+contract TestIndexedEnumerableSetLib is Killable {
   using IndexedEnumerableSetLib for IndexedEnumerableSetLib.IndexedEnumerableSet;
 
   IndexedEnumerableSetLib.IndexedEnumerableSet testSet;

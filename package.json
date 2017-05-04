@@ -24,8 +24,5 @@
   "bugs": {
     "url": "https://github.com/transmute-industries/transmute-framework/issues"
   },
-  "homepage": "https://github.com/transmute-industries/transmute-framework#readme",
-  "devDependencies": {
-    "web3": "^0.18.4"
-  }
+  "homepage": "https://github.com/transmute-industries/transmute-framework#readme"
 }
