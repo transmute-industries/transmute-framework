@@ -19,7 +19,10 @@
     "security",
     "transmute"
   ],
-  "author": "Eric Olszewski <eolszewski@gmail.com>",
+  "contributors": [
+    "Eric Olszewski <eolszewski@gmail.com>",
+    "Orie Steele <orie@or13.io>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/transmute-industries/transmute-framework/issues"
