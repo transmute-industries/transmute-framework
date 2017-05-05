@@ -29,3 +29,9 @@ node_modules
 # Remove some common IDE working directories
 .idea
 .vscode
+
+
+# Transmute Framework
+
+config.js
+service-account.json
