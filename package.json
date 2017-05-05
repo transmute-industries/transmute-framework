@@ -2,9 +2,9 @@
   "name": "transmute-framework",
   "version": "0.1.0",
   "description": "An ethereum smart contract framework.",
-  "main": "lib/library.js",
+  "main": "dist/TF.min.js",
   "scripts": {
-    "clean": "rm -rf docs build lib",
+    "clean": "rm -rf docs build dist",
     "build": "webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "mocha --compilers js:babel-core/register --colors ./src/*.spec.js",
@@ -13,7 +13,6 @@
     "test:all": "npm run test && npm run test-truffle",
     "lint": "eslint src",
     "testrpc": "pm2 start testrpc",
-    
     "esdoc": "esdoc"
   },
   "devDependencies": {
