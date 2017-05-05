@@ -1,16 +1,15 @@
-
 'use strict'
 
 import { assert } from 'chai'
 import TF from './TF'
 
-describe('TransmuteFramework', () => {
+describe('TF', () => {
 
   before(() => {
     // console.log(TF)
   })
 
-  describe('config', () => {
+  describe('.config', () => {
     it('has firebase config', () => {
       assert.isObject(TF.config.firebase)
     })

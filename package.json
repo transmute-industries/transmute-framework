@@ -5,12 +5,12 @@
   "main": "dist/TF.min.js",
   "scripts": {
     "clean": "rm -rf docs build dist",
-    "build": "webpack --env build",
+    "build": "npm run clean && webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
-    "test": "mocha --compilers js:babel-core/register --colors ./src/*.spec.js",
+    "test": "mocha --timeout 15000 --compilers js:babel-core/register --colors ./src/**/*.spec.js",
     "test-truffle": "truffle test",
-    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./src/*.spec.js",
-    "test:all": "npm run test && npm run test-truffle",
+    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./src/**/*.spec.js",
+    "test:all": "npm run test-truffle && npm run test",
     "lint": "eslint src",
     "testrpc": "pm2 start testrpc",
     "esdoc": "esdoc"
@@ -63,6 +63,7 @@
     "http-server": "^0.9.0",
     "jsdoc": "^3.4.0",
     "mocha": "^3.0.0",
+    "node-localstorage": "^1.3.0",
     "truffle": "^3.2.1"
   }
 }

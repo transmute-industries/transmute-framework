@@ -6,7 +6,9 @@
  */
 
 import * as firebase from 'firebase'
-import { fbConfig } from '../config.js'
+import { fbConfig } from './config.js'
+
+import EventStore from './EventStore/EventStore'
 
 /** Class representing the TransmuteFramework. */
 class TransmuteFramework {
@@ -15,6 +17,7 @@ class TransmuteFramework {
    * Create a TransmuteFramework.
    */
   constructor() {
+    this.EventStore = EventStore
     this.config = {
       firebase: fbConfig
     }
