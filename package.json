@@ -1,13 +1,21 @@
 {
-  "name": "webpack-library-starter",
-  "version": "0.3.0",
-  "description": "Produce universal library with webpack and es6",
+  "name": "transmute-framework",
+  "version": "0.1.0",
+  "description": "An ethereum smart contract framework.",
   "main": "lib/library.js",
   "scripts": {
     "build": "webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
     "test": "mocha --compilers js:babel-core/register --colors ./test/*.spec.js",
-    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js"
+    "test:watch": "mocha --compilers js:babel-core/register --colors -w ./test/*.spec.js",
+    "clean": "rm -rf docs build",
+    "docs-gen": "rm -rf docs; jsdoc --configure .jsdoc.json --verbose",
+    "docs-serve": "http-server docs",
+    "docs-debug": "rm -rf docs; jsdoc --configure .jsdoc.json --verbose; http-server docs;",
+    "jshint": "jshint src",
+    "jscs": "jscs src",
+    "lint": "npm run jshint && npm run jscs",
+    "testrpc": "pm2 start testrpc"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",
@@ -25,21 +33,28 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/krasimir/webpack-library-starter.git"
+    "url": "git+https://github.com/transmute-industries/transmute-framework.git"
   },
   "keywords": [
-    "webpack",
-    "es6",
-    "starter",
-    "library",
-    "universal",
-    "umd",
-    "commonjs"
+    "solidity",
+    "ethereum",
+    "smart",
+    "contracts",
+    "security",
+    "javascript",
+    "truffle",
+    "transmute"
   ],
-  "author": "Krasimir Tsonev",
+  "contributors": [
+    "Eric Olszewski <eolszewski@gmail.com>",
+    "Orie Steele <orie@or13.io>"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/krasimir/webpack-library-starter/issues"
+    "url": "https://github.com/transmute-industries/transmute-framework/issues"
   },
-  "homepage": "https://github.com/krasimir/webpack-library-starter"
+  "homepage": "https://github.com/transmute-industries/transmute-framework#readme",
+  "dependencies": {
+    "truffle": "^3.2.1"
+  }
 }
