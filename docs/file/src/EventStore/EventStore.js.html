@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/EventStore/EventStore.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/transmute-industries/transmute-framework" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomAddress">getRandomAddress</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-module">module</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fbConfig">fbConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-envs">envs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-web3">web3</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/EventStore/EventStore.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">&apos;use strict&apos;
+
+import contract from &apos;truffle-contract&apos;
+import { web3 } from &apos;../env&apos;
+import eventStoreArtifacts from &apos;../../build/contracts/EventStore.json&apos;
+
+var EventStore = contract(eventStoreArtifacts)
+EventStore.setProvider(web3.currentProvider)
+
+import { eventsFromTransaction } from &apos;./Transactions&apos;
+import { readModelGenerator } from &apos;./ReadModel&apos;
+
+import {
+    getItem,
+    setItem
+} from &apos;./Persistence&apos;
+
+/**
+ * this is object destructuring.
+ * @param {Object} param - this is object param.
+ * @param {number} param.foo - this is property param.
+ * @param {string} param.bar - this is property param.
+ */
+const readEvent = async (es, eventId) =&gt; {
+    return {
+        Id: eventId,
+        Type: await es.getType(eventId),
+        Created: (await es.getCreated(eventId)).toNumber(),
+        AddressValue: await es.getAddressValue(eventId),
+        UIntValue: (await es.getUIntValue(eventId)).toNumber(),
+        StringValue: await es.getStringValue(eventId)
+    }
+}
+
+const readEvents = async (es, eventId = 0) =&gt; {
+    let currentEvent = await es.eventCount()
+    let eventPromises = []
+    while (eventId &lt; currentEvent) {
+        eventPromises.push(await readEvent(es, eventId))
+        eventId++
+    }
+    return await Promise.all(eventPromises)
+}
+
+const writeEvent = async (es, event, fromAddress) =&gt; {
+    let tx = await es.emitEvent(event.Type, event.AddressValue, event.UIntValue, event.StringValue, {
+        from: fromAddress,
+        gas: 2000000
+    })
+    return eventsFromTransaction(tx)
+}
+
+const writeEvents = async (es, eventArray, fromAddress) =&gt; {
+    let eventPromises = eventArray
+        .map((event) =&gt; {
+            return es
+                .emitEvent(event.Type, event.AddressValue, event.UIntValue, event.StringValue, {
+                    from: fromAddress,
+                    gas: 2000000
+                })
+                .then((tx) =&gt; {
+                    return eventsFromTransaction(tx)
+                })
+        })
+    return await Promise.all(eventPromises)
+        .then((newEvents) =&gt; {
+            return newEvents
+        })
+}
+
+
+/**
+ * @param {TruffleContractInstance} es - a contract which is an Event Store
+ */
+const maybeSyncReadModel = async (es, readModel, reducer) =&gt; {
+    let eventCount = (await es.eventCount()).toNumber()
+    return getItem(readModel.Id)
+        .then(async (_readModel) =&gt; {
+            if (!_readModel) {
+                _readModel = readModel
+            }
+            if (_readModel.EventCount === eventCount) {
+                return false
+            }
+            let events = await readEvents(es, _readModel.EventCount || 0)
+            let updatedReadModel = readModelGenerator(_readModel, reducer, events)
+            return setItem(updatedReadModel.Id, updatedReadModel)
+        })
+}
+
+export default {
+    EventStore,
+    writeEvent,
+    writeEvents,
+    readEvent,
+    readEvents,
+    getItem,
+    setItem,
+    readModelGenerator,
+    maybeSyncReadModel
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.5.2)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
