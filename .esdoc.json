@@ -1,4 +1,7 @@
 {
     "source": "./src",
-    "destination": "./docs"
+    "destination": "./docs",
+    "plugins": [
+    {"name": "esdoc-undocumented-identifier-plugin", "option": {"enable": true}}
+  ]
 }

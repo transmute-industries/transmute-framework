@@ -1,37 +1,27 @@
-'use strict'
+import {
+  EventStore,
+  writeEvent,
+  writeEvents,
+  readEvent,
+  readEvents,
+  getItem,
+  setItem,
+  readModelGenerator,
+  maybeSyncReadModel
+} from './EventStore/EventStore'
 
-/**
- * Ethereum Smart Contract Framework
- * @module TransmuteFramework
- */
 
-import * as firebase from 'firebase'
-import { fbConfig } from './config.js'
 
-import EventStore from './EventStore/EventStore'
-
-/** Class representing the TransmuteFramework. */
-class TransmuteFramework {
-
-  /**
-   * Create a TransmuteFramework.
-   */
-  constructor() {
-    this.EventStore = EventStore
-    this.config = {
-      firebase: fbConfig
-    }
-    this.initializeFirebase()
-  }
-
-  /**
-  * Connect to Firebase
-  * {@link https://firebase.google.com/docs/database/server/start Firebase Server API}.
-  */
-  initializeFirebase() {
-    firebase.initializeApp(this.config.firebase)
-  }
-
+export const module = {
+  EventStore,
+  writeEvent,
+  writeEvents,
+  readEvent,
+  readEvents,
+  getItem,
+  setItem,
+  readModelGenerator,
+  maybeSyncReadModel
 }
 
-export default new TransmuteFramework()
+

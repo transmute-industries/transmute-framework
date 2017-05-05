@@ -15,6 +15,12 @@ import {
     setItem
 } from './Persistence'
 
+/**
+ * this is object destructuring.
+ * @param {Object} param - this is object param.
+ * @param {number} param.foo - this is property param.
+ * @param {string} param.bar - this is property param.
+ */
 const readEvent = async (es, eventId) => {
     return {
         Id: eventId,
@@ -63,6 +69,9 @@ const writeEvents = async (es, eventArray, fromAddress) => {
 }
 
 
+/**
+ * @param {TruffleContractInstance} es - a contract which is an Event Store
+ */
 const maybeSyncReadModel = async (es, readModel, reducer) => {
     let eventCount = (await es.eventCount()).toNumber()
     return getItem(readModel.Id)
