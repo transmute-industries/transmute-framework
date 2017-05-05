@@ -1,0 +1,22 @@
+{
+  "name": "TransmuteDocs",
+  "version": "1.1.1",
+  "description": "A Firebase and IPFS based JSDocs theme built from the awesome theme TransmuteDocs",
+  "main": "publish.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OR13/TransmuteDocs.git"
+  },
+  "author": "Orie Steele <orie@TransmuteFramework.com>",
+  "licenses": [{
+    "type": "Apache-2.0",
+    "url": "http://www.apache.org/licenses/LICENSE-2.0"
+  }],
+  "bugs": {
+    "url": "https://github.com/OR13/TransmuteDocs/issues"
+  },
+  "homepage": "https://github.com/OR13/TransmuteDocs"
+}
