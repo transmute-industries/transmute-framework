@@ -2,7 +2,6 @@
 
 import { web3 } from '../env'
 import { assert } from 'chai'
-
 import { EventStore } from './EventStore'
 import { Persistence } from './Persistence'
 import { ReadModel } from './ReadModel'
@@ -16,14 +15,23 @@ import {
   expectedProjectState
 } from './Mocks/data'
 
-let es, startEventCount, maybeUpdatedReadModel
+let es, startEventCount, maybeUpdatedReadModel, initialTestProjectState, expectedTestProjectState
 
 describe('EventStore', () => {
 
   before(async () => {
-    // console.log(TF)
     es = await EventStore.ES.deployed()
     startEventCount = (await es.eventCount()).toNumber()
+    initialTestProjectState = Object.assign(initialProjectState, {
+      ReadModelStoreKey: 'ProjectSummary' + '@' + es.address,
+      ReadModelType: 'ProjectSummary',
+      ContractAddress: es.address
+    })
+    expectedTestProjectState = Object.assign(expectedProjectState, {
+      ReadModelStoreKey: 'ProjectSummary' + '@' + es.address,
+      ReadModelType: 'ProjectSummary',
+      ContractAddress: es.address
+    })
   })
 
   describe('.writeEvent', () => {
@@ -51,7 +59,6 @@ describe('EventStore', () => {
     it('should return the events written to the event store', async () => {
       let transmuteEvents = await EventStore.writeEvents(es, transmuteTestEventStream, web3.eth.accounts[0])
       assert.equal(transmuteEvents.length, 3)
-      // console.log(transmuteEvents)
     })
   })
 
@@ -59,16 +66,15 @@ describe('EventStore', () => {
     it('should return the events in the contract starting with the index', async () => {
       let transmuteEvents = await EventStore.readEvents(es, startEventCount)
       assert.equal(transmuteEvents.length, 4)
-      // console.log(transmuteEvents)
     })
   })
 
   describe('.setItem', () => {
     it('should return the value when passed a valid key, after saving the value', async () => {
-      Persistence.setItem(initialProjectState.ReadModelStoreKey, initialProjectState)
+      Persistence.setItem(initialTestProjectState.ReadModelStoreKey, initialTestProjectState)
         .then((readModel) => {
-          assert.equal(initialProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
-          assert.equal(initialProjectState.Name, readModel.Name)
+          assert.equal(initialTestProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
+          assert.equal(initialTestProjectState.Name, readModel.Name)
         })
     })
   })
@@ -82,36 +88,36 @@ describe('EventStore', () => {
     })
 
     it('should return a readModel when passed valid readModelKey', async () => {
-      Persistence.getItem(initialProjectState.ReadModelStoreKey)
+      Persistence.getItem(initialTestProjectState.ReadModelStoreKey)
         .then((readModel) => {
-          assert.equal(initialProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
-          assert.equal(initialProjectState.Name, readModel.Name)
+          assert.equal(initialTestProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
+          assert.equal(initialTestProjectState.Name, readModel.Name)
         })
     })
   })
 
   describe('.readModelGenerator', () => {
     it('should return the the initial reducer state when no events exist', async () => {
-      let projectModel = ReadModel.readModelGenerator(initialProjectState, projectReducer, [])
-      assert.equal(projectModel.ReadModelStoreKey, initialProjectState.ReadModelStoreKey)
-      assert.equal(projectModel.EventCount, initialProjectState.EventCount)
-      assert.equal(projectModel.Users, initialProjectState.Users)
-      assert.equal(projectModel.Milestones, initialProjectState.Milestones)
+      let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, [])
+      assert.equal(projectModel.ReadModelStoreKey, initialTestProjectState.ReadModelStoreKey)
+      assert.equal(projectModel.EventCount, initialTestProjectState.EventCount)
+      assert.equal(projectModel.Users, initialTestProjectState.Users)
+      assert.equal(projectModel.Milestones, initialTestProjectState.Milestones)
     })
 
     it('should return the updated read model when passed events', async () => {
       let projectHistory = await EventStore.readEvents(es, startEventCount)
-      let projectModel = ReadModel.readModelGenerator(initialProjectState, projectReducer, projectHistory)
-      assert.equal(projectModel.ReadModelStoreKey, expectedProjectState.ReadModelStoreKey)
-      assert.equal(projectModel.Name, expectedProjectState.Name)
-      assert.isArray(projectModel.Users, expectedProjectState.Users)
-      assert.isArray(projectModel.Milestones, expectedProjectState.Milestones)
+      let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, projectHistory)
+      assert.equal(projectModel.ReadModelStoreKey, expectedTestProjectState.ReadModelStoreKey)
+      assert.equal(projectModel.Name, expectedTestProjectState.Name)
+      assert.isArray(projectModel.Users, expectedTestProjectState.Users)
+      assert.isArray(projectModel.Milestones, expectedTestProjectState.Milestones)
     })
   })
 
   describe('maybeSyncReadModel', () => {
     it('should retrieve a read model and sync any missing events from the contract', async () => {
-      let _maybeUpdatedReadModel = await ReadModel.maybeSyncReadModel(es, initialProjectState, projectReducer)
+      let _maybeUpdatedReadModel = await ReadModel.maybeSyncReadModel(es, initialTestProjectState, projectReducer)
       maybeUpdatedReadModel = _maybeUpdatedReadModel
     })
 
@@ -121,5 +127,4 @@ describe('EventStore', () => {
       assert.equal(sameReadModel.EventCount, maybeUpdatedReadModel.EventCount)
     })
   })
-
 })

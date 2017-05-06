@@ -1,8 +1,8 @@
 import { Constants } from './constants'
 
 export const initialProjectState = {
-  ReadModelStoreKey: '0', // CONTRACT_ADDRESS:READ_MODEL_NAME
-  ReadModelType: 'ProjectSummary', // READ_MODEL_NAME
+  ReadModelStoreKey: '', // CONTRACT_ADDRESS:READ_MODEL_NAME
+  ReadModelType: '', // READ_MODEL_NAME
   ContractAddress: '', // CONTRACT_ADDRESS
   EventCount: null,
   Name: '',
