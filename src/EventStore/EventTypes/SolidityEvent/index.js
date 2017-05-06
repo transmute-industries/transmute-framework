@@ -1,6 +1,4 @@
 
-export const UNIVERSAL_EVENT = 'UNIVERSAL_EVENT'
-
 
 //   struct SolidityEventProperty {
 //     string Type;
@@ -20,6 +18,9 @@ export const UNIVERSAL_EVENT = 'UNIVERSAL_EVENT'
 //   uint public solidityEventCount;
 //   mapping (uint => SolidityEvent) solidityEvents;
 
+
+export const SOLIDITY_EVENT = 'SOLIDITY_EVENT'
+export const SOLIDITY_EVENT_PROPERTY = 'SOLIDITY_EVENT_PROPERTY'
 
 /**
  * @typedef {Object} SolidityEventPropertySchema

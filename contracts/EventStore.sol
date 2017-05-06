@@ -103,6 +103,29 @@ contract EventStore is Killable {
     return solidityEventCount;
   }
 
+
+  function readSolidityEventType(uint _eventIndex) public
+    returns (string)
+  {
+    return solidityEvents[_eventIndex].Type;
+  }
+  function readSolidityEventCreated(uint _eventIndex) public
+    returns (uint)
+  {
+    return solidityEvents[_eventIndex].Created;
+  }
+  function readSolidityEventPropertyCount(uint _eventIndex) public
+    returns (uint)
+  {
+    return solidityEvents[_eventIndex].PropertyCount;
+  }
+  function readSolidityEventIntegrityHash(uint _eventIndex) public
+    returns (string)
+  {
+    return solidityEvents[_eventIndex].IntegrityHash;
+  }
+
+
   function readSolidityEventPropertyName(uint _eventIndex, uint _eventPropertyIndex) public
     returns (string)
   {
@@ -135,26 +158,7 @@ contract EventStore is Killable {
 
 
 
-  function readSolidityEventType(uint _eventIndex) public
-    returns (string)
-  {
-    return solidityEvents[_eventIndex].Type;
-  }
-  function readSolidityEventCreated(uint _eventIndex) public
-    returns (uint)
-  {
-    return solidityEvents[_eventIndex].Created;
-  }
-  function readSolidityEventPropertyCount(uint _eventIndex) public
-    returns (uint)
-  {
-    return solidityEvents[_eventIndex].PropertyCount;
-  }
-  function readSolidityEventIntegrityHash(uint _eventIndex) public
-    returns (string)
-  {
-    return solidityEvents[_eventIndex].IntegrityHash;
-  }
+  
     
 
 

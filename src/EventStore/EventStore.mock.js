@@ -16,7 +16,6 @@ export const universalEvent = {
     IntegrityHash: '0x6046d0c4c178fddDc374A2e64be81BCa88fAd689'
 }
 
-
 export const universalEvents = [
     {
         Id: 1,
