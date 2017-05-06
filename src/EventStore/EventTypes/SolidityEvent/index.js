@@ -42,6 +42,7 @@ export const SolidityEventSchema = {
     Id: 'BigNumber',
     Type: 'String',
     Created: 'BigNumber',
+    IntegrityHash: 'String',
 
     PropertyCount: 'String'
 }
