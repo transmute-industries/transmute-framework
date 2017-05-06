@@ -4,17 +4,12 @@ import { web3 } from '../env'
 import { assert } from 'chai'
 
 import {
-  EventStore,
-  writeEvent,
-  writeEvents,
-  readEvent,
-  readEvents,
-  maybeSyncReadModel
+  EventStore
 } from './EventStore'
 
 import {Persistence } from './Persistence'
 
-import {readModelGenerator } from './ReadModel'
+import { ReadModel } from './ReadModel'
 
 import {
   event,
@@ -30,14 +25,14 @@ describe('EventStore', () => {
 
   before(async () => {
     // console.log(TF)
-    es = await EventStore.deployed()
+    es = await EventStore.ES.deployed()
     startEventCount = (await es.eventCount()).toNumber()
 
   })
 
   describe('.writeEvent', () => {
     it('should return the event at the index', async () => {
-      let events = await writeEvent(es, event, web3.eth.accounts[0])
+      let events = await EventStore.writeEvent(es, event, web3.eth.accounts[0])
       assert.equal(events.length, 1)
       assert.equal(events[0].Type, event.Type)
       assert.equal(events[0].AddressValue, event.AddressValue)
@@ -48,7 +43,7 @@ describe('EventStore', () => {
 
   describe('.readEvent', () => {
     it('should return the event at the index', async () => {
-      let event = await readEvent(es, 0)
+      let event = await EventStore.readEvent(es, 0)
       assert.equal(event.Type, event.Type)
       assert.equal(event.AddressValue, event.AddressValue)
       assert.equal(event.UIntValue, event.UIntValue)
@@ -58,7 +53,7 @@ describe('EventStore', () => {
 
   describe('.writeEvents', () => {
     it('should return the events written to the event store', async () => {
-      let events = await writeEvents(es, eventStream, web3.eth.accounts[0])
+      let events = await EventStore.writeEvents(es, eventStream, web3.eth.accounts[0])
       assert.equal(events.length, 3)
       // console.log(events)
     })
@@ -66,7 +61,7 @@ describe('EventStore', () => {
 
   describe('.readEvents', () => {
     it('should return the events in the contract starting with the index', async () => {
-      let events = await readEvents(es, startEventCount)
+      let events = await EventStore.readEvents(es, startEventCount)
       assert.equal(events.length, 4)
       // console.log(events)
     })
@@ -101,7 +96,7 @@ describe('EventStore', () => {
 
   describe('.readModelGenerator', () => {
     it('should return the the initial reducer state when no events exist', async () => {
-      let projectModel = readModelGenerator(initialProjectState, projectReducer, [])
+      let projectModel = ReadModel.readModelGenerator(initialProjectState, projectReducer, [])
       assert.equal(projectModel.Id, initialProjectState.Id)
       assert.equal(projectModel.EventCount, initialProjectState.EventCount)
       assert.equal(projectModel.Users, initialProjectState.Users)
@@ -109,8 +104,8 @@ describe('EventStore', () => {
     })
 
     it('should return the updated read model when passed events', async () => {
-      let projectHistory = await readEvents(es, startEventCount)
-      let projectModel = readModelGenerator(initialProjectState, projectReducer, projectHistory)
+      let projectHistory = await EventStore.readEvents(es, startEventCount)
+      let projectModel = ReadModel.readModelGenerator(initialProjectState, projectReducer, projectHistory)
       assert.equal(projectModel.Id, expectedProjectState.Id)
       assert.equal(projectModel.Name, expectedProjectState.Name)
       assert.isArray(projectModel.Users, expectedProjectState.Users)
@@ -120,12 +115,12 @@ describe('EventStore', () => {
 
   describe('maybeSyncReadModel', () => {
     it('should retrieve a read model and sync any missing events from the contract', async () => {
-      let _maybeUpdatedReadModel = await maybeSyncReadModel(es, initialProjectState, projectReducer)
+      let _maybeUpdatedReadModel = await ReadModel.maybeSyncReadModel(es, initialProjectState, projectReducer)
       maybeUpdatedReadModel = _maybeUpdatedReadModel
     })
 
     it('should return quickly if no new events exist', async () => {
-      let sameReadModel = await maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
+      let sameReadModel = await ReadModel.maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
       assert.equal(sameReadModel.Name, maybeUpdatedReadModel.Name)
       assert.equal(sameReadModel.EventCount, maybeUpdatedReadModel.EventCount)
     })

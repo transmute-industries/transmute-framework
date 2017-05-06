@@ -18,3 +18,7 @@ export const EVENT_SCHEMAS = {
     }
 }
 
+export const EvenTypes = {
+    NEW_EVENT,
+    EVENT_SCHEMAS
+}

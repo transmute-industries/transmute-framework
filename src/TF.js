@@ -1,25 +1,19 @@
 import {
-  EventStore,
-  writeEvent,
-  writeEvents,
-  readEvent,
-  readEvents,
-  getItem,
-  setItem,
-  readModelGenerator,
-  maybeSyncReadModel
+  EventStore
 } from './EventStore/EventStore'
 
-export const module = {
+import {
+  Persistence
+} from './EventStore/Persistence'
+
+import {
+  ReadModel
+} from './EventStore/Persistence'
+
+export const TF = {
   EventStore,
-  writeEvent,
-  writeEvents,
-  readEvent,
-  readEvents,
-  getItem,
-  setItem,
-  readModelGenerator,
-  maybeSyncReadModel
+  Persistence,
+  ReadModel
 }
 
 
