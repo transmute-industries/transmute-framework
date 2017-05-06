@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/env.js | API Document</title>
+  <base data-ice="baseUrl" href="../">
+  <title data-ice="title">Typedef | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -63,39 +63,174 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/env.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+<div class="content" data-ice="content"><h1 data-ice="title">Typedef</h1>
+<div data-ice="summaries"><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Static Public Summary</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span><span data-ice="signature">: <span>Persistence</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div data-ice="details"><h2 data-ice="title">Static Public </h2>
 
-import Web3 from &apos;web3&apos;
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-typedef-EVENT_SCHEMAS">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">EVENT_SCHEMAS</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/EventStore/EventTypes/index.js.html#lineNumber9">source</a></span></span>
+    </span>
+  </h3>
 
-import { without } from &apos;lodash&apos;
+  
+  
+  
+  
 
-export const envs = [&apos;testrpc&apos;, &apos;parity&apos;, &apos;infura&apos;, &apos;metamask&apos;]
+  
 
-let currentEnv = &apos;testrpc&apos;
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Properties:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" data-depth="0">a</td>
+      <td data-ice="type"><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Solidity Event Schema</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
 
-let _web3, _provider
-switch (currentEnv) {
-  case &apos;testrpc&apos;: _provider = &apos;http://localhost:8545&apos;; break
-  case &apos;parity&apos;: _provider = &apos;http://localhost:8545&apos;; break
-  case &apos;infura&apos;: _provider = &apos;https://ropsten.infura.io&apos;; break
-}
+  
 
-switch (currentEnv) {
-  case &apos;testrpc&apos;: _web3 = new Web3(new Web3.providers.HttpProvider(_provider)); break
-  case &apos;parity&apos;: _web3 = new Web3(new Web3.providers.HttpProvider(_provider)); break
-  case &apos;metamask&apos;: _web3 = window.web3; break
-}
+  
 
-export const getRandomAddress = (addresses, exclude = []) =&gt; {
-  let possible = without(addresses, exclude)
-  let addr = possible[Math.floor(Math.random() * possible.length)]
-  return addr
-}
+  
 
-export const web3 = _web3
-</code></pre>
+  
 
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-typedef-EVENT_SCHEMAS">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">EVENT_SCHEMAS</span><span data-ice="signature">: <span>Persistence</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/EventStore/Persistence/index.js.html#lineNumber13">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
 </div>
 
 <footer class="footer">

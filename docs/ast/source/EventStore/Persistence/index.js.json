@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 105,
+  "end": 279,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 12,
+      "line": 17,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 105,
+    "end": 279,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 12,
+        "line": 17,
         "column": 0
       }
     },
@@ -160,157 +160,283 @@
             "rawValue": "./LocalStorage",
             "raw": "'./LocalStorage'"
           },
-          "value": "./LocalStorage"
-        }
+          "value": "./LocalStorage",
+          "leadingComments": null,
+          "trailingComments": null
+        },
+        "trailingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\n * @typedef {Persistence} EVENT_SCHEMAS\n * @method {getItem} returns an object by key from storage\n * @method {setItem} saves an object by key to storage\n ",
+            "start": 61,
+            "end": 222,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 0
+              },
+              "end": {
+                "line": 12,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       {
-        "type": "ExportDefaultDeclaration",
-        "start": 61,
-        "end": 104,
+        "type": "ExportNamedDeclaration",
+        "start": 223,
+        "end": 278,
         "loc": {
           "start": {
-            "line": 8,
+            "line": 13,
             "column": 0
           },
           "end": {
-            "line": 11,
+            "line": 16,
             "column": 1
           }
         },
+        "specifiers": [],
+        "source": null,
         "declaration": {
-          "type": "ObjectExpression",
-          "start": 76,
-          "end": 104,
+          "type": "VariableDeclaration",
+          "start": 230,
+          "end": 278,
           "loc": {
             "start": {
-              "line": 8,
-              "column": 15
+              "line": 13,
+              "column": 7
             },
             "end": {
-              "line": 11,
+              "line": 16,
               "column": 1
             }
           },
-          "properties": [
+          "declarations": [
             {
-              "type": "ObjectProperty",
-              "start": 82,
-              "end": 89,
+              "type": "VariableDeclarator",
+              "start": 236,
+              "end": 278,
               "loc": {
                 "start": {
-                  "line": 9,
-                  "column": 4
+                  "line": 13,
+                  "column": 13
                 },
                 "end": {
-                  "line": 9,
-                  "column": 11
+                  "line": 16,
+                  "column": 1
                 }
               },
-              "method": false,
-              "shorthand": true,
-              "computed": false,
-              "key": {
+              "id": {
                 "type": "Identifier",
-                "start": 82,
-                "end": 89,
+                "start": 236,
+                "end": 247,
                 "loc": {
                   "start": {
-                    "line": 9,
-                    "column": 4
+                    "line": 13,
+                    "column": 13
                   },
                   "end": {
-                    "line": 9,
-                    "column": 11
+                    "line": 13,
+                    "column": 24
                   },
-                  "identifierName": "getItem"
+                  "identifierName": "Persistence"
                 },
-                "name": "getItem"
+                "name": "Persistence",
+                "leadingComments": null
               },
-              "value": {
-                "type": "Identifier",
-                "start": 82,
-                "end": 89,
+              "init": {
+                "type": "ObjectExpression",
+                "start": 250,
+                "end": 278,
                 "loc": {
                   "start": {
-                    "line": 9,
-                    "column": 4
+                    "line": 13,
+                    "column": 27
                   },
                   "end": {
-                    "line": 9,
-                    "column": 11
-                  },
-                  "identifierName": "getItem"
+                    "line": 16,
+                    "column": 1
+                  }
                 },
-                "name": "getItem"
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start": 256,
+                    "end": 263,
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 11
+                      }
+                    },
+                    "method": false,
+                    "shorthand": true,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 256,
+                      "end": 263,
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 11
+                        },
+                        "identifierName": "getItem"
+                      },
+                      "name": "getItem"
+                    },
+                    "value": {
+                      "type": "Identifier",
+                      "start": 256,
+                      "end": 263,
+                      "loc": {
+                        "start": {
+                          "line": 14,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 14,
+                          "column": 11
+                        },
+                        "identifierName": "getItem"
+                      },
+                      "name": "getItem"
+                    },
+                    "extra": {
+                      "shorthand": true
+                    }
+                  },
+                  {
+                    "type": "ObjectProperty",
+                    "start": 269,
+                    "end": 276,
+                    "loc": {
+                      "start": {
+                        "line": 15,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 15,
+                        "column": 11
+                      }
+                    },
+                    "method": false,
+                    "shorthand": true,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 269,
+                      "end": 276,
+                      "loc": {
+                        "start": {
+                          "line": 15,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 15,
+                          "column": 11
+                        },
+                        "identifierName": "setItem"
+                      },
+                      "name": "setItem"
+                    },
+                    "value": {
+                      "type": "Identifier",
+                      "start": 269,
+                      "end": 276,
+                      "loc": {
+                        "start": {
+                          "line": 15,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 15,
+                          "column": 11
+                        },
+                        "identifierName": "setItem"
+                      },
+                      "name": "setItem"
+                    },
+                    "extra": {
+                      "shorthand": true
+                    }
+                  }
+                ]
               },
-              "extra": {
-                "shorthand": true
-              }
-            },
+              "leadingComments": null
+            }
+          ],
+          "kind": "const",
+          "leadingComments": [
             {
-              "type": "ObjectProperty",
-              "start": 95,
-              "end": 102,
+              "type": "CommentBlock",
+              "value": "*\n * @typedef {Persistence} EVENT_SCHEMAS\n * @method {getItem} returns an object by key from storage\n * @method {setItem} saves an object by key to storage\n ",
+              "start": 61,
+              "end": 222,
               "loc": {
                 "start": {
-                  "line": 10,
-                  "column": 4
+                  "line": 8,
+                  "column": 0
                 },
                 "end": {
-                  "line": 10,
-                  "column": 11
+                  "line": 12,
+                  "column": 3
                 }
-              },
-              "method": false,
-              "shorthand": true,
-              "computed": false,
-              "key": {
-                "type": "Identifier",
-                "start": 95,
-                "end": 102,
-                "loc": {
-                  "start": {
-                    "line": 10,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 10,
-                    "column": 11
-                  },
-                  "identifierName": "setItem"
-                },
-                "name": "setItem"
-              },
-              "value": {
-                "type": "Identifier",
-                "start": 95,
-                "end": 102,
-                "loc": {
-                  "start": {
-                    "line": 10,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 10,
-                    "column": 11
-                  },
-                  "identifierName": "setItem"
-                },
-                "name": "setItem"
-              },
-              "extra": {
-                "shorthand": true
               }
             }
           ],
-          "leadingComments": [],
           "trailingComments": []
-        }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\n * @typedef {Persistence} EVENT_SCHEMAS\n * @method {getItem} returns an object by key from storage\n * @method {setItem} saves an object by key to storage\n ",
+            "start": 61,
+            "end": 222,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 0
+              },
+              "end": {
+                "line": 12,
+                "column": 3
+              }
+            }
+          }
+        ]
       }
     ],
     "directives": []
   },
-  "comments": [],
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * @typedef {Persistence} EVENT_SCHEMAS\n * @method {getItem} returns an object by key from storage\n * @method {setItem} saves an object by key to storage\n ",
+      "start": 61,
+      "end": 222,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 12,
+          "column": 3
+        }
+      }
+    }
+  ],
   "tokens": [
     {
       "type": {
@@ -522,6 +648,22 @@
       }
     },
     {
+      "type": "CommentBlock",
+      "value": "*\n * @typedef {Persistence} EVENT_SCHEMAS\n * @method {getItem} returns an object by key from storage\n * @method {setItem} saves an object by key to storage\n ",
+      "start": 61,
+      "end": 222,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 12,
+          "column": 3
+        }
+      }
+    },
+    {
       "type": {
         "label": "export",
         "keyword": "export",
@@ -536,24 +678,24 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 61,
-      "end": 67,
+      "start": 223,
+      "end": 229,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 13,
           "column": 0
         },
         "end": {
-          "line": 8,
+          "line": 13,
           "column": 6
         }
       }
     },
     {
       "type": {
-        "label": "default",
-        "keyword": "default",
-        "beforeExpr": true,
+        "label": "const",
+        "keyword": "const",
+        "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
@@ -563,17 +705,70 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "default",
-      "start": 68,
-      "end": 75,
+      "value": "const",
+      "start": 230,
+      "end": 235,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 13,
           "column": 7
         },
         "end": {
-          "line": 8,
-          "column": 14
+          "line": 13,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Persistence",
+      "start": 236,
+      "end": 247,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 13
+        },
+        "end": {
+          "line": 13,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "=",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": true,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "=",
+      "start": 248,
+      "end": 249,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 25
+        },
+        "end": {
+          "line": 13,
+          "column": 26
         }
       }
     },
@@ -589,16 +784,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 76,
-      "end": 77,
+      "start": 250,
+      "end": 251,
       "loc": {
         "start": {
-          "line": 8,
-          "column": 15
+          "line": 13,
+          "column": 27
         },
         "end": {
-          "line": 8,
-          "column": 16
+          "line": 13,
+          "column": 28
         }
       }
     },
@@ -615,15 +810,15 @@
         "binop": null
       },
       "value": "getItem",
-      "start": 82,
-      "end": 89,
+      "start": 256,
+      "end": 263,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 14,
           "column": 4
         },
         "end": {
-          "line": 9,
+          "line": 14,
           "column": 11
         }
       }
@@ -641,15 +836,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 89,
-      "end": 90,
+      "start": 263,
+      "end": 264,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 14,
           "column": 11
         },
         "end": {
-          "line": 9,
+          "line": 14,
           "column": 12
         }
       }
@@ -667,15 +862,15 @@
         "binop": null
       },
       "value": "setItem",
-      "start": 95,
-      "end": 102,
+      "start": 269,
+      "end": 276,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 15,
           "column": 4
         },
         "end": {
-          "line": 10,
+          "line": 15,
           "column": 11
         }
       }
@@ -692,15 +887,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 103,
-      "end": 104,
+      "start": 277,
+      "end": 278,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 16,
           "column": 0
         },
         "end": {
-          "line": 11,
+          "line": 16,
           "column": 1
         }
       }
@@ -718,15 +913,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 105,
-      "end": 105,
+      "start": 279,
+      "end": 279,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 17,
           "column": 0
         },
         "end": {
-          "line": 12,
+          "line": 17,
           "column": 0
         }
       }

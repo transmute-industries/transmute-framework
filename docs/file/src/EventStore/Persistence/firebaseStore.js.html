@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../">
-  <title data-ice="title">src/env.js | API Document</title>
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/EventStore/Persistence/firebaseStore.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -63,37 +63,44 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/env.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">
+<div class="content" data-ice="content"><h1 data-ice="title">src/EventStore/Persistence/firebaseStore.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">// const { firebaseConfig } = require(&apos;../../env&apos;)
 
-import Web3 from &apos;web3&apos;
+// const firebase = require(&apos;firebase&apos;)
+// const { readEventsStartingAt } = require(&apos;./eventStore&apos;)
 
-import { without } from &apos;lodash&apos;
+// firebase.initializeApp(firebaseConfig)
 
-export const envs = [&apos;testrpc&apos;, &apos;parity&apos;, &apos;infura&apos;, &apos;metamask&apos;]
+// const db = firebase.database()
+// const eventStorePath = &apos;transmute/events/&apos;
+// const readModelStorePath = &apos;transmute/models/&apos;
 
-let currentEnv = &apos;testrpc&apos;
+// // // TODO: Add Encryption here
+// // // to hide contract data from firebase...
+// // // store encryption key in a contract with owner
+// // // https://github.com/cisco/node-jose
+// // // https://github.com/OR13/JOE
 
-let _web3, _provider
-switch (currentEnv) {
-  case &apos;testrpc&apos;: _provider = &apos;http://localhost:8545&apos;; break
-  case &apos;parity&apos;: _provider = &apos;http://localhost:8545&apos;; break
-  case &apos;infura&apos;: _provider = &apos;https://ropsten.infura.io&apos;; break
-}
+// const getItem = async (storePath, key) =&gt; {
+//   return db.ref(storePath + key)
+//   .once(&apos;value&apos;)
+//   .then((snapshot) =&gt; {
+//     let obj = snapshot.val()
+//     return obj
+//   })
+// }
 
-switch (currentEnv) {
-  case &apos;testrpc&apos;: _web3 = new Web3(new Web3.providers.HttpProvider(_provider)); break
-  case &apos;parity&apos;: _web3 = new Web3(new Web3.providers.HttpProvider(_provider)); break
-  case &apos;metamask&apos;: _web3 = window.web3; break
-}
+// const setItem = async (storePath, key, value) =&gt; {
+//   return db.ref(storePath + key).set(value)
+// }
 
-export const getRandomAddress = (addresses, exclude = []) =&gt; {
-  let possible = without(addresses, exclude)
-  let addr = possible[Math.floor(Math.random() * possible.length)]
-  return addr
-}
 
-export const web3 = _web3
+// module.exports = {
+//   readModelStorePath,
+//   receiveEvents,
+//   rebuildReadModelWithGenerator,
+//   maybeSyncReadModel
+// }
 </code></pre>
 
 </div>

@@ -1,7 +1,12 @@
 
-const NEW_EVENT = 'NEW_EVENT'
+export const NEW_EVENT = 'NEW_EVENT'
 
-const EVENT_SCHEMAS = {
+
+/**
+ * @typedef {Object} EVENT_SCHEMAS
+ * @property {NEW_EVENT} a Solidity Event Schema
+ */
+export const EVENT_SCHEMAS = {
     [NEW_EVENT]: {
         Id: 'BigNumber',
         Type: 'String',
@@ -13,8 +18,3 @@ const EVENT_SCHEMAS = {
     }
 }
 
-
-export default {
-    NEW_EVENT,
-    EVENT_SCHEMAS
-}

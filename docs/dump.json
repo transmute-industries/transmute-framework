@@ -3,7 +3,7 @@
     "__docId__": 0,
     "kind": "file",
     "name": "src/EventStore/EventStore.js",
-    "content": "'use strict'\n\nimport contract from 'truffle-contract'\nimport { web3 } from '../env'\nimport eventStoreArtifacts from '../../build/contracts/EventStore.json'\n\nvar EventStore = contract(eventStoreArtifacts)\nEventStore.setProvider(web3.currentProvider)\n\nimport { eventsFromTransaction } from './Transactions'\nimport { readModelGenerator } from './ReadModel'\n\nimport {\n    getItem,\n    setItem\n} from './Persistence'\n\n/**\n * this is object destructuring.\n * @param {Object} param - this is object param.\n * @param {number} param.foo - this is property param.\n * @param {string} param.bar - this is property param.\n */\nconst readEvent = async (es, eventId) => {\n    return {\n        Id: eventId,\n        Type: await es.getType(eventId),\n        Created: (await es.getCreated(eventId)).toNumber(),\n        AddressValue: await es.getAddressValue(eventId),\n        UIntValue: (await es.getUIntValue(eventId)).toNumber(),\n        StringValue: await es.getStringValue(eventId)\n    }\n}\n\nconst readEvents = async (es, eventId = 0) => {\n    let currentEvent = await es.eventCount()\n    let eventPromises = []\n    while (eventId < currentEvent) {\n        eventPromises.push(await readEvent(es, eventId))\n        eventId++\n    }\n    return await Promise.all(eventPromises)\n}\n\nconst writeEvent = async (es, event, fromAddress) => {\n    let tx = await es.emitEvent(event.Type, event.AddressValue, event.UIntValue, event.StringValue, {\n        from: fromAddress,\n        gas: 2000000\n    })\n    return eventsFromTransaction(tx)\n}\n\nconst writeEvents = async (es, eventArray, fromAddress) => {\n    let eventPromises = eventArray\n        .map((event) => {\n            return es\n                .emitEvent(event.Type, event.AddressValue, event.UIntValue, event.StringValue, {\n                    from: fromAddress,\n                    gas: 2000000\n                })\n                .then((tx) => {\n                    return eventsFromTransaction(tx)\n                })\n        })\n    return await Promise.all(eventPromises)\n        .then((newEvents) => {\n            return newEvents\n        })\n}\n\n\n/**\n * @param {TruffleContractInstance} es - a contract which is an Event Store\n */\nconst maybeSyncReadModel = async (es, readModel, reducer) => {\n    let eventCount = (await es.eventCount()).toNumber()\n    return getItem(readModel.Id)\n        .then(async (_readModel) => {\n            if (!_readModel) {\n                _readModel = readModel\n            }\n            if (_readModel.EventCount === eventCount) {\n                return false\n            }\n            let events = await readEvents(es, _readModel.EventCount || 0)\n            let updatedReadModel = readModelGenerator(_readModel, reducer, events)\n            return setItem(updatedReadModel.Id, updatedReadModel)\n        })\n}\n\nexport default {\n    EventStore,\n    writeEvent,\n    writeEvents,\n    readEvent,\n    readEvents,\n    getItem,\n    setItem,\n    readModelGenerator,\n    maybeSyncReadModel\n}\n",
+    "content": "'use strict'\n\nimport contract from 'truffle-contract'\nimport { web3 } from '../env'\nimport eventStoreArtifacts from '../../build/contracts/EventStore.json'\n\nexport var EventStore = contract(eventStoreArtifacts)\nEventStore.setProvider(web3.currentProvider)\n\nimport { eventsFromTransaction } from './Transactions'\nimport { readModelGenerator } from './ReadModel'\n\nimport {\n  Persistence\n} from './Persistence'\n\n\n/**\n * @param {EventStore} es - a contract instance which is an Event Store\n * @param {UInt} eventId - all events after this Id and includig it will be returned\n * @return {Promise<NEW_EVENT, Error>} json object representing a Solidity NEW_EVENT\n */\nexport const readEvent = async (es, eventId) => {\n    return {\n        Id: eventId,\n        Type: await es.getType(eventId),\n        Created: (await es.getCreated(eventId)).toNumber(),\n        AddressValue: await es.getAddressValue(eventId),\n        UIntValue: (await es.getUIntValue(eventId)).toNumber(),\n        StringValue: await es.getStringValue(eventId)\n    }\n}\n\n/**\n * @param {EventStore} es - a contract instance which is an Event Store\n * @param {UInt} eventId - all events after this Id and includig it will be returned\n * @param {Address} fromAddress - the address you wish to deploy these events from\n * @return {Promise<NEW_EVENT[], Error>} json objects representing Solidity NEW_EVENTs\n */\nexport const readEvents = async (es, eventId = 0) => {\n    let currentEvent = await es.eventCount()\n    let eventPromises = []\n    while (eventId < currentEvent) {\n        eventPromises.push(await readEvent(es, eventId))\n        eventId++\n    }\n    return await Promise.all(eventPromises)\n}\n\n/**\n * @param {EventStore} es - a contract instance which is an Event Store\n * @param {NEW_EVENT} event - a NEW_EVENT object to be written to the chain\n * @param {Address} fromAddress - the address you wish to deploy these events from\n * @return {Promise<NEW_EVENT, Error>} json object representing the Solidity NEW_EVENT\n */\nexport const writeEvent = async (es, event, fromAddress) => {\n    let tx = await es.emitEvent(event.Type, event.AddressValue, event.UIntValue, event.StringValue, {\n        from: fromAddress,\n        gas: 2000000\n    })\n    return eventsFromTransaction(tx)\n}\n\n/**\n * @param {EventStore} es - a contract instance which is an Event Store\n * @param {NEW_EVENT} eventArray - an array of NEW_EVENT objects to be written to the chain\n * @param {Address} fromAddress - the address you wish to deploy these events from\n * @return {Promise<NEW_EVENT[], Error>} json objects representing the Solidity NEW_EVENTs which were written to chain\n */\nexport const writeEvents = async (es, eventArray, fromAddress) => {\n    let eventPromises = eventArray\n        .map((event) => {\n            return es\n                .emitEvent(event.Type, event.AddressValue, event.UIntValue, event.StringValue, {\n                    from: fromAddress,\n                    gas: 2000000\n                })\n                .then((tx) => {\n                    return eventsFromTransaction(tx)\n                })\n        })\n    return await Promise.all(eventPromises)\n        .then((newEvents) => {\n            return newEvents\n        })\n}\n\n\n/**\n * @param {EventStore} es - a contract instance which is an Event Store\n * @param {initialProjectState} readModel - a json object representing the state of a given model\n * @param {projectReducer} reducer - a function which reduces events into a read model state object\n * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore\n */\nexport const maybeSyncReadModel = async (es, readModel, reducer) => {\n    let eventCount = (await es.eventCount()).toNumber()\n    return Persistence.getItem(readModel.Id)\n        .then(async (_readModel) => {\n            if (!_readModel) {\n                _readModel = readModel\n            }\n            if (_readModel.EventCount === eventCount) {\n                return false\n            }\n            let events = await readEvents(es, _readModel.EventCount || 0)\n            let updatedReadModel = readModelGenerator(_readModel, reducer, events)\n            return Persistence.setItem(updatedReadModel.Id, updatedReadModel)\n        })\n}\n\nexport default {\n    EventStore,\n    writeEvent,\n    writeEvents,\n    readEvent,\n    readEvents,\n    readModelGenerator,\n    maybeSyncReadModel\n}\n",
     "static": true,
     "longname": "src/EventStore/EventStore.js",
     "access": null,
@@ -18,9 +18,9 @@
     "static": true,
     "longname": "src/EventStore/EventStore.js~EventStore",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.js",
-    "importStyle": null,
+    "importStyle": "{EventStore}",
     "description": null,
     "lineNumber": 7,
     "undocument": true,
@@ -46,47 +46,40 @@
     "static": true,
     "longname": "src/EventStore/EventStore.js~readEvent",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.js",
-    "importStyle": null,
-    "description": "this is object destructuring.",
-    "lineNumber": 24,
+    "importStyle": "{readEvent}",
+    "description": "",
+    "lineNumber": 23,
     "params": [
       {
         "nullable": null,
         "types": [
-          "Object"
+          "EventStore"
         ],
         "spread": false,
         "optional": false,
-        "name": "param",
-        "description": "this is object param."
+        "name": "es",
+        "description": "a contract instance which is an Event Store"
       },
       {
         "nullable": null,
         "types": [
-          "number"
+          "UInt"
         ],
         "spread": false,
         "optional": false,
-        "name": "param.foo",
-        "description": "this is property param."
-      },
-      {
-        "nullable": null,
-        "types": [
-          "string"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "param.bar",
-        "description": "this is property param."
+        "name": "eventId",
+        "description": "all events after this Id and includig it will be returned"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "{\"Id\": *, \"Type\": *, \"Created\": *, \"AddressValue\": *, \"UIntValue\": *, \"StringValue\": *}"
-      ]
+        "Promise<NEW_EVENT, Error>"
+      ],
+      "spread": false,
+      "description": "json object representing a Solidity NEW_EVENT"
     }
   },
   {
@@ -99,39 +92,50 @@
     "static": true,
     "longname": "src/EventStore/EventStore.js~readEvents",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 35,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "importStyle": "{readEvents}",
+    "description": "",
+    "lineNumber": 40,
     "params": [
       {
-        "name": "es",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "EventStore"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "es",
+        "description": "a contract instance which is an Event Store"
       },
       {
-        "name": "eventId",
-        "optional": true,
+        "nullable": null,
         "types": [
-          "number"
+          "UInt"
         ],
-        "defaultRaw": 0,
-        "defaultValue": "0"
+        "spread": false,
+        "optional": false,
+        "name": "eventId",
+        "description": "all events after this Id and includig it will be returned"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Address"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "fromAddress",
+        "description": "the address you wish to deploy these events from"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Promise<NEW_EVENT[], Error>"
+      ],
+      "spread": false,
+      "description": "json objects representing Solidity NEW_EVENTs"
     }
   },
   {
@@ -144,42 +148,50 @@
     "static": true,
     "longname": "src/EventStore/EventStore.js~writeEvent",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 45,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "importStyle": "{writeEvent}",
+    "description": "",
+    "lineNumber": 56,
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "EventStore"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "es",
-        "types": [
-          "*"
-        ]
+        "description": "a contract instance which is an Event Store"
       },
       {
+        "nullable": null,
+        "types": [
+          "NEW_EVENT"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "event",
-        "types": [
-          "*"
-        ]
+        "description": "a NEW_EVENT object to be written to the chain"
       },
       {
-        "name": "fromAddress",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Address"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "fromAddress",
+        "description": "the address you wish to deploy these events from"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Promise<NEW_EVENT, Error>"
+      ],
+      "spread": false,
+      "description": "json object representing the Solidity NEW_EVENT"
     }
   },
   {
@@ -192,42 +204,50 @@
     "static": true,
     "longname": "src/EventStore/EventStore.js~writeEvents",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 53,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "importStyle": "{writeEvents}",
+    "description": "",
+    "lineNumber": 70,
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "EventStore"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "es",
-        "types": [
-          "*"
-        ]
+        "description": "a contract instance which is an Event Store"
       },
       {
+        "nullable": null,
+        "types": [
+          "NEW_EVENT"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "eventArray",
-        "types": [
-          "*"
-        ]
+        "description": "an array of NEW_EVENT objects to be written to the chain"
       },
       {
-        "name": "fromAddress",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Address"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "fromAddress",
+        "description": "the address you wish to deploy these events from"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Promise<NEW_EVENT[], Error>"
+      ],
+      "spread": false,
+      "description": "json objects representing the Solidity NEW_EVENTs which were written to chain"
     }
   },
   {
@@ -240,34 +260,57 @@
     "static": true,
     "longname": "src/EventStore/EventStore.js~maybeSyncReadModel",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.js",
-    "importStyle": null,
+    "importStyle": "{maybeSyncReadModel}",
     "description": "",
-    "lineNumber": 75,
+    "lineNumber": 95,
     "params": [
       {
         "nullable": null,
         "types": [
-          "TruffleContractInstance"
+          "EventStore"
         ],
         "spread": false,
         "optional": false,
         "name": "es",
-        "description": "a contract which is an Event Store"
+        "description": "a contract instance which is an Event Store"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "initialProjectState"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "readModel",
+        "description": "a json object representing the state of a given model"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "projectReducer"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "reducer",
+        "description": "a function which reduces events into a read model state object"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Promise<ReadModel, Error>"
+      ],
+      "spread": false,
+      "description": "json object representing the state of a ReadModel for an EventStore"
     }
   },
   {
     "__docId__": 7,
     "kind": "file",
     "name": "src/EventStore/EventStore.mock.js",
-    "content": "import { web3 } from '../env'\n\nconst event = {\n    Id: 0,\n    Type: 'PROJECT_CREATED',\n    AddressValue: web3.eth.accounts[0],\n    UIntValue: 1,\n    StringValue: 'Coral'\n}\n\nconst eventStream = [\n    {\n        Id: 1,\n        Type: 'PROJECT_JOINED',\n        AddressValue: web3.eth.accounts[0],\n        UIntValue: 1,\n        StringValue: 'Engineer Alice'\n    },\n    {\n        Id: 2,\n        Type: 'PROJECT_JOINED',\n        AddressValue: web3.eth.accounts[1],\n        UIntValue: 1,\n        StringValue: 'Customer Bob'\n    },\n    {\n        Id: 3,\n        Type: 'PROJECT_MILESTONE',\n        AddressValue: web3.eth.accounts[0],\n        UIntValue: 1,\n        StringValue: 'Version 0'\n    }\n]\n\nconst initialProjectState = {\n    Id: '0',\n    EventCount: null,\n    Name: '',\n    Users: [],\n    Milestones: []\n}\n\nconst expectedProjectState = {\n    Id: '0',\n    Name: 'Coral',\n    Users: ['Engineer Alice', 'Customer Bob'],\n    Milestones: ['Version 0']\n}\n\nconst projectReducer = (state = initialProjectState, event) => {\n    if (event.Type === 'PROJECT_CREATED') {\n        state = Object.assign({}, state, {\n            Name: event.StringValue\n        })\n    }\n    if (event.Type === 'PROJECT_JOINED') {\n        state = Object.assign({}, state, {\n            Users: state.Users.concat(event.StringValue)\n        })\n    }\n    if (event.Type === 'PROJECT_MILESTONE') {\n        state = Object.assign({}, state, {\n            Milestones: state.Milestones.concat(event.StringValue)\n        })\n    }\n    // Important for synching state\n    state.EventCount = event.Id\n    return state\n}\n\nexport default {\n    event,\n    eventStream,\n\n    initialProjectState,\n    expectedProjectState,\n    projectReducer\n}\n",
+    "content": "import { web3 } from '../env'\n\nexport const event = {\n    Id: 0,\n    Type: 'PROJECT_CREATED',\n    AddressValue: web3.eth.accounts[0],\n    UIntValue: 1,\n    StringValue: 'Coral'\n}\n\nexport const eventStream = [\n    {\n        Id: 1,\n        Type: 'PROJECT_JOINED',\n        AddressValue: web3.eth.accounts[0],\n        UIntValue: 1,\n        StringValue: 'Engineer Alice'\n    },\n    {\n        Id: 2,\n        Type: 'PROJECT_JOINED',\n        AddressValue: web3.eth.accounts[1],\n        UIntValue: 1,\n        StringValue: 'Customer Bob'\n    },\n    {\n        Id: 3,\n        Type: 'PROJECT_MILESTONE',\n        AddressValue: web3.eth.accounts[0],\n        UIntValue: 1,\n        StringValue: 'Version 0'\n    }\n]\n\nexport const initialProjectState = {\n    Id: '0',\n    EventCount: null,\n    Name: '',\n    Users: [],\n    Milestones: []\n}\n\nexport const expectedProjectState = {\n    Id: '0',\n    Name: 'Coral',\n    Users: ['Engineer Alice', 'Customer Bob'],\n    Milestones: ['Version 0']\n}\n\nexport const projectReducer = (state = initialProjectState, event) => {\n    if (event.Type === 'PROJECT_CREATED') {\n        state = Object.assign({}, state, {\n            Name: event.StringValue\n        })\n    }\n    if (event.Type === 'PROJECT_JOINED') {\n        state = Object.assign({}, state, {\n            Users: state.Users.concat(event.StringValue)\n        })\n    }\n    if (event.Type === 'PROJECT_MILESTONE') {\n        state = Object.assign({}, state, {\n            Milestones: state.Milestones.concat(event.StringValue)\n        })\n    }\n    // Important for synching state\n    state.EventCount = event.Id\n    return state\n}\n\nexport default {\n    event,\n    eventStream,\n\n    initialProjectState,\n    expectedProjectState,\n    projectReducer\n}\n",
     "static": true,
     "longname": "src/EventStore/EventStore.mock.js",
     "access": null,
@@ -282,9 +325,9 @@
     "static": true,
     "longname": "src/EventStore/EventStore.mock.js~event",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.mock.js",
-    "importStyle": null,
+    "importStyle": "{event}",
     "description": null,
     "lineNumber": 3,
     "undocument": true,
@@ -308,9 +351,9 @@
     "static": true,
     "longname": "src/EventStore/EventStore.mock.js~eventStream",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.mock.js",
-    "importStyle": null,
+    "importStyle": "{eventStream}",
     "description": null,
     "lineNumber": 11,
     "undocument": true,
@@ -334,9 +377,9 @@
     "static": true,
     "longname": "src/EventStore/EventStore.mock.js~initialProjectState",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.mock.js",
-    "importStyle": null,
+    "importStyle": "{initialProjectState}",
     "description": null,
     "lineNumber": 35,
     "undocument": true,
@@ -360,9 +403,9 @@
     "static": true,
     "longname": "src/EventStore/EventStore.mock.js~expectedProjectState",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.mock.js",
-    "importStyle": null,
+    "importStyle": "{expectedProjectState}",
     "description": null,
     "lineNumber": 43,
     "undocument": true,
@@ -388,9 +431,9 @@
     "static": true,
     "longname": "src/EventStore/EventStore.mock.js~projectReducer",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventStore.mock.js",
-    "importStyle": null,
+    "importStyle": "{projectReducer}",
     "description": null,
     "lineNumber": 50,
     "undocument": true,
@@ -427,7 +470,7 @@
     "__docId__": 13,
     "kind": "file",
     "name": "src/EventStore/EventStore.spec.js",
-    "content": "'use strict'\n\nimport { web3 } from '../env'\nimport { assert } from 'chai'\n\nimport {\n  EventStore,\n  writeEvent,\n  writeEvents,\n  readEvent,\n  readEvents,\n  getItem,\n  setItem,\n  readModelGenerator,\n  maybeSyncReadModel\n} from './EventStore'\n\nimport {\n  event,\n  eventStream,\n  initialProjectState,\n  expectedProjectState,\n  projectReducer\n} from './EventStore.mock'\n\nlet es, startEventCount, maybeUpdatedReadModel\n\ndescribe('EventStore', () => {\n\n  before(async () => {\n    // console.log(TF)\n    es = await EventStore.deployed()\n    startEventCount = (await es.eventCount()).toNumber()\n\n  })\n\n  describe('.writeEvent', () => {\n    it('should return the event at the index', async () => {\n      let events = await writeEvent(es, event, web3.eth.accounts[0])\n      assert.equal(events.length, 1)\n      assert.equal(events[0].Type, event.Type)\n      assert.equal(events[0].AddressValue, event.AddressValue)\n      assert.equal(events[0].UIntValue, event.UIntValue)\n      assert.equal(events[0].StringValue, event.StringValue)\n    })\n  })\n\n  describe('.readEvent', () => {\n    it('should return the event at the index', async () => {\n      let event = await readEvent(es, 0)\n      assert.equal(event.Type, event.Type)\n      assert.equal(event.AddressValue, event.AddressValue)\n      assert.equal(event.UIntValue, event.UIntValue)\n      assert.equal(event.StringValue, event.StringValue)\n    })\n  })\n\n  describe('.writeEvents', () => {\n    it('should return the events written to the event store', async () => {\n      let events = await writeEvents(es, eventStream, web3.eth.accounts[0])\n      assert.equal(events.length, 3)\n      // console.log(events)\n    })\n  })\n\n  describe('.readEvents', () => {\n    it('should return the events in the contract starting with the index', async () => {\n      let events = await readEvents(es, startEventCount)\n      assert.equal(events.length, 4)\n      // console.log(events)\n    })\n  })\n\n  describe('.setItem', () => {\n    it('should return the value when passed a valid key, after saving the value', async () => {\n      setItem(initialProjectState.Id, initialProjectState)\n        .then((readModel) => {\n          assert.equal(initialProjectState.Id, readModel.Id)\n          assert.equal(initialProjectState.Name, readModel.Name)\n        })\n    })\n  })\n\n  describe('.getItem', () => {\n    it('should return null for invalid key', async () => {\n      getItem('not-a-real-key')\n        .then((readModel) => {\n          assert.isNull(readModel)\n        })\n    })\n\n    it('should return a readModel when passed valid readModelKey', async () => {\n      getItem(initialProjectState.Id)\n        .then((readModel) => {\n          assert.equal(initialProjectState.Id, readModel.Id)\n          assert.equal(initialProjectState.Name, readModel.Name)\n        })\n    })\n  })\n\n  describe('.readModelGenerator', () => {\n    it('should return the the initial reducer state when no events exist', async () => {\n      let projectModel = readModelGenerator(initialProjectState, projectReducer, [])\n      assert.equal(projectModel.Id, initialProjectState.Id)\n      assert.equal(projectModel.EventCount, initialProjectState.EventCount)\n      assert.equal(projectModel.Users, initialProjectState.Users)\n      assert.equal(projectModel.Milestones, initialProjectState.Milestones)\n    })\n\n    it('should return the updated read model when passed events', async () => {\n      let projectHistory = await readEvents(es, startEventCount)\n      let projectModel = readModelGenerator(initialProjectState, projectReducer, projectHistory)\n      assert.equal(projectModel.Id, expectedProjectState.Id)\n      assert.equal(projectModel.Name, expectedProjectState.Name)\n      assert.isArray(projectModel.Users, expectedProjectState.Users)\n      assert.isArray(projectModel.Milestones, expectedProjectState.Milestones)\n    })\n  })\n\n  describe('maybeSyncReadModel', () => {\n    it('should retrieve a read model and sync any missing events from the contract', async () => {\n      let _maybeUpdatedReadModel = await maybeSyncReadModel(es, initialProjectState, projectReducer)\n      maybeUpdatedReadModel = _maybeUpdatedReadModel\n    })\n\n    it('should return quickly if no new events exist', async () => {\n      let sameReadModel = await maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)\n      assert.equal(sameReadModel.Name, maybeUpdatedReadModel.Name)\n      assert.equal(sameReadModel.EventCount, maybeUpdatedReadModel.EventCount)\n    })\n  })\n\n})\n\n\n",
+    "content": "'use strict'\n\nimport { web3 } from '../env'\nimport { assert } from 'chai'\n\nimport {\n  EventStore,\n  writeEvent,\n  writeEvents,\n  readEvent,\n  readEvents,\n  maybeSyncReadModel\n} from './EventStore'\n\nimport {Persistence } from './Persistence'\n\nimport {readModelGenerator } from './ReadModel'\n\nimport {\n  event,\n  eventStream,\n  initialProjectState,\n  expectedProjectState,\n  projectReducer\n} from './EventStore.mock'\n\nlet es, startEventCount, maybeUpdatedReadModel\n\ndescribe('EventStore', () => {\n\n  before(async () => {\n    // console.log(TF)\n    es = await EventStore.deployed()\n    startEventCount = (await es.eventCount()).toNumber()\n\n  })\n\n  describe('.writeEvent', () => {\n    it('should return the event at the index', async () => {\n      let events = await writeEvent(es, event, web3.eth.accounts[0])\n      assert.equal(events.length, 1)\n      assert.equal(events[0].Type, event.Type)\n      assert.equal(events[0].AddressValue, event.AddressValue)\n      assert.equal(events[0].UIntValue, event.UIntValue)\n      assert.equal(events[0].StringValue, event.StringValue)\n    })\n  })\n\n  describe('.readEvent', () => {\n    it('should return the event at the index', async () => {\n      let event = await readEvent(es, 0)\n      assert.equal(event.Type, event.Type)\n      assert.equal(event.AddressValue, event.AddressValue)\n      assert.equal(event.UIntValue, event.UIntValue)\n      assert.equal(event.StringValue, event.StringValue)\n    })\n  })\n\n  describe('.writeEvents', () => {\n    it('should return the events written to the event store', async () => {\n      let events = await writeEvents(es, eventStream, web3.eth.accounts[0])\n      assert.equal(events.length, 3)\n      // console.log(events)\n    })\n  })\n\n  describe('.readEvents', () => {\n    it('should return the events in the contract starting with the index', async () => {\n      let events = await readEvents(es, startEventCount)\n      assert.equal(events.length, 4)\n      // console.log(events)\n    })\n  })\n\n  describe('.setItem', () => {\n    it('should return the value when passed a valid key, after saving the value', async () => {\n      Persistence.setItem(initialProjectState.Id, initialProjectState)\n        .then((readModel) => {\n          assert.equal(initialProjectState.Id, readModel.Id)\n          assert.equal(initialProjectState.Name, readModel.Name)\n        })\n    })\n  })\n\n  describe('.getItem', () => {\n    it('should return null for invalid key', async () => {\n      Persistence.getItem('not-a-real-key')\n        .then((readModel) => {\n          assert.isNull(readModel)\n        })\n    })\n\n    it('should return a readModel when passed valid readModelKey', async () => {\n      Persistence.getItem(initialProjectState.Id)\n        .then((readModel) => {\n          assert.equal(initialProjectState.Id, readModel.Id)\n          assert.equal(initialProjectState.Name, readModel.Name)\n        })\n    })\n  })\n\n  describe('.readModelGenerator', () => {\n    it('should return the the initial reducer state when no events exist', async () => {\n      let projectModel = readModelGenerator(initialProjectState, projectReducer, [])\n      assert.equal(projectModel.Id, initialProjectState.Id)\n      assert.equal(projectModel.EventCount, initialProjectState.EventCount)\n      assert.equal(projectModel.Users, initialProjectState.Users)\n      assert.equal(projectModel.Milestones, initialProjectState.Milestones)\n    })\n\n    it('should return the updated read model when passed events', async () => {\n      let projectHistory = await readEvents(es, startEventCount)\n      let projectModel = readModelGenerator(initialProjectState, projectReducer, projectHistory)\n      assert.equal(projectModel.Id, expectedProjectState.Id)\n      assert.equal(projectModel.Name, expectedProjectState.Name)\n      assert.isArray(projectModel.Users, expectedProjectState.Users)\n      assert.isArray(projectModel.Milestones, expectedProjectState.Milestones)\n    })\n  })\n\n  describe('maybeSyncReadModel', () => {\n    it('should retrieve a read model and sync any missing events from the contract', async () => {\n      let _maybeUpdatedReadModel = await maybeSyncReadModel(es, initialProjectState, projectReducer)\n      maybeUpdatedReadModel = _maybeUpdatedReadModel\n    })\n\n    it('should return quickly if no new events exist', async () => {\n      let sameReadModel = await maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)\n      assert.equal(sameReadModel.Name, maybeUpdatedReadModel.Name)\n      assert.equal(sameReadModel.EventCount, maybeUpdatedReadModel.EventCount)\n    })\n  })\n\n})\n\n\n",
     "static": true,
     "longname": "src/EventStore/EventStore.spec.js",
     "access": null,
@@ -438,7 +481,7 @@
     "__docId__": 14,
     "kind": "file",
     "name": "src/EventStore/EventTypes/index.js",
-    "content": "\nconst NEW_EVENT = 'NEW_EVENT'\n\nconst EVENT_SCHEMAS = {\n    [NEW_EVENT]: {\n        Id: 'BigNumber',\n        Type: 'String',\n        Created: 'BigNumber',\n\n        AddressValue: 'String',\n        UIntValue: 'BigNumber',\n        StringValue: 'String'\n    }\n}\n\n\nexport default {\n    NEW_EVENT,\n    EVENT_SCHEMAS\n}\n",
+    "content": "\nexport const NEW_EVENT = 'NEW_EVENT'\n\n\n/**\n * @typedef {Object} EVENT_SCHEMAS\n * @property {NEW_EVENT} a Solidity Event Schema\n */\nexport const EVENT_SCHEMAS = {\n    [NEW_EVENT]: {\n        Id: 'BigNumber',\n        Type: 'String',\n        Created: 'BigNumber',\n\n        AddressValue: 'String',\n        UIntValue: 'BigNumber',\n        StringValue: 'String'\n    }\n}\n\n",
     "static": true,
     "longname": "src/EventStore/EventTypes/index.js",
     "access": null,
@@ -453,9 +496,9 @@
     "static": true,
     "longname": "src/EventStore/EventTypes/index.js~NEW_EVENT",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/EventTypes/index.js",
-    "importStyle": null,
+    "importStyle": "{NEW_EVENT}",
     "description": null,
     "lineNumber": 2,
     "undocument": true,
@@ -473,35 +516,39 @@
   },
   {
     "__docId__": 16,
-    "kind": "variable",
+    "kind": "typedef",
     "name": "EVENT_SCHEMAS",
     "memberof": "src/EventStore/EventTypes/index.js",
     "static": true,
     "longname": "src/EventStore/EventTypes/index.js~EVENT_SCHEMAS",
     "access": null,
-    "export": false,
-    "importPath": "transmute-framework/src/EventStore/EventTypes/index.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 4,
-    "undocument": true,
-    "unknown": [
+    "description": "",
+    "lineNumber": 9,
+    "properties": [
       {
-        "tagName": "@_undocument",
-        "tagValue": ""
+        "nullable": null,
+        "types": [
+          "NEW_EVENT"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "a",
+        "description": "Solidity Event Schema"
       }
     ],
     "type": {
       "types": [
-        "{\"NEW_EVENT\": *}"
-      ]
+        "Object"
+      ],
+      "optional": false,
+      "name": "EVENT_SCHEMAS"
     }
   },
   {
     "__docId__": 17,
     "kind": "file",
     "name": "src/EventStore/Persistence/LocalStorage.js",
-    "content": "\nlet store\n\nif (typeof localStorage === 'undefined' || localStorage === null) {\n    const LocalStorage = require('node-localstorage').LocalStorage\n    store = new LocalStorage('./scratch')\n} else {\n    store = localStorage\n}\n\nconst getItem = (key) => {\n    return new Promise((resolve, reject) => {\n        let itemAsString = store.getItem(key)\n        try {\n            resolve(JSON.parse(itemAsString))\n        } catch (e) {\n            resolve(itemAsString)\n        }\n    })\n}\n\nconst setItem = (key, value) => {\n    return new Promise((resolve, reject) => {\n        store.setItem(key, JSON.stringify(value))\n        resolve(value)\n    })\n}\n\nexport default {\n    getItem,\n    setItem\n}\n\n",
+    "content": "\nlet store\n\nif (typeof localStorage === 'undefined' || localStorage === null) {\n    const LocalStorage = require('node-localstorage').LocalStorage\n    store = new LocalStorage('./scratch')\n} else {\n    store = localStorage\n}\n\n/**\n * @param {String} key - a key for a stored object\n * @return {Object} a promise for the object at the given key\n */\nexport const getItem = (key) => {\n    return new Promise((resolve, reject) => {\n        let itemAsString = store.getItem(key)\n        try {\n            resolve(JSON.parse(itemAsString))\n        } catch (e) {\n            resolve(itemAsString)\n        }\n    })\n}\n\n/**\n * @param {String} key - a key for a stored object\n * @param {String} value - the object to be stored\n * @return {Object} a promise for the object at the given key\n */\nexport const setItem = (key, value) => {\n    return new Promise((resolve, reject) => {\n        store.setItem(key, JSON.stringify(value))\n        resolve(value)\n    })\n}\n\n",
     "static": true,
     "longname": "src/EventStore/Persistence/LocalStorage.js",
     "access": null,
@@ -518,30 +565,30 @@
     "static": true,
     "longname": "src/EventStore/Persistence/LocalStorage.js~getItem",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/Persistence/LocalStorage.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 11,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "importStyle": "{getItem}",
+    "description": "",
+    "lineNumber": 15,
     "params": [
       {
-        "name": "key",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "key",
+        "description": "a key for a stored object"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Object"
+      ],
+      "spread": false,
+      "description": "a promise for the object at the given key"
     }
   },
   {
@@ -554,45 +601,49 @@
     "static": true,
     "longname": "src/EventStore/Persistence/LocalStorage.js~setItem",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/Persistence/LocalStorage.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 22,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "importStyle": "{setItem}",
+    "description": "",
+    "lineNumber": 31,
     "params": [
       {
-        "name": "key",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "key",
+        "description": "a key for a stored object"
       },
       {
-        "name": "value",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "the object to be stored"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Object"
+      ],
+      "spread": false,
+      "description": "a promise for the object at the given key"
     }
   },
   {
     "__docId__": 20,
     "kind": "file",
-    "name": "src/EventStore/Persistence/index.js",
-    "content": "\n\nimport {\n    getItem,\n    setItem\n} from './LocalStorage'\n\nexport default {\n    getItem,\n    setItem\n}\n",
+    "name": "src/EventStore/Persistence/firebaseStore.js",
+    "content": "// const { firebaseConfig } = require('../../env')\n\n// const firebase = require('firebase')\n// const { readEventsStartingAt } = require('./eventStore')\n\n// firebase.initializeApp(firebaseConfig)\n\n// const db = firebase.database()\n// const eventStorePath = 'transmute/events/'\n// const readModelStorePath = 'transmute/models/'\n\n// // // TODO: Add Encryption here\n// // // to hide contract data from firebase...\n// // // store encryption key in a contract with owner\n// // // https://github.com/cisco/node-jose\n// // // https://github.com/OR13/JOE\n\n// const getItem = async (storePath, key) => {\n//   return db.ref(storePath + key)\n//   .once('value')\n//   .then((snapshot) => {\n//     let obj = snapshot.val()\n//     return obj\n//   })\n// }\n\n// const setItem = async (storePath, key, value) => {\n//   return db.ref(storePath + key).set(value)\n// }\n\n\n// module.exports = {\n//   readModelStorePath,\n//   receiveEvents,\n//   rebuildReadModelWithGenerator,\n//   maybeSyncReadModel\n// }\n",
     "static": true,
-    "longname": "src/EventStore/Persistence/index.js",
+    "longname": "src/EventStore/Persistence/firebaseStore.js",
     "access": null,
     "description": null,
     "lineNumber": 1
@@ -600,8 +651,47 @@
   {
     "__docId__": 21,
     "kind": "file",
+    "name": "src/EventStore/Persistence/index.js",
+    "content": "\n\nimport {\n    getItem,\n    setItem\n} from './LocalStorage'\n\n/**\n * @typedef {Persistence} EVENT_SCHEMAS\n * @method {getItem} returns an object by key from storage\n * @method {setItem} saves an object by key to storage\n */\nexport const Persistence = {\n    getItem,\n    setItem\n}\n",
+    "static": true,
+    "longname": "src/EventStore/Persistence/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1
+  },
+  {
+    "__docId__": 22,
+    "kind": "typedef",
+    "name": "EVENT_SCHEMAS",
+    "memberof": "src/EventStore/Persistence/index.js",
+    "static": true,
+    "longname": "src/EventStore/Persistence/index.js~EVENT_SCHEMAS",
+    "access": null,
+    "description": "",
+    "lineNumber": 13,
+    "unknown": [
+      {
+        "tagName": "@method",
+        "tagValue": "{getItem} returns an object by key from storage"
+      },
+      {
+        "tagName": "@method",
+        "tagValue": "{setItem} saves an object by key to storage"
+      }
+    ],
+    "type": {
+      "types": [
+        "Persistence"
+      ],
+      "optional": false,
+      "name": "EVENT_SCHEMAS"
+    }
+  },
+  {
+    "__docId__": 23,
+    "kind": "file",
     "name": "src/EventStore/ReadModel/index.js",
-    "content": "\nconst readModelGenerator = (readModel, reducer, events) => {\n    events.forEach((event) => {\n        readModel = reducer(readModel, event)\n    })\n    return readModel\n}\n\nexport default {\n    readModelGenerator\n}\n",
+    "content": "\n/**\n * @param {EventStore} readModel - a json object representing the state of a given model\n * @param {projectReducer} reducer - a function which reduces events into a read model state object\n * @param {NEW_EVENT[]} events - events from an es contract\n */\nexport const readModelGenerator = (readModel, reducer, events) => {\n    events.forEach((event) => {\n        readModel = reducer(readModel, event)\n    })\n    return readModel\n}\n",
     "static": true,
     "longname": "src/EventStore/ReadModel/index.js",
     "access": null,
@@ -609,7 +699,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 22,
+    "__docId__": 24,
     "kind": "function",
     "name": "readModelGenerator",
     "memberof": "src/EventStore/ReadModel/index.js",
@@ -618,36 +708,41 @@
     "static": true,
     "longname": "src/EventStore/ReadModel/index.js~readModelGenerator",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/ReadModel/index.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 2,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "importStyle": "{readModelGenerator}",
+    "description": "",
+    "lineNumber": 7,
     "params": [
       {
+        "nullable": null,
+        "types": [
+          "EventStore"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "readModel",
-        "types": [
-          "*"
-        ]
+        "description": "a json object representing the state of a given model"
       },
       {
+        "nullable": null,
+        "types": [
+          "projectReducer"
+        ],
+        "spread": false,
+        "optional": false,
         "name": "reducer",
-        "types": [
-          "*"
-        ]
+        "description": "a function which reduces events into a read model state object"
       },
       {
-        "name": "events",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "NEW_EVENT[]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "events",
+        "description": "events from an es contract"
       }
     ],
     "return": {
@@ -657,10 +752,10 @@
     }
   },
   {
-    "__docId__": 23,
+    "__docId__": 25,
     "kind": "file",
     "name": "src/EventStore/Transactions/index.js",
-    "content": "\nimport { forIn, extend } from 'lodash'\n\nconst { EVENT_SCHEMAS } = require('../EventTypes')\n\nconst getPropFromSchema = (propType, value) => {\n    switch (propType) {\n        case 'String': return value.toString()\n        case 'BigNumber': return value.toNumber()\n        default: throw Error(`UNKNWON propType for value '${value}'. Make sure your schema is up to date.`)\n    }\n}\n\nconst eventFromLog = (log) => {\n    let schema = EVENT_SCHEMAS[log.event]\n    let event = {}\n    forIn(log.args, (value, key) => {\n        let prop = getPropFromSchema(schema[key], value)\n        extend(event, {\n            [key]: prop\n        })\n    })\n    return event\n}\n\nconst eventsFromTransaction = (tx) => {\n    return tx.logs.map((log) => {\n        return eventFromLog(log)\n    })\n}\n\nexport default {\n    eventsFromTransaction\n}\n\n\n\n",
+    "content": "\nimport { forIn, extend } from 'lodash'\n\nconst { EVENT_SCHEMAS } = require('../EventTypes')\n\nexport const LOG = {}\nexport const TX = {}\n\n/**\n * @param {String} propType - the type of the truffle property\n * @param {ReadModel} readModel - a json object representing the state of a given model\n * @return {Object} the property type without truffle data types (no bid numbers or other truffle types...)\n */\nexport const getPropFromSchema = (propType, value) => {\n    switch (propType) {\n        case 'String': return value.toString()\n        case 'BigNumber': return value.toNumber()\n        default: throw Error(`UNKNWON propType for value '${value}'. Make sure your schema is up to date.`)\n    }\n}\n\n/**\n * @param {LOG} log - an ethereum log from a transaction\n * @return {NEW_EVENT} a json object representing a solidity NEW_EVENT\n */\nexport const eventFromLog = (log) => {\n    let schema = EVENT_SCHEMAS[log.event]\n    let event = {}\n    forIn(log.args, (value, key) => {\n        let prop = getPropFromSchema(schema[key], value)\n        extend(event, {\n            [key]: prop\n        })\n    })\n    return event\n}\n\n/**\n * @param {TX} tx - an ethereum log from a transaction\n * @return {NEW_EVENT} an array of all NEW_EVENTS in the transaction tx\n */\nexport const eventsFromTransaction = (tx) => {\n    return tx.logs.map((log) => {\n        return eventFromLog(log)\n    })\n}\n\n\n\n",
     "static": true,
     "longname": "src/EventStore/Transactions/index.js",
     "access": null,
@@ -668,7 +763,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 24,
+    "__docId__": 26,
     "kind": "variable",
     "name": "EVENT_SCHEMAS",
     "memberof": "src/EventStore/Transactions/index.js",
@@ -694,18 +789,16 @@
     }
   },
   {
-    "__docId__": 25,
-    "kind": "function",
-    "name": "getPropFromSchema",
+    "__docId__": 27,
+    "kind": "variable",
+    "name": "LOG",
     "memberof": "src/EventStore/Transactions/index.js",
-    "generator": false,
-    "async": false,
     "static": true,
-    "longname": "src/EventStore/Transactions/index.js~getPropFromSchema",
+    "longname": "src/EventStore/Transactions/index.js~LOG",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/Transactions/index.js",
-    "importStyle": null,
+    "importStyle": "{LOG}",
     "description": null,
     "lineNumber": 6,
     "undocument": true,
@@ -715,28 +808,86 @@
         "tagValue": ""
       }
     ],
-    "params": [
-      {
-        "name": "propType",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "value",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": {
+    "type": {
       "types": [
-        "*"
+        "{}"
       ]
     }
   },
   {
-    "__docId__": 26,
+    "__docId__": 28,
+    "kind": "variable",
+    "name": "TX",
+    "memberof": "src/EventStore/Transactions/index.js",
+    "static": true,
+    "longname": "src/EventStore/Transactions/index.js~TX",
+    "access": null,
+    "export": true,
+    "importPath": "transmute-framework/src/EventStore/Transactions/index.js",
+    "importStyle": "{TX}",
+    "description": null,
+    "lineNumber": 7,
+    "undocument": true,
+    "unknown": [
+      {
+        "tagName": "@_undocument",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "types": [
+        "{}"
+      ]
+    }
+  },
+  {
+    "__docId__": 29,
+    "kind": "function",
+    "name": "getPropFromSchema",
+    "memberof": "src/EventStore/Transactions/index.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/EventStore/Transactions/index.js~getPropFromSchema",
+    "access": null,
+    "export": true,
+    "importPath": "transmute-framework/src/EventStore/Transactions/index.js",
+    "importStyle": "{getPropFromSchema}",
+    "description": "",
+    "lineNumber": 14,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "propType",
+        "description": "the type of the truffle property"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "ReadModel"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "readModel",
+        "description": "a json object representing the state of a given model"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": "the property type without truffle data types (no bid numbers or other truffle types...)"
+    }
+  },
+  {
+    "__docId__": 30,
     "kind": "function",
     "name": "eventFromLog",
     "memberof": "src/EventStore/Transactions/index.js",
@@ -745,34 +896,34 @@
     "static": true,
     "longname": "src/EventStore/Transactions/index.js~eventFromLog",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/Transactions/index.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 14,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "importStyle": "{eventFromLog}",
+    "description": "",
+    "lineNumber": 26,
     "params": [
       {
-        "name": "log",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "LOG"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "log",
+        "description": "an ethereum log from a transaction"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "NEW_EVENT"
+      ],
+      "spread": false,
+      "description": "a json object representing a solidity NEW_EVENT"
     }
   },
   {
-    "__docId__": 27,
+    "__docId__": 31,
     "kind": "function",
     "name": "eventsFromTransaction",
     "memberof": "src/EventStore/Transactions/index.js",
@@ -781,37 +932,37 @@
     "static": true,
     "longname": "src/EventStore/Transactions/index.js~eventsFromTransaction",
     "access": null,
-    "export": false,
+    "export": true,
     "importPath": "transmute-framework/src/EventStore/Transactions/index.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 26,
-    "undocument": true,
-    "unknown": [
-      {
-        "tagName": "@_undocument",
-        "tagValue": ""
-      }
-    ],
+    "importStyle": "{eventsFromTransaction}",
+    "description": "",
+    "lineNumber": 42,
     "params": [
       {
-        "name": "tx",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "TX"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "tx",
+        "description": "an ethereum log from a transaction"
       }
     ],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "NEW_EVENT"
+      ],
+      "spread": false,
+      "description": "an array of all NEW_EVENTS in the transaction tx"
     }
   },
   {
-    "__docId__": 28,
+    "__docId__": 32,
     "kind": "file",
     "name": "src/TF.js",
-    "content": "import {\n  EventStore,\n  writeEvent,\n  writeEvents,\n  readEvent,\n  readEvents,\n  getItem,\n  setItem,\n  readModelGenerator,\n  maybeSyncReadModel\n} from './EventStore/EventStore'\n\n\n\nexport const module = {\n  EventStore,\n  writeEvent,\n  writeEvents,\n  readEvent,\n  readEvents,\n  getItem,\n  setItem,\n  readModelGenerator,\n  maybeSyncReadModel\n}\n\n\n",
+    "content": "import {\n  EventStore,\n  writeEvent,\n  writeEvents,\n  readEvent,\n  readEvents,\n  getItem,\n  setItem,\n  readModelGenerator,\n  maybeSyncReadModel\n} from './EventStore/EventStore'\n\nexport const module = {\n  EventStore,\n  writeEvent,\n  writeEvents,\n  readEvent,\n  readEvents,\n  getItem,\n  setItem,\n  readModelGenerator,\n  maybeSyncReadModel\n}\n\n\n\n",
     "static": true,
     "longname": "src/TF.js",
     "access": null,
@@ -819,7 +970,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 29,
+    "__docId__": 33,
     "kind": "variable",
     "name": "module",
     "memberof": "src/TF.js",
@@ -830,7 +981,7 @@
     "importPath": "transmute-framework/src/TF.js",
     "importStyle": "{module}",
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 13,
     "undocument": true,
     "unknown": [
       {
@@ -845,10 +996,10 @@
     }
   },
   {
-    "__docId__": 30,
+    "__docId__": 34,
     "kind": "file",
     "name": "src/config.js",
-    "content": "export const fbConfig = {\n  apiKey: 'AIzaSyDIXrTv0TD9zdaCy5n_QXm6_VMaS-1B3sQ',\n  authDomain: 'transmute-industries.firebaseapp.com',\n  databaseURL: 'https://transmute-industries.firebaseio.com',\n  projectId: 'transmute-industries',\n  storageBucket: 'transmute-industries.appspot.com',\n  messagingSenderId: '1068223304219'\n}\n",
+    "content": "export const firebaseConfig = {\n  apiKey: 'AIzaSyDIXrTv0TD9zdaCy5n_QXm6_VMaS-1B3sQ',\n  authDomain: 'transmute-industries.firebaseapp.com',\n  databaseURL: 'https://transmute-industries.firebaseio.com',\n  projectId: 'transmute-industries',\n  storageBucket: 'transmute-industries.appspot.com',\n  messagingSenderId: '1068223304219'\n}\n",
     "static": true,
     "longname": "src/config.js",
     "access": null,
@@ -856,16 +1007,16 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 31,
+    "__docId__": 35,
     "kind": "variable",
-    "name": "fbConfig",
+    "name": "firebaseConfig",
     "memberof": "src/config.js",
     "static": true,
-    "longname": "src/config.js~fbConfig",
+    "longname": "src/config.js~firebaseConfig",
     "access": null,
     "export": true,
     "importPath": "transmute-framework/src/config.js",
-    "importStyle": "{fbConfig}",
+    "importStyle": "{firebaseConfig}",
     "description": null,
     "lineNumber": 1,
     "undocument": true,
@@ -882,7 +1033,7 @@
     }
   },
   {
-    "__docId__": 32,
+    "__docId__": 36,
     "kind": "file",
     "name": "src/env.js",
     "content": "\n\nimport Web3 from 'web3'\n\nimport { without } from 'lodash'\n\nexport const envs = ['testrpc', 'parity', 'infura', 'metamask']\n\nlet currentEnv = 'testrpc'\n\nlet _web3, _provider\nswitch (currentEnv) {\n  case 'testrpc': _provider = 'http://localhost:8545'; break\n  case 'parity': _provider = 'http://localhost:8545'; break\n  case 'infura': _provider = 'https://ropsten.infura.io'; break\n}\n\nswitch (currentEnv) {\n  case 'testrpc': _web3 = new Web3(new Web3.providers.HttpProvider(_provider)); break\n  case 'parity': _web3 = new Web3(new Web3.providers.HttpProvider(_provider)); break\n  case 'metamask': _web3 = window.web3; break\n}\n\nexport const getRandomAddress = (addresses, exclude = []) => {\n  let possible = without(addresses, exclude)\n  let addr = possible[Math.floor(Math.random() * possible.length)]\n  return addr\n}\n\nexport const web3 = _web3\n",
@@ -893,7 +1044,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 33,
+    "__docId__": 37,
     "kind": "variable",
     "name": "envs",
     "memberof": "src/env.js",
@@ -919,7 +1070,7 @@
     }
   },
   {
-    "__docId__": 34,
+    "__docId__": 38,
     "kind": "variable",
     "name": "currentEnv",
     "memberof": "src/env.js",
@@ -945,7 +1096,7 @@
     }
   },
   {
-    "__docId__": 35,
+    "__docId__": 39,
     "kind": "function",
     "name": "getRandomAddress",
     "memberof": "src/env.js",
@@ -990,7 +1141,7 @@
     }
   },
   {
-    "__docId__": 36,
+    "__docId__": 40,
     "kind": "variable",
     "name": "web3",
     "memberof": "src/env.js",
@@ -1016,7 +1167,7 @@
     }
   },
   {
-    "__docId__": 38,
+    "__docId__": 42,
     "kind": "external",
     "name": "Infinity",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
@@ -1028,7 +1179,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 39,
+    "__docId__": 43,
     "kind": "external",
     "name": "NaN",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
@@ -1040,7 +1191,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 40,
+    "__docId__": 44,
     "kind": "external",
     "name": "undefined",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
@@ -1052,7 +1203,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 41,
+    "__docId__": 45,
     "kind": "external",
     "name": "null",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
@@ -1064,7 +1215,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 42,
+    "__docId__": 46,
     "kind": "external",
     "name": "Object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -1076,7 +1227,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 43,
+    "__docId__": 47,
     "kind": "external",
     "name": "object",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
@@ -1088,7 +1239,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 44,
+    "__docId__": 48,
     "kind": "external",
     "name": "Function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -1100,7 +1251,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 45,
+    "__docId__": 49,
     "kind": "external",
     "name": "function",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
@@ -1112,7 +1263,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 46,
+    "__docId__": 50,
     "kind": "external",
     "name": "Boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -1124,7 +1275,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 47,
+    "__docId__": 51,
     "kind": "external",
     "name": "boolean",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
@@ -1136,7 +1287,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 48,
+    "__docId__": 52,
     "kind": "external",
     "name": "Symbol",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
@@ -1148,7 +1299,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 49,
+    "__docId__": 53,
     "kind": "external",
     "name": "Error",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
@@ -1160,7 +1311,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 50,
+    "__docId__": 54,
     "kind": "external",
     "name": "EvalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
@@ -1172,7 +1323,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 51,
+    "__docId__": 55,
     "kind": "external",
     "name": "InternalError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
@@ -1184,7 +1335,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 52,
+    "__docId__": 56,
     "kind": "external",
     "name": "RangeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
@@ -1196,7 +1347,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 53,
+    "__docId__": 57,
     "kind": "external",
     "name": "ReferenceError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
@@ -1208,7 +1359,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 54,
+    "__docId__": 58,
     "kind": "external",
     "name": "SyntaxError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
@@ -1220,7 +1371,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 55,
+    "__docId__": 59,
     "kind": "external",
     "name": "TypeError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
@@ -1232,7 +1383,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 56,
+    "__docId__": 60,
     "kind": "external",
     "name": "URIError",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
@@ -1244,7 +1395,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 57,
+    "__docId__": 61,
     "kind": "external",
     "name": "Number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -1256,7 +1407,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 58,
+    "__docId__": 62,
     "kind": "external",
     "name": "number",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
@@ -1268,7 +1419,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 59,
+    "__docId__": 63,
     "kind": "external",
     "name": "Date",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
@@ -1280,7 +1431,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 60,
+    "__docId__": 64,
     "kind": "external",
     "name": "String",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -1292,7 +1443,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 61,
+    "__docId__": 65,
     "kind": "external",
     "name": "string",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
@@ -1304,7 +1455,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 62,
+    "__docId__": 66,
     "kind": "external",
     "name": "RegExp",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
@@ -1316,7 +1467,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 63,
+    "__docId__": 67,
     "kind": "external",
     "name": "Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
@@ -1328,7 +1479,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 64,
+    "__docId__": 68,
     "kind": "external",
     "name": "Int8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
@@ -1340,7 +1491,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 65,
+    "__docId__": 69,
     "kind": "external",
     "name": "Uint8Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
@@ -1352,7 +1503,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 66,
+    "__docId__": 70,
     "kind": "external",
     "name": "Uint8ClampedArray",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
@@ -1364,7 +1515,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 67,
+    "__docId__": 71,
     "kind": "external",
     "name": "Int16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
@@ -1376,7 +1527,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 68,
+    "__docId__": 72,
     "kind": "external",
     "name": "Uint16Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
@@ -1388,7 +1539,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 69,
+    "__docId__": 73,
     "kind": "external",
     "name": "Int32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
@@ -1400,7 +1551,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 70,
+    "__docId__": 74,
     "kind": "external",
     "name": "Uint32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
@@ -1412,7 +1563,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 71,
+    "__docId__": 75,
     "kind": "external",
     "name": "Float32Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
@@ -1424,7 +1575,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 72,
+    "__docId__": 76,
     "kind": "external",
     "name": "Float64Array",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
@@ -1436,7 +1587,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 73,
+    "__docId__": 77,
     "kind": "external",
     "name": "Map",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
@@ -1448,7 +1599,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 74,
+    "__docId__": 78,
     "kind": "external",
     "name": "Set",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
@@ -1460,7 +1611,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 75,
+    "__docId__": 79,
     "kind": "external",
     "name": "WeakMap",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
@@ -1472,7 +1623,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 76,
+    "__docId__": 80,
     "kind": "external",
     "name": "WeakSet",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
@@ -1484,7 +1635,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 77,
+    "__docId__": 81,
     "kind": "external",
     "name": "ArrayBuffer",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
@@ -1496,7 +1647,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 78,
+    "__docId__": 82,
     "kind": "external",
     "name": "DataView",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
@@ -1508,7 +1659,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 79,
+    "__docId__": 83,
     "kind": "external",
     "name": "JSON",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
@@ -1520,7 +1671,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 80,
+    "__docId__": 84,
     "kind": "external",
     "name": "Promise",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
@@ -1532,7 +1683,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 81,
+    "__docId__": 85,
     "kind": "external",
     "name": "Generator",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
@@ -1544,7 +1695,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 82,
+    "__docId__": 86,
     "kind": "external",
     "name": "GeneratorFunction",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
@@ -1556,7 +1707,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 83,
+    "__docId__": 87,
     "kind": "external",
     "name": "Reflect",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
@@ -1568,7 +1719,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 84,
+    "__docId__": 88,
     "kind": "external",
     "name": "Proxy",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
@@ -1581,7 +1732,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 86,
+    "__docId__": 90,
     "kind": "external",
     "name": "CanvasRenderingContext2D",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
@@ -1593,7 +1744,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 87,
+    "__docId__": 91,
     "kind": "external",
     "name": "DocumentFragment",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
@@ -1605,7 +1756,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 88,
+    "__docId__": 92,
     "kind": "external",
     "name": "Element",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
@@ -1617,7 +1768,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 89,
+    "__docId__": 93,
     "kind": "external",
     "name": "Event",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
@@ -1629,7 +1780,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 90,
+    "__docId__": 94,
     "kind": "external",
     "name": "Node",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
@@ -1641,7 +1792,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 91,
+    "__docId__": 95,
     "kind": "external",
     "name": "NodeList",
     "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
@@ -1653,7 +1804,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 92,
+    "__docId__": 96,
     "kind": "external",
     "name": "XMLHttpRequest",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
@@ -1665,7 +1816,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 93,
+    "__docId__": 97,
     "kind": "external",
     "name": "AudioContext",
     "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",

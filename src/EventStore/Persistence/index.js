@@ -5,7 +5,12 @@ import {
     setItem
 } from './LocalStorage'
 
-export default {
+/**
+ * @typedef {Persistence} EVENT_SCHEMAS
+ * @method {getItem} returns an object by key from storage
+ * @method {setItem} saves an object by key to storage
+ */
+export const Persistence = {
     getItem,
     setItem
 }

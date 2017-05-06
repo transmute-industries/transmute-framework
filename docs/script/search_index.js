@@ -1,20 +1,98 @@
 window.esdocSearchIndex = [
   [
+    "transmute-framework/src/eventstore/eventstore.js~eventstore",
+    "variable/index.html#static-variable-EventStore",
+    "<span>EventStore</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/transactions/index.js~log",
+    "variable/index.html#static-variable-LOG",
+    "<span>LOG</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventtypes/index.js~new_event",
+    "variable/index.html#static-variable-NEW_EVENT",
+    "<span>NEW_EVENT</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventTypes/index.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/transactions/index.js~tx",
+    "variable/index.html#static-variable-TX",
+    "<span>TX</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
+    "variable"
+  ],
+  [
     "transmute-framework/src/env.js~envs",
     "variable/index.html#static-variable-envs",
     "<span>envs</span> <span class=\"search-result-import-path\">transmute-framework/src/env.js</span>",
     "variable"
   ],
   [
-    "transmute-framework/src/config.js~fbconfig",
-    "variable/index.html#static-variable-fbConfig",
-    "<span>fbConfig</span> <span class=\"search-result-import-path\">transmute-framework/src/config.js</span>",
+    "transmute-framework/src/eventstore/eventstore.mock.js~event",
+    "variable/index.html#static-variable-event",
+    "<span>event</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
     "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/transactions/index.js~eventfromlog",
+    "function/index.html#static-function-eventFromLog",
+    "<span>eventFromLog</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventstore.mock.js~eventstream",
+    "variable/index.html#static-variable-eventStream",
+    "<span>eventStream</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/transactions/index.js~eventsfromtransaction",
+    "function/index.html#static-function-eventsFromTransaction",
+    "<span>eventsFromTransaction</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventstore.mock.js~expectedprojectstate",
+    "variable/index.html#static-variable-expectedProjectState",
+    "<span>expectedProjectState</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/config.js~firebaseconfig",
+    "variable/index.html#static-variable-firebaseConfig",
+    "<span>firebaseConfig</span> <span class=\"search-result-import-path\">transmute-framework/src/config.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/persistence/localstorage.js~getitem",
+    "function/index.html#static-function-getItem",
+    "<span>getItem</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Persistence/LocalStorage.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/transactions/index.js~getpropfromschema",
+    "function/index.html#static-function-getPropFromSchema",
+    "<span>getPropFromSchema</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
+    "function"
   ],
   [
     "transmute-framework/src/env.js~getrandomaddress",
     "function/index.html#static-function-getRandomAddress",
     "<span>getRandomAddress</span> <span class=\"search-result-import-path\">transmute-framework/src/env.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventstore.mock.js~initialprojectstate",
+    "variable/index.html#static-variable-initialProjectState",
+    "<span>initialProjectState</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventstore.js~maybesyncreadmodel",
+    "function/index.html#static-function-maybeSyncReadModel",
+    "<span>maybeSyncReadModel</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
     "function"
   ],
   [
@@ -24,10 +102,52 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "transmute-framework/src/eventstore/eventstore.mock.js~projectreducer",
+    "function/index.html#static-function-projectReducer",
+    "<span>projectReducer</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventstore.js~readevent",
+    "function/index.html#static-function-readEvent",
+    "<span>readEvent</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventstore.js~readevents",
+    "function/index.html#static-function-readEvents",
+    "<span>readEvents</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/readmodel/index.js~readmodelgenerator",
+    "function/index.html#static-function-readModelGenerator",
+    "<span>readModelGenerator</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/ReadModel/index.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/persistence/localstorage.js~setitem",
+    "function/index.html#static-function-setItem",
+    "<span>setItem</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Persistence/LocalStorage.js</span>",
+    "function"
+  ],
+  [
     "transmute-framework/src/env.js~web3",
     "variable/index.html#static-variable-web3",
     "<span>web3</span> <span class=\"search-result-import-path\">transmute-framework/src/env.js</span>",
     "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventstore.js~writeevent",
+    "function/index.html#static-function-writeEvent",
+    "<span>writeEvent</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
+    "function"
+  ],
+  [
+    "transmute-framework/src/eventstore/eventstore.js~writeevents",
+    "function/index.html#static-function-writeEvents",
+    "<span>writeEvents</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
+    "function"
   ],
   [
     "builtinexternal/ecmascriptexternal.js~array",
@@ -384,9 +504,21 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/eventstore/eventtypes/index.js~event_schemas",
+    "typedef/index.html#static-typedef-EVENT_SCHEMAS",
+    "src/EventStore/EventTypes/index.js~EVENT_SCHEMAS",
+    "typedef"
+  ],
+  [
     "src/eventstore/persistence/localstorage.js",
     "file/src/EventStore/Persistence/LocalStorage.js.html",
     "src/EventStore/Persistence/LocalStorage.js",
+    "file"
+  ],
+  [
+    "src/eventstore/persistence/firebasestore.js",
+    "file/src/EventStore/Persistence/firebaseStore.js.html",
+    "src/EventStore/Persistence/firebaseStore.js",
     "file"
   ],
   [
@@ -394,6 +526,12 @@ window.esdocSearchIndex = [
     "file/src/EventStore/Persistence/index.js.html",
     "src/EventStore/Persistence/index.js",
     "file"
+  ],
+  [
+    "src/eventstore/persistence/index.js~event_schemas",
+    "typedef/index.html#static-typedef-EVENT_SCHEMAS",
+    "src/EventStore/Persistence/index.js~EVENT_SCHEMAS",
+    "typedef"
   ],
   [
     "src/eventstore/readmodel/index.js",

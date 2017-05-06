@@ -1,6 +1,6 @@
 import { web3 } from '../env'
 
-const event = {
+export const event = {
     Id: 0,
     Type: 'PROJECT_CREATED',
     AddressValue: web3.eth.accounts[0],
@@ -8,7 +8,7 @@ const event = {
     StringValue: 'Coral'
 }
 
-const eventStream = [
+export const eventStream = [
     {
         Id: 1,
         Type: 'PROJECT_JOINED',
@@ -32,7 +32,7 @@ const eventStream = [
     }
 ]
 
-const initialProjectState = {
+export const initialProjectState = {
     Id: '0',
     EventCount: null,
     Name: '',
@@ -40,14 +40,14 @@ const initialProjectState = {
     Milestones: []
 }
 
-const expectedProjectState = {
+export const expectedProjectState = {
     Id: '0',
     Name: 'Coral',
     Users: ['Engineer Alice', 'Customer Bob'],
     Milestones: ['Version 0']
 }
 
-const projectReducer = (state = initialProjectState, event) => {
+export const projectReducer = (state = initialProjectState, event) => {
     if (event.Type === 'PROJECT_CREATED') {
         state = Object.assign({}, state, {
             Name: event.StringValue
