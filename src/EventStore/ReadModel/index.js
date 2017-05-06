@@ -21,7 +21,7 @@ export const readModelGenerator = (readModel, reducer, events) => {
 */
 export const maybeSyncReadModel = async (es, readModel, reducer) => {
   let eventCount = (await es.eventCount()).toNumber()
-  return Persistence.getItem(readModel.Id)
+  return Persistence.getItem(readModel.ReadModelStoreKey)
   .then(async (_readModel) => {
     if (!_readModel) {
       _readModel = readModel
@@ -31,7 +31,7 @@ export const maybeSyncReadModel = async (es, readModel, reducer) => {
     }
     let events = await EventStore.readEvents(es, _readModel.EventCount || 0)
     let updatedReadModel = readModelGenerator(_readModel, reducer, events)
-    return Persistence.setItem(updatedReadModel.Id, updatedReadModel)
+    return Persistence.setItem(updatedReadModel.ReadModelStoreKey, updatedReadModel)
   })
 }
 

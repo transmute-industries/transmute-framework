@@ -1,7 +1,9 @@
 import { Constants } from './constants'
 
 export const initialProjectState = {
-  Id: '0',
+  ReadModelStoreKey: '0', // CONTRACT_ADDRESS:READ_MODEL_NAME
+  ReadModelType: 'ProjectSummary', // READ_MODEL_NAME
+  ContractAddress: '', // CONTRACT_ADDRESS
   EventCount: null,
   Name: '',
   Users: [],
@@ -30,7 +32,7 @@ const handlers = {
 }
 
 export const projectReducer = (state = initialProjectState, transmuteEvent) => {
-  if (handlers[transmuteEvent.Type]) {
+  if (handlers[transmuteEvent.Type] && transmuteEvent.Id > state.EventCount) {
     return handlers[transmuteEvent.Type](state, transmuteEvent)
   }
   return state
