@@ -13,7 +13,7 @@
     "test:all": "npm run test-truffle && npm run test",
     "lint": "eslint src",
     "testrpc": "pm2 start testrpc",
-    "docs": "npm run clean && esdoc"
+    "docs": "npm run clean && esdoc "
   },
   "devDependencies": {
     "babel-cli": "6.24.1",

@@ -9,11 +9,12 @@ import {
   writeEvents,
   readEvent,
   readEvents,
-  getItem,
-  setItem,
-  readModelGenerator,
   maybeSyncReadModel
 } from './EventStore'
+
+import {Persistence } from './Persistence'
+
+import {readModelGenerator } from './ReadModel'
 
 import {
   event,
@@ -73,7 +74,7 @@ describe('EventStore', () => {
 
   describe('.setItem', () => {
     it('should return the value when passed a valid key, after saving the value', async () => {
-      setItem(initialProjectState.Id, initialProjectState)
+      Persistence.setItem(initialProjectState.Id, initialProjectState)
         .then((readModel) => {
           assert.equal(initialProjectState.Id, readModel.Id)
           assert.equal(initialProjectState.Name, readModel.Name)
@@ -83,14 +84,14 @@ describe('EventStore', () => {
 
   describe('.getItem', () => {
     it('should return null for invalid key', async () => {
-      getItem('not-a-real-key')
+      Persistence.getItem('not-a-real-key')
         .then((readModel) => {
           assert.isNull(readModel)
         })
     })
 
     it('should return a readModel when passed valid readModelKey', async () => {
-      getItem(initialProjectState.Id)
+      Persistence.getItem(initialProjectState.Id)
         .then((readModel) => {
           assert.equal(initialProjectState.Id, readModel.Id)
           assert.equal(initialProjectState.Name, readModel.Name)

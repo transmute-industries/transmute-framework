@@ -34,9 +34,28 @@
     
   <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getRandomAddress">getRandomAddress</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-module">module</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-fbConfig">fbConfig</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-firebaseConfig">firebaseConfig</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-envs">envs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-web3">web3</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-maybeSyncReadModel">maybeSyncReadModel</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-readEvent">readEvent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-readEvents">readEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvent">writeEvent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvents">writeEvents</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-eventStream">eventStream</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-expectedProjectState">expectedProjectState</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/EventTypes</div><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Persistence</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getItem">getItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setItem">setItem</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/ReadModel</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-readModelGenerator">readModelGenerator</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Transactions</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventFromLog">eventFromLog</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventsFromTransaction">eventsFromTransaction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getPropFromSchema">getPropFromSchema</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-LOG">LOG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-TX">TX</a></span></span></li>
 </ul>
 </div>
 </nav>
@@ -59,13 +78,13 @@ import {
     setItem
 } from &apos;./Persistence&apos;
 
+
 /**
- * this is object destructuring.
- * @param {Object} param - this is object param.
- * @param {number} param.foo - this is property param.
- * @param {string} param.bar - this is property param.
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {UInt} eventId - all events after this Id and includig it will be returned
+ * @return {Promise&lt;NEW_EVENT, Error&gt;} json object representing a Solidity NEW_EVENT
  */
-const readEvent = async (es, eventId) =&gt; {
+export const readEvent = async (es, eventId) =&gt; {
     return {
         Id: eventId,
         Type: await es.getType(eventId),
@@ -76,7 +95,13 @@ const readEvent = async (es, eventId) =&gt; {
     }
 }
 
-const readEvents = async (es, eventId = 0) =&gt; {
+/**
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {UInt} eventId - all events after this Id and includig it will be returned
+ * @param {Address} fromAddress - the address you wish to deploy these events from
+ * @return {Promise&lt;NEW_EVENT[], Error&gt;} json objects representing Solidity NEW_EVENTs
+ */
+export const readEvents = async (es, eventId = 0) =&gt; {
     let currentEvent = await es.eventCount()
     let eventPromises = []
     while (eventId &lt; currentEvent) {
@@ -86,7 +111,13 @@ const readEvents = async (es, eventId = 0) =&gt; {
     return await Promise.all(eventPromises)
 }
 
-const writeEvent = async (es, event, fromAddress) =&gt; {
+/**
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {NEW_EVENT} event - a NEW_EVENT object to be written to the chain
+ * @param {Address} fromAddress - the address you wish to deploy these events from
+ * @return {Promise&lt;NEW_EVENT, Error&gt;} json object representing the Solidity NEW_EVENT
+ */
+export const writeEvent = async (es, event, fromAddress) =&gt; {
     let tx = await es.emitEvent(event.Type, event.AddressValue, event.UIntValue, event.StringValue, {
         from: fromAddress,
         gas: 2000000
@@ -94,7 +125,13 @@ const writeEvent = async (es, event, fromAddress) =&gt; {
     return eventsFromTransaction(tx)
 }
 
-const writeEvents = async (es, eventArray, fromAddress) =&gt; {
+/**
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {NEW_EVENT} eventArray - an array of NEW_EVENT objects to be written to the chain
+ * @param {Address} fromAddress - the address you wish to deploy these events from
+ * @return {Promise&lt;NEW_EVENT[], Error&gt;} json objects representing the Solidity NEW_EVENTs which were written to chain
+ */
+export const writeEvents = async (es, eventArray, fromAddress) =&gt; {
     let eventPromises = eventArray
         .map((event) =&gt; {
             return es
@@ -114,9 +151,12 @@ const writeEvents = async (es, eventArray, fromAddress) =&gt; {
 
 
 /**
- * @param {TruffleContractInstance} es - a contract which is an Event Store
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {initialProjectState} readModel - a json object representing the state of a given model
+ * @param {projectReducer} reducer - a function which reduces events into a read model state object
+ * @return {Promise&lt;ReadModel, Error&gt;} json object representing the state of a ReadModel for an EventStore
  */
-const maybeSyncReadModel = async (es, readModel, reducer) =&gt; {
+export const maybeSyncReadModel = async (es, readModel, reducer) =&gt; {
     let eventCount = (await es.eventCount()).toNumber()
     return getItem(readModel.Id)
         .then(async (_readModel) =&gt; {

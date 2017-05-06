@@ -1,7 +1,13 @@
 {
-    "source": "./src",
-    "destination": "./docs",
-    "plugins": [
-    {"name": "esdoc-undocumented-identifier-plugin", "option": {"enable": true}}
+  "source": "./src",
+  "destination": "./docs",
+  "lint": false,
+  "plugins": [
+    {
+      "name": "esdoc-undocumented-identifier-plugin",
+      "option": {
+        "enable": true
+      }
+    }
   ]
 }

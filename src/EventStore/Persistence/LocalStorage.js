@@ -8,7 +8,11 @@ if (typeof localStorage === 'undefined' || localStorage === null) {
     store = localStorage
 }
 
-const getItem = (key) => {
+/**
+ * @param {String} key - a key for a stored object
+ * @return {Object} a promise for the object at the given key
+ */
+export const getItem = (key) => {
     return new Promise((resolve, reject) => {
         let itemAsString = store.getItem(key)
         try {
@@ -19,15 +23,15 @@ const getItem = (key) => {
     })
 }
 
-const setItem = (key, value) => {
+/**
+ * @param {String} key - a key for a stored object
+ * @param {String} value - the object to be stored
+ * @return {Object} a promise for the object at the given key
+ */
+export const setItem = (key, value) => {
     return new Promise((resolve, reject) => {
         store.setItem(key, JSON.stringify(value))
         resolve(value)
     })
-}
-
-export default {
-    getItem,
-    setItem
 }
 

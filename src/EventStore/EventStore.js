@@ -4,24 +4,23 @@ import contract from 'truffle-contract'
 import { web3 } from '../env'
 import eventStoreArtifacts from '../../build/contracts/EventStore.json'
 
-var EventStore = contract(eventStoreArtifacts)
+export var EventStore = contract(eventStoreArtifacts)
 EventStore.setProvider(web3.currentProvider)
 
 import { eventsFromTransaction } from './Transactions'
 import { readModelGenerator } from './ReadModel'
 
 import {
-    getItem,
-    setItem
+  Persistence
 } from './Persistence'
 
+
 /**
- * this is object destructuring.
- * @param {Object} param - this is object param.
- * @param {number} param.foo - this is property param.
- * @param {string} param.bar - this is property param.
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {UInt} eventId - all events after this Id and includig it will be returned
+ * @return {Promise<NEW_EVENT, Error>} json object representing a Solidity NEW_EVENT
  */
-const readEvent = async (es, eventId) => {
+export const readEvent = async (es, eventId) => {
     return {
         Id: eventId,
         Type: await es.getType(eventId),
@@ -32,7 +31,13 @@ const readEvent = async (es, eventId) => {
     }
 }
 
-const readEvents = async (es, eventId = 0) => {
+/**
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {UInt} eventId - all events after this Id and includig it will be returned
+ * @param {Address} fromAddress - the address you wish to deploy these events from
+ * @return {Promise<NEW_EVENT[], Error>} json objects representing Solidity NEW_EVENTs
+ */
+export const readEvents = async (es, eventId = 0) => {
     let currentEvent = await es.eventCount()
     let eventPromises = []
     while (eventId < currentEvent) {
@@ -42,7 +47,13 @@ const readEvents = async (es, eventId = 0) => {
     return await Promise.all(eventPromises)
 }
 
-const writeEvent = async (es, event, fromAddress) => {
+/**
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {NEW_EVENT} event - a NEW_EVENT object to be written to the chain
+ * @param {Address} fromAddress - the address you wish to deploy these events from
+ * @return {Promise<NEW_EVENT, Error>} json object representing the Solidity NEW_EVENT
+ */
+export const writeEvent = async (es, event, fromAddress) => {
     let tx = await es.emitEvent(event.Type, event.AddressValue, event.UIntValue, event.StringValue, {
         from: fromAddress,
         gas: 2000000
@@ -50,7 +61,13 @@ const writeEvent = async (es, event, fromAddress) => {
     return eventsFromTransaction(tx)
 }
 
-const writeEvents = async (es, eventArray, fromAddress) => {
+/**
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {NEW_EVENT} eventArray - an array of NEW_EVENT objects to be written to the chain
+ * @param {Address} fromAddress - the address you wish to deploy these events from
+ * @return {Promise<NEW_EVENT[], Error>} json objects representing the Solidity NEW_EVENTs which were written to chain
+ */
+export const writeEvents = async (es, eventArray, fromAddress) => {
     let eventPromises = eventArray
         .map((event) => {
             return es
@@ -70,11 +87,14 @@ const writeEvents = async (es, eventArray, fromAddress) => {
 
 
 /**
- * @param {TruffleContractInstance} es - a contract which is an Event Store
+ * @param {EventStore} es - a contract instance which is an Event Store
+ * @param {initialProjectState} readModel - a json object representing the state of a given model
+ * @param {projectReducer} reducer - a function which reduces events into a read model state object
+ * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
  */
-const maybeSyncReadModel = async (es, readModel, reducer) => {
+export const maybeSyncReadModel = async (es, readModel, reducer) => {
     let eventCount = (await es.eventCount()).toNumber()
-    return getItem(readModel.Id)
+    return Persistence.getItem(readModel.Id)
         .then(async (_readModel) => {
             if (!_readModel) {
                 _readModel = readModel
@@ -84,7 +104,7 @@ const maybeSyncReadModel = async (es, readModel, reducer) => {
             }
             let events = await readEvents(es, _readModel.EventCount || 0)
             let updatedReadModel = readModelGenerator(_readModel, reducer, events)
-            return setItem(updatedReadModel.Id, updatedReadModel)
+            return Persistence.setItem(updatedReadModel.Id, updatedReadModel)
         })
 }
 
@@ -94,8 +114,6 @@ export default {
     writeEvents,
     readEvent,
     readEvents,
-    getItem,
-    setItem,
     readModelGenerator,
     maybeSyncReadModel
 }

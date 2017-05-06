@@ -10,8 +10,6 @@ import {
   maybeSyncReadModel
 } from './EventStore/EventStore'
 
-
-
 export const module = {
   EventStore,
   writeEvent,
@@ -23,5 +21,6 @@ export const module = {
   readModelGenerator,
   maybeSyncReadModel
 }
+
 
 

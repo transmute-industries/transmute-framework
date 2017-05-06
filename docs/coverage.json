@@ -1,8 +1,23 @@
 {
-  "coverage": "0%",
-  "expectCount": 5,
-  "actualCount": 0,
+  "coverage": "47.82%",
+  "expectCount": 23,
+  "actualCount": 11,
   "files": {
+    "src/EventStore/Transactions/index.js": {
+      "expectCount": 5,
+      "actualCount": 3,
+      "undocumentLines": [
+        6,
+        7
+      ]
+    },
+    "src/EventStore/EventTypes/index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        2
+      ]
+    },
     "src/env.js": {
       "expectCount": 3,
       "actualCount": 0,
@@ -12,6 +27,16 @@
         30
       ]
     },
+    "src/EventStore/Mock.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        11,
+        43,
+        35,
+        50
+      ]
+    },
     "src/config.js": {
       "expectCount": 1,
       "actualCount": 0,
@@ -19,12 +44,27 @@
         1
       ]
     },
+    "src/EventStore/Persistence/LocalStorage.js": {
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/EventStore/EventStore.js": {
+      "expectCount": 5,
+      "actualCount": 5,
+      "undocumentLines": []
+    },
     "src/TF.js": {
       "expectCount": 1,
       "actualCount": 0,
       "undocumentLines": [
-        15
+        13
       ]
+    },
+    "src/EventStore/ReadModel/index.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
     }
   }
 }
