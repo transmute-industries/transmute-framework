@@ -45,5 +45,8 @@ export const eventsFromTransaction = (tx) => {
     })
 }
 
-
-
+export const Transactions = {
+    getPropFromSchema,
+    eventFromLog,
+    eventsFromTransaction
+}

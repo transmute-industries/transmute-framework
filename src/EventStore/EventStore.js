@@ -4,16 +4,10 @@ import contract from 'truffle-contract'
 import { web3 } from '../env'
 import eventStoreArtifacts from '../../build/contracts/EventStore.json'
 
-export var EventStore = contract(eventStoreArtifacts)
-EventStore.setProvider(web3.currentProvider)
+const ES = contract(eventStoreArtifacts)
+ES.setProvider(web3.currentProvider)
 
 import { eventsFromTransaction } from './Transactions'
-import { readModelGenerator } from './ReadModel'
-
-import {
-  Persistence
-} from './Persistence'
-
 
 /**
  * @param {EventStore} es - a contract instance which is an Event Store
@@ -85,35 +79,10 @@ export const writeEvents = async (es, eventArray, fromAddress) => {
         })
 }
 
-
-/**
- * @param {EventStore} es - a contract instance which is an Event Store
- * @param {initialProjectState} readModel - a json object representing the state of a given model
- * @param {projectReducer} reducer - a function which reduces events into a read model state object
- * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
- */
-export const maybeSyncReadModel = async (es, readModel, reducer) => {
-    let eventCount = (await es.eventCount()).toNumber()
-    return Persistence.getItem(readModel.Id)
-        .then(async (_readModel) => {
-            if (!_readModel) {
-                _readModel = readModel
-            }
-            if (_readModel.EventCount === eventCount) {
-                return false
-            }
-            let events = await readEvents(es, _readModel.EventCount || 0)
-            let updatedReadModel = readModelGenerator(_readModel, reducer, events)
-            return Persistence.setItem(updatedReadModel.Id, updatedReadModel)
-        })
-}
-
-export default {
-    EventStore,
-    writeEvent,
-    writeEvents,
+export const EventStore = {
+    ES,
     readEvent,
     readEvents,
-    readModelGenerator,
-    maybeSyncReadModel
+    writeEvent,
+    writeEvents
 }

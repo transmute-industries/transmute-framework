@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "transmute-framework/src/eventstore/eventtypes/index.js~eventypes",
+    "variable/index.html#static-variable-EvenTypes",
+    "<span>EvenTypes</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventTypes/index.js</span>",
+    "variable"
+  ],
+  [
     "transmute-framework/src/eventstore/eventstore.js~eventstore",
     "variable/index.html#static-variable-EventStore",
     "<span>EventStore</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
@@ -18,9 +24,27 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "transmute-framework/src/eventstore/readmodel/index.js~readmodel",
+    "variable/index.html#static-variable-ReadModel",
+    "<span>ReadModel</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/ReadModel/index.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/tf.js~tf",
+    "variable/index.html#static-variable-TF",
+    "<span>TF</span> <span class=\"search-result-import-path\">transmute-framework/src/TF.js</span>",
+    "variable"
+  ],
+  [
     "transmute-framework/src/eventstore/transactions/index.js~tx",
     "variable/index.html#static-variable-TX",
     "<span>TX</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
+    "variable"
+  ],
+  [
+    "transmute-framework/src/eventstore/transactions/index.js~transactions",
+    "variable/index.html#static-variable-Transactions",
+    "<span>Transactions</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
     "variable"
   ],
   [
@@ -90,16 +114,10 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "transmute-framework/src/eventstore/eventstore.js~maybesyncreadmodel",
+    "transmute-framework/src/eventstore/readmodel/index.js~maybesyncreadmodel",
     "function/index.html#static-function-maybeSyncReadModel",
-    "<span>maybeSyncReadModel</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
+    "<span>maybeSyncReadModel</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/ReadModel/index.js</span>",
     "function"
-  ],
-  [
-    "transmute-framework/src/tf.js~module",
-    "variable/index.html#static-variable-module",
-    "<span>module</span> <span class=\"search-result-import-path\">transmute-framework/src/TF.js</span>",
-    "variable"
   ],
   [
     "transmute-framework/src/eventstore/eventstore.mock.js~projectreducer",
