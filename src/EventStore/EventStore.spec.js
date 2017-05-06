@@ -3,21 +3,50 @@
 import { web3 } from '../env'
 import { assert } from 'chai'
 
-import {
-  EventStore
-} from './EventStore'
-
-import {Persistence } from './Persistence'
-
+import { EventStore } from './EventStore'
+import { Persistence } from './Persistence'
 import { ReadModel } from './ReadModel'
+import { Constants } from './constants'
+import { initialProjectState, projectReducer } from './reducer'
 
-import {
-  event,
-  eventStream,
-  initialProjectState,
-  expectedProjectState,
-  projectReducer
-} from './EventStore.mock'
+const transmuteTestEvent = {
+  Id: 0,
+  Type: Constants.PROJECT_CREATED,
+  AddressValue: web3.eth.accounts[0],
+  UIntValue: 1,
+  StringValue: 'Coral'
+}
+
+const transmuteTestEventStream = [
+  {
+    Id: 1,
+    Type: Constants.PROJECT_JOINED,
+    AddressValue: web3.eth.accounts[0],
+    UIntValue: 1,
+    StringValue: 'Engineer Alice'
+  },
+  {
+    Id: 2,
+    Type: Constants.PROJECT_JOINED,
+    AddressValue: web3.eth.accounts[1],
+    UIntValue: 1,
+    StringValue: 'Customer Bob'
+  },
+  {
+    Id: 3,
+    Type: Constants.PROJECT_MILESTONE,
+    AddressValue: web3.eth.accounts[0],
+    UIntValue: 1,
+    StringValue: 'Version 0'
+  }
+]
+
+const expectedProjectState = {
+  Id: '0',
+  Name: 'Coral',
+  Users: ['Engineer Alice', 'Customer Bob'],
+  Milestones: ['Version 0']
+}
 
 let es, startEventCount, maybeUpdatedReadModel
 
@@ -27,43 +56,42 @@ describe('EventStore', () => {
     // console.log(TF)
     es = await EventStore.ES.deployed()
     startEventCount = (await es.eventCount()).toNumber()
-
   })
 
   describe('.writeEvent', () => {
     it('should return the event at the index', async () => {
-      let events = await EventStore.writeEvent(es, event, web3.eth.accounts[0])
-      assert.equal(events.length, 1)
-      assert.equal(events[0].Type, event.Type)
-      assert.equal(events[0].AddressValue, event.AddressValue)
-      assert.equal(events[0].UIntValue, event.UIntValue)
-      assert.equal(events[0].StringValue, event.StringValue)
+      let transmuteEvents = await EventStore.writeEvent(es, transmuteTestEvent, web3.eth.accounts[0])
+      assert.equal(transmuteEvents.length, 1)
+      assert.equal(transmuteEvents[0].Type, transmuteTestEvent.Type)
+      assert.equal(transmuteEvents[0].AddressValue, transmuteTestEvent.AddressValue)
+      assert.equal(transmuteEvents[0].UIntValue, transmuteTestEvent.UIntValue)
+      assert.equal(transmuteEvents[0].StringValue, transmuteTestEvent.StringValue)
     })
   })
 
   describe('.readEvent', () => {
     it('should return the event at the index', async () => {
-      let event = await EventStore.readEvent(es, 0)
-      assert.equal(event.Type, event.Type)
-      assert.equal(event.AddressValue, event.AddressValue)
-      assert.equal(event.UIntValue, event.UIntValue)
-      assert.equal(event.StringValue, event.StringValue)
+      let transmuteEvent = await EventStore.readEvent(es, 0)
+      assert.equal(transmuteEvent.Type, transmuteTestEvent.Type)
+      assert.equal(transmuteEvent.AddressValue, transmuteTestEvent.AddressValue)
+      assert.equal(transmuteEvent.UIntValue, transmuteTestEvent.UIntValue)
+      assert.equal(transmuteEvent.StringValue, transmuteTestEvent.StringValue)
     })
   })
 
   describe('.writeEvents', () => {
     it('should return the events written to the event store', async () => {
-      let events = await EventStore.writeEvents(es, eventStream, web3.eth.accounts[0])
-      assert.equal(events.length, 3)
-      // console.log(events)
+      let transmuteEvents = await EventStore.writeEvents(es, transmuteTestEventStream, web3.eth.accounts[0])
+      assert.equal(transmuteEvents.length, 3)
+      // console.log(transmuteEvents)
     })
   })
 
   describe('.readEvents', () => {
     it('should return the events in the contract starting with the index', async () => {
-      let events = await EventStore.readEvents(es, startEventCount)
-      assert.equal(events.length, 4)
-      // console.log(events)
+      let transmuteEvents = await EventStore.readEvents(es, startEventCount)
+      assert.equal(transmuteEvents.length, 4)
+      // console.log(transmuteEvents)
     })
   })
 
@@ -127,5 +155,3 @@ describe('EventStore', () => {
   })
 
 })
-
-
