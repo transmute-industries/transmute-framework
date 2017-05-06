@@ -51,6 +51,12 @@ $ truffle test
 $ npm run test:all
 ```
 
+
+### Contributing 
+
+Please fork and submit PRs. There are integration tests for truffle and javascript libraries that run in travis.
+If these fail, expect your PR to be rejected ; )
+
 ### References
 
 - https://github.com/Upchain/truffle-template

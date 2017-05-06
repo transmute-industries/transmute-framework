@@ -12,8 +12,34 @@ contract EventStore is Killable {
     string StringValue;
   }
 
+  struct SolidityEventProperty {
+    string Name;
+    string Type;
+    address AddressValue;
+    uint UIntValue;
+    string StringValue;
+  }
+
+  struct SolidityEvent {
+    uint Id;
+    string Type;
+    uint Created;
+    uint PropertyCount;
+    mapping (uint => SolidityEventProperty) PropertyValues;
+  }
+
+  uint public solidityEventCount;
+  mapping (uint => SolidityEvent) solidityEvents;
+
   uint public eventCount;
   mapping (uint => TransmuteEvent) events;
+
+  event SOLIDITY_EVENT(
+    uint Id,
+    string Type,
+    uint Created,
+    address PropertyCount
+  );
 
   event NEW_EVENT(
     uint Id,
