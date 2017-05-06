@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/EventStore/Mock.js | API Document</title>
+  <base data-ice="baseUrl" href="../../../../">
+  <title data-ice="title">src/EventStore/Persistence/firebaseStore.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -43,6 +43,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvent">writeEvent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvents">writeEvents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-event">event</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-eventStream">eventStream</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-expectedProjectState">expectedProjectState</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span></span></li>
@@ -50,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Persistence</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getItem">getItem</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setItem">setItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/ReadModel</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-readModelGenerator">readModelGenerator</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Transactions</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventFromLog">eventFromLog</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventsFromTransaction">eventsFromTransaction</a></span></span></li>
@@ -60,85 +63,44 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/EventStore/Mock.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { web3 } from &apos;../env&apos;
+<div class="content" data-ice="content"><h1 data-ice="title">src/EventStore/Persistence/firebaseStore.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">// const { firebaseConfig } = require(&apos;../../env&apos;)
 
-const event = {
-    Id: 0,
-    Type: &apos;PROJECT_CREATED&apos;,
-    AddressValue: web3.eth.accounts[0],
-    UIntValue: 1,
-    StringValue: &apos;Coral&apos;
-}
+// const firebase = require(&apos;firebase&apos;)
+// const { readEventsStartingAt } = require(&apos;./eventStore&apos;)
 
-export const eventStream = [
-    {
-        Id: 1,
-        Type: &apos;PROJECT_JOINED&apos;,
-        AddressValue: web3.eth.accounts[0],
-        UIntValue: 1,
-        StringValue: &apos;Engineer Alice&apos;
-    },
-    {
-        Id: 2,
-        Type: &apos;PROJECT_JOINED&apos;,
-        AddressValue: web3.eth.accounts[1],
-        UIntValue: 1,
-        StringValue: &apos;Customer Bob&apos;
-    },
-    {
-        Id: 3,
-        Type: &apos;PROJECT_MILESTONE&apos;,
-        AddressValue: web3.eth.accounts[0],
-        UIntValue: 1,
-        StringValue: &apos;Version 0&apos;
-    }
-]
+// firebase.initializeApp(firebaseConfig)
 
-export const initialProjectState = {
-    Id: &apos;0&apos;,
-    EventCount: null,
-    Name: &apos;&apos;,
-    Users: [],
-    Milestones: []
-}
+// const db = firebase.database()
+// const eventStorePath = &apos;transmute/events/&apos;
+// const readModelStorePath = &apos;transmute/models/&apos;
 
-export const expectedProjectState = {
-    Id: &apos;0&apos;,
-    Name: &apos;Coral&apos;,
-    Users: [&apos;Engineer Alice&apos;, &apos;Customer Bob&apos;],
-    Milestones: [&apos;Version 0&apos;]
-}
+// // // TODO: Add Encryption here
+// // // to hide contract data from firebase...
+// // // store encryption key in a contract with owner
+// // // https://github.com/cisco/node-jose
+// // // https://github.com/OR13/JOE
 
-export const projectReducer = (state = initialProjectState, event) =&gt; {
-    if (event.Type === &apos;PROJECT_CREATED&apos;) {
-        state = Object.assign({}, state, {
-            Name: event.StringValue
-        })
-    }
-    if (event.Type === &apos;PROJECT_JOINED&apos;) {
-        state = Object.assign({}, state, {
-            Users: state.Users.concat(event.StringValue)
-        })
-    }
-    if (event.Type === &apos;PROJECT_MILESTONE&apos;) {
-        state = Object.assign({}, state, {
-            Milestones: state.Milestones.concat(event.StringValue)
-        })
-    }
-    // Important for synching state
-    state.EventCount = event.Id
-    return state
-}
+// const getItem = async (storePath, key) =&gt; {
+//   return db.ref(storePath + key)
+//   .once(&apos;value&apos;)
+//   .then((snapshot) =&gt; {
+//     let obj = snapshot.val()
+//     return obj
+//   })
+// }
 
-export default {
-    event,
-    eventStream,
+// const setItem = async (storePath, key, value) =&gt; {
+//   return db.ref(storePath + key).set(value)
+// }
 
-    initialProjectState,
-    expectedProjectState,
-    projectReducer
-}
+
+// module.exports = {
+//   readModelStorePath,
+//   receiveEvents,
+//   rebuildReadModelWithGenerator,
+//   maybeSyncReadModel
+// }
 </code></pre>
 
 </div>

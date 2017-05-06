@@ -43,6 +43,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvent">writeEvent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvents">writeEvents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-event">event</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-eventStream">eventStream</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-expectedProjectState">expectedProjectState</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span></span></li>
@@ -50,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Persistence</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getItem">getItem</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setItem">setItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/ReadModel</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-readModelGenerator">readModelGenerator</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Transactions</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventFromLog">eventFromLog</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventsFromTransaction">eventsFromTransaction</a></span></span></li>
@@ -66,6 +69,33 @@
   <tbody>
   
   <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></span><span data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -160,6 +190,33 @@
           
           
           <span data-ice="name"><span><a href="variable/index.html#static-variable-envs">envs</a></span></span><span data-ice="signature">: <span><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span><span>[]</span></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          <span data-ice="name"><span><a href="variable/index.html#static-variable-event">event</a></span></span><span data-ice="signature">: {&quot;Id&quot;: <span>*</span>, &quot;Type&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, &quot;AddressValue&quot;: <span>*</span>, &quot;UIntValue&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;StringValue&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}</span>
         </p>
       </div>
       <div>
@@ -341,6 +398,49 @@
 <div data-ice="details"><h2 data-ice="title">Static Public </h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-variable-EventStore">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">EventStore</span><span data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber7">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {EventStore} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber7">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-variable-LOG">
     <span class="access" data-ice="access">public</span>
     
@@ -513,6 +613,49 @@
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-variable-event">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span data-ice="name">event</span><span data-ice="signature">: {&quot;Id&quot;: <span>*</span>, &quot;Type&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, &quot;AddressValue&quot;: <span>*</span>, &quot;UIntValue&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, &quot;StringValue&quot;: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>}</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber3">source</a></span></span>
+    </span>
+  </h3>
+
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {event} from &apos;<span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber3">transmute-framework/src/EventStore/EventStore.mock.js</a></span>&apos;</code></pre></div>
+  
+  
+  
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="static-variable-eventStream">
     <span class="access" data-ice="access">public</span>
     
@@ -524,11 +667,11 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/Mock.js.html#lineNumber11">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber11">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {eventStream} from &apos;<span><a href="file/src/EventStore/Mock.js.html#lineNumber11">transmute-framework/src/EventStore/Mock.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {eventStream} from &apos;<span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber11">transmute-framework/src/EventStore/EventStore.mock.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -567,11 +710,11 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/Mock.js.html#lineNumber43">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {expectedProjectState} from &apos;<span><a href="file/src/EventStore/Mock.js.html#lineNumber43">transmute-framework/src/EventStore/Mock.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {expectedProjectState} from &apos;<span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber43">transmute-framework/src/EventStore/EventStore.mock.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -653,11 +796,11 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/Mock.js.html#lineNumber35">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber35">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {initialProjectState} from &apos;<span><a href="file/src/EventStore/Mock.js.html#lineNumber35">transmute-framework/src/EventStore/Mock.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {initialProjectState} from &apos;<span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber35">transmute-framework/src/EventStore/EventStore.mock.js</a></span>&apos;</code></pre></div>
   
   
   

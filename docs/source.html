@@ -43,6 +43,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvent">writeEvent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvents">writeEvents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-event">event</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-eventStream">eventStream</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-expectedProjectState">expectedProjectState</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span></span></li>
@@ -50,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Persistence</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getItem">getItem</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setItem">setItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/ReadModel</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-readModelGenerator">readModelGenerator</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Transactions</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventFromLog">eventFromLog</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventsFromTransaction">eventsFromTransaction</a></span></span></li>
@@ -60,7 +63,7 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">11/23</span></h1>
+<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">11/25</span></h1>
 
 <table class="files-summary" data-ice="files" data-use-coverage="true">
   <thead>
@@ -76,16 +79,37 @@
   <tbody>
     
   <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/EventStore/EventStore.js.html">src/EventStore/EventStore.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-maybeSyncReadModel">maybeSyncReadModel</a></span>
+      <td data-ice="filePath"><span><a href="file/src/EventStore/EventStore.js.html#errorLines=7">src/EventStore/EventStore.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>
+<span><a href="function/index.html#static-function-maybeSyncReadModel">maybeSyncReadModel</a></span>
 <span><a href="function/index.html#static-function-readEvent">readEvent</a></span>
 <span><a href="function/index.html#static-function-readEvents">readEvents</a></span>
 <span><a href="function/index.html#static-function-writeEvent">writeEvent</a></span>
 <span><a href="function/index.html#static-function-writeEvents">writeEvents</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">5/5</span></td>
-      <td style="display: none;" data-ice="size">4366 byte</td>
-      <td style="display: none;" data-ice="lines">122</td>
-      <td style="display: none;" data-ice="updated">2017-05-07 03:07:19 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">83 %</span><span data-ice="coverageCount" class="coverage-count">5/6</span></td>
+      <td style="display: none;" data-ice="size">4360 byte</td>
+      <td style="display: none;" data-ice="lines">119</td>
+      <td style="display: none;" data-ice="updated">2017-05-07 03:24:54 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/EventStore/EventStore.mock.js.html#errorLines=11,3,35,43,50">src/EventStore/EventStore.mock.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-event">event</a></span>
+<span><a href="variable/index.html#static-variable-eventStream">eventStream</a></span>
+<span><a href="variable/index.html#static-variable-expectedProjectState">expectedProjectState</a></span>
+<span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span>
+<span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span></td>
+      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/5</span></td>
+      <td style="display: none;" data-ice="size">1723 byte</td>
+      <td style="display: none;" data-ice="lines">78</td>
+      <td style="display: none;" data-ice="updated">2017-05-07 03:21:46 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/EventStore/EventStore.spec.js.html">src/EventStore/EventStore.spec.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">4540 byte</td>
+      <td style="display: none;" data-ice="lines">136</td>
+      <td style="display: none;" data-ice="updated">2017-05-07 03:23:22 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/EventStore/EventTypes/index.js.html#errorLines=2">src/EventStore/EventTypes/index.js</a></span></td>
@@ -96,48 +120,37 @@
       <td style="display: none;" data-ice="updated">2017-05-07 03:00:56 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/EventStore/Mock.js.html#errorLines=11,35,43,50">src/EventStore/Mock.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="variable/index.html#static-variable-eventStream">eventStream</a></span>
-<span><a href="variable/index.html#static-variable-expectedProjectState">expectedProjectState</a></span>
-<span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span>
-<span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span></td>
-      <td class="coverage"><span data-ice="coverage">0 %</span><span data-ice="coverageCount" class="coverage-count">0/4</span></td>
-      <td style="display: none;" data-ice="size">1716 byte</td>
-      <td style="display: none;" data-ice="lines">78</td>
-      <td style="display: none;" data-ice="updated">2017-05-07 02:57:07 (UTC)</td>
-    </tr>
-<tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/EventStore/Persistence/LocalStorage.js.html">src/EventStore/Persistence/LocalStorage.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-getItem">getItem</a></span>
 <span><a href="function/index.html#static-function-setItem">setItem</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
       <td style="display: none;" data-ice="size">951 byte</td>
       <td style="display: none;" data-ice="lines">37</td>
-      <td style="display: none;" data-ice="updated">2017-05-07 02:50:08 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2017-05-07 03:16:58 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/EventStore/Persistence/firebaseStore.js.html">src/EventStore/Persistence/firebaseStore.js</a></span></td>
+      <td data-ice="identifier" class="identifiers">-</td>
+      <td class="coverage"><span data-ice="coverage">-</span></td>
+      <td style="display: none;" data-ice="size">981 byte</td>
+      <td style="display: none;" data-ice="lines">37</td>
+      <td style="display: none;" data-ice="updated">2017-05-07 03:11:18 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/EventStore/Persistence/index.js.html">src/EventStore/Persistence/index.js</a></span></td>
       <td data-ice="identifier" class="identifiers">-</td>
       <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">105 byte</td>
-      <td style="display: none;" data-ice="lines">11</td>
-      <td style="display: none;" data-ice="updated">2017-05-07 02:27:24 (UTC)</td>
+      <td style="display: none;" data-ice="size">279 byte</td>
+      <td style="display: none;" data-ice="lines">16</td>
+      <td style="display: none;" data-ice="updated">2017-05-07 03:20:38 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/EventStore/ReadModel/index.js.html">src/EventStore/ReadModel/index.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="function/index.html#static-function-readModelGenerator">readModelGenerator</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">1/1</span></td>
-      <td style="display: none;" data-ice="size">435 byte</td>
-      <td style="display: none;" data-ice="lines">13</td>
-      <td style="display: none;" data-ice="updated">2017-05-07 02:58:27 (UTC)</td>
-    </tr>
-<tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/EventStore/Spec.js.html">src/EventStore/Spec.js</a></span></td>
-      <td data-ice="identifier" class="identifiers">-</td>
-      <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">4455 byte</td>
-      <td style="display: none;" data-ice="lines">135</td>
-      <td style="display: none;" data-ice="updated">2017-05-07 02:56:38 (UTC)</td>
+      <td style="display: none;" data-ice="size">434 byte</td>
+      <td style="display: none;" data-ice="lines">12</td>
+      <td style="display: none;" data-ice="updated">2017-05-07 03:22:57 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/EventStore/Transactions/index.js.html#errorLines=6,7">src/EventStore/Transactions/index.js</a></span></td>

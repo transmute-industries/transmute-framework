@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "transmute-framework/src/eventstore/eventstore.js~eventstore",
+    "variable/index.html#static-variable-EventStore",
+    "<span>EventStore</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.js</span>",
+    "variable"
+  ],
+  [
     "transmute-framework/src/eventstore/transactions/index.js~log",
     "variable/index.html#static-variable-LOG",
     "<span>LOG</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
@@ -24,15 +30,21 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "transmute-framework/src/eventstore/eventstore.mock.js~event",
+    "variable/index.html#static-variable-event",
+    "<span>event</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
+    "variable"
+  ],
+  [
     "transmute-framework/src/eventstore/transactions/index.js~eventfromlog",
     "function/index.html#static-function-eventFromLog",
     "<span>eventFromLog</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Transactions/index.js</span>",
     "function"
   ],
   [
-    "transmute-framework/src/eventstore/mock.js~eventstream",
+    "transmute-framework/src/eventstore/eventstore.mock.js~eventstream",
     "variable/index.html#static-variable-eventStream",
-    "<span>eventStream</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Mock.js</span>",
+    "<span>eventStream</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
     "variable"
   ],
   [
@@ -42,9 +54,9 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "transmute-framework/src/eventstore/mock.js~expectedprojectstate",
+    "transmute-framework/src/eventstore/eventstore.mock.js~expectedprojectstate",
     "variable/index.html#static-variable-expectedProjectState",
-    "<span>expectedProjectState</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Mock.js</span>",
+    "<span>expectedProjectState</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
     "variable"
   ],
   [
@@ -72,9 +84,9 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
-    "transmute-framework/src/eventstore/mock.js~initialprojectstate",
+    "transmute-framework/src/eventstore/eventstore.mock.js~initialprojectstate",
     "variable/index.html#static-variable-initialProjectState",
-    "<span>initialProjectState</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Mock.js</span>",
+    "<span>initialProjectState</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
     "variable"
   ],
   [
@@ -90,9 +102,9 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
-    "transmute-framework/src/eventstore/mock.js~projectreducer",
+    "transmute-framework/src/eventstore/eventstore.mock.js~projectreducer",
     "function/index.html#static-function-projectReducer",
-    "<span>projectReducer</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/Mock.js</span>",
+    "<span>projectReducer</span> <span class=\"search-result-import-path\">transmute-framework/src/EventStore/EventStore.mock.js</span>",
     "function"
   ],
   [
@@ -474,6 +486,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/eventstore/eventstore.mock.js",
+    "file/src/EventStore/EventStore.mock.js.html",
+    "src/EventStore/EventStore.mock.js",
+    "file"
+  ],
+  [
+    "src/eventstore/eventstore.spec.js",
+    "file/src/EventStore/EventStore.spec.js.html",
+    "src/EventStore/EventStore.spec.js",
+    "file"
+  ],
+  [
     "src/eventstore/eventtypes/index.js",
     "file/src/EventStore/EventTypes/index.js.html",
     "src/EventStore/EventTypes/index.js",
@@ -486,15 +510,15 @@ window.esdocSearchIndex = [
     "typedef"
   ],
   [
-    "src/eventstore/mock.js",
-    "file/src/EventStore/Mock.js.html",
-    "src/EventStore/Mock.js",
-    "file"
-  ],
-  [
     "src/eventstore/persistence/localstorage.js",
     "file/src/EventStore/Persistence/LocalStorage.js.html",
     "src/EventStore/Persistence/LocalStorage.js",
+    "file"
+  ],
+  [
+    "src/eventstore/persistence/firebasestore.js",
+    "file/src/EventStore/Persistence/firebaseStore.js.html",
+    "src/EventStore/Persistence/firebaseStore.js",
     "file"
   ],
   [
@@ -504,15 +528,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/eventstore/persistence/index.js~event_schemas",
+    "typedef/index.html#static-typedef-EVENT_SCHEMAS",
+    "src/EventStore/Persistence/index.js~EVENT_SCHEMAS",
+    "typedef"
+  ],
+  [
     "src/eventstore/readmodel/index.js",
     "file/src/EventStore/ReadModel/index.js.html",
     "src/EventStore/ReadModel/index.js",
-    "file"
-  ],
-  [
-    "src/eventstore/spec.js",
-    "file/src/EventStore/Spec.js.html",
-    "src/EventStore/Spec.js",
     "file"
   ],
   [

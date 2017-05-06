@@ -43,6 +43,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvent">writeEvent</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-writeEvents">writeEvents</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-event">event</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-eventStream">eventStream</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-expectedProjectState">expectedProjectState</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span></span></li>
@@ -50,6 +52,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Persistence</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getItem">getItem</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setItem">setItem</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EVENT_SCHEMAS">EVENT_SCHEMAS</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/ReadModel</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-readModelGenerator">readModelGenerator</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">EventStore/Transactions</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventFromLog">eventFromLog</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-eventsFromTransaction">eventsFromTransaction</a></span></span></li>
@@ -213,7 +216,7 @@
         <p>
           <span data-ice="async">async</span>
           
-          <span data-ice="name"><span><a href="function/index.html#static-function-maybeSyncReadModel">maybeSyncReadModel</a></span></span><span data-ice="signature">(es: <span>EventStore</span>, readModel: <span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span>, reducer: <span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span>ReadModel</span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+          <span data-ice="name"><span><a href="function/index.html#static-function-maybeSyncReadModel">maybeSyncReadModel</a></span></span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, readModel: <span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span>, reducer: <span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span>ReadModel</span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
         </p>
       </div>
       <div>
@@ -267,7 +270,7 @@
         <p>
           <span data-ice="async">async</span>
           
-          <span data-ice="name"><span><a href="function/index.html#static-function-readEvent">readEvent</a></span></span><span data-ice="signature">(es: <span>EventStore</span>, eventId: <span>UInt</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+          <span data-ice="name"><span><a href="function/index.html#static-function-readEvent">readEvent</a></span></span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, eventId: <span>UInt</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
         </p>
       </div>
       <div>
@@ -294,7 +297,7 @@
         <p>
           <span data-ice="async">async</span>
           
-          <span data-ice="name"><span><a href="function/index.html#static-function-readEvents">readEvents</a></span></span><span data-ice="signature">(es: <span>EventStore</span>, eventId: <span>UInt</span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+          <span data-ice="name"><span><a href="function/index.html#static-function-readEvents">readEvents</a></span></span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, eventId: <span>UInt</span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
         </p>
       </div>
       <div>
@@ -321,7 +324,7 @@
         <p>
           
           
-          <span data-ice="name"><span><a href="function/index.html#static-function-readModelGenerator">readModelGenerator</a></span></span><span data-ice="signature">(readModel: <span>EventStore</span>, reducer: <span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span>, events: <span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>): <span>*</span></span>
+          <span data-ice="name"><span><a href="function/index.html#static-function-readModelGenerator">readModelGenerator</a></span></span><span data-ice="signature">(readModel: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, reducer: <span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span>, events: <span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>): <span>*</span></span>
         </p>
       </div>
       <div>
@@ -375,7 +378,7 @@
         <p>
           <span data-ice="async">async</span>
           
-          <span data-ice="name"><span><a href="function/index.html#static-function-writeEvent">writeEvent</a></span></span><span data-ice="signature">(es: <span>EventStore</span>, event: <span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+          <span data-ice="name"><span><a href="function/index.html#static-function-writeEvent">writeEvent</a></span></span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, event: <span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
         </p>
       </div>
       <div>
@@ -402,7 +405,7 @@
         <p>
           <span data-ice="async">async</span>
           
-          <span data-ice="name"><span><a href="function/index.html#static-function-writeEvents">writeEvents</a></span></span><span data-ice="signature">(es: <span>EventStore</span>, eventArray: <span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+          <span data-ice="name"><span><a href="function/index.html#static-function-writeEvents">writeEvents</a></span></span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, eventArray: <span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
         </p>
       </div>
       <div>
@@ -806,15 +809,15 @@
     
     <span data-ice="async">async</span>
     
-    <span data-ice="name">maybeSyncReadModel</span><span data-ice="signature">(es: <span>EventStore</span>, readModel: <span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span>, reducer: <span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span>ReadModel</span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+    <span data-ice="name">maybeSyncReadModel</span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, readModel: <span><a href="variable/index.html#static-variable-initialProjectState">initialProjectState</a></span>, reducer: <span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span>ReadModel</span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber96">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {maybeSyncReadModel} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber96">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {maybeSyncReadModel} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber95">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -831,7 +834,7 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">es</td>
-      <td data-ice="type"><span>EventStore</span></td>
+      <td data-ice="type"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>a contract instance which is an Event Store</p>
 </td>
@@ -897,11 +900,11 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/Mock.js.html#lineNumber50">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {projectReducer} from &apos;<span><a href="file/src/EventStore/Mock.js.html#lineNumber50">transmute-framework/src/EventStore/Mock.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {projectReducer} from &apos;<span><a href="file/src/EventStore/EventStore.mock.js.html#lineNumber50">transmute-framework/src/EventStore/EventStore.mock.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -971,15 +974,15 @@
     
     <span data-ice="async">async</span>
     
-    <span data-ice="name">readEvent</span><span data-ice="signature">(es: <span>EventStore</span>, eventId: <span>UInt</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+    <span data-ice="name">readEvent</span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, eventId: <span>UInt</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {readEvent} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber24">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {readEvent} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber23">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -996,7 +999,7 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">es</td>
-      <td data-ice="type"><span>EventStore</span></td>
+      <td data-ice="type"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>a contract instance which is an Event Store</p>
 </td>
@@ -1051,15 +1054,15 @@
     
     <span data-ice="async">async</span>
     
-    <span data-ice="name">readEvents</span><span data-ice="signature">(es: <span>EventStore</span>, eventId: <span>UInt</span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+    <span data-ice="name">readEvents</span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, eventId: <span>UInt</span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber40">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {readEvents} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber41">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {readEvents} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber40">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -1076,7 +1079,7 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">es</td>
-      <td data-ice="type"><span>EventStore</span></td>
+      <td data-ice="type"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>a contract instance which is an Event Store</p>
 </td>
@@ -1138,7 +1141,7 @@
     
     
     
-    <span data-ice="name">readModelGenerator</span><span data-ice="signature">(readModel: <span>EventStore</span>, reducer: <span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span>, events: <span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>): <span>*</span></span>
+    <span data-ice="name">readModelGenerator</span><span data-ice="signature">(readModel: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, reducer: <span><a href="function/index.html#static-function-projectReducer">projectReducer</a></span>, events: <span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>): <span>*</span></span>
     <span class="right-info">
       
       
@@ -1163,7 +1166,7 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">readModel</td>
-      <td data-ice="type"><span>EventStore</span></td>
+      <td data-ice="type"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>a json object representing the state of a given model</p>
 </td>
@@ -1304,15 +1307,15 @@
     
     <span data-ice="async">async</span>
     
-    <span data-ice="name">writeEvent</span><span data-ice="signature">(es: <span>EventStore</span>, event: <span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+    <span data-ice="name">writeEvent</span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, event: <span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber57">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {writeEvent} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber57">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {writeEvent} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber56">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -1329,7 +1332,7 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">es</td>
-      <td data-ice="type"><span>EventStore</span></td>
+      <td data-ice="type"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>a contract instance which is an Event Store</p>
 </td>
@@ -1391,15 +1394,15 @@
     
     <span data-ice="async">async</span>
     
-    <span data-ice="name">writeEvents</span><span data-ice="signature">(es: <span>EventStore</span>, eventArray: <span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
+    <span data-ice="name">writeEvents</span><span data-ice="signature">(es: <span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span>, eventArray: <span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span>, fromAddress: <span>Address</span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span>&lt;<span><span><a href="variable/index.html#static-variable-NEW_EVENT">NEW_EVENT</a></span><span>[]</span></span>, <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error">Error</a></span>&gt;</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/EventStore/EventStore.js.html#lineNumber70">source</a></span></span>
     </span>
   </h3>
 
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {writeEvents} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber71">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {writeEvents} from &apos;<span><a href="file/src/EventStore/EventStore.js.html#lineNumber70">transmute-framework/src/EventStore/EventStore.js</a></span>&apos;</code></pre></div>
   
   
   
@@ -1416,7 +1419,7 @@
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">es</td>
-      <td data-ice="type"><span>EventStore</span></td>
+      <td data-ice="type"><span><a href="variable/index.html#static-variable-EventStore">EventStore</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>a contract instance which is an Event Store</p>
 </td>
