@@ -1,0 +1,73 @@
+{
+  "coverage": "44%",
+  "expectCount": 25,
+  "actualCount": 11,
+  "files": {
+    "src/EventStore/EventStore.js": {
+      "expectCount": 6,
+      "actualCount": 5,
+      "undocumentLines": [
+        7
+      ]
+    },
+    "src/EventStore/Transactions/index.js": {
+      "expectCount": 5,
+      "actualCount": 3,
+      "undocumentLines": [
+        6,
+        7
+      ]
+    },
+    "src/EventStore/EventTypes/index.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        2
+      ]
+    },
+    "src/env.js": {
+      "expectCount": 3,
+      "actualCount": 0,
+      "undocumentLines": [
+        7,
+        24,
+        30
+      ]
+    },
+    "src/EventStore/EventStore.mock.js": {
+      "expectCount": 5,
+      "actualCount": 0,
+      "undocumentLines": [
+        3,
+        11,
+        43,
+        35,
+        50
+      ]
+    },
+    "src/config.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        1
+      ]
+    },
+    "src/EventStore/Persistence/LocalStorage.js": {
+      "expectCount": 2,
+      "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/TF.js": {
+      "expectCount": 1,
+      "actualCount": 0,
+      "undocumentLines": [
+        13
+      ]
+    },
+    "src/EventStore/ReadModel/index.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    }
+  }
+}
