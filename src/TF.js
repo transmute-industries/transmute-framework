@@ -8,7 +8,7 @@ import {
 
 import {
   ReadModel
-} from './EventStore/Persistence'
+} from './EventStore/ReadModel'
 
 export const TF = {
   EventStore,

@@ -9,7 +9,7 @@ Smart contract developers can annotate their contracts with "is EventStore" and 
 unlock awesome state mangement capabilities powered by redux.
 
 ReadModels represent views of the state of your smart contract. For example, a PLC for a 
-nuclear facility might have an event steam containg firmware updates, commands, readings, etc...
+nuclear facility might have an event stream containg firmware updates, commands, readings, etc...
 These events are reduced into a model which represents state of the controller over time.
 As actions are taken, events are processed and the state of the controller updates.
 
