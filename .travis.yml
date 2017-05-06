@@ -22,4 +22,5 @@ install:
 
 
 script:
+    - npm run migrate
     - npm run test:all
