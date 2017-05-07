@@ -1,0 +1,234 @@
+{
+  "contract_name": "IndexedEnumerableSetLib",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        },
+        {
+          "name": "value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "indexOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        }
+      ],
+      "name": "last",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        },
+        {
+          "name": "value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "add",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        },
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "pop",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        },
+        {
+          "name": "value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "remove",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        }
+      ],
+      "name": "size",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        },
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "get",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        },
+        {
+          "name": "value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "contains",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        },
+        {
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "name": "value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "set",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "self",
+          "type": "IndexedEnumerableSetLib.IndexedEnumerableSet storage"
+        }
+      ],
+      "name": "first",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x606060405234610000575b610567806100196000396000f300606060405236156100885763ffffffff60e060020a60003504166303a1718b811461008d5780632629f8da146100ad57806353fe95de146100ca5780635ee64f69146100ec57806375dd5dcb1461010c578063b32e9f251461012e578063c21b22091461014b578063c2a48c0a1461016b578063e574a95a1461018d578063fc66ce89146101b2575b610000565b61009b6004356024356101cf565b60408051918252519081900360200190f35b61009b60043561020b565b60408051918252519081900360200190f35b6100d8600435602435610238565b604080519115158252519081900360200190f35b61009b6004356024356102ea565b60408051918252519081900360200190f35b6100d86004356024356103de565b604080519115158252519081900360200190f35b61009b600435610426565b60408051918252519081900360200190f35b61009b60043560243561042e565b60408051918252519081900360200190f35b6100d860043560243561046c565b604080519115158252519081900360200190f35b6100d8600435602435604435610487565b604080519115158252519081900360200190f35b61009b600435610514565b60408051918252519081900360200190f35b600081815260018301602052604081205460ff1615156101f25750600019610205565b5060008181526002830160205260409020545b92915050565b80546000908290151561021d57610000565b825461022e9084906000190161042e565b91505b5b50919050565b600081815260018301602052604081205460ff161561025957506000610205565b8254600083815260028501602052604090208190556001810180855584919082818380158290116102af576000838152602090206102af9181019083015b808211156102ab5760008155600101610297565b5090565b5b505050916000526020600020900160005b508390555050600081815260018381016020526040909120805460ff1916821790555b92915050565b81546000908190819085908590811061030257610000565b61030c878761042e565b875490945060001901861461035e576103248761020b565b60008181526001890160205260409020805460ff191690559250610349878785610487565b50600083815260028801602052604090208690555b86546000198101808955908890829080158290116103a1576000838152602090206103a19181019083015b808211156102ab5760008155600101610297565b5090565b5b5050506000858152600289016020908152604080832083905560018b019091529020805460ff191690555092935083925b5b5050505092915050565b6000818152600183016020526040812054819060ff161515610403576000915061041f565b61040d84846101cf565b905061041984826102ea565b50600191505b5092915050565b80545b919050565b815460009083908390811061044257610000565b8460000184815481101561000057906000526020600020900160005b505492505b5b505092915050565b600081815260018301602052604090205460ff165b92915050565b825460009084908490811061049b57610000565b600084815260018701602052604090205460ff16156104bd576000925061050a565b838660000186815481101561000057906000526020600020900160005b50556000848152600187810160209081526040808420805460ff19168417905560028a0190915290912086905592505b5b50509392505050565b80546000908290151561052657610000565b61022e83600061042e565b91505b5b509190505600a165627a7a72305820f11e71a95052ae69aecc849c39dbd00bbe2e596846c7cc09020e6f0e9c2b09430029",
+  "networks": {
+    "1494096436121": {
+      "events": {},
+      "links": {},
+      "address": "0x4580e3932f233dc2d1491206a20f67e5c5cfab48",
+      "updated_at": 1494096453906
+    },
+    "1494115713926": {
+      "events": {},
+      "links": {},
+      "address": "0xd5c46c2f8cba843e030e10065c5f82e5e5caf50c",
+      "updated_at": 1494115719993
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1494115719993
+}
