@@ -264,8 +264,52 @@
       "links": {},
       "address": "0x3d35089d8c60af5dce14980a566e39666723f11e",
       "updated_at": 1494096453907
+    },
+    "1494115713926": {
+      "events": {
+        "0x0b8db9208eb127cfd546991e87e5bc7c29bb8b92b0ac9afafc60a3798e20265d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "Id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "Type",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "Created",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "AddressValue",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "UIntValue",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "StringValue",
+              "type": "string"
+            }
+          ],
+          "name": "NEW_EVENT",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xf3f096b2485a6ad23a1ef1a3eaf96f55969c925e",
+      "updated_at": 1494115719992
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1494096453907
+  "updated_at": 1494115719992
 }
