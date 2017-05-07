@@ -12,6 +12,9 @@ contract TestIndexedEnumerableSetLib is Killable {
   bool public lastAdd;
   bool public lastRemove;
 
+  function () payable {}
+  function TestIndexedEnumerableSetLib() payable {}
+
   function get(uint index) public constant
     returns (bytes32)
   {
