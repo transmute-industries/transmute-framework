@@ -266,8 +266,16 @@
       },
       "address": "0x5110bd46400543c57043d88b596bd0e9241d88d9",
       "updated_at": 1494047259054
+    },
+    "1494114425904": {
+      "events": {},
+      "links": {
+        "IndexedEnumerableSetLib": "0x47bfc8aea54645675bcf1789380c4d94e2724516"
+      },
+      "address": "0x29a8f6ad577f6209040124ba780d17affb191fc8",
+      "updated_at": 1494115525758
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1494047259054
+  "updated_at": 1494115525758
 }
