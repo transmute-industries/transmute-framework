@@ -54,6 +54,7 @@
   },
   "homepage": "https://github.com/transmute-industries/transmute-framework#readme",
   "dependencies": {
+    "@digix/truffle-lightwallet-provider": "0.0.12",
     "bluebird": "^3.4.1",
     "chai": "^3.5.0",
     "esdoc": "^0.5.2",
