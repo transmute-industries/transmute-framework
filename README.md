@@ -60,6 +60,5 @@ If these fail, expect your PR to be rejected ; )
 ### References
 
 - https://github.com/Upchain/truffle-template
-- https://github.com/OR13/FireDocs
 - https://github.com/transmute-industries/eth-faucet
 
