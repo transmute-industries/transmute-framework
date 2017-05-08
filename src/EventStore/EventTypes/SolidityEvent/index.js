@@ -1,24 +1,4 @@
 
-
-//   struct SolidityEventProperty {
-//     string Type;
-//     address AddressValue;
-//     uint UIntValue;
-//     string StringValue;
-//   }
-
-//   struct SolidityEvent {
-//     uint Id;
-//     string Type;
-//     uint Created;
-//     uint PropertyCount;
-//     mapping (uint => SolidityEventProperty) PropertyValues;
-//   }
-
-//   uint public solidityEventCount;
-//   mapping (uint => SolidityEvent) solidityEvents;
-
-
 export const SOLIDITY_EVENT = 'SOLIDITY_EVENT'
 export const SOLIDITY_EVENT_PROPERTY = 'SOLIDITY_EVENT_PROPERTY'
 
