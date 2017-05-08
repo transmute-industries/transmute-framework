@@ -11,7 +11,7 @@
     "migrate": "truffle migrate",
     "test-truffle": "truffle test",
     "test:watch": "mocha --compilers js:babel-core/register --colors -w ./src/**/*.spec.js",
-    "test:all": "npm run test-truffle && npm run test",
+    "test:all": "truffle migrate && npm run test-truffle && npm run test",
     "lint": "eslint src",
     "testrpc": "pm2 start testrpc",
     "docs": "npm run clean && esdoc && cp CNAME docs"
@@ -54,6 +54,7 @@
   },
   "homepage": "https://github.com/transmute-industries/transmute-framework#readme",
   "dependencies": {
+    "@digix/truffle-lightwallet-provider": "0.0.12",
     "bluebird": "^3.4.1",
     "chai": "^3.5.0",
     "esdoc": "^0.5.2",

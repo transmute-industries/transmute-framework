@@ -62,6 +62,9 @@ contract EventStore is Killable {
     string StringValue
   );
 
+  function () payable {}
+  function EventStore() payable {}
+
   function getVersion() public constant
     returns (uint)
   {
@@ -103,7 +106,6 @@ contract EventStore is Killable {
     return solidityEventCount;
   }
 
-
   function readSolidityEventType(uint _eventIndex) public
     returns (string)
   {
@@ -124,7 +126,6 @@ contract EventStore is Killable {
   {
     return solidityEvents[_eventIndex].IntegrityHash;
   }
-
 
   function readSolidityEventPropertyName(uint _eventIndex, uint _eventPropertyIndex) public
     returns (string)
@@ -155,12 +156,6 @@ contract EventStore is Killable {
   {
     return solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex].StringValue;
   }
-
-
-
-  
-    
-
 
   function emitEvent(string _type, address _address, uint _uint, string _string) public
     returns (uint)
