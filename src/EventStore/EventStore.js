@@ -7,8 +7,6 @@ import eventStoreArtifacts from '../../build/contracts/EventStore.json'
 const ES = contract(eventStoreArtifacts)
 ES.setProvider(web3.currentProvider)
 
-import { eventsFromTransaction } from './Transactions'
-
 import {
   Middleware
 } from './Middleware'
