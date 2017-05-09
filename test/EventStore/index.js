@@ -4,7 +4,6 @@ var Web3 = require('web3')
 
 var EventStore = artifacts.require('./EventStore.sol')
 
-
 const event = {
   Id: 0,
   Type: 'PROJECT_CREATED',

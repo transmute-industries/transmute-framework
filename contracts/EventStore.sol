@@ -74,8 +74,6 @@ contract EventStore is Killable {
   function writeSolidityEventProperty(uint _eventIndex, uint _eventPropertyIndex, string _name, string _type, address _address, uint _uint, string _string) public
     returns (uint)
   {
-    uint _created = now;
-
     solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex] = SolidityEventProperty({
       Name: _name,
       Type: _type,
