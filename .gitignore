@@ -33,6 +33,7 @@ node_modules
 
 # Transmute Framework
 
+docs
 build/*
 config.js
 service-account.json
