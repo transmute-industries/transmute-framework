@@ -82,7 +82,6 @@ contract EventStore is Killable {
       StringValue: _string
     });
     SOLIDITY_EVENT_PROPERTY(_eventIndex, _eventPropertyIndex, _name, _type, _address, _uint, _string);
-    solidityEventCount += 1;
     return solidityEventCount;
   }
 

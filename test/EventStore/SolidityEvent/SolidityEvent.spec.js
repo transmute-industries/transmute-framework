@@ -4,6 +4,7 @@ var EventStore = artifacts.require('./EventStore.sol')
 
 var {
     readSolidityEventAsync,
+    readSolidityEventsAsync,
     writeSolidityEventAsync,
     writeSolidityEventsAsync
 } = require('./helpers')
@@ -29,14 +30,15 @@ contract('EventStore', (accounts) => {
                     return writeSolidityEventAsync(_esInstance, _callerMeta, event)
                 })
                 .then((allEvents) => {
+                    // ADD TESTS HERE TO CONFIRM EVENT BEHAVIOR
                     // console.log(allEvents)
                     return true
                 })
         })
     })
 
-    describe.only('writeSolidityEventsAsync', () => {
-        it('writes a SOLIDITY_EVENT to the chain', () => {
+    describe('writeSolidityEventsAsync', () => {
+        it('write an array of SOLIDITY_EVENTs to the chain', () => {
    
             let _callerMeta = {
                 from: accounts[0],
@@ -48,21 +50,39 @@ contract('EventStore', (accounts) => {
                     return writeSolidityEventsAsync(_esInstance, _callerMeta, meshPointEvents)
                 })
                 .then((allEvents) => {
-                    console.log(allEvents)
+                    // ADD TESTS HERE TO CONFIRM EVENT BEHAVIOR
+                    // console.log(allEvents)
                     return true
                 })
         })
     })
 
     describe('readSolidityEventAsync', () => {
-        it('return a SOLIDITY_EVENT at the givent Id', () => {
+        it('return a SOLIDITY_EVENT at the given Id', () => {
 
             return EventStore.deployed()
                 .then((_esInstance) => {
                     return readSolidityEventAsync(_esInstance, 0)
                 })
                 .then((event) => {
-                    console.log(event)
+                    // ADD TESTS HERE TO CONFIRM EVENT BEHAVIOR
+                    // console.log(event)
+                    return true
+                })
+        })
+    })
+
+
+    describe('readSolidityEventsAsync', () => {
+        it('return all SOLIDITY_EVENTs as array from the gievent eventId to the latest event', () => {
+
+            return EventStore.deployed()
+                .then((_esInstance) => {
+                    return readSolidityEventsAsync(_esInstance, 0)
+                })
+                .then((event) => {
+                    // ADD TESTS HERE TO CONFIRM EVENT BEHAVIOR
+                    // console.log(event)
                     return true
                 })
         })

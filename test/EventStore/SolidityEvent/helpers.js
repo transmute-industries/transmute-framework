@@ -87,6 +87,12 @@ const writeSolidityEventAsync = async (esInstance, _callerMeta, event) => {
         })
 }
 
+const writeSolidityEventsAsync = async (esInstance, _callerMeta, _events) => {
+    return Promise.all(_events.map( async (_event) =>{
+        return await writeSolidityEventAsync(esInstance, _callerMeta, _event)
+    }))
+}
+
 const readSolidityEventHelper = async (esInstance, eventId) => {
     return {
         Id: eventId,
@@ -135,7 +141,19 @@ const readSolidityEventAsync = async (esInstance, eventId) => {
     return event
 }
 
+const readSolidityEventsAsync = async (esInstance, eventId = 0) => {
+  let currentEvent = await esInstance.solidityEventCount()
+  let eventPromises = []
+  while (eventId < currentEvent) {
+    eventPromises.push(await readSolidityEventAsync(esInstance, eventId))
+    eventId++
+  }
+  return await Promise.all(eventPromises)
+}
+
 module.exports = {
     readSolidityEventAsync,
-    writeSolidityEventAsync
+    readSolidityEventsAsync,
+    writeSolidityEventAsync,
+    writeSolidityEventsAsync
 }
