@@ -11,23 +11,19 @@ export const transmuteTestEventStream = [
   {
     Id: 1,
     Type: Constants.PROJECT_JOINED,
-    AddressValue: web3.eth.accounts[0],
-    UIntValue: 1,
-    StringValue: 'Engineer Alice'
+    UserAddress: web3.eth.accounts[0],
+    UserName: 'Engineer Alice'
   },
   {
     Id: 2,
     Type: Constants.PROJECT_JOINED,
-    AddressValue: web3.eth.accounts[1],
-    UIntValue: 1,
-    StringValue: 'Customer Bob'
+    UserAddress: web3.eth.accounts[1],
+    UserName: 'Customer Bob'
   },
   {
     Id: 3,
     Type: Constants.PROJECT_MILESTONE,
-    AddressValue: web3.eth.accounts[0],
-    UIntValue: 1,
-    StringValue: 'Version 0'
+    Version: 'Version 0'
   }
 ]
 

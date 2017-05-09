@@ -20,16 +20,16 @@ export const readModelGenerator = (readModel, reducer, events) => {
 * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
 */
 export const maybeSyncReadModel = async (es, readModel, reducer) => {
-  let eventCount = (await es.eventCount()).toNumber()
+  let solidityEventCount = (await es.solidityEventCount()).toNumber()
   return Persistence.getItem(readModel.ReadModelStoreKey)
   .then(async (_readModel) => {
     if (!_readModel) {
       _readModel = readModel
     }
-    if (_readModel.EventCount === eventCount) {
+    if (_readModel.LastEvent === solidityEventCount) {
       return false
     }
-    let events = await EventStore.readEvents(es, _readModel.EventCount || 0)
+    let events = await EventStore.readEvents(es, _readModel.LastEvent || 0)
     let updatedReadModel = readModelGenerator(_readModel, reducer, events)
     return Persistence.setItem(updatedReadModel.ReadModelStoreKey, updatedReadModel)
   })

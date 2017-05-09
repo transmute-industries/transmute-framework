@@ -61,67 +61,67 @@ describe('EventStore', () => {
   describe('.readEvents', () => {
     it('should return the events in the contract starting with the index', async () => {
       let transmuteEvents = await EventStore.readEvents(es, startEventCount)
-      console.log(transmuteEvents)
+      // console.log(transmuteEvents)
       assert.equal(transmuteEvents.length, 4)
     })
   })
 
-  // describe('.setItem', () => {
-  //   it('should return the value when passed a valid key, after saving the value', async () => {
-  //     Persistence.setItem(initialTestProjectState.ReadModelStoreKey, initialTestProjectState)
-  //       .then((readModel) => {
-  //         assert.equal(initialTestProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
-  //         assert.equal(initialTestProjectState.Name, readModel.Name)
-  //       })
-  //   })
-  // })
+  describe('.setItem', () => {
+    it('should return the value when passed a valid key, after saving the value', async () => {
+      Persistence.setItem(initialTestProjectState.ReadModelStoreKey, initialTestProjectState)
+        .then((readModel) => {
+          assert.equal(initialTestProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
+          assert.equal(initialTestProjectState.Name, readModel.Name)
+        })
+    })
+  })
 
-  // describe('.getItem', () => {
-  //   it('should return null for invalid key', async () => {
-  //     Persistence.getItem('not-a-real-key')
-  //       .then((readModel) => {
-  //         assert.isNull(readModel)
-  //       })
-  //   })
+  describe('.getItem', () => {
+    it('should return null for invalid key', async () => {
+      Persistence.getItem('not-a-real-key')
+        .then((readModel) => {
+          assert.isNull(readModel)
+        })
+    })
 
-  //   it('should return a readModel when passed valid readModelKey', async () => {
-  //     Persistence.getItem(initialTestProjectState.ReadModelStoreKey)
-  //       .then((readModel) => {
-  //         assert.equal(initialTestProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
-  //         assert.equal(initialTestProjectState.Name, readModel.Name)
-  //       })
-  //   })
-  // })
+    it('should return a readModel when passed valid readModelKey', async () => {
+      Persistence.getItem(initialTestProjectState.ReadModelStoreKey)
+        .then((readModel) => {
+          assert.equal(initialTestProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
+          assert.equal(initialTestProjectState.Name, readModel.Name)
+        })
+    })
+  })
 
-  // describe('.readModelGenerator', () => {
-  //   it('should return the the initial reducer state when no events exist', async () => {
-  //     let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, [])
-  //     assert.equal(projectModel.ReadModelStoreKey, initialTestProjectState.ReadModelStoreKey)
-  //     assert.equal(projectModel.EventCount, initialTestProjectState.EventCount)
-  //     assert.equal(projectModel.Users, initialTestProjectState.Users)
-  //     assert.equal(projectModel.Milestones, initialTestProjectState.Milestones)
-  //   })
+  describe('.readModelGenerator', () => {
+    it('should return the the initial reducer state when no events exist', async () => {
+      let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, [])
+      assert.equal(projectModel.ReadModelStoreKey, initialTestProjectState.ReadModelStoreKey)
+      assert.equal(projectModel.LastEvent, initialTestProjectState.LastEvent)
+      assert.equal(projectModel.Users, initialTestProjectState.Users)
+      assert.equal(projectModel.Milestones, initialTestProjectState.Milestones)
+    })
 
-  //   it('should return the updated read model when passed events', async () => {
-  //     let projectHistory = await EventStore.readEvents(es, startEventCount)
-  //     let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, projectHistory)
-  //     assert.equal(projectModel.ReadModelStoreKey, expectedTestProjectState.ReadModelStoreKey)
-  //     assert.equal(projectModel.Name, expectedTestProjectState.Name)
-  //     assert.isArray(projectModel.Users, expectedTestProjectState.Users)
-  //     assert.isArray(projectModel.Milestones, expectedTestProjectState.Milestones)
-  //   })
-  // })
+    it('should return the updated read model when passed events', async () => {
+      let projectHistory = await EventStore.readEvents(es, startEventCount)
+      let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, projectHistory)
+      assert.equal(projectModel.ReadModelStoreKey, expectedTestProjectState.ReadModelStoreKey)
+      assert.equal(projectModel.Name, expectedTestProjectState.Name)
+      assert.isArray(projectModel.Users, expectedTestProjectState.Users)
+      assert.isArray(projectModel.Milestones, expectedTestProjectState.Milestones)
+    })
+  })
 
-  // describe('maybeSyncReadModel', () => {
-  //   it('should retrieve a read model and sync any missing events from the contract', async () => {
-  //     let _maybeUpdatedReadModel = await ReadModel.maybeSyncReadModel(es, initialTestProjectState, projectReducer)
-  //     maybeUpdatedReadModel = _maybeUpdatedReadModel
-  //   })
+  describe('maybeSyncReadModel', () => {
+    it('should retrieve a read model and sync any missing events from the contract', async () => {
+      let _maybeUpdatedReadModel = await ReadModel.maybeSyncReadModel(es, initialTestProjectState, projectReducer)
+      maybeUpdatedReadModel = _maybeUpdatedReadModel
+    })
 
-  //   it('should return quickly if no new events exist', async () => {
-  //     let sameReadModel = await ReadModel.maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
-  //     assert.equal(sameReadModel.Name, maybeUpdatedReadModel.Name)
-  //     assert.equal(sameReadModel.EventCount, maybeUpdatedReadModel.EventCount)
-  //   })
-  // })
+    it('should return quickly if no new events exist', async () => {
+      let sameReadModel = await ReadModel.maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
+      assert.equal(sameReadModel.Name, maybeUpdatedReadModel.Name)
+      assert.equal(sameReadModel.LastEvent, maybeUpdatedReadModel.LastEvent)
+    })
+  })
 })
