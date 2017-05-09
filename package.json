@@ -14,7 +14,7 @@
     "test:all": "truffle migrate && npm run test-truffle && npm run test",
     "lint": "eslint src",
     "testrpc": "pm2 start testrpc",
-    "docs": "npm run clean && esdoc && cp CNAME docs"
+    "docs": "npm run clean && esdoc"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",
