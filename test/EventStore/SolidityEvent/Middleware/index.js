@@ -5,11 +5,11 @@ var {
     SCHEMAS,
     SOLIDITY_EVENT_SCHEMA,
     SOLIDITY_EVENT_PROPERTY_SCHEMA
-} = require('./EventTypes')
+} = require('../EventTypes')
 
 var {
     eventsFromTransaction,
-} = require('./Transactions')
+} = require('../Transactions')
 
 const solidityEventProperties = _.keys(SOLIDITY_EVENT_SCHEMA)
 
