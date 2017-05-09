@@ -1,21 +1,27 @@
-export const NEW_EVENT = 'NEW_EVENT'
 
-/**
-* @typedef {Object} EVENT_SCHEMAS
-* @property {NEW_EVENT} a Solidity Event Schema
-*/
-export const EVENT_SCHEMAS = {
-  [NEW_EVENT]: {
-    Id: 'BigNumber',
+export const SOLIDITY_EVENT = 'SOLIDITY_EVENT'
+export const SOLIDITY_EVENT_PROPERTY = 'SOLIDITY_EVENT_PROPERTY'
+
+export const SOLIDITY_EVENT_PROPERTY_SCHEMA = {
+    EventIndex: 'BigNumber',
+    EventPropertyIndex: 'BigNumber',
+    Name: 'String',
     Type: 'String',
-    Created: 'BigNumber',
+
     AddressValue: 'String',
     UIntValue: 'BigNumber',
     StringValue: 'String'
-  }
 }
 
-export const EventTypes = {
-  NEW_EVENT,
-  EVENT_SCHEMAS
+export const SOLIDITY_EVENT_SCHEMA = {
+    Id: 'BigNumber',
+    Type: 'String',
+    Created: 'BigNumber',
+    IntegrityHash: 'String',
+    PropertyCount: 'BigNumber'
+}
+
+export const SCHEMAS = {
+    [SOLIDITY_EVENT]: SOLIDITY_EVENT_SCHEMA,
+    [SOLIDITY_EVENT_PROPERTY]: SOLIDITY_EVENT_PROPERTY_SCHEMA
 }

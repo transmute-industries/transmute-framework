@@ -12,7 +12,6 @@ var {
 } = require('./Transactions')
 
 const solidityEventProperties = _.keys(SOLIDITY_EVENT_SCHEMA)
-const solidityEventPropertyProperties = _.keys(SOLIDITY_EVENT_PROPERTY_SCHEMA)
 
 const objectToSolidityEvent = (_obj) => {
     return _.pick(_obj, solidityEventProperties)

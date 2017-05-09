@@ -7,7 +7,7 @@ var {
     readSolidityEventsAsync,
     writeSolidityEventAsync,
     writeSolidityEventsAsync
-} = require('./helpers')
+} = require('./Middleware')
 
 var {
     meshPointEvent,

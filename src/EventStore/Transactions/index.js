@@ -1,7 +1,7 @@
 
-import { forIn, extend } from 'lodash'
+import { forIn, extend, reject} from 'lodash'
 
-const { EVENT_SCHEMAS } = require('../EventTypes')
+const { SCHEMAS } = require('../EventTypes')
 
 export const LOG = {}
 export const TX = {}
@@ -24,7 +24,7 @@ export const getPropFromSchema = (propType, value) => {
  * @return {NEW_EVENT} a json object representing a solidity NEW_EVENT
  */
 export const eventFromLog = (log) => {
-    let schema = EVENT_SCHEMAS[log.event]
+    let schema = SCHEMAS[log.event]
     let event = {}
     forIn(log.args, (value, key) => {
         let prop = getPropFromSchema(schema[key], value)
@@ -35,15 +35,24 @@ export const eventFromLog = (log) => {
     return event
 }
 
+
+
 /**
  * @param {TX} tx - an ethereum log from a transaction
  * @return {NEW_EVENT} an array of all NEW_EVENTS in the transaction tx
  */
 export const eventsFromTransaction = (tx) => {
-    return tx.logs.map((log) => {
+     let allEvents = tx.logs.map((log) => {
         return eventFromLog(log)
     })
+    return allEvents
 }
+
+
+
+
+
+
 
 export const Transactions = {
     getPropFromSchema,
