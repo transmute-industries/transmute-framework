@@ -3,7 +3,7 @@ const SOLIDITY_EVENT = 'SOLIDITY_EVENT'
 const SOLIDITY_EVENT_PROPERTY = 'SOLIDITY_EVENT_PROPERTY'
 
 
-const SOLIDITY_EVENT_PROPERTY_SCHEMA = {
+const SolidityEventPropertySchema = {
     EventIndex: 'BigNumber',
     EventPropertyIndex: 'BigNumber',
     Name: 'String',
@@ -14,7 +14,7 @@ const SOLIDITY_EVENT_PROPERTY_SCHEMA = {
     StringValue: 'String'
 }
 
-const SOLIDITY_EVENT_SCHEMA = {
+const SolidityEventSchema = {
     Id: 'BigNumber',
     Type: 'String',
     Created: 'BigNumber',
@@ -22,15 +22,15 @@ const SOLIDITY_EVENT_SCHEMA = {
     PropertyCount: 'BigNumber'
 }
 
-const SCHEMAS = {
-    [SOLIDITY_EVENT]: SOLIDITY_EVENT_SCHEMA,
-    [SOLIDITY_EVENT_PROPERTY]: SOLIDITY_EVENT_PROPERTY_SCHEMA,
+const TruffleEventSchema = {
+    [SOLIDITY_EVENT]: SolidityEventSchema,
+    [SOLIDITY_EVENT_PROPERTY]: SolidityEventPropertySchema,
 }
 
 module.exports = {
-    SCHEMAS,
+    TruffleEventSchema,
     SOLIDITY_EVENT,
     SOLIDITY_EVENT_PROPERTY,
-    SOLIDITY_EVENT_SCHEMA,
-    SOLIDITY_EVENT_PROPERTY_SCHEMA
+    SolidityEventSchema,
+    SolidityEventPropertySchema
 }

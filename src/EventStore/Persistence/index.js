@@ -4,9 +4,9 @@ import {
 } from './LocalStorage'
 
 /**
-* @typedef {Persistence} EVENT_SCHEMAS
-* @method {getItem} returns an object by key from storage
-* @method {setItem} saves an object by key to storage
+* @type {Object} Persistence
+* @property {getItem} getItem - returns an object by key from storage
+* @property {setItem} setItem - saves an object by key to storage
 */
 export const Persistence = {
   getItem,

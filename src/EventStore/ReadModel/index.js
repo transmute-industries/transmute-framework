@@ -2,9 +2,10 @@ import { EventStore } from '../EventStore'
 import { Persistence } from '../Persistence'
 
 /**
-* @param {EventStore} readModel - a json object representing the state of a given model
-* @param {projectReducer} reducer - a function which reduces events into a read model state object
-* @param {NEW_EVENT[]} events - events from an es contract
+* @type {Function} readModelGenerator - transform an event stream into a json object
+* @param {Object} readModel - a json object representing the state of a given model
+* @param {Function} reducer - a function which reduces events into a read model state object
+* @param {Object[]} events - events from an es contract
 */
 export const readModelGenerator = (readModel, reducer, events) => {
   events.forEach((event) => {
@@ -14,9 +15,10 @@ export const readModelGenerator = (readModel, reducer, events) => {
 }
 
 /**
-* @param {EventStore} es - a contract instance which is an Event Store
-* @param {initialProjectState} readModel - a json object representing the state of a given model
-* @param {projectReducer} reducer - a function which reduces events into a read model state object
+* @type {Function} maybeSyncReadModel - maybe update a json read model if it has new events
+* @param {Contract} es - a contract instance which is an Event Store
+* @param {Object} readModel - a json object representing the state of a given model
+* @param {Function} reducer - a function which reduces events into a read model state object
 * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
 */
 export const maybeSyncReadModel = async (es, readModel, reducer) => {
@@ -35,6 +37,11 @@ export const maybeSyncReadModel = async (es, readModel, reducer) => {
   })
 }
 
+/**
+* @type {Object} ReadModel - tools for turning event streams into json objects
+* @property {readModelGenerator} readModelGenerator - convert an event stream into a json object
+* @property {maybeSyncReadModel} maybeSyncReadModel - update json object with lastet blockchain events
+*/
 export const ReadModel = {
   readModelGenerator,
   maybeSyncReadModel

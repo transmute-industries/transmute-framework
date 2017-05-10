@@ -12,21 +12,20 @@ import {
 } from './Middleware'
 
 /**
-* @param {EventStore} es - a contract instance which is an Event Store
-* @param {UInt} eventId - all events after this Id and includig it will be returned
-* @return {Promise<NEW_EVENT, Error>} json object representing a Solidity NEW_EVENT
+* @param {TruffleContract} eventStore - a contract instance which is an Event Store
+* @param {Number} eventId - all events after this Id and includig it will be returned
+* @return {Promise<SOLIDITY_EVENT, Error>} json object representing a Solidity SOLIDITY_EVENT
 */
-const readEvent = async (es, eventId) => {
+export const readEvent = async (es, eventId) => {
   return Middleware.readSolidityEventAsync(es, eventId)
 }
 
 /**
-* @param {EventStore} es - a contract instance which is an Event Store
-* @param {UInt} eventId - all events after this Id and includig it will be returned
-* @param {Address} fromAddress - the address you wish to deploy these events from
-* @return {Promise<NEW_EVENT[], Error>} json objects representing Solidity NEW_EVENTs
+* @param {TruffleContract} eventStore - a contract instance which is an Event Store
+* @param {Number} eventId - all events after this Id and includig it will be returned
+* @return {Promise<SOLIDITY_EVENT[], Error>} json objects representing SOLIDITY_EVENTs
 */
-const readEvents = async (es, eventId = 0) => {
+export const readEvents = async (es, eventId = 0) => {
   let currentEvent = await es.solidityEventCount()
   let eventPromises = []
   while (eventId < currentEvent) {
@@ -37,12 +36,12 @@ const readEvents = async (es, eventId = 0) => {
 }
 
 /**
-* @param {EventStore} es - a contract instance which is an Event Store
-* @param {NEW_EVENT} event - a NEW_EVENT object to be written to the chain
+* @param {TruffleContract} eventStore - a contract instance which is an Event Store
+* @param {SOLIDITY_EVENT} event - a SOLIDITY_EVENT object to be written to the chain
 * @param {Address} fromAddress - the address you wish to deploy these events from
-* @return {Promise<NEW_EVENT, Error>} json object representing the Solidity NEW_EVENT
+* @return {Promise<SOLIDITY_EVENT, Error>} json object representing the Solidity SOLIDITY_EVENT
 */
-const writeEvent = async (es, transmuteEvent, fromAddress) => {
+export const writeEvent = async (es, transmuteEvent, fromAddress) => {
   let meta = {
     from: fromAddress,
     gas: 2000000
@@ -52,12 +51,12 @@ const writeEvent = async (es, transmuteEvent, fromAddress) => {
 }
 
 /**
-* @param {EventStore} es - a contract instance which is an Event Store
-* @param {NEW_EVENT} eventArray - an array of NEW_EVENT objects to be written to the chain
+* @param {TruffleContract} eventStore - a contract instance which is an Event Store
+* @param {SOLIDITY_EVENT} eventArray - an array of SOLIDITY_EVENT objects to be written to the chain
 * @param {Address} fromAddress - the address you wish to deploy these events from
-* @return {Promise<NEW_EVENT[], Error>} json objects representing the Solidity NEW_EVENTs which were written to chain
+* @return {Promise<SOLIDITY_EVENT[], Error>} json objects representing the SOLIDITY_EVENTs which were written to chain
 */
-const writeEvents = async (es, eventArray, fromAddress) => {
+export const writeEvents = async (es, eventArray, fromAddress) => {
 
   let eventPromises = eventArray
   .map((transmuteEvent) => {
@@ -69,6 +68,15 @@ const writeEvents = async (es, eventArray, fromAddress) => {
   })
 }
 
+
+
+/**
+* @property {TruffleContract} ES - a truffle contract which is an EventStore
+* @property {readEvent} readEvent - read a single event by ID
+* @property {readEvents} readEvents - read a single event by ID, and all events after it
+* @property {writeEvent} writeEvent - write a single event
+* @property {writeEvents} writeEvents - write an array of events
+*/
 export const EventStore = {
   ES,
   readEvent,

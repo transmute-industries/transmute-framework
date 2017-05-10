@@ -3,7 +3,7 @@ import {keys, pick, omit, flatten, difference, extend} from 'lodash'
 import { web3 } from '../../env'
 
 var {
-    SOLIDITY_EVENT_SCHEMA
+    SolidityEventSchema
 } = require('../EventTypes')
 
 var {
@@ -11,7 +11,7 @@ var {
 } = require('../Transactions')
 
 
-const solidityEventProperties = keys(SOLIDITY_EVENT_SCHEMA)
+const solidityEventProperties = keys(SolidityEventSchema)
 
 const objectToSolidityEvent = (_obj) => {
     return pick(_obj, solidityEventProperties)
@@ -102,7 +102,7 @@ export const solidityEventReducer = (events) =>{
         if (event.Type && event.Created) {
             extend(_event, event)
         } else {
-            switch(event.Type) {
+            switch (event.Type) {
                 case 'String': _event[event.Name] = event.StringValue; break
                 case 'BigNumber': _event[event.Name] = event.UIntValue; break
                 case 'Address': _event[event.Name] = event.AddressValue; break
@@ -112,13 +112,19 @@ export const solidityEventReducer = (events) =>{
     return _event
 }
 
-const writeSolidityEventAsync = async (esInstance, _callerMeta, event) => {
+/**
+* @param {TruffleContract} esInstance - a contract instance which is an Event Store
+* @param {Object} _callerMeta - from address and gas
+* @param {Object} event - an event to be written to the EventStore
+* @return {Promise<Object, Error>} a reconstructed event from the transaction logs
+*/
+export const writeSolidityEventAsync = async (esInstance, _callerMeta, event) => {
 
     // TODO: Add check to make sure event does not contain reserved keys, throw error if so
 
     // danger hashing stringified objects may not be safe...
-    event.IntegrityHash = web3.sha3(JSON.stringify(event))
     event.PropertyCount = difference(keys(event), solidityEventProperties).length
+    event.IntegrityHash = web3.sha3(JSON.stringify(event))
 
     hasRequiredProps(event)
 
@@ -147,7 +153,13 @@ const writeSolidityEventAsync = async (esInstance, _callerMeta, event) => {
         })
 }
 
-const writeSolidityEventsAsync = async (esInstance, _callerMeta, _events) => {
+/**
+* @param {TruffleContract} esInstance - a contract instance which is an EventStore
+* @param {Object} _callerMeta - from address and gas
+* @param {Array} events - the events to be written to the EventStore
+* @return {Promise<Array<Object>, Error>} an array of reconstructed events from the transaction logs
+*/
+export const writeSolidityEventsAsync = async (esInstance, _callerMeta, _events) => {
     return Promise.all(_events.map(async (_event) =>{
         return await writeSolidityEventAsync(esInstance, _callerMeta, _event)
     }))
@@ -159,7 +171,7 @@ const readSolidityEventHelper = async (esInstance, eventId) => {
         Type: (await esInstance.readSolidityEventType.call(eventId)).toString(),
         Created: (await esInstance.readSolidityEventCreated.call(eventId)).toNumber(),
         IntegrityHash: (await esInstance.readSolidityEventIntegrityHash.call(eventId)).toString(),
-        PropertyCount: (await esInstance.readSolidityEventPropertyCount.call(eventId)).toNumber(),
+        PropertyCount: (await esInstance.readSolidityEventPropertyCount.call(eventId)).toNumber()
     }
 }
 
@@ -185,7 +197,12 @@ const solidityEventPropertyToObject = (prop) => {
     return _obj
 }
 
-const readSolidityEventAsync = async (esInstance, eventId) => {
+/**
+* @param {TruffleContract} esInstance - a contract instance which is an EventStore
+* @param {Number} eventId - the solidityEventId to be read
+* @return {Promise<Object, Error>} a solidity event from the EventStore
+*/
+export const readSolidityEventAsync = async (esInstance, eventId) => {
     let event = await readSolidityEventHelper(esInstance, eventId)
     let propIndex = 0
     let props = []
@@ -201,7 +218,12 @@ const readSolidityEventAsync = async (esInstance, eventId) => {
     return event
 }
 
-const readSolidityEventsAsync = async (esInstance, eventId = 0) => {
+/**
+* @param {TruffleContract} esInstance - a contract instance which is an EventStore
+* @param {Number} eventId - the starting index to read from the EventStore
+* @return {Promise<Array<Object>, Error>} the solidity events from the EventStore
+*/
+export const readSolidityEventsAsync = async (esInstance, eventId = 0) => {
   let currentEvent = await esInstance.solidityEventCount()
   let eventPromises = []
   while (eventId < currentEvent) {
@@ -211,6 +233,13 @@ const readSolidityEventsAsync = async (esInstance, eventId = 0) => {
   return await Promise.all(eventPromises)
 }
 
+/**
+* @type {Object} Middleware
+* @property {readSolidityEventAsync} readSolidityEventAsync - read a single event by id
+* @property {readSolidityEventsAsync} readSolidityEventsAsync - read a single event by id, and all events after it
+* @property {writeSolidityEventAsync} writeSolidityEventAsync - write a single event
+* @property {writeSolidityEventsAsync} writeSolidityEventsAsync - write an array of events
+*/
 export const Middleware = {
     readSolidityEventAsync,
     readSolidityEventsAsync,

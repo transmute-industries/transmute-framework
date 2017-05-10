@@ -2,7 +2,7 @@
 var _ = require('lodash')
 
 var {
-    SCHEMAS
+    TruffleEventSchema
 } = require('../EventTypes')
 
 const getPropFromSchema = (propType, value) => {
@@ -15,7 +15,7 @@ const getPropFromSchema = (propType, value) => {
 }
 
 const eventFromLog = (log) => {
-    let schema = SCHEMAS[log.event]
+    let schema = TruffleEventSchema[log.event]
     let event = {}
     _.forIn(log.args, (value, key) => {
         let prop = getPropFromSchema(schema[key], value)

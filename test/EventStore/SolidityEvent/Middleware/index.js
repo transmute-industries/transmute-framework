@@ -2,16 +2,16 @@
 var _ = require('lodash')
 
 var {
-    SCHEMAS,
-    SOLIDITY_EVENT_SCHEMA,
-    SOLIDITY_EVENT_PROPERTY_SCHEMA
+    TruffleEventSchema,
+    SolidityEventSchema,
+    SolidityEventPropertySchema
 } = require('../EventTypes')
 
 var {
     eventsFromTransaction,
 } = require('../Transactions')
 
-const solidityEventProperties = _.keys(SOLIDITY_EVENT_SCHEMA)
+const solidityEventProperties = _.keys(SolidityEventSchema)
 
 const objectToSolidityEvent = (_obj) => {
     return _.pick(_obj, solidityEventProperties)
