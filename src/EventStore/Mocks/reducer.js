@@ -13,20 +13,20 @@ export const initialProjectState = {
 const handlers = {
   [Constants.PROJECT_CREATED]: (state, transmuteEvent) => {
     return Object.assign({}, state, {
-      Name: transmuteEvent.StringValue,
-      LastEvent: transmuteEvent.id
+      Name: transmuteEvent.Name,
+      LastEvent: transmuteEvent.Id
     })
   },
   [Constants.PROJECT_JOINED]: (state, transmuteEvent) => {
     return Object.assign({}, state, {
-      Users: state.Users.concat(transmuteEvent.StringValue),
-      LastEvent: transmuteEvent.id
+      Users: state.Users.concat(transmuteEvent.UserName),
+      LastEvent: transmuteEvent.Id
     })
   },
   [Constants.PROJECT_MILESTONE]: (state, transmuteEvent) => {
     return Object.assign({}, state, {
-      Milestones: state.Milestones.concat(transmuteEvent.StringValue),
-      LastEvent: transmuteEvent.id
+      Milestones: state.Milestones.concat(transmuteEvent.Version),
+      LastEvent: transmuteEvent.Id
     })
   }
 }

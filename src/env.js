@@ -2,10 +2,6 @@
 
 import Web3 from 'web3'
 
-import { without } from 'lodash'
-
-export const envs = ['testrpc', 'parity', 'infura', 'metamask']
-
 let currentEnv = 'testrpc'
 
 let _web3, _provider
@@ -21,10 +17,6 @@ switch (currentEnv) {
   case 'metamask': _web3 = window.web3; break
 }
 
-export const getRandomAddress = (addresses, exclude = []) => {
-  let possible = without(addresses, exclude)
-  let addr = possible[Math.floor(Math.random() * possible.length)]
-  return addr
-}
+
 
 export const web3 = _web3

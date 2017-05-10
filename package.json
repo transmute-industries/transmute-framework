@@ -7,14 +7,15 @@
     "clean": "rm -rf docs build dist",
     "build": "npm run clean && webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
-    "test": "mocha --timeout 15000 --compilers js:babel-core/register --colors ./src/**/*.spec.js",
+    "test": "mocha --timeout 30000 --compilers js:babel-core/register --colors ./src/**/*.spec.js",
     "migrate": "truffle migrate",
     "test-truffle": "truffle test",
     "test:watch": "mocha --compilers js:babel-core/register --colors -w ./src/**/*.spec.js",
     "test:all": "truffle migrate && npm run test-truffle && npm run test",
     "lint": "eslint src",
     "testrpc": "pm2 start testrpc",
-    "docs": "npm run clean && esdoc && cp CNAME docs"
+    "docs": "npm run clean && esdoc",
+    "deploy:docs": "firebase deploy"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",

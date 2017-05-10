@@ -31,12 +31,14 @@ node_modules
 .vscode
 .DS_Store
 
-
 # Transmute Framework
 
+docs
+build/*
 config.js
 service-account.json
 scratch
 
 sigmate-v3-ti.json
 src/creds.js
+

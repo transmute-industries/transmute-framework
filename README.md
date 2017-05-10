@@ -3,6 +3,7 @@
 An ethereum smart contract framework.
 
 [![Build Status](https://travis-ci.org/transmute-industries/transmute-framework.svg?branch=master)](https://travis-ci.org/transmute-industries/transmute-framework)
+[![Coverage Status](https://coveralls.io/repos/transmute-industries/transmute-framework/badge.svg?branch=master&service=github)](https://coveralls.io/github/transmute-industries/transmute-framework?branch=master)
 
 EventStore provides a simple javascript event based interface to the ethereum blockchain.
 Smart contract developers can annotate their contracts with "is EventStore" and instantly 
@@ -60,6 +61,5 @@ If these fail, expect your PR to be rejected ; )
 ### References
 
 - https://github.com/Upchain/truffle-template
-- https://github.com/OR13/FireDocs
 - https://github.com/transmute-industries/eth-faucet
 

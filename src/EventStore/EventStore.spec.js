@@ -21,7 +21,7 @@ describe('EventStore', () => {
 
   before(async () => {
     es = await EventStore.ES.deployed()
-    startEventCount = (await es.eventCount()).toNumber()
+    startEventCount = (await es.solidityEventCount()).toNumber()
     initialTestProjectState = Object.assign(initialProjectState, {
       ReadModelStoreKey: 'ProjectSummary' + '@' + es.address,
       ReadModelType: 'ProjectSummary',
@@ -35,13 +35,11 @@ describe('EventStore', () => {
   })
 
   describe('.writeEvent', () => {
-    it('should return the event at the index', async () => {
-      let transmuteEvents = await EventStore.writeEvent(es, transmuteTestEvent, web3.eth.accounts[0])
-      assert.equal(transmuteEvents.length, 1)
-      assert.equal(transmuteEvents[0].Type, transmuteTestEvent.Type)
-      assert.equal(transmuteEvents[0].AddressValue, transmuteTestEvent.AddressValue)
-      assert.equal(transmuteEvents[0].UIntValue, transmuteTestEvent.UIntValue)
-      assert.equal(transmuteEvents[0].StringValue, transmuteTestEvent.StringValue)
+    it('should write an event and return it ', async () => {
+      let event = await EventStore.writeEvent(es, transmuteTestEvent, web3.eth.accounts[0])
+      // console.log(event)
+      assert.equal(event.Type, transmuteTestEvent.Type)
+      assert.equal(event.Name, transmuteTestEvent.Name)
     })
   })
 
@@ -49,9 +47,7 @@ describe('EventStore', () => {
     it('should return the event at the index', async () => {
       let transmuteEvent = await EventStore.readEvent(es, 0)
       assert.equal(transmuteEvent.Type, transmuteTestEvent.Type)
-      assert.equal(transmuteEvent.AddressValue, transmuteTestEvent.AddressValue)
-      assert.equal(transmuteEvent.UIntValue, transmuteTestEvent.UIntValue)
-      assert.equal(transmuteEvent.StringValue, transmuteTestEvent.StringValue)
+      assert.equal(transmuteEvent.Name, transmuteTestEvent.Name)
     })
   })
 
@@ -65,6 +61,7 @@ describe('EventStore', () => {
   describe('.readEvents', () => {
     it('should return the events in the contract starting with the index', async () => {
       let transmuteEvents = await EventStore.readEvents(es, startEventCount)
+      // console.log(transmuteEvents)
       assert.equal(transmuteEvents.length, 4)
     })
   })
@@ -100,7 +97,7 @@ describe('EventStore', () => {
     it('should return the the initial reducer state when no events exist', async () => {
       let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, [])
       assert.equal(projectModel.ReadModelStoreKey, initialTestProjectState.ReadModelStoreKey)
-      assert.equal(projectModel.EventCount, initialTestProjectState.EventCount)
+      assert.equal(projectModel.LastEvent, initialTestProjectState.LastEvent)
       assert.equal(projectModel.Users, initialTestProjectState.Users)
       assert.equal(projectModel.Milestones, initialTestProjectState.Milestones)
     })
@@ -124,7 +121,7 @@ describe('EventStore', () => {
     it('should return quickly if no new events exist', async () => {
       let sameReadModel = await ReadModel.maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
       assert.equal(sameReadModel.Name, maybeUpdatedReadModel.Name)
-      assert.equal(sameReadModel.EventCount, maybeUpdatedReadModel.EventCount)
+      assert.equal(sameReadModel.LastEvent, maybeUpdatedReadModel.LastEvent)
     })
   })
 })
