@@ -14,7 +14,8 @@
     "test:all": "truffle migrate && npm run test-truffle && npm run test",
     "lint": "eslint src",
     "testrpc": "pm2 start testrpc",
-    "docs": "npm run clean && esdoc"
+    "docs": "npm run clean && esdoc",
+    "deploy:docs": "firebase deploy"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",
