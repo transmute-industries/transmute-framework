@@ -2,8 +2,10 @@
 
 An ethereum smart contract framework.
 
+[![NPM version](https://img.shields.io/npm/v/transmute-framework.svg)](https://www.npmjs.com/package/transmute-framework)
 [![Build Status](https://travis-ci.org/transmute-industries/transmute-framework.svg?branch=master)](https://travis-ci.org/transmute-industries/transmute-framework)
 [![Coverage Status](https://coveralls.io/repos/transmute-industries/transmute-framework/badge.svg?branch=master&service=github)](https://coveralls.io/github/transmute-industries/transmute-framework?branch=master)
+[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 
 EventStore provides a simple javascript event based interface to the ethereum blockchain.
 Smart contract developers can annotate their contracts with "is EventStore" and instantly 
@@ -50,6 +52,17 @@ $ truffle test
 
 ```
 $ npm run test:all
+```
+
+### Commands
+```
+npm run build          - build the library
+npm run test           - run the tests
+npm run test:watch     - run the tests (watch-mode)
+npm run coverage       - run the tests with coverage
+npm run coverage:watch - run the tests with coverage (watch-mode)
+npm run pack           - creates .tgz
+npm run release        - prepare package for next release
 ```
 
 
