@@ -41,4 +41,4 @@ scratch
 
 sigmate-v3-ti.json
 src/creds.js
-
+.nyc_output
