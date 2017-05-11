@@ -17,6 +17,4 @@ switch (currentEnv) {
   case 'metamask': _web3 = window.web3; break
 }
 
-
-
 export const web3 = _web3

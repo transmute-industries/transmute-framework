@@ -1,26 +1,23 @@
 
-import {keys, pick, omit, flatten, difference, extend} from 'lodash'
+const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 import { web3 } from '../../env'
 
 var {
     SolidityEventSchema
-} = require('../EventTypes')
+} = require('../EventTypes/EventTypes')
 
 var {
     eventsFromTransaction
-} = require('../Transactions')
+} = require('../Transactions/Transactions')
 
 
 const solidityEventProperties = keys(SolidityEventSchema)
-
 const objectToSolidityEvent = (_obj) => {
     return pick(_obj, solidityEventProperties)
 }
-
 const objectToSolidityEventProperties = (_obj) => {
     return omit(_obj, solidityEventProperties)
 }
-
 const writeSolidityEventHelper = async (_esInstance, _callerMeta, _type, _propCount, _integrity) => {
     return await _esInstance.writeSolidityEvent(_type, _propCount, _integrity, _callerMeta)
 }
@@ -35,7 +32,7 @@ const writeSolidityEventPropertyHelper = async (
     _address,
     _uint,
     _string
-    ) => {
+) => {
     return await _esInstance.writeSolidityEventProperty(
         _eventIndex,
         _eventPropertyIndex,
@@ -82,22 +79,22 @@ const writePropsToEvent = async (_es, _callerMeta, _event, _eventProps) => {
     return promises
 }
 
-const hasRequiredProps = (eventObj) =>{
+const hasRequiredProps = (eventObj) => {
     let ownProps = difference(solidityEventProperties, keys(eventObj))
     //  Expect [ 'Created' ]
     if (ownProps.length === 1 && ownProps[0] === 'Created') {
         return true
     }
-    throw Error('Event does not contain required properties: ', solidityEventProperties)
+    throw Error('Event does not contain required properties: ' + solidityEventProperties)
 }
 
 // Needs work... This function parses the events we have extracted from tx logs (multiple txs)
 // It then reconstructs the original event from the logs
 // dangerous if other events are fireing in the tx, consider a string property on both event and prop event types
-export const solidityEventReducer = (events) =>{
+export const solidityEventReducer = (events) => {
     // console.log('rebuild the event here...', events)
     let _event = {}
-    events.forEach((event) =>{
+    events.forEach((event) => {
         // NOT GOOD way of determing even type...
         if (event.Type && event.Created) {
             extend(_event, event)
@@ -160,7 +157,7 @@ export const writeSolidityEventAsync = async (esInstance, _callerMeta, event) =>
 * @return {Promise<Array<Object>, Error>} an array of reconstructed events from the transaction logs
 */
 export const writeSolidityEventsAsync = async (esInstance, _callerMeta, _events) => {
-    return Promise.all(_events.map(async (_event) =>{
+    return Promise.all(_events.map(async (_event) => {
         return await writeSolidityEventAsync(esInstance, _callerMeta, _event)
     }))
 }
@@ -224,13 +221,13 @@ export const readSolidityEventAsync = async (esInstance, eventId) => {
 * @return {Promise<Array<Object>, Error>} the solidity events from the EventStore
 */
 export const readSolidityEventsAsync = async (esInstance, eventId = 0) => {
-  let currentEvent = await esInstance.solidityEventCount()
-  let eventPromises = []
-  while (eventId < currentEvent) {
-    eventPromises.push(await readSolidityEventAsync(esInstance, eventId))
-    eventId++
-  }
-  return await Promise.all(eventPromises)
+    let currentEvent = await esInstance.solidityEventCount()
+    let eventPromises = []
+    while (eventId < currentEvent) {
+        eventPromises.push(await readSolidityEventAsync(esInstance, eventId))
+        eventId++
+    }
+    return await Promise.all(eventPromises)
 }
 
 /**

@@ -1,60 +1,67 @@
 'use strict'
 
+import 'jest';
+declare var beforeAll: any
+require("babel-core/register");
+require("babel-polyfill");
+
 import { web3 } from '../env'
-import { assert } from 'chai'
 import { EventStore } from './EventStore'
-import { Persistence } from './Persistence'
-import { ReadModel } from './ReadModel'
+import { Persistence } from '../Persistence/Persistence'
+import { ReadModel } from './ReadModel/ReadModel'
 import {
   initialProjectState,
   projectReducer
-} from './Mocks/reducer'
+} from './Mock/reducer'
 import {
   transmuteTestEvent,
   transmuteTestEventStream,
   expectedProjectState
-} from './Mocks/data'
+} from './Mock/data'
 
 let es, startEventCount, maybeUpdatedReadModel, initialTestProjectState, expectedTestProjectState
 
 describe('EventStore', () => {
 
-  before(async () => {
+  beforeAll(async () => {
     es = await EventStore.ES.deployed()
     startEventCount = (await es.solidityEventCount()).toNumber()
+
     initialTestProjectState = Object.assign(initialProjectState, {
       ReadModelStoreKey: 'ProjectSummary' + '@' + es.address,
       ReadModelType: 'ProjectSummary',
       ContractAddress: es.address
     })
+
     expectedTestProjectState = Object.assign(expectedProjectState, {
       ReadModelStoreKey: 'ProjectSummary' + '@' + es.address,
       ReadModelType: 'ProjectSummary',
       ContractAddress: es.address
     })
+
   })
+
 
   describe('.writeEvent', () => {
     it('should write an event and return it ', async () => {
-      let event = await EventStore.writeEvent(es, transmuteTestEvent, web3.eth.accounts[0])
-      // console.log(event)
-      assert.equal(event.Type, transmuteTestEvent.Type)
-      assert.equal(event.Name, transmuteTestEvent.Name)
+      let event: any = await EventStore.writeEvent(es, transmuteTestEvent, web3.eth.accounts[0])
+      expect(event.Type).toBe(transmuteTestEvent.Type)
+      expect(event.Name).toBe(transmuteTestEvent.Name)
     })
   })
 
   describe('.readEvent', () => {
     it('should return the event at the index', async () => {
-      let transmuteEvent = await EventStore.readEvent(es, 0)
-      assert.equal(transmuteEvent.Type, transmuteTestEvent.Type)
-      assert.equal(transmuteEvent.Name, transmuteTestEvent.Name)
+      let transmuteEvent: any = await EventStore.readEvent(es, 0)
+      expect(transmuteEvent.Type).toBe(transmuteTestEvent.Type)
+      expect(transmuteEvent.Name).toBe(transmuteTestEvent.Name)
     })
   })
 
   describe('.writeEvents', () => {
     it('should return the events written to the event store', async () => {
       let transmuteEvents = await EventStore.writeEvents(es, transmuteTestEventStream, web3.eth.accounts[0])
-      assert.equal(transmuteEvents.length, 3)
+      expect(transmuteEvents.length).toBe(3)
     })
   })
 
@@ -62,16 +69,16 @@ describe('EventStore', () => {
     it('should return the events in the contract starting with the index', async () => {
       let transmuteEvents = await EventStore.readEvents(es, startEventCount)
       // console.log(transmuteEvents)
-      assert.equal(transmuteEvents.length, 4)
+      expect(transmuteEvents.length).toBe(4)
     })
   })
 
   describe('.setItem', () => {
     it('should return the value when passed a valid key, after saving the value', async () => {
       Persistence.setItem(initialTestProjectState.ReadModelStoreKey, initialTestProjectState)
-        .then((readModel) => {
-          assert.equal(initialTestProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
-          assert.equal(initialTestProjectState.Name, readModel.Name)
+        .then((readModel: any) => {
+          expect(initialTestProjectState.ReadModelStoreKey).toBe(readModel.ReadModelStoreKey)
+          expect(initialTestProjectState.Name).toBe(readModel.Name)
         })
     })
   })
@@ -80,35 +87,33 @@ describe('EventStore', () => {
     it('should return null for invalid key', async () => {
       Persistence.getItem('not-a-real-key')
         .then((readModel) => {
-          assert.isNull(readModel)
+          expect(readModel).toBeNull()
         })
     })
 
     it('should return a readModel when passed valid readModelKey', async () => {
       Persistence.getItem(initialTestProjectState.ReadModelStoreKey)
-        .then((readModel) => {
-          assert.equal(initialTestProjectState.ReadModelStoreKey, readModel.ReadModelStoreKey)
-          assert.equal(initialTestProjectState.Name, readModel.Name)
+        .then((readModel: any) => {
+          expect(initialTestProjectState.ReadModelStoreKey).toBe(readModel.ReadModelStoreKey)
+          expect(initialTestProjectState.Name).toBe(readModel.Name)
         })
     })
   })
 
   describe('.readModelGenerator', () => {
     it('should return the the initial reducer state when no events exist', async () => {
-      let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, [])
-      assert.equal(projectModel.ReadModelStoreKey, initialTestProjectState.ReadModelStoreKey)
-      assert.equal(projectModel.LastEvent, initialTestProjectState.LastEvent)
-      assert.equal(projectModel.Users, initialTestProjectState.Users)
-      assert.equal(projectModel.Milestones, initialTestProjectState.Milestones)
+      let projectModel: any = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, [])
+      expect(projectModel.ReadModelStoreKey).toBe(initialTestProjectState.ReadModelStoreKey)
+      expect(projectModel.LastEvent).toBe(initialTestProjectState.LastEvent)
+      expect(projectModel.Users).toBe(initialTestProjectState.Users)
+      expect(projectModel.Milestones).toBe(initialTestProjectState.Milestones)
     })
 
     it('should return the updated read model when passed events', async () => {
-      let projectHistory = await EventStore.readEvents(es, startEventCount)
-      let projectModel = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, projectHistory)
-      assert.equal(projectModel.ReadModelStoreKey, expectedTestProjectState.ReadModelStoreKey)
-      assert.equal(projectModel.Name, expectedTestProjectState.Name)
-      assert.isArray(projectModel.Users, expectedTestProjectState.Users)
-      assert.isArray(projectModel.Milestones, expectedTestProjectState.Milestones)
+      let projectHistory: any = await EventStore.readEvents(es, startEventCount)
+      let projectModel: any = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, projectHistory)
+      expect(projectModel.ReadModelStoreKey).toBe(expectedTestProjectState.ReadModelStoreKey)
+      expect(projectModel.Name).toBe(expectedTestProjectState.Name)
     })
   })
 
@@ -119,9 +124,9 @@ describe('EventStore', () => {
     })
 
     it('should return quickly if no new events exist', async () => {
-      let sameReadModel = await ReadModel.maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
-      assert.equal(sameReadModel.Name, maybeUpdatedReadModel.Name)
-      assert.equal(sameReadModel.LastEvent, maybeUpdatedReadModel.LastEvent)
+      let sameReadModel: any = await ReadModel.maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
+      expect(sameReadModel.Name).toBe(maybeUpdatedReadModel.Name)
+      expect(sameReadModel.LastEvent).toBe(maybeUpdatedReadModel.LastEvent)
     })
   })
 })

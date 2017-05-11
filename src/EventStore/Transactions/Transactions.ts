@@ -1,7 +1,6 @@
 
-import { forIn, extend} from 'lodash'
-
-const { TruffleEventSchema } = require('../EventTypes')
+const { forIn, extend } = require('lodash')
+const { TruffleEventSchema } = require('../EventTypes/EventTypes')
 
 /**
  * @type {Function} getPropFromSchema - convert truffle values by type
@@ -42,7 +41,7 @@ export const eventFromLog = (log) => {
  * @return {Object} an array of all NEW_EVENTS in the transaction tx
  */
 export const eventsFromTransaction = (tx) => {
-     let allEvents = tx.logs.map((log) => {
+    let allEvents = tx.logs.map((log) => {
         return eventFromLog(log)
     })
     return allEvents

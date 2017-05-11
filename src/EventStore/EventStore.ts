@@ -1,15 +1,18 @@
 'use strict'
 
-import contract from 'truffle-contract'
-import { web3 } from '../env'
-import eventStoreArtifacts from '../../build/contracts/EventStore.json'
+declare var require: any
 
-const ES = contract(eventStoreArtifacts)
+import { web3 } from '../env'
+
+const contract  = require('truffle-contract') 
+const eventStoreArtifacts = require('../../build/contracts/EventStore')
+
+var ES = contract(eventStoreArtifacts)
 ES.setProvider(web3.currentProvider)
 
 import {
   Middleware
-} from './Middleware'
+} from './Middleware/Middleware'
 
 /**
 * @param {TruffleContract} eventStore - a contract instance which is an Event Store
@@ -59,13 +62,13 @@ export const writeEvent = async (es, transmuteEvent, fromAddress) => {
 export const writeEvents = async (es, eventArray, fromAddress) => {
 
   let eventPromises = eventArray
-  .map((transmuteEvent) => {
-    return writeEvent(es, transmuteEvent, fromAddress)
-  })
+    .map((transmuteEvent) => {
+      return writeEvent(es, transmuteEvent, fromAddress)
+    })
   return await Promise.all(eventPromises)
-  .then((newEvents) => {
-    return newEvents
-  })
+    .then((newEvents) => {
+      return newEvents
+    })
 }
 
 
