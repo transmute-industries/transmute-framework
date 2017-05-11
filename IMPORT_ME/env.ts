@@ -1,7 +1,7 @@
 
 
 import Web3 from 'web3'
-
+declare var window: any
 let currentEnv = 'testrpc'
 
 let _web3, _provider

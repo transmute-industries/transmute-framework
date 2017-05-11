@@ -2,26 +2,18 @@
   "name": "transmute-framework",
   "version": "0.1.0",
   "description": "An ethereum smart contract framework.",
-  "main": "dist/main.js",
-  "typings": "dist/main.d.ts",
-  "jam": {
-    "main": "./dist/main.browser.js"
-  },
-  "browser": {
-    "dist/main.js": "./dist/main.browser.js"
-  },
+  "main": "build/index.js",
   "scripts": {
-    "clean": "rm -rf dist docs",
-    "build": "webpack || echo sadness build broken",
+    "clean": "rm -rf build docs coverage .nyc_output",
+    "start": "ts-node src/index.ts",
+    "build": "node node_modules/typescript/bin/tsc --p tsconfig.json",
+    "watch": "node node_modules/typescript/bin/tsc --w --p tsconfig.json",
+    "production": "npm run build && node bin/index.js",
+    "pretest": "npm run build",
     "testrpc": "pm2 start testrpc",
-    "jest": "jest",
-    "test": "truffle migrate && truffle test && jest",
-    "test:watch": "npm test -- --watch",
-    "coverage": "npm test -- --coverage --no-cache",
-    "coverage:watch": "npm run coverage -- --watch",
-    "prerelease": "npm run build && npm test",
-    "release": "standard-version && npm pack",
-    "docs": "typedoc --out docs  src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
+    "test": "nyc mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "docs": "typedoc --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
     "deploy:docs": "firebase deploy"
   },
   "repository": {
@@ -49,24 +41,16 @@
   },
   "homepage": "https://github.com/transmute-industries/transmute-framework#readme",
   "devDependencies": {
-    "@types/jest": "^0.9.31",
-    "@types/node": "^6.0.38",
-    "awesome-typescript-loader": "^2.2.1",
-    "babel-core": "^6.14.0",
-    "babel-loader": "^6.2.5",
-    "babel-polyfill": "^6.13.0",
-    "babel-preset-es2015": "^6.14.0",
-    "browserify": "^13.1.0",
-    "delete-empty": "^0.1.3",
-    "dts-bundle": "^0.5.0",
-    "jest": "^15.1.1",
-    "standard-version": "^2.4.0",
-    "tslint": "^3.15.1",
-    "tslint-loader": "^2.1.5",
-    "typescript": "2.0.0",
-    "typescript-babel-jest": "^0.1.2",
-    "webpack": "2.1.0-beta.22",
-    "webpack-node-externals": "^1.4.3"
+    "@types/chai": "^3.5.2",
+    "@types/mocha": "^2.2.41",
+    "chai": "^3.5.0",
+    "coveralls": "^2.11.15",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.3.0",
+    "ts-node": "^2.1.2",
+    "typedoc": "^0.5.3",
+    "typescript": "^2.1.4",
+    "nyc": "^10.3.2"
   },
   "dependencies": {
     "@conclurer/local-storage-fallback": "^1.0.2",
@@ -75,14 +59,22 @@
     "truffle": "^3.2.2",
     "truffle-contract": "^2.0.0"
   },
-  "jest": {
-    "scriptPreprocessor": "node_modules/typescript-babel-jest",
-    "testEnvironment": "node",
-    "testRegex": ".*\\.spec\\.ts$",
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "json"
-    ]
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
   }
 }

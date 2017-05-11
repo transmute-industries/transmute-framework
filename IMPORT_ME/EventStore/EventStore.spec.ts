@@ -1,9 +1,6 @@
 'use strict'
 
-import 'jest';
-declare var beforeAll: any
-require("babel-core/register");
-require("babel-polyfill");
+import { expect } from 'chai'
 
 import { web3 } from '../env'
 import { EventStore } from './EventStore'
@@ -23,7 +20,7 @@ let es, startEventCount, maybeUpdatedReadModel, initialTestProjectState, expecte
 
 describe('EventStore', () => {
 
-  beforeAll(async () => {
+  before(async () => {
     es = await EventStore.ES.deployed()
     startEventCount = (await es.solidityEventCount()).toNumber()
 
@@ -45,23 +42,23 @@ describe('EventStore', () => {
   describe('.writeEvent', () => {
     it('should write an event and return it ', async () => {
       let event: any = await EventStore.writeEvent(es, transmuteTestEvent, web3.eth.accounts[0])
-      expect(event.Type).toBe(transmuteTestEvent.Type)
-      expect(event.Name).toBe(transmuteTestEvent.Name)
+      expect(event.Type === transmuteTestEvent.Type)
+      expect(event.Name === transmuteTestEvent.Name)
     })
   })
 
   describe('.readEvent', () => {
     it('should return the event at the index', async () => {
       let transmuteEvent: any = await EventStore.readEvent(es, 0)
-      expect(transmuteEvent.Type).toBe(transmuteTestEvent.Type)
-      expect(transmuteEvent.Name).toBe(transmuteTestEvent.Name)
+      expect(transmuteEvent.Type === transmuteTestEvent.Type)
+      expect(transmuteEvent.Name === transmuteTestEvent.Name)
     })
   })
 
   describe('.writeEvents', () => {
     it('should return the events written to the event store', async () => {
       let transmuteEvents = await EventStore.writeEvents(es, transmuteTestEventStream, web3.eth.accounts[0])
-      expect(transmuteEvents.length).toBe(3)
+      expect(transmuteEvents.length === 3)
     })
   })
 
@@ -69,7 +66,7 @@ describe('EventStore', () => {
     it('should return the events in the contract starting with the index', async () => {
       let transmuteEvents = await EventStore.readEvents(es, startEventCount)
       // console.log(transmuteEvents)
-      expect(transmuteEvents.length).toBe(4)
+      expect(transmuteEvents.length === 4)
     })
   })
 
@@ -77,8 +74,8 @@ describe('EventStore', () => {
     it('should return the value when passed a valid key, after saving the value', async () => {
       Persistence.setItem(initialTestProjectState.ReadModelStoreKey, initialTestProjectState)
         .then((readModel: any) => {
-          expect(initialTestProjectState.ReadModelStoreKey).toBe(readModel.ReadModelStoreKey)
-          expect(initialTestProjectState.Name).toBe(readModel.Name)
+          expect(initialTestProjectState.ReadModelStoreKey === readModel.ReadModelStoreKey)
+          expect(initialTestProjectState.Name === readModel.Name)
         })
     })
   })
@@ -87,15 +84,15 @@ describe('EventStore', () => {
     it('should return null for invalid key', async () => {
       Persistence.getItem('not-a-real-key')
         .then((readModel) => {
-          expect(readModel).toBeNull()
+          expect(readModel === null)
         })
     })
 
     it('should return a readModel when passed valid readModelKey', async () => {
       Persistence.getItem(initialTestProjectState.ReadModelStoreKey)
         .then((readModel: any) => {
-          expect(initialTestProjectState.ReadModelStoreKey).toBe(readModel.ReadModelStoreKey)
-          expect(initialTestProjectState.Name).toBe(readModel.Name)
+          expect(initialTestProjectState.ReadModelStoreKey === readModel.ReadModelStoreKey)
+          expect(initialTestProjectState.Name === readModel.Name)
         })
     })
   })
@@ -103,17 +100,17 @@ describe('EventStore', () => {
   describe('.readModelGenerator', () => {
     it('should return the the initial reducer state when no events exist', async () => {
       let projectModel: any = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, [])
-      expect(projectModel.ReadModelStoreKey).toBe(initialTestProjectState.ReadModelStoreKey)
-      expect(projectModel.LastEvent).toBe(initialTestProjectState.LastEvent)
-      expect(projectModel.Users).toBe(initialTestProjectState.Users)
-      expect(projectModel.Milestones).toBe(initialTestProjectState.Milestones)
+      expect(projectModel.ReadModelStoreKey === initialTestProjectState.ReadModelStoreKey)
+      expect(projectModel.LastEvent === initialTestProjectState.LastEvent)
+      expect(projectModel.Users === initialTestProjectState.Users)
+      expect(projectModel.Milestones === initialTestProjectState.Milestones)
     })
 
     it('should return the updated read model when passed events', async () => {
       let projectHistory: any = await EventStore.readEvents(es, startEventCount)
       let projectModel: any = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, projectHistory)
-      expect(projectModel.ReadModelStoreKey).toBe(expectedTestProjectState.ReadModelStoreKey)
-      expect(projectModel.Name).toBe(expectedTestProjectState.Name)
+      expect(projectModel.ReadModelStoreKey === expectedTestProjectState.ReadModelStoreKey)
+      expect(projectModel.Name === expectedTestProjectState.Name)
     })
   })
 
@@ -125,8 +122,8 @@ describe('EventStore', () => {
 
     it('should return quickly if no new events exist', async () => {
       let sameReadModel: any = await ReadModel.maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
-      expect(sameReadModel.Name).toBe(maybeUpdatedReadModel.Name)
-      expect(sameReadModel.LastEvent).toBe(maybeUpdatedReadModel.LastEvent)
+      expect(sameReadModel.Name === maybeUpdatedReadModel.Name)
+      expect(sameReadModel.LastEvent === maybeUpdatedReadModel.LastEvent)
     })
   })
 })

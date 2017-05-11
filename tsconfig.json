@@ -1,28 +1,27 @@
 {
-	"compilerOptions": {
-		"experimentalDecorators": true,
-		"lib": [
-			"es6",
-			"dom"
-		],
-		"module": "commonjs",
-		"target": "es6",
-		"noImplicitAny": false,
-		"suppressImplicitAnyIndexErrors": true,
-		"moduleResolution": "node",
-		"emitDecoratorMetadata": true,
-		"sourceMap": false,
-		"declaration": true,
-		"outDir": "dist",
-		"removeComments": false,
-		"typeRoots": [
-			"node_modules/@types"
-		]
-	},
-	"files": [
-		"src/main.ts"
-	],
-	"exclude": [
-		"node_modules"
-	]
+  "ref": "master",
+  "path": "typings",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "diagnostics": false,
+    "removeComments": true,
+    "noImplicitAny": false,
+    "declaration": true,
+    "noResolve": false,
+    "noEmitHelpers": true,
+    "outDir": "build"
+  },
+  "exclude": [
+    "node_modules",
+    "typings/global",
+    "typings/index.d.ts"
+  ],
+  "files": [
+    "./src/index.ts"
+  ]
 }

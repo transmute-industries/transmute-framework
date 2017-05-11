@@ -1,16 +1,8 @@
-*
-!src/
-!src/**/*
-!*.js
-!*.json
-!*.md
-!.babelrc
-!.gitignore
-!.travis.yml
-!LICENSE
-!.npmignore
-
-
-# Transmute Framework
-src/creds.js
+.vscode
+node_modules
+coverage
+typings
+docs
+dist
+.nyc_output
 
