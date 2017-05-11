@@ -36,7 +36,7 @@ const outputCleanup = (dir, initial) => {
 const percentageHandler = (percentage, msg) => {
 	if (!percentage) {
 		outputCleanup(getLibraryPath(), true);
-		console.log("Begin transmute-framework build... :frog:");
+		console.log("Begin transmute-framework build...");
 	} else if (1 == percentage) {
 		// TODO: Check for errors here or bail... or something...
 		createBrowserVersion(webpackOpts.output.filename);
