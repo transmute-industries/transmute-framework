@@ -1,7 +1,6 @@
 'use strict'
 
 import { expect } from 'chai'
-
 import { web3 } from '../env'
 import { EventStore } from './EventStore'
 import { Persistence } from '../Persistence/Persistence'

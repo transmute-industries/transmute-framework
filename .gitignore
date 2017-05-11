@@ -4,5 +4,6 @@ coverage
 typings
 docs
 dist
+build
 .nyc_output
 
