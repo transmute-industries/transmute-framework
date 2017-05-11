@@ -1,0 +1,50 @@
+{
+  "contract_name": "Killable",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "kill",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x60606040525b60008054600160a060020a03191633600160a060020a03161790555b5b610118806100316000396000f300606060405263ffffffff60e060020a60003504166341c0e1b5811460345780638da5cb5b146043578063f2fde38b14606c575bfe5b3415603b57fe5b60416087565b005b3415604a57fe5b60506097565b60408051600160a060020a039092168252519081900360200190f35b3415607357fe5b6041600160a060020a036004351660a6565b005b600054600160a060020a0316ff5b565b600054600160a060020a031681565b60005433600160a060020a039081169116141560e657600160a060020a0381161560e65760008054600160a060020a031916600160a060020a0383161790555b5b5b5b505600a165627a7a7230582089d1712196307782308fe44da174286629ee4d2aeebb644f67b4aa11cf5a33840029",
+  "networks": {
+    "1494457334792": {
+      "events": {},
+      "links": {},
+      "address": "0x534c74dcee1993095a6d8c37b56846bc35a7d786",
+      "updated_at": 1494476162324
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1494476162324
+}

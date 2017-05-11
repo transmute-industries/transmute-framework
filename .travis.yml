@@ -3,6 +3,7 @@ sudo: required
 
 dist: trusty
 
+
 language: node_js
 
 node_js:
@@ -20,6 +21,6 @@ install:
   - npm install
   - npm run testrpc
 
-
 script:
-    - npm run test:all
+  - npm test
+  - npm run coverage
