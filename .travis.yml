@@ -5,12 +5,10 @@ node_js:
 
 install:
   - npm config set spin=false
-  - npm install -g coveralls
   - npm install
 
 script:
   - npm test
   - npm run coverage
-  - coveralls < ./coverage/lcov.info || true 
 
 sudo: false

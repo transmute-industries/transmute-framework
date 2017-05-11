@@ -1,7 +1,5 @@
 'use strict'
 
-declare var require: any
-
 import { web3 } from '../env'
 
 const contract  = require('truffle-contract') 
