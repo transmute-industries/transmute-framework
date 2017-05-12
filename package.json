@@ -2,10 +2,10 @@
   "name": "transmute-framework",
   "version": "0.1.0",
   "description": "An ethereum smart contract framework.",
-  "main": "build/index.js",
+  "main": "build/TransmuteFramework.js",
   "scripts": {
     "clean": "rm -rf build docs coverage .nyc_output",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node src/TransmuteFramework.ts",
     "build": "node node_modules/typescript/bin/tsc --p tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --w --p tsconfig.json",
     "production": "npm run build && node bin/index.js",
