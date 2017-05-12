@@ -20,7 +20,7 @@ export module LocalStorage {
     }
     /**
      * @param {String} key - a key for a stored object
-     * @param {String} value - the object to be stored
+     * @param {Object} value - the object to be stored
      * @return {Object} a promise for the object at the given key
      */
     export const setItem = (key: string, value: Object): Promise<Object> => {

@@ -81,7 +81,7 @@ const hasRequiredProps = (eventObj) => {
     if (ownProps.length === 1 && ownProps[0] === 'Created') {
         return true
     }
-    throw Error('Event does not contain required properties: ' + JSON.stringify(solidityEventProperties) )
+    throw Error('Event does not contain required properties: ' + JSON.stringify(solidityEventProperties))
 }
 
 // Needs work... This function parses the events we have extracted from tx logs (multiple txs)

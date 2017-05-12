@@ -15,10 +15,10 @@ export module ReadModel {
     * @param {Object[]} events - events from an es contract
     */
     export const readModelGenerator = (readModel: IReadModel, reducer: any, events: Object[]) => {
-    events.forEach((event) => {
-        readModel = reducer(readModel, event)
-    })
-    return readModel
+        events.forEach((event) => {
+            readModel = reducer(readModel, event)
+        })
+        return readModel
     }
 
     /**
@@ -29,19 +29,19 @@ export module ReadModel {
     * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
     */
     export const maybeSyncReadModel = async (es: any, readModel: IReadModel, reducer: any) => {
-    let solidityEventCount = (await es.solidityEventCount()).toNumber()
-    return Persistence.LocalStore.getItem(readModel.ReadModelStoreKey)
-        .then(async (_readModel: IReadModel) => {
-        if (!_readModel) {
-            _readModel = readModel
-        }
-        if (_readModel.LastEvent === solidityEventCount) {
-            return false
-        }
-        let events = await EventStore.readEvents(es, _readModel.LastEvent || 0)
-        let updatedReadModel = readModelGenerator(_readModel, reducer, events)
-        return Persistence.LocalStore.setItem(updatedReadModel.ReadModelStoreKey, updatedReadModel)
-        })
+        let solidityEventCount = (await es.solidityEventCount()).toNumber()
+        return Persistence.LocalStore.getItem(readModel.ReadModelStoreKey)
+            .then(async (_readModel: IReadModel) => {
+                if (!_readModel) {
+                    _readModel = readModel
+                }
+                if (_readModel.LastEvent === solidityEventCount) {
+                    return false
+                }
+                let events = await EventStore.readEvents(es, _readModel.LastEvent || 0)
+                let updatedReadModel = readModelGenerator(_readModel, reducer, events)
+                return Persistence.LocalStore.setItem(updatedReadModel.ReadModelStoreKey, updatedReadModel)
+            })
     }
 
 }

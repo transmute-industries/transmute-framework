@@ -81,6 +81,7 @@ describe('EventStore', () => {
 
   describe('.getItem', () => {
     it('should return null for invalid key', async () => {
+      // TODO: Move this to Persistence tests
       Persistence.LocalStore.getItem('not-a-real-key')
         .then((readModel) => {
           expect(readModel === null)
