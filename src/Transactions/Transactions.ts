@@ -1,7 +1,9 @@
 
-const { forIn, extend } = require('lodash')
-const { TruffleEventSchema } = require('../EventTypes/EventTypes')
+import { EventTypes } from  '../EventTypes/EventTypes'
 
+const { forIn, extend } = require('lodash')
+
+export module Transactions {
 /**
  * @type {Function} getPropFromSchema - convert truffle values by type
  * @param {String} propType - the type of the truffle property
@@ -22,7 +24,7 @@ export const getPropFromSchema = (propType, value) => {
  * @return {SOLIDITY_EVENT} a json object representing a solidity SOLIDITY_EVENT
  */
 export const eventFromLog = (log) => {
-    let schema = TruffleEventSchema[log.event]
+    let schema = EventTypes.TruffleEventSchema[log.event]
     let event = {}
     forIn(log.args, (value, key) => {
         let prop = getPropFromSchema(schema[key], value)
@@ -32,8 +34,6 @@ export const eventFromLog = (log) => {
     })
     return event
 }
-
-
 
 /**
  * @type {Function} eventsFromTransaction - extract an array of events from a truffle transaction
@@ -47,15 +47,4 @@ export const eventsFromTransaction = (tx) => {
     return allEvents
 }
 
-
-/**
-* @type {Object} Transactions - helper tools for processing transactions
-* @property {getPropFromSchema} getPropFromSchema
-* @property {eventFromLog} eventFromLog
-* @property {eventsFromTransaction} eventsFromTransaction
-*/
-export const Transactions = {
-    getPropFromSchema,
-    eventFromLog,
-    eventsFromTransaction
 }

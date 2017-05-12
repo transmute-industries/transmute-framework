@@ -22,5 +22,6 @@ install:
   - npm run testrpc
 
 script:
+  - npm run truffle-test
   - npm test
   - npm run coverage

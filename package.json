@@ -11,7 +11,8 @@
     "production": "npm run build && node bin/index.js",
     "pretest": "npm run build",
     "testrpc": "pm2 start testrpc",
-    "test": "truffle migrate && truffle test && nyc mocha",
+    "truffle-test": "truffle migrate && truffle test",
+    "test": "nyc mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "docs": "typedoc --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
     "deploy:docs": "firebase deploy"

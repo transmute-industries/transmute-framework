@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { web3 } from '../env'
 import { EventStore } from './EventStore'
 import { Persistence } from '../Persistence/Persistence'
-import { ReadModel } from './ReadModel/ReadModel'
+import { ReadModel } from '../ReadModel/ReadModel'
 import {
   initialProjectState,
   projectReducer
@@ -71,7 +71,7 @@ describe('EventStore', () => {
 
   describe('.setItem', () => {
     it('should return the value when passed a valid key, after saving the value', async () => {
-      Persistence.setItem(initialTestProjectState.ReadModelStoreKey, initialTestProjectState)
+      Persistence.LocalStore.setItem(initialTestProjectState.ReadModelStoreKey, initialTestProjectState)
         .then((readModel: any) => {
           expect(initialTestProjectState.ReadModelStoreKey === readModel.ReadModelStoreKey)
           expect(initialTestProjectState.Name === readModel.Name)
@@ -81,14 +81,14 @@ describe('EventStore', () => {
 
   describe('.getItem', () => {
     it('should return null for invalid key', async () => {
-      Persistence.getItem('not-a-real-key')
+      Persistence.LocalStore.getItem('not-a-real-key')
         .then((readModel) => {
           expect(readModel === null)
         })
     })
 
     it('should return a readModel when passed valid readModelKey', async () => {
-      Persistence.getItem(initialTestProjectState.ReadModelStoreKey)
+      Persistence.LocalStore.getItem(initialTestProjectState.ReadModelStoreKey)
         .then((readModel: any) => {
           expect(initialTestProjectState.ReadModelStoreKey === readModel.ReadModelStoreKey)
           expect(initialTestProjectState.Name === readModel.Name)

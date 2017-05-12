@@ -1,4 +1,4 @@
-export declare const Persistence: {
-    getItem: (key: any) => Promise<{}>;
-    setItem: (key: any, value: any) => Promise<{}>;
-};
+import { LocalStorage } from './LocalStorage';
+export declare module Persistence {
+    const LocalStore: typeof LocalStorage;
+}

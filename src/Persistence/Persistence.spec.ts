@@ -9,12 +9,12 @@ describe("Persistence", () => {
     })
     describe("getItem", () => {
         it("is an function", () => {
-            expect(typeof Persistence.getItem === "function");
+            expect(typeof Persistence.LocalStore.getItem === "function");
         })
     })
     describe("setItem", () => {
         it("is an function", () => {
-            expect(typeof Persistence.setItem === "function");
+            expect(typeof Persistence.LocalStore.setItem === "function");
         })
     })
 });
