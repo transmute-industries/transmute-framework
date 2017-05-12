@@ -1,14 +1,5 @@
-import {
-  getItem,
-  setItem
-} from './LocalStorage/LocalStorage'
+import { LocalStorage }  from './LocalStorage'
 
-/**
-* @type {Object} Persistence
-* @property {getItem} getItem - returns an object by key from storage
-* @property {setItem} setItem - saves an object by key to storage
-*/
-export const Persistence = {
-  getItem,
-  setItem
+export module Persistence {
+    export const LocalStore = LocalStorage
 }

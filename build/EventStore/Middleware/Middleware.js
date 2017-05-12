@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const { keys, pick, omit, flatten, difference, extend } = require('lodash');
 const env_1 = require("../../env");
-var { SolidityEventSchema } = require('../EventTypes/EventTypes');
-var { eventsFromTransaction } = require('../Transactions/Transactions');
-const solidityEventProperties = keys(SolidityEventSchema);
+const EventTypes_1 = require("../../EventTypes/EventTypes");
+const Transactions_1 = require("../../Transactions/Transactions");
+const solidityEventProperties = keys(EventTypes_1.EventTypes.SolidityEventSchema);
 const objectToSolidityEvent = (_obj) => {
     return pick(_obj, solidityEventProperties);
 };
@@ -61,7 +61,7 @@ const hasRequiredProps = (eventObj) => {
     if (ownProps.length === 1 && ownProps[0] === 'Created') {
         return true;
     }
-    throw Error('Event does not contain required properties: ' + solidityEventProperties);
+    throw Error('Event does not contain required properties: ' + JSON.stringify(solidityEventProperties));
 };
 exports.solidityEventReducer = (events) => {
     let _event = {};
@@ -95,7 +95,7 @@ exports.writeSolidityEventAsync = (esInstance, _callerMeta, event) => tslib_1.__
     let wp = writeSolidityEventHelper;
     return wp(esInstance, _callerMeta, _solEvent.Type, _solEvent.PropertyCount, _solEvent.IntegrityHash)
         .then((tx) => {
-        let _events = eventsFromTransaction(tx);
+        let _events = Transactions_1.Transactions.eventsFromTransaction(tx);
         let event = _events[0];
         allEvents.push(event);
         return event;
@@ -105,7 +105,7 @@ exports.writeSolidityEventAsync = (esInstance, _callerMeta, event) => tslib_1.__
     })
         .then((txs) => {
         let dirtyEvents = txs.map((tx) => {
-            return eventsFromTransaction(tx);
+            return Transactions_1.Transactions.eventsFromTransaction(tx);
         });
         let propEvents = flatten(dirtyEvents);
         allEvents = allEvents.concat(propEvents);

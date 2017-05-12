@@ -2,16 +2,12 @@
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 import { web3 } from '../../env'
 
-var {
-    SolidityEventSchema
-} = require('../EventTypes/EventTypes')
+import {EventTypes} from '../../EventTypes/EventTypes'
 
-var {
-    eventsFromTransaction
-} = require('../Transactions/Transactions')
+import {Transactions} from '../../Transactions/Transactions'
 
 
-const solidityEventProperties = keys(SolidityEventSchema)
+const solidityEventProperties = keys(EventTypes.SolidityEventSchema)
 const objectToSolidityEvent = (_obj) => {
     return pick(_obj, solidityEventProperties)
 }
@@ -85,7 +81,7 @@ const hasRequiredProps = (eventObj) => {
     if (ownProps.length === 1 && ownProps[0] === 'Created') {
         return true
     }
-    throw Error('Event does not contain required properties: ' + solidityEventProperties)
+    throw Error('Event does not contain required properties: ' + JSON.stringify(solidityEventProperties))
 }
 
 // Needs work... This function parses the events we have extracted from tx logs (multiple txs)
@@ -131,7 +127,7 @@ export const writeSolidityEventAsync = async (esInstance, _callerMeta, event) =>
     let wp = writeSolidityEventHelper
     return wp(esInstance, _callerMeta, _solEvent.Type, _solEvent.PropertyCount, _solEvent.IntegrityHash)
         .then((tx) => {
-            let _events = eventsFromTransaction(tx)
+            let _events = Transactions.eventsFromTransaction(tx)
             let event = _events[0]
             allEvents.push(event)
             return event
@@ -141,7 +137,7 @@ export const writeSolidityEventAsync = async (esInstance, _callerMeta, event) =>
         })
         .then((txs) => {
             let dirtyEvents = txs.map((tx) => {
-                return eventsFromTransaction(tx)
+                return Transactions.eventsFromTransaction(tx)
             })
             let propEvents = flatten(dirtyEvents)
             allEvents = allEvents.concat(propEvents)
