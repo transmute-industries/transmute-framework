@@ -1,6 +1,6 @@
 
 var Web3 = require('web3')
-var EventStore = artifacts.require('./EventStore.sol')
+var EventStore = artifacts.require('./TransmuteFramework/EventStore.sol')
 
 var {
     readSolidityEventAsync,

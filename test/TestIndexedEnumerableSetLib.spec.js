@@ -1,6 +1,6 @@
 // var Web3 = require('web3')
 // const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
-// var TestIndexedEnumerableSetLib = artifacts.require('./tests/TestIndexedEnumerableSetLib.sol')
+// var TestIndexedEnumerableSetLib = artifacts.require('./TransmuteFramework/TestIndexedEnumerableSetLib.sol')
 
 // contract('TestIndexedEnumerableSetLib', function (accounts) {
 

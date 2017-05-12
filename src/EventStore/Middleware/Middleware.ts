@@ -76,6 +76,9 @@ const writePropsToEvent = async (_es, _callerMeta, _event, _eventProps) => {
 }
 
 const hasRequiredProps = (eventObj) => {
+
+    // console.log(" hasRequiredProps eventObj: ", eventObj)
+    
     let ownProps = difference(solidityEventProperties, keys(eventObj))
     //  Expect [ 'Created' ]
     if (ownProps.length === 1 && ownProps[0] === 'Created') {
