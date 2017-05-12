@@ -24,7 +24,7 @@ module.exports = {
 }
 
 // In the client (consumer) migrations.js
-// const transmuteMigrations = require('./node_modules/trasmute-framework/module_migrations')
+// const transmuteMigrations = require('../node_modules/transmute-framework/module_migrations')
 // module.exports = function(deployer) {
 //     transmuteMigrations(deployer)
 //     //   Your migrations below this line...
