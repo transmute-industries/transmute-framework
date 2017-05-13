@@ -1,12 +1,12 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "An ethereum smart contract framework.",
   "main": "build/TransmuteFramework.js",
   "scripts": {
     "clean": "rm -rf build docs coverage .nyc_output",
     "start": "ts-node src/TransmuteFramework.ts",
-    "build": "npm run clean &&  truffle migrate && node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/",
+    "build": "npm run clean &&  truffle migrate && node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/ && cp -r cli build/cli",
     "watch": "node node_modules/typescript/bin/tsc --w --p tsconfig.json",
     "production": "npm run build && node bin/index.js",
     "pretest": "npm run build",
