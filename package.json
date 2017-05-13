@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf build docs coverage .nyc_output",
     "start": "ts-node src/TransmuteFramework.ts",
-    "build": "npm run clean &&  truffle migrate && node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/ && cp migrations/module_migrations.js build/",
+    "build": "npm run clean &&  truffle migrate && node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/",
     "watch": "node node_modules/typescript/bin/tsc --w --p tsconfig.json",
     "production": "npm run build && node bin/index.js",
     "pretest": "npm run build",
