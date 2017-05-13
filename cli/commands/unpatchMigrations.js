@@ -1,4 +1,5 @@
 var Promise = require('bluebird');
+var path = require('path')
 
 var fs = Promise.promisifyAll(require('fs'));
 
@@ -19,9 +20,10 @@ const unPatchFiles = (patchedFilePath, backupFilePath) =>{
         })
 }
 
+let patchFilePath = path.resolve(__dirname, '../../../../../migrations/2_deploy_contracts.js')
+let backupPath = path.resolve(__dirname, '../../../../../migrations/2_deploy_contracts.js.transmute.bak')
+
 const unpatchMigrations = () =>{
-    let patchFilePath = '../migrations/2_deploy_contracts.js'
-    let backupPath = '../migrations/2_deploy_contracts.js.transmute.bak'
     unPatchFiles(patchFilePath, backupPath)
 }
  

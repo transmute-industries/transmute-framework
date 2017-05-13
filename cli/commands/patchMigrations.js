@@ -1,4 +1,5 @@
 var Promise = require('bluebird');
+var path = require('path')
 
 var fs = Promise.promisifyAll(require('fs'));
 
@@ -51,7 +52,7 @@ const patchFileAsync = (targetPath, patchFileString) =>{
 }
 
 const patchMigrations = () =>{
-    let patchTargetPath = '../migrations/2_deploy_contracts.js'
+    let patchTargetPath = path.resolve(__dirname, '../../../../../migrations/2_deploy_contracts.js')
     backupPatchTarget(patchTargetPath)
         .then( (contents) =>{
 
