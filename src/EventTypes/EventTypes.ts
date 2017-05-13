@@ -2,6 +2,24 @@
 
 export module EventTypes {
 
+    export interface ISolidityEventProperty {
+        EventIndex: Object;
+        EventPropertyIndex: Object;
+        Name: string;
+        Type: string;
+
+        AddressValue: string;
+        UIntValue: Object;
+        StringValue: string;
+    }
+
+    export interface ISolidityEvent {
+        Id: Object;
+        Type: string;
+        IntegrityHash: string;
+        PropertyCount: Object;
+    }
+
     /**
     * @typedef {String} SOLIDITY_EVENT
     */
