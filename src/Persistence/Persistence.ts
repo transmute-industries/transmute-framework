@@ -1,4 +1,4 @@
-import { LocalStorage } from './LocalStorage'
+import { LocalStorage } from './LocalStore/LocalStorage'
 import  { FirebaseStorage  }   from './FireStore/FirebaseStorage'
 
 const moment = require('moment')

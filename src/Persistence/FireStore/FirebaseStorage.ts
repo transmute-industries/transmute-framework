@@ -12,8 +12,11 @@ export module FirebaseStorage {
     export const storePath = 'store/'
     export let db
     export const init = (config = firebaseConfig) =>{
-        firebase.initializeApp(firebaseConfig)
-        db = firebase.database()
+        if (firebase.apps.length === 0) {
+            firebase.initializeApp(firebaseConfig)
+            return db = firebase.database()
+        } 
+        throw Error('firebase cannot be initialized with config: ' + firebaseConfig.projectId)
     }
 
     /**
