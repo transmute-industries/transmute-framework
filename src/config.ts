@@ -1,8 +1,8 @@
 export const firebaseConfig = {
-  apiKey: 'AIzaSyDIXrTv0TD9zdaCy5n_QXm6_VMaS-1B3sQ',
-  authDomain: 'transmute-industries.firebaseapp.com',
-  databaseURL: 'https://transmute-industries.firebaseio.com',
-  projectId: 'transmute-industries',
-  storageBucket: 'transmute-industries.appspot.com',
-  messagingSenderId: '1068223304219'
+  apiKey: "AIzaSyAz5HkV4suTR49_1Cj40bQYd9Jgiv634qQ",
+  authDomain: "transmute-framework.firebaseapp.com",
+  databaseURL: "https://transmute-framework.firebaseio.com",
+  projectId: "transmute-framework",
+  storageBucket: "transmute-framework.appspot.com",
+  messagingSenderId: "191884578641"
 }
