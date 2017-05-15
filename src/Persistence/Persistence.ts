@@ -18,6 +18,26 @@ export module Persistence {
     export const LocalStore = LocalStorage
     export const FireStore = FirebaseStorage
 
+
+    /**
+     * @param {String} key - a key for a stored object
+     * @param {IPersistenceStore} store - the persistence method used for the cache
+     * @return {Object} a promise for an empty object, the cache is expired
+     */
+    export const expireItem = (key: string, store: Persistence.IPersistenceStore = LocalStore): Promise<Object> => {
+        return new Promise((resolve, reject) => {
+            let cacheObject = {
+                expires: moment().subtract(1, "second").toISOString(),
+                value: {}
+            }
+            store.setItem(key, cacheObject)
+                .then((data: ICacheObject) => {
+                    log('cache: ' + key + ' expired.')
+                    resolve(data.value)
+                })
+        })
+    }
+
     /**
      * @param {String} key - a key for a stored object
      * @param {Object} value - a an object to be persisted

@@ -77,10 +77,6 @@ describe("Persistence", () => {
         })
 
         it("supports custom firebase store", () => {
-            let key = 'a-valid-key'
-            let value = {
-                name: 'a valid value'
-            }
             let expires = moment().add(5, 'seconds').toISOString()
             return Persistence.setItem(key, value, expires, Persistence.FireStore)
                 .then((dataReadFromCache: any) => {
@@ -90,6 +86,7 @@ describe("Persistence", () => {
         })
 
     })
+
 
     describe("getItem", () => {
         before( () =>{
@@ -120,6 +117,29 @@ describe("Persistence", () => {
                     expect(dataReadFromCache.name == value.name)
                 })
         })
+    })
+
+      describe("expireItem", () => {
+        before( () =>{
+            let expires = moment().add(10, 'seconds').toISOString()
+            Persistence.setItem(key, value, expires)
+            .then((dataReadFromCache: any) => {
+                expect(dataReadFromCache !== null)
+                expect(dataReadFromCache.name == value.name)
+            })
+        })
+
+         it("should return a promise for null for expired item", () => {
+            Persistence.expireItem(key)
+            .then((dataReadFromCache: any) => {
+                expect(dataReadFromCache === {})
+            })
+            Persistence.getItem(key,)
+            .then((dataReadFromCache: any) => {
+                expect(dataReadFromCache === null)
+            })
+        })
+
     })
 
     after(()=>{
