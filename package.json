@@ -61,6 +61,7 @@
     "bluebird": "^3.5.0",
     "ethereumjs-testrpc": "^3.0.5",
     "firebase": "^3.9.0",
+    "json-logic-js": "^1.1.1",
     "moment": "^2.18.1",
     "ncp": "^2.0.0",
     "pm2": "^2.4.6",

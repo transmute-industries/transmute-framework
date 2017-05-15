@@ -31,3 +31,33 @@ export const expectedProjectState = {
   Users: ['Engineer Alice', 'Customer Bob'],
   Milestones: ['Version 0']
 }
+
+
+// OLD Faucet Object
+export const faucetObjectSnapshot = {
+  address :"0x6cf15ee95c59fcb05ec13204335550c27f69c086",
+  balance:"909",
+  creator:"0xc133f3d564d78fca77489fabe049124d7deda9d9",
+  name:"austin-ethereum",
+  timeCreated:1494730461
+}
+
+
+export const JSON_FEED = {
+  Pie: require('./JSON_FEED/pie')
+}
+
+export const JSON_LD = {
+  Invoice: require('./JSON_LD/invoice')
+}
+
+export const JSON_SCHEMA = {
+  Person: require('./JSON_SCHEMA/person')
+}
+
+export const JSON_LOGIC = {
+  isPieReadyToEat: require('./JSON_LOGIC/isPieReadyToEat')
+}
+
+
+  

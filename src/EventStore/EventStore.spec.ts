@@ -37,7 +37,6 @@ describe('EventStore', () => {
 
   })
 
-
   describe('.writeEvent', () => {
     it('should write an event and return it ', async () => {
       let event: any = await EventStore.writeEvent(es, transmuteTestEvent, web3.eth.accounts[0])
