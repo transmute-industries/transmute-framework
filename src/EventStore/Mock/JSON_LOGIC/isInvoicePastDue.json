@@ -1,0 +1,14 @@
+{
+    "and": [
+        {
+            "<": [
+                {
+                    "var": "paymentDueDate"
+                },
+                {
+                    "var": "now"
+                }
+            ]
+        }
+    ]
+}

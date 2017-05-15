@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf build docs coverage .nyc_output",
     "start": "ts-node src/TransmuteFramework.ts",
-    "build": "npm run clean &&  truffle migrate && node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/ && cp -r cli build/cli && cp -r migrations build/migrations",
+    "build": "node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/ && cp -r cli build/cli && cp -r migrations build/migrations",
     "watch": "node node_modules/typescript/bin/tsc --w --p tsconfig.json",
     "production": "npm run build && node bin/index.js",
     "pretest": "npm run build",
@@ -60,6 +60,9 @@
     "@digix/truffle-lightwallet-provider": "0.0.12",
     "bluebird": "^3.5.0",
     "ethereumjs-testrpc": "^3.0.5",
+    "firebase": "^3.9.0",
+    "json-logic-js": "^1.1.1",
+    "moment": "^2.18.1",
     "ncp": "^2.0.0",
     "pm2": "^2.4.6",
     "rimraf": "^2.6.1",
