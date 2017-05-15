@@ -32,7 +32,6 @@ export const expectedProjectState = {
   Milestones: ['Version 0']
 }
 
-
 // OLD Faucet Object
 export const faucetObjectSnapshot = {
   address :"0x6cf15ee95c59fcb05ec13204335550c27f69c086",
@@ -41,7 +40,6 @@ export const faucetObjectSnapshot = {
   name:"austin-ethereum",
   timeCreated:1494730461
 }
-
 
 export const JSON_FEED = {
   Pie: require('./JSON_FEED/pie')
@@ -56,7 +54,8 @@ export const JSON_SCHEMA = {
 }
 
 export const JSON_LOGIC = {
-  isPieReadyToEat: require('./JSON_LOGIC/isPieReadyToEat')
+  isPieReadyToEat: require('./JSON_LOGIC/isPieReadyToEat'),
+  isInvoicePastDue: require('./JSON_LOGIC/isInvoicePastDue')
 }
 
 

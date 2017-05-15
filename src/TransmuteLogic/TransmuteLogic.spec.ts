@@ -3,18 +3,18 @@ import { expect } from 'chai'
 const jsonLogic = require('json-logic-js')
 
 // Remember {"log":"apple"} for debugging
-const RULES = {
-    // The pie isn’t ready to eat unless it’s cooler than 110 degrees, and filled with apples.
-    isPieReadyToEat: require('../EventStore/Mock/JSON_LOGIC/isPieReadyToEat.json'),
-    // The invoice is past due if now is after paymentDueDate
-    // isInvoicePastDue:  require('../EventStore/Mock/JSON_LOGIC/isInvoicePastDue.json'),
-}
 
-const STATE_STREAM = {
-    pie: require('../EventStore/Mock/JSON_FEED/pie.json'),
-}
+const {extend}  = require('lodash')
+const moment = require('moment')
 
-// console.log(data)
+import { 
+    JSON_FEED,
+    JSON_LD,
+    JSON_SCHEMA,
+    JSON_LOGIC
+} from '../EventStore/Mock/data'
+
+// console.log(data)s
 // console.log(result)
 
 import { TransmuteLogic } from './TransmuteLogic'
@@ -22,23 +22,37 @@ import { TransmuteLogic } from './TransmuteLogic'
 describe("TransmuteLogic", () => {
     describe(".apply", () => {
         it("returns the result of jsonLogic.apply", () => {
-            let rule = RULES.isPieReadyToEat
-            let data = STATE_STREAM.pie[0]
+            let rule = JSON_LOGIC.isPieReadyToEat
+            let data = JSON_FEED.Pie[0]
             let result1 = jsonLogic.apply(rule, data)
             let result2 = TransmuteLogic.apply(rule, data)
             expect(result1 === false)
             expect(result2 === false)
         })
+
+        it(" can be used to tell if invoice is past due", () => {
+            let rule = JSON_LOGIC.isInvoicePastDue
+            let data = JSON_LD.Invoice 
+            let now = moment().format('YYYY-MM-DD')
+            extend( data, {
+                "now": now
+            })
+            // console.log(data.paymentDueDate,  now)
+            // console.log(data.paymentDueDate < now)
+            let result = TransmuteLogic.apply(rule, data)
+            // console.log('result: ', result)
+            expect(result === true)
+        })
     })
 
     describe(".projection", () => {
-        it("maps each object to jsonLogic.apply of rule", () => {
-            let rule = RULES.isPieReadyToEat
-            let data = STATE_STREAM.pie
+        it(" can tell when a pie is ready to eat", () => {
+            let rule = JSON_LOGIC.isPieReadyToEat
+            let data = JSON_FEED.Pie
             let result = TransmuteLogic.projection(rule, data)
             expect(result[0] === false)
             expect(result[1] === false)
-        })
+        }) 
     })
 
 })
