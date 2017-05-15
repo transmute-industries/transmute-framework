@@ -54,29 +54,30 @@ contract EventStore is Killable {
   function writeSolidityEventProperty(uint _eventIndex, uint _eventPropertyIndex, string _name, string _type, address _address, uint _uint, string _string) public
     returns (uint)
   {
-    solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex] = SolidityEventProperty({
-      Name: _name,
-      Type: _type,
-      AddressValue: _address,
-      UIntValue: _uint,
-      StringValue: _string
-    });
+    SolidityEventProperty memory solidityEventProperty;
+    solidityEventProperty.Name = _name;
+    solidityEventProperty.Type = _type;
+    solidityEventProperty.AddressValue = _address;
+    solidityEventProperty.UIntValue = _uint;
+    solidityEventProperty.StringValue = _string;
+    solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex] = solidityEventProperty;
+
     SOLIDITY_EVENT_PROPERTY(_eventIndex, _eventPropertyIndex, _name, _type, _address, _uint, _string);
     return solidityEventCount;
   }
 
-   function writeSolidityEvent(string _type, uint _propCount, string _integrity) public
+  function writeSolidityEvent(string _type, uint _propCount, string _integrity) public
     returns (uint)
   {
     uint _created = now;
 
-    solidityEvents[solidityEventCount] = SolidityEvent({
-      Id: solidityEventCount,
-      Type: _type,
-      Created: _created,
-      PropertyCount: _propCount,
-      IntegrityHash: _integrity,
-    });
+    SolidityEvent memory solidityEvent;
+    solidityEvent.Id = solidityEventCount;
+    solidityEvent.Type = _type;
+    solidityEvent.Created = _created;
+    solidityEvent.PropertyCount = _propCount;
+    solidityEvent.IntegrityHash = _integrity;
+    solidityEvents[solidityEventCount] = solidityEvent;
 
     SOLIDITY_EVENT(solidityEventCount, _type, _created, _propCount, _integrity);
     solidityEventCount += 1;
