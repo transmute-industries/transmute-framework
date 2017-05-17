@@ -6,9 +6,9 @@ pragma solidity ^0.4.8;
 library IndexedEnumerableSetLib {
 
   struct IndexedEnumerableSet {
-    bytes32[] values;
-    mapping(bytes32 => bool) exists;
-    mapping(bytes32 => uint) indices;
+    address[] values;
+    mapping(address => bool) exists;
+    mapping(address => uint) indices;
   }
 
   modifier inBounds(IndexedEnumerableSet storage self, uint index) {
@@ -25,12 +25,12 @@ library IndexedEnumerableSetLib {
 
   function get(IndexedEnumerableSet storage self, uint index) public constant
     inBounds(self, index)
-    returns (bytes32)
+    returns (address)
   {
     return self.values[index];
   }
 
-  function set(IndexedEnumerableSet storage self, uint index, bytes32 value) public
+  function set(IndexedEnumerableSet storage self, uint index, address value) public
     inBounds(self, index)
     returns (bool)
   {
@@ -42,7 +42,7 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
-  function add(IndexedEnumerableSet storage self, bytes32 value) public
+  function add(IndexedEnumerableSet storage self, address value) public
     returns (bool)
   {
     if (self.exists[value])
@@ -53,7 +53,7 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
-  function remove(IndexedEnumerableSet storage self, bytes32 value) public
+  function remove(IndexedEnumerableSet storage self, address value) public
     returns (bool)
   {
     if (!self.exists[value])
@@ -63,15 +63,27 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
+  function first(IndexedEnumerableSet storage self) public constant
+    notEmpty(self)
+    returns (address)
+  {
+    return get(self, 0);
+  }
+
+  function last(IndexedEnumerableSet storage self) public constant
+    notEmpty(self)
+    returns (address)
+  {
+    return get(self, self.values.length - 1);
+  }
+
   function pop(IndexedEnumerableSet storage self, uint index) public
     inBounds(self, index)
-    returns (bytes32)
-	{
-    bytes32 value = get(self, index);
+    returns (address) {
+    address value = get(self, index);
 
     if (index != self.values.length - 1) {
-      bytes32 lastValue = last(self);
-      self.exists[lastValue] = false;
+      address lastValue = last(self);
       set(self, index, lastValue);
       self.indices[lastValue] = index;
     }
@@ -83,21 +95,7 @@ library IndexedEnumerableSetLib {
     return value;
   }
 
-  function first(IndexedEnumerableSet storage self) public constant
-    notEmpty(self)
-    returns (bytes32)
-  {
-    return get(self, 0);
-  }
-
-  function last(IndexedEnumerableSet storage self) public constant
-    notEmpty(self)
-    returns (bytes32)
-  {
-    return get(self, self.values.length - 1);
-  }
-
-  function indexOf(IndexedEnumerableSet storage self, bytes32 value) public constant
+  function indexOf(IndexedEnumerableSet storage self, address value) public constant
     returns (uint)
   {
     if (!self.exists[value])
@@ -105,7 +103,7 @@ library IndexedEnumerableSetLib {
     return self.indices[value];
   }
 
-  function contains(IndexedEnumerableSet storage self, bytes32 value) public constant
+  function contains(IndexedEnumerableSet storage self, address value) public constant
     returns (bool)
   {
     return self.exists[value];
