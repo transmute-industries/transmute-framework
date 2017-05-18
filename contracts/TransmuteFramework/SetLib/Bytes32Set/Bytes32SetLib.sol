@@ -3,34 +3,34 @@ pragma solidity ^0.4.8;
 /// @title Library implementing an array type which allows O(1) lookups on values.
 /// @author Piper Merriam <pipermerriam@gmail.com>, Eric Olszewski <eolszewski@gmail.com>
 /// Adapted from https://github.com/ethpm/ethereum-indexed-enumerable-set-lib/blob/master/contracts/IndexedEnumerableSetLib.sol
-library IndexedEnumerableSetLib {
+library Bytes32SetLib {
 
-  struct IndexedEnumerableSet {
+  struct Bytes32Set {
     bytes32[] values;
     mapping(bytes32 => bool) exists;
     mapping(bytes32 => uint) indices;
   }
 
-  modifier inBounds(IndexedEnumerableSet storage self, uint index) {
+  modifier inBounds(Bytes32Set storage self, uint index) {
     if (index >= self.values.length)
       throw;
     _;
   }
 
-  modifier notEmpty(IndexedEnumerableSet storage self) {
+  modifier notEmpty(Bytes32Set storage self) {
     if (self.values.length == 0)
       throw;
     _;
   }
 
-  function get(IndexedEnumerableSet storage self, uint index) public constant
+  function get(Bytes32Set storage self, uint index) public constant
     inBounds(self, index)
     returns (bytes32)
   {
     return self.values[index];
   }
 
-  function set(IndexedEnumerableSet storage self, uint index, bytes32 value) public
+  function set(Bytes32Set storage self, uint index, bytes32 value) public
     inBounds(self, index)
     returns (bool)
   {
@@ -42,7 +42,7 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
-  function add(IndexedEnumerableSet storage self, bytes32 value) public
+  function add(Bytes32Set storage self, bytes32 value) public
     returns (bool)
   {
     if (self.exists[value])
@@ -53,7 +53,7 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
-  function remove(IndexedEnumerableSet storage self, bytes32 value) public
+  function remove(Bytes32Set storage self, bytes32 value) public
     returns (bool)
   {
     if (!self.exists[value])
@@ -63,7 +63,7 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
-  function pop(IndexedEnumerableSet storage self, uint index) public
+  function pop(Bytes32Set storage self, uint index) public
     inBounds(self, index)
     returns (bytes32)
 	{
@@ -83,21 +83,21 @@ library IndexedEnumerableSetLib {
     return value;
   }
 
-  function first(IndexedEnumerableSet storage self) public constant
+  function first(Bytes32Set storage self) public constant
     notEmpty(self)
     returns (bytes32)
   {
     return get(self, 0);
   }
 
-  function last(IndexedEnumerableSet storage self) public constant
+  function last(Bytes32Set storage self) public constant
     notEmpty(self)
     returns (bytes32)
   {
     return get(self, self.values.length - 1);
   }
 
-  function indexOf(IndexedEnumerableSet storage self, bytes32 value) public constant
+  function indexOf(Bytes32Set storage self, bytes32 value) public constant
     returns (uint)
   {
     if (!self.exists[value])
@@ -105,13 +105,13 @@ library IndexedEnumerableSetLib {
     return self.indices[value];
   }
 
-  function contains(IndexedEnumerableSet storage self, bytes32 value) public constant
+  function contains(Bytes32Set storage self, bytes32 value) public constant
     returns (bool)
   {
     return self.exists[value];
   }
 
-  function size(IndexedEnumerableSet storage self) public constant
+  function size(Bytes32Set storage self) public constant
     returns (uint)
   {
     return self.values.length;

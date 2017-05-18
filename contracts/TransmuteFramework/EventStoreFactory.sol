@@ -1,12 +1,12 @@
 pragma solidity ^0.4.8;
 import "./EventStore.sol";
-import "./IndexedEnumerableSetLib.sol";
+import "./SetLib/AddressSet/AddressSetLib.sol";
 
 contract EventStoreFactory is EventStore {
-  using IndexedEnumerableSetLib for IndexedEnumerableSetLib.IndexedEnumerableSet;
+  using AddressSetLib for AddressSetLib.AddressSet;
 
   mapping (address => address) creatorEventStoreMapping;
-  IndexedEnumerableSetLib.IndexedEnumerableSet EventStoreAddresses;
+  AddressSetLib.AddressSet EventStoreAddresses;
 
   // Fallback Function
   function() payable {}

@@ -3,34 +3,34 @@ pragma solidity ^0.4.8;
 /// @title Library implementing an array type which allows O(1) lookups on values.
 /// @author Piper Merriam <pipermerriam@gmail.com>, Eric Olszewski <eolszewski@gmail.com>
 /// Adapted from https://github.com/ethpm/ethereum-indexed-enumerable-set-lib/blob/master/contracts/IndexedEnumerableSetLib.sol
-library IndexedEnumerableSetLib {
+library AddressSetLib {
 
-  struct IndexedEnumerableSet {
-    bytes32[] values;
-    mapping(bytes32 => bool) exists;
-    mapping(bytes32 => uint) indices;
+  struct AddressSet {
+    address[] values;
+    mapping(address => bool) exists;
+    mapping(address => uint) indices;
   }
 
-  modifier inBounds(IndexedEnumerableSet storage self, uint index) {
+  modifier inBounds(AddressSet storage self, uint index) {
     if (index >= self.values.length)
       throw;
     _;
   }
 
-  modifier notEmpty(IndexedEnumerableSet storage self) {
+  modifier notEmpty(AddressSet storage self) {
     if (self.values.length == 0)
       throw;
     _;
   }
 
-  function get(IndexedEnumerableSet storage self, uint index) public constant
+  function get(AddressSet storage self, uint index) public constant
     inBounds(self, index)
-    returns (bytes32)
+    returns (address)
   {
     return self.values[index];
   }
 
-  function set(IndexedEnumerableSet storage self, uint index, bytes32 value) public
+  function set(AddressSet storage self, uint index, address value) public
     inBounds(self, index)
     returns (bool)
   {
@@ -42,7 +42,7 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
-  function add(IndexedEnumerableSet storage self, bytes32 value) public
+  function add(AddressSet storage self, address value) public
     returns (bool)
   {
     if (self.exists[value])
@@ -53,7 +53,7 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
-  function remove(IndexedEnumerableSet storage self, bytes32 value) public
+  function remove(AddressSet storage self, address value) public
     returns (bool)
   {
     if (!self.exists[value])
@@ -63,14 +63,14 @@ library IndexedEnumerableSetLib {
     return true;
   }
 
-  function pop(IndexedEnumerableSet storage self, uint index) public
+  function pop(AddressSet storage self, uint index) public
     inBounds(self, index)
-    returns (bytes32)
+    returns (address)
 	{
-    bytes32 value = get(self, index);
+    address value = get(self, index);
 
     if (index != self.values.length - 1) {
-      bytes32 lastValue = last(self);
+      address lastValue = last(self);
       self.exists[lastValue] = false;
       set(self, index, lastValue);
       self.indices[lastValue] = index;
@@ -83,21 +83,21 @@ library IndexedEnumerableSetLib {
     return value;
   }
 
-  function first(IndexedEnumerableSet storage self) public constant
+  function first(AddressSet storage self) public constant
     notEmpty(self)
-    returns (bytes32)
+    returns (address)
   {
     return get(self, 0);
   }
 
-  function last(IndexedEnumerableSet storage self) public constant
+  function last(AddressSet storage self) public constant
     notEmpty(self)
-    returns (bytes32)
+    returns (address)
   {
     return get(self, self.values.length - 1);
   }
 
-  function indexOf(IndexedEnumerableSet storage self, bytes32 value) public constant
+  function indexOf(AddressSet storage self, address value) public constant
     returns (uint)
   {
     if (!self.exists[value])
@@ -105,13 +105,13 @@ library IndexedEnumerableSetLib {
     return self.indices[value];
   }
 
-  function contains(IndexedEnumerableSet storage self, bytes32 value) public constant
+  function contains(AddressSet storage self, address value) public constant
     returns (bool)
   {
     return self.exists[value];
   }
 
-  function size(IndexedEnumerableSet storage self) public constant
+  function size(AddressSet storage self) public constant
     returns (uint)
   {
     return self.values.length;
