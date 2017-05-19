@@ -1,8 +1,8 @@
 var Ownable = artifacts.require('./zeppelin/ownership/Ownable.sol')
 var Killable = artifacts.require('./zeppelin/lifecycle/Killable.sol')
 
-// var Bytes32SetLib = artifacts.require("./TransmuteFramework/SetLib/Bytes32Set/Bytes32SetLib.sol")
-// var Bytes32SetSpec = artifacts.require("./TransmuteFramework/SetLib/Bytes32Set/Bytes32SetSpec.sol")
+var Bytes32SetLib = artifacts.require("./TransmuteFramework/SetLib/Bytes32Set/Bytes32SetLib.sol")
+var Bytes32SetSpec = artifacts.require("./TransmuteFramework/SetLib/Bytes32Set/Bytes32SetSpec.sol")
 
 var IndexedEnumerableSetLib = artifacts.require("./TransmuteFramework/IndexedEnumerableSetLib.sol")
 var TestIndexedEnumerableSetLib = artifacts.require("./TransmuteFramework/TestIndexedEnumerableSetLib.sol")
@@ -28,10 +28,10 @@ module.exports = function(deployer) {
   deployer.link(IndexedEnumerableSetLib, TestIndexedEnumerableSetLib)
   deployer.deploy(TestIndexedEnumerableSetLib)
 
-  
-  // deployer.deploy(Bytes32SetLib)
-  // deployer.link(Bytes32SetLib, Bytes32SetSpec)
-  // deployer.deploy(Bytes32SetSpec)
+
+  deployer.deploy(Bytes32SetLib)
+  deployer.link(Bytes32SetLib, Bytes32SetSpec)
+  deployer.deploy(Bytes32SetSpec)
 
 
   deployer.deploy(AddressSetLib)
