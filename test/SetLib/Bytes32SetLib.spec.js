@@ -1,14 +1,14 @@
 var Web3 = require('web3')
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
-var TestIndexedEnumerableSetLib = artifacts.require('./TransmuteFramework/TestIndexedEnumerableSetLib.sol')
+var Bytes32SetSpec = artifacts.require('./TransmuteFramework/SetLib/Bytes32Set/Bytes32SetSpec.sol')
 
-contract('TestIndexedEnumerableSetLib', function (accounts) {
+contract('Bytes32SetSpec', function (accounts) {
 
   var testInstance = null
   var size = 0
 
   it('test deployed', async () => {
-    testInstance = await TestIndexedEnumerableSetLib.deployed()
+    testInstance = await Bytes32SetSpec.deployed()
   })
 
   it('test add, last', async () => {
@@ -51,19 +51,19 @@ contract('TestIndexedEnumerableSetLib', function (accounts) {
   })
 
   it('test add, remove, contains', async () => {
-    testInstance.add('F').then((_tx) => ++size)
-    testInstance.add('G').then((_tx) => ++size)
-    testInstance.add('H').then((_tx) => ++size)
-    testInstance.add('I').then((_tx) => ++size)
-    testInstance.add('J').then((_tx) => ++size)
+    await testInstance.add('F').then((_tx) => ++size)
+    await testInstance.add('G').then((_tx) => ++size)
+    await testInstance.add('H').then((_tx) => ++size)
+    await testInstance.add('I').then((_tx) => ++size)
+    await testInstance.add('J').then((_tx) => ++size)
     assert.equal(await testInstance.contains.call('F'), true)
     assert.equal(await testInstance.contains.call('G'), true)
     assert.equal(await testInstance.contains.call('H'), true)
     assert.equal(await testInstance.contains.call('I'), true)
     assert.equal(await testInstance.contains.call('J'), true)
-    testInstance.remove('J').then((_tx) => --size)
-    testInstance.remove('I').then((_tx) => --size)
-    testInstance.remove('H').then((_tx) => --size)
+    await testInstance.remove('J').then((_tx) => --size)
+    await testInstance.remove('I').then((_tx) => --size)
+    await testInstance.remove('H').then((_tx) => --size)
     assert.equal(await testInstance.contains.call('H'), false)
     assert.equal(await testInstance.contains.call('I'), false)
     assert.equal(await testInstance.contains.call('J'), false)
