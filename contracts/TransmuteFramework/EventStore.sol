@@ -1,7 +1,10 @@
 pragma solidity ^0.4.8;
 import './zeppelin/lifecycle/Killable.sol';
+import "./SetLib/AddressSet/AddressSetLib.sol";
 
 contract EventStore is Killable {
+  using AddressSetLib for AddressSetLib.AddressSet;
+
 
   event SOLIDITY_EVENT_PROPERTY(
     uint EventIndex,
@@ -41,9 +44,69 @@ contract EventStore is Killable {
   uint public solidityEventCount;
   mapping (uint => SolidityEvent) solidityEvents;
 
+  mapping (address => bool) authorizedAddressesMapping;
+  AddressSetLib.AddressSet requestorAddresses;
+  address public creator;
+  uint public timeCreated;
 
+  // Modifiers
+  modifier onlyCreator() {
+    if (tx.origin != creator)
+      throw;
+    _;
+  }
+
+  modifier onlyAuthorized() {
+    if (tx.origin != creator && !authorizedAddressesMapping[tx.origin])
+      throw;
+    _;
+  }
+  
   function () payable {}
   function EventStore() payable {}
+
+  function getRequestorAddresses() constant
+    returns (address[])
+  {
+    return requestorAddresses.values;
+  }
+
+  function addRequestorAddress(address _requestor) public {
+    if (requestorAddresses.contains(_requestor))
+      throw;
+    requestorAddresses.add(_requestor);
+    authorizedAddressesMapping[_requestor] = false;
+    // EMIT a ES Event here...
+  }
+
+  function authorizeRequestorAddress(address _requestor) public
+    onlyCreator
+  {
+    if (!requestorAddresses.contains(_requestor))
+      throw;
+    if (authorizedAddressesMapping[_requestor])
+      throw;
+    authorizedAddressesMapping[_requestor] = true;
+    // EMIT an ES Event here
+  }
+
+  function revokeRequestorAddress(address _requestor) public
+    onlyCreator
+  {
+    if (!requestorAddresses.contains(_requestor))
+      throw;
+    if (!authorizedAddressesMapping[_requestor])
+      throw;
+    authorizedAddressesMapping[_requestor] = false;
+    // EMIT an ES Event here
+  }
+
+  function isAddressAuthorized(address _address) public constant
+    returns (bool)
+  {
+    return authorizedAddressesMapping[_address];
+  }
+
 
   function getVersion() public constant
     returns (uint)
