@@ -19,10 +19,6 @@ module.exports = function(deployer) {
   deployer.link(Ownable, Killable)
   deployer.deploy(Killable)
 
-  deployer.link(AddressSetLib, EventStore)
-  deployer.link(Killable, EventStore)
-  deployer.deploy(EventStore)
-
   deployer.deploy(AddressSetLib)
   deployer.link(AddressSetLib, AddressSetSpec)
   deployer.deploy(AddressSetSpec)
@@ -35,7 +31,11 @@ module.exports = function(deployer) {
   deployer.link(UIntSetLib, UIntSetSpec)
   deployer.deploy(UIntSetSpec)
 
-  
+  deployer.link(AddressSetLib, EventStore)
+  deployer.link(Killable, EventStore)
+  deployer.deploy(EventStore)
+
+
   deployer.link(AddressSetLib, EventStoreFactory)
   deployer.link(EventStore, EventStoreFactory)
   deployer.deploy(EventStoreFactory)

@@ -12,7 +12,7 @@ contract EventStoreFactory is EventStore {
   function() payable {}
 
   // Constructor
-  function EventStoreManager() payable {}
+  function EventStoreFactory() payable {}
 
   // Modifiers
   modifier checkExistence(address _EventStoreAddress) {

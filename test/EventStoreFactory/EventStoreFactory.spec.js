@@ -21,12 +21,6 @@ contract('EventStoreFactory', (accounts) => {
             assert(isNewESAddressValid === true)
         })
 
-        it('returns an address', async () => {
-            let newESAddress = await factory.createEventStore.call({ from: factoryCreatorAddress })
-            let isNewESAddressValid = web3.isAddress(newESAddress)
-            assert(isNewESAddressValid === true)
-        })
-
         it('creates an event store contract', async () => {
             let tx = await factory.createEventStore({
                 from: factoryCreatorAddress,
@@ -39,6 +33,23 @@ contract('EventStoreFactory', (accounts) => {
 
             assert(createdEvent.Type === 'EVENT_STORE_CREATED')
             assert(auditEvent.Type === 'EVENT_STORE_AUDIT_LOG')
+        })
+    })
+
+    describe('.getEventStores', async () => {
+        it('returns an array of event store contract addresses', async () => {
+            let eventStoreContractAddresses = await factory.getEventStores({ from: factoryCreatorAddress })
+            assert(eventStoreContractAddresses.length === 1)
+        })
+    })
+
+    describe('.getEventStoreByCreator', () => {
+        it('returns an event store contract by creator address', async () => {
+            let eventStoreContractAddress = await factory.getEventStoreByCreator(factoryCreatorAddress, {
+                from: factoryCreatorAddress
+            })
+            let isAddress = web3.isAddress(eventStoreContractAddress)
+            assert(isAddress === true)
         })
     })
 
