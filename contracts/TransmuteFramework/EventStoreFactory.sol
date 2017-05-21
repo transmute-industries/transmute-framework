@@ -67,7 +67,7 @@ contract EventStoreFactory is EventStore {
     return address(_newEventStore);
 	}
 
-  function killEventStore(address _address, string _name, address _creator)  {
+  function killEventStore(address _address, address _creator)  {
     // Validate Local State
     if ((_creator != msg.sender && this.owner() != msg.sender) || creatorEventStoreMapping[_creator] == 0) {
       throw;
