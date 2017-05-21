@@ -30,45 +30,22 @@ smart contract state.
 Transactions are the result of calling truffle contracts. Events are received in transactions, and
 applied to read models by a model reducer.
 
-### Usage 
-
-```
-npm install 
-```
-
-### PM2
-
-A process manager command line tool.
-
-```
-$ npm run testrpc
-$ pm2 logs testrpc
-$ pm2 kill
-```
-
-### Truffle
-
-```
-$ truffle test
-```
-
-### Tests
-
-```
-$ npm run test:all
-```
-
 ### Commands
 ```
+npm install            - install the package and its dependencies
+npm run clean          - clean the project of all build and debug data
+npm run testrpc        - run testrpc
+pm2 logs testrpc       - review testrpc logs
+truffle migrate        - migrate truffle contracts
+truffle test           - test truffle contracts
+npm run test           - run framework middleware tests
 npm run build          - build the library
-npm run test           - run the tests
-npm run test:watch     - run the tests (watch-mode)
-npm run coverage       - run the tests with coverage
-npm run coverage:watch - run the tests with coverage (watch-mode)
-npm run pack           - creates .tgz
-npm run release        - prepare package for next release
+npm run docs           - build the docs
+npm run patch          - increment the package version and create a tag
+npm publish            - deploy the package to npm
+npm run deploy:docs    - deploy the docs to https://framework.transmute.industries
+pm2 kill               - kill testrpc and any other pm2 processes
 ```
-
 
 ### Contributing 
 
