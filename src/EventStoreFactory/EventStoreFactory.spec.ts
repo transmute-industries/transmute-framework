@@ -5,10 +5,10 @@ import { web3 } from '../env'
 
 import { EventStoreFactory } from './EventStoreFactory'
 
-describe('EventStore', () => {
+describe('EventStoreFactory', () => {
 
     let factory
-    let fromAddress = web3.eth.accounts[0];
+    let fromAddress = web3.eth.accounts[1];
 
     before(async () => {
         factory = await EventStoreFactory.EventStoreFactoryContract.deployed()
