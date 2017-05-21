@@ -47,18 +47,23 @@ contract EventStoreFactory is EventStore {
 
     // Interact With Other Contracts
 		EventStore _newEventStore = new EventStore();
-    if (!_newEventStore.send(msg.value)) {
-      throw;
-    }
 
     // Update State Dependent On Other Contracts
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender] = address(_newEventStore);
 
     // Emit Events
-    // USE EVENT STORE
-    // requestAccess(address(_newEventStore), msg.sender);
-    // authorizeAccess(address(_newEventStore), msg.sender);
+    uint eventIndex = solidityEventCount;
+
+    writeSolidityEvent('EVENT_STORE_CREATED', 1, '0x0');
+    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
+
+    eventIndex = solidityEventCount;
+
+    writeSolidityEvent('EVENT_STORE_AUDIT_LOG', 2, '0x1');
+    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
+    writeSolidityEventProperty(eventIndex, 1, 'ContractOwnerAddress', 'Address', address(msg.sender), 0, '');
+
     return address(_newEventStore);
 	}
 

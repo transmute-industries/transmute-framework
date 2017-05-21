@@ -4,7 +4,8 @@ var _ = require('lodash')
 var {
     TruffleEventSchema,
     SolidityEventSchema,
-    SolidityEventPropertySchema
+    SolidityEventPropertySchema,
+    solidityEventPropertyToObject
 } = require('../EventTypes')
 
 var {
@@ -114,15 +115,7 @@ const readSolidityEventPropertyHelper = async (esInstance, eventId, propIndex) =
     }
 }
 
-const solidityEventPropertyToObject = (prop) => {
-    let _obj = {}
-    switch (prop.Type) {
-        case 'String': _obj[prop.Name] = prop.StringValue; break;
-        case 'BigNumber': _obj[prop.Name] = prop.UIntValue; break;
-        case 'Address': _obj[prop.Name] = prop.AddressValue; break;
-    }
-    return _obj
-}
+
 
 const readSolidityEventAsync = async (esInstance, eventId) => {
     let event = await readSolidityEventHelper(esInstance, eventId)
