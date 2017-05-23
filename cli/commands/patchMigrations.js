@@ -9,24 +9,24 @@ let patchBegin = `🦄 ${frameworkName}`
 let patchEnd = `🐩 ${frameworkName}`
 
 function replaceAll(str, find, replace) {
-  return str.replace(new RegExp(find, 'g'), replace);
+    return str.replace(new RegExp(find, 'g'), replace);
 }
 
-const backupPatchTarget = (targetPath) =>{
+const backupPatchTarget = (targetPath) => {
     let contents
     return fs.readFileAsync(targetPath, "utf8")
         .then((_contents) => {
             contents = _contents
             return fs.writeFileAsync(targetPath + '.transmute.bak', contents, {})
         })
-        .then(() =>{
+        .then(() => {
             return contents
         })
 }
 
-const buildPatch = (fileString) =>{
+const buildPatch = (fileString) => {
     // Fix path to match result of copyTransmuteContracts
-    fileString = fileString.replace(/\.\//g, "./TransmuteFramework/");
+    // fileString = fileString.replace(/\.\//g, "./TransmuteFramework/");
     // convert deployer
     fileString = fileString.replace(/module\.exports/g, "const transmuteDeployer");
     fileString = `// BEGIN ${patchBegin} \n` + fileString
@@ -34,16 +34,16 @@ const buildPatch = (fileString) =>{
     return fileString
 }
 
-const patchFileAsync = (targetPath, patchFileString) =>{
-     return fs.readFileAsync(targetPath, "utf8")
+const patchFileAsync = (targetPath, patchFileString) => {
+    return fs.readFileAsync(targetPath, "utf8")
         .then((contents) => {
-            return  patchFileString + '\n' + contents
+            return patchFileString + '\n' + contents
         })
         .then((contents) => {
             let target = 'module.exports = function(deployer) {'
             let patchCall = '\ttransmuteDeployer(deployer)\n'
             let comment = '\t// Patched by Transmute Framework\n'
-            let patch =  target + '\n' + comment + patchCall
+            let patch = target + '\n' + comment + patchCall
             return contents = contents.replace(target, patch);
         })
         .then((result) => {
@@ -51,24 +51,28 @@ const patchFileAsync = (targetPath, patchFileString) =>{
         })
 }
 
-const patchMigrations = () =>{
+const patchMigrations = () => {
     let patchTargetPath = path.resolve(__dirname, '../../../../../migrations/2_deploy_contracts.js')
-    backupPatchTarget(patchTargetPath)
-        .then( (contents) =>{
+    let transmuteMigrations = path.resolve(__dirname, '../../migrations/2_deploy_contracts.js')
 
-            if (contents.indexOf(patchBegin) !== -1){
+    backupPatchTarget(patchTargetPath)
+        .then((contents) => {
+
+            if (contents.indexOf(patchBegin) !== -1) {
                 throw Error('Already patched, aborting... consider unpatch')
             } else {
-                return buildPatch(contents)
+                return fs.readFileAsync(transmuteMigrations, "utf8")
+                    .then((contents) => {
+                        return buildPatch(contents)
+                    })
             }
-
         })
         .then((patch) => {
             return patchFileAsync(patchTargetPath, patch)
             // console.log("PATCH", result);
-        }) 
+        })
 }
- 
+
 module.exports = {
     patchMigrations
 }

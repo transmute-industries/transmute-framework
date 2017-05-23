@@ -1,6 +1,6 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.14",
+  "version": "0.1.21",
   "description": "An ethereum smart contract framework.",
   "main": "build/TransmuteFramework.js",
   "scripts": {
@@ -14,10 +14,9 @@
     "truffle-test": "truffle migrate && truffle test",
     "test": "nyc mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "docs": "typedoc --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
+    "docs": "typedoc --gaID UA-99768185-1 --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
     "deploy:docs": "firebase deploy",
-    "patch": "npm version patch",
-    "publish": "npm publish"
+    "patch": "npm version patch"
   },
   "repository": {
     "type": "git",

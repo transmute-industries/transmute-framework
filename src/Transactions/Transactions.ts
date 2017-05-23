@@ -1,7 +1,7 @@
 
-import { EventTypes } from  '../EventTypes/EventTypes'
+import { EventTypes } from '../EventTypes/EventTypes'
 
-const { forIn, extend } = require('lodash')
+const { find, filter, forIn, extend } = require('lodash')
 
 export module Transactions {
     /**
@@ -45,5 +45,31 @@ export module Transactions {
             return eventFromLog(log)
         })
         return allEvents
+    }
+
+    export const transactionEventsToEventObject = (events) => {
+
+        let eventObjs = filter(events, (evt) => {
+            return evt.Id !== undefined
+        })
+
+        eventObjs.forEach((eventObj: any) => {
+            let propIndex = 0;
+            while (propIndex < eventObj.PropertyCount) {
+                let eventProp = find(events, (evt) => {
+                    return evt.EventPropertyIndex === propIndex
+                })
+                let eventPropObj = EventTypes.solidityEventPropertyToObject(eventProp)
+                extend(eventObj, eventPropObj)
+                propIndex++;
+            }
+        })
+        return eventObjs
+    }
+
+    export const transactionToEventCollection = (tx) => {
+        let events = eventsFromTransaction(tx)
+        let eventCollection = transactionEventsToEventObject(events)
+        return eventCollection
     }
 }

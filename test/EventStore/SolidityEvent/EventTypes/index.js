@@ -27,10 +27,21 @@ const TruffleEventSchema = {
     [SOLIDITY_EVENT_PROPERTY]: SolidityEventPropertySchema,
 }
 
+const solidityEventPropertyToObject = (prop) => {
+    let _obj = {}
+    switch (prop.Type) {
+        case 'String': _obj[prop.Name] = prop.StringValue; break;
+        case 'BigNumber': _obj[prop.Name] = prop.UIntValue; break;
+        case 'Address': _obj[prop.Name] = prop.AddressValue; break;
+    }
+    return _obj
+}
+
 module.exports = {
     TruffleEventSchema,
     SOLIDITY_EVENT,
     SOLIDITY_EVENT_PROPERTY,
     SolidityEventSchema,
-    SolidityEventPropertySchema
+    SolidityEventPropertySchema,
+    solidityEventPropertyToObject
 }
