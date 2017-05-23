@@ -61,19 +61,19 @@ contract EventStoreFactory is EventStore {
     return address(_newEventStore);
 	}
 
-  function killEventStore(address _address, address _creator)  {
+  function killEventStore(address _address)  {
     // Validate Local State
-    if ((_creator != msg.sender && this.owner() != msg.sender) || creatorEventStoreMapping[_creator] == 0) {
+    if (this.owner() != msg.sender || creatorEventStoreMapping[msg.sender] == 0) {
       throw;
     }
 
     // Update Local State
-    delete creatorEventStoreMapping[_creator];
+    delete creatorEventStoreMapping[msg.sender];
     EventStoreAddresses.remove(_address);
 
     // Interact With Other Contracts
-    EventStore _EventStore = EventStore(_address);
-    _EventStore.kill();
+    EventStore _eventStore = EventStore(_address);
+    _eventStore.kill();
 
     // Emit Events
     writeSolidityEvent('EVENT_STORE_DESTROYED', 1, StringUtils.uintToBytes(solidityEventCount));
