@@ -1,6 +1,7 @@
 pragma solidity ^0.4.8;
 import "./EventStore.sol";
 import "./SetLib/AddressSet/AddressSetLib.sol";
+import "./Utils/StringUtils.sol";
 
 contract EventStoreFactory is EventStore {
   using AddressSetLib for AddressSetLib.AddressSet;
@@ -12,7 +13,7 @@ contract EventStoreFactory is EventStore {
   function() payable {}
 
   // Constructor
-  function EventStoreManager() payable {}
+  function EventStoreFactory() payable {}
 
   // Modifiers
   modifier checkExistence(address _EventStoreAddress) {
@@ -47,22 +48,20 @@ contract EventStoreFactory is EventStore {
 
     // Interact With Other Contracts
 		EventStore _newEventStore = new EventStore();
-    if (!_newEventStore.send(msg.value)) {
-      throw;
-    }
 
     // Update State Dependent On Other Contracts
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender] = address(_newEventStore);
 
     // Emit Events
-    // USE EVENT STORE
-    // requestAccess(address(_newEventStore), msg.sender);
-    // authorizeAccess(address(_newEventStore), msg.sender);
+    writeSolidityEvent('EVENT_STORE_CREATED', 1, StringUtils.uintToBytes(solidityEventCount));
+    writeSolidityEventProperty(solidityEventCount, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
+    writeSolidityEventProperty(solidityEventCount, 1, 'ContractOwnerAddress', 'Address', msg.sender, 0, '');
+
     return address(_newEventStore);
 	}
 
-  function killEventStore(address _address, string _name, address _creator)  {
+  function killEventStore(address _address, address _creator)  {
     // Validate Local State
     if ((_creator != msg.sender && this.owner() != msg.sender) || creatorEventStoreMapping[_creator] == 0) {
       throw;
@@ -77,6 +76,7 @@ contract EventStoreFactory is EventStore {
     _EventStore.kill();
 
     // Emit Events
-    // USE EVENT STORE
+    writeSolidityEvent('EVENT_STORE_DESTROYED', 1, StringUtils.uintToBytes(solidityEventCount));
+    writeSolidityEventProperty(solidityEventCount, 0, 'ContractAddress', 'Address', _address, 0, '');
   }
 }

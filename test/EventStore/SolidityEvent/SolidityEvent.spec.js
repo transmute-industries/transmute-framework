@@ -14,8 +14,6 @@ var {
     meshPointEvents,
 } = require('./mocks')
 
-
-
 contract('EventStore', (accounts) => {
 
     describe('writeSolidityEventAsync', () => {
@@ -39,7 +37,7 @@ contract('EventStore', (accounts) => {
 
     describe('writeSolidityEventsAsync', () => {
         it('write an array of SOLIDITY_EVENTs to the chain', () => {
-   
+
             let _callerMeta = {
                 from: accounts[0],
                 gas: 2000000
@@ -74,7 +72,7 @@ contract('EventStore', (accounts) => {
 
 
     describe('readSolidityEventsAsync', () => {
-        it('return all SOLIDITY_EVENTs as array from the gievent eventId to the latest event', () => {
+        it('return all SOLIDITY_EVENTs as array from the given eventId to the latest event', () => {
 
             return EventStore.deployed()
                 .then((_esInstance) => {

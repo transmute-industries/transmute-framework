@@ -10,7 +10,7 @@ const getPropFromSchema = (propType, value) => {
         case 'String': return value.toString()
         case 'Address': return value.toString()
         case 'BigNumber': return value.toNumber()
-        default: throw Error(`UNKNWON propType ${propType} for value '${value}'. Make sure your schema is up to date.`)
+        default: throw Error(`UNKNOWN propType ${propType} for value '${value}'. Make sure your schema is up to date.`)
     }
 }
 
