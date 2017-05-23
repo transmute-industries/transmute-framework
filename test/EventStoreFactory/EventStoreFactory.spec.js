@@ -9,9 +9,6 @@ contract('EventStoreFactory', function (accounts) {
   var factory = null
   var eventStoreAddress = null
   var eventStoreCreator = accounts[0]
-  var faucetRecipient = accounts[1]
-  var faucetCustomer = accounts[2]
-  var faucetName = 'austin-test-faucet'
 
   it('Factory Instance Exists', () => {
       return EventStoreFactory.deployed().then((_instance) => {
