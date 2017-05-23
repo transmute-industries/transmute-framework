@@ -2,8 +2,11 @@
 var _ = require('lodash')
 
 var {
-    TruffleEventSchema
+    TruffleEventSchema,
+    solidityEventPropertyToObject
 } = require('../EventTypes')
+
+
 
 const getPropFromSchema = (propType, value) => {
     switch (propType) {
@@ -32,6 +35,36 @@ const eventsFromTransaction = (tx) => {
     })
 }
 
+
+
+const transactionEventsToEventObject = (events) => {
+
+    let eventObjs = _.filter(events, (evt) => {
+        return evt.Id !== undefined
+    })
+
+    eventObjs.forEach((eventObj) => {
+        let propIndex = 0;
+        while (propIndex < eventObj.PropertyCount) {
+            let eventProp = _.find(events, (evt) => {
+                return evt.EventPropertyIndex === propIndex
+            })
+            let eventPropObj = solidityEventPropertyToObject(eventProp)
+            _.extend(eventObj, eventPropObj)
+            propIndex++;
+        }
+    })
+    return eventObjs
+}
+
+const transactionToEventCollection = (tx) => {
+    let events = eventsFromTransaction(tx)
+    let eventCollection = transactionEventsToEventObject(events)
+    return eventCollection
+}
+
 module.exports = {
-    eventsFromTransaction
+    eventsFromTransaction,
+    transactionEventsToEventObject,
+    transactionToEventCollection
 }

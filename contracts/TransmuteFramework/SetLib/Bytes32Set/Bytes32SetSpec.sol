@@ -1,19 +1,19 @@
 pragma solidity ^0.4.8;
 
-import './IndexedEnumerableSetLib.sol';
-import './zeppelin/lifecycle/Killable.sol';
+import './Bytes32SetLib.sol';
+import '../../zeppelin/lifecycle/Killable.sol';
 
-contract TestIndexedEnumerableSetLib is Killable {
-  using IndexedEnumerableSetLib for IndexedEnumerableSetLib.IndexedEnumerableSet;
+contract Bytes32SetSpec is Killable {
+  using Bytes32SetLib for Bytes32SetLib.Bytes32Set;
 
-  IndexedEnumerableSetLib.IndexedEnumerableSet testSet;
+  Bytes32SetLib.Bytes32Set testSet;
 
   bytes32 public lastPop;
   bool public lastAdd;
   bool public lastRemove;
 
   function () payable {}
-  function TestIndexedEnumerableSetLib() payable {}
+  function Bytes32SetSpec() payable {}
 
   function get(uint index) public constant
     returns (bytes32)
