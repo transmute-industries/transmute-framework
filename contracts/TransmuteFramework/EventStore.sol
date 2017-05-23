@@ -1,10 +1,10 @@
 pragma solidity ^0.4.8;
 import './zeppelin/lifecycle/Killable.sol';
 import "./SetLib/AddressSet/AddressSetLib.sol";
+import "./Utils/StringUtils.sol";
 
 contract EventStore is Killable {
   using AddressSetLib for AddressSetLib.AddressSet;
-
 
   event SOLIDITY_EVENT_PROPERTY(
     uint EventIndex,
@@ -21,7 +21,7 @@ contract EventStore is Killable {
     string Type,
     uint Created,
     uint PropertyCount,
-    string IntegrityHash
+    bytes32 IntegrityHash
   );
 
   struct SolidityEventProperty {
@@ -38,7 +38,7 @@ contract EventStore is Killable {
     uint Created;
     uint PropertyCount;
     mapping (uint => SolidityEventProperty) PropertyValues;
-    string IntegrityHash;
+    bytes32 IntegrityHash;
   }
 
   uint public solidityEventCount;
@@ -61,7 +61,7 @@ contract EventStore is Killable {
       throw;
     _;
   }
-  
+
   function () payable {}
   function EventStore() payable {}
 
@@ -76,7 +76,9 @@ contract EventStore is Killable {
       throw;
     requestorAddresses.add(_requestor);
     authorizedAddressesMapping[_requestor] = false;
-    // EMIT a ES Event here...
+
+    writeSolidityEvent('REQUEST_ACCESS', 1, StringUtils.uintToBytes(solidityEventCount));
+    writeSolidityEventProperty(solidityEventCount, 0, 'RequestorAddress', 'Address', _requestor, 0, '');
   }
 
   function authorizeRequestorAddress(address _requestor) public
@@ -87,7 +89,9 @@ contract EventStore is Killable {
     if (authorizedAddressesMapping[_requestor])
       throw;
     authorizedAddressesMapping[_requestor] = true;
-    // EMIT an ES Event here
+
+    writeSolidityEvent('GRANT_ACCESS', 1, StringUtils.uintToBytes(solidityEventCount));
+    writeSolidityEventProperty(solidityEventCount, 0, 'RequestorAddress', 'Address', _requestor, 0, '');
   }
 
   function revokeRequestorAddress(address _requestor) public
@@ -98,7 +102,9 @@ contract EventStore is Killable {
     if (!authorizedAddressesMapping[_requestor])
       throw;
     authorizedAddressesMapping[_requestor] = false;
-    // EMIT an ES Event here
+
+    writeSolidityEvent('REVOKE_ACCESS', 1, StringUtils.uintToBytes(solidityEventCount));
+    writeSolidityEventProperty(solidityEventCount, 0, 'RequestorAddress', 'Address', _requestor, 0, '');
   }
 
   function isAddressAuthorized(address _address) public constant
@@ -106,7 +112,6 @@ contract EventStore is Killable {
   {
     return authorizedAddressesMapping[_address];
   }
-
 
   function getVersion() public constant
     returns (uint)
@@ -129,7 +134,7 @@ contract EventStore is Killable {
     return solidityEventCount;
   }
 
-  function writeSolidityEvent(string _type, uint _propCount, string _integrity) public
+  function writeSolidityEvent(string _type, uint _propCount, bytes32 _integrity) public
     returns (uint)
   {
     uint _created = now;
@@ -163,7 +168,7 @@ contract EventStore is Killable {
     return solidityEvents[_eventIndex].PropertyCount;
   }
   function readSolidityEventIntegrityHash(uint _eventIndex) public
-    returns (string)
+    returns (bytes32)
   {
     return solidityEvents[_eventIndex].IntegrityHash;
   }

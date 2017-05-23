@@ -1,81 +1,83 @@
 // var Web3 = require('web3')
 // const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
-// var Bytes32SetSpec = artifacts.require('./TransmuteFramework/SetLib/Bytes32Set/Bytes32SetSpec.sol')
-
-// contract('Bytes32SetSpec', function (accounts) {
-
+// var Bytes32SetLib = artifacts.require('./TransmuteFramework/SetLib/Bytes32SetSpec.sol')
+//
+// contract('Bytes32SetLib', function (accounts) {
+//
 //   var testInstance = null
 //   var size = 0
-
-//   it('test deployed', async () => {
-//     testInstance = await Bytes32SetSpec.deployed()
+//
+//   it('test deployed', (done) => {
+//     Bytes32SetLib.deployed().then((_instance) => {
+//       testInstance = _instance
+//       done()
+//     })
 //   })
-
-//   it('test add, last', async () => {
+//
+//   it('test add, last', (done) => {
 //     testInstance.add('A').then((_tx) => ++size)
-//     assert.equal(toAscii(await testInstance.last.call()), 'A')
+//     testInstance.last.call().then((_last) => assert.equal(toAscii(_last), 'A'))
 //     testInstance.add('B').then((_tx) => ++size)
-//     assert.equal(toAscii(await testInstance.last.call()), 'B')
 //     testInstance.add('C').then((_tx) => ++size)
-//     assert.equal(toAscii(await testInstance.last.call()), 'C')
 //     testInstance.add('D').then((_tx) => ++size)
-//     assert.equal(toAscii(await testInstance.last.call()), 'D')
 //     testInstance.add('E').then((_tx) => ++size)
-//     assert.equal(toAscii(await testInstance.last.call()), 'E')
+//     testInstance.last.call().then((_last) => assert.equal(toAscii(_last), 'E'))
+//     done()
 //   })
-
-//   it('test indexOf', async () => {
+//
+//   it('test indexOf', (done) => {
 //     testInstance.indexOf.call('A').then((_index) => assert.equal(_index, 0))
 //     testInstance.indexOf.call('B').then((_index) => assert.equal(_index, 1))
 //     testInstance.indexOf.call('C').then((_index) => assert.equal(_index, 2))
 //     testInstance.indexOf.call('D').then((_index) => assert.equal(_index, 3))
 //     testInstance.indexOf.call('E').then((_index) => assert.equal(_index, 4))
+//     done()
 //   })
-
-//   it('test remove, first', async () => {
-//     assert.equal(toAscii(await testInstance.first.call()), 'A')
+//
+//   it('test remove, first', (done) => {
+//     testInstance.size.call().then((_size) => assert.equal(_size, size))
+//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'A'))
 //     testInstance.remove('A').then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//     assert.equal(toAscii(await testInstance.first.call()), 'E')
+//     testInstance.size.call().then((_size) => assert.equal(_size, size))
+//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'E'))
 //     testInstance.remove('E').then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//     assert.equal(toAscii(await testInstance.first.call()), 'D')
+//     testInstance.size.call().then((_size) => assert.equal(_size, size))
+//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'D'))
 //     testInstance.remove('D').then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//     assert.equal(toAscii(await testInstance.first.call()), 'C')
+//     testInstance.size.call().then((_size) => assert.equal(_size, size))
+//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'C'))
 //     testInstance.remove('C').then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//     assert.equal(toAscii(await testInstance.first.call()), 'B')
+//     testInstance.size.call().then((_size) => assert.equal(_size, size))
+//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'B'))
 //     testInstance.remove('B').then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
+//     testInstance.size.call().then((_size) => assert.equal(_size, size))
+//     done()
 //   })
-
-//   it('test add, remove, contains', async () => {
-//     await testInstance.add('F').then((_tx) => ++size)
-//     await testInstance.add('G').then((_tx) => ++size)
-//     await testInstance.add('H').then((_tx) => ++size)
-//     await testInstance.add('I').then((_tx) => ++size)
-//     await testInstance.add('J').then((_tx) => ++size)
-//     assert.equal(await testInstance.contains.call('F'), true)
-//     assert.equal(await testInstance.contains.call('G'), true)
-//     assert.equal(await testInstance.contains.call('H'), true)
-//     assert.equal(await testInstance.contains.call('I'), true)
-//     assert.equal(await testInstance.contains.call('J'), true)
-//     await testInstance.remove('J').then((_tx) => --size)
-//     await testInstance.remove('I').then((_tx) => --size)
-//     await testInstance.remove('H').then((_tx) => --size)
-//     assert.equal(await testInstance.contains.call('H'), false)
-//     assert.equal(await testInstance.contains.call('I'), false)
-//     assert.equal(await testInstance.contains.call('J'), false)
+//
+//   it('test add, remove, contains', (done) => {
+//     testInstance.contains.call('H').then((_bool) => assert.equal(_bool, false))
+//     testInstance.add('F').then((_tx) => ++size)
+//     testInstance.add('G').then((_tx) => ++size)
+//     testInstance.add('H').then((_tx) => ++size)
+//     testInstance.add('I').then((_tx) => ++size)
+//     testInstance.add('J').then((_tx) => ++size)
+//     testInstance.contains.call('H').then((_bool) => assert.equal(_bool, true))
+//     testInstance.contains.call('I').then((_bool) => assert.equal(_bool, true))
+//     testInstance.remove('J').then((_tx) => --size)
+//     testInstance.remove('I').then((_tx) => --size)
+//     testInstance.remove('H').then((_tx) => --size)
+//     testInstance.contains.call('I').then((_bool) => assert.equal(_bool, false))
+//     done()
 //   })
-
-//   it('test get, set', async () => {
-//     await testInstance.set(0, 'A')
+//
+//   it('test get, set', (done) => {
+//     testInstance.set(0, 'A');
 //     testInstance.get.call(0).then((_value) => assert.equal(toAscii(_value), 'A'))
-//     await testInstance.set(1, 'A')
+//     testInstance.set(1, 'A');
 //     testInstance.get.call(1).then((_value) => assert.equal(toAscii(_value), 'G'))
+//     done()
 //   })
-
+//
 //   function toAscii(value) {
 //     return web3.toAscii(value).replace(/\u0000/g, '')
 //   }
