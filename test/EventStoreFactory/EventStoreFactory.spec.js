@@ -1,56 +1,56 @@
+var Web3 = require('web3')
+var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStoreFactory.sol')
+var EventStore = artifacts.require('./TransmuteFramework/EventStore.sol')
+var { eventsFromTransaction } = require('../EventStore/SolidityEvent/Transactions')
+var _ = require('lodash')
 
-const Web3 = require('web3')
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+contract('EventStoreFactory', function (accounts) {
 
-const EventStoreFactory = artifacts.require('./TransmuteFramework/EventStoreFactory.sol')
+  var factory = null
+  var eventStoreAddress = null
+  var eventStoreCreator = accounts[0]
 
-const { transactionToEventCollection } = require('../EventStore/SolidityEvent/Transactions')
+  it('Factory Instance Exists', () => {
+      return EventStoreFactory.deployed().then((_instance) => {
+          factory = _instance
+      })
+  })
 
-contract('EventStoreFactory', (accounts) => {
-    let factory
-    let factoryCreatorAddress = accounts[0]
-    it('is deployed contract', async () => {
-        factory = await EventStoreFactory.deployed()
-        return factory
+  it('Create EventStore address', (done) => {
+    factory.createEventStore.call({ from: eventStoreCreator }).then((_address) => {
+      eventStoreAddress = _address
+      done()
     })
+  })
 
-    describe('.createEventStore', () => {
-        it('returns an address', async () => {
-            let newESAddress = await factory.createEventStore.call({ from: factoryCreatorAddress })
-            let isNewESAddressValid = web3.isAddress(newESAddress)
-            assert(isNewESAddressValid === true)
-        })
+  it('Create EventStore', async () => {
+    let _tx = await factory.createEventStore({ from: eventStoreCreator, gas: 2000000 })
+    let _events = eventsFromTransaction(_tx)
+    assert.equal(_events[0].Type, 'EVENT_STORE_CREATED', 'EventStore Created Event is invalid')
+    assert.equal(_events[1].AddressValue, eventStoreAddress, 'EventStore ContractAddress is invalid')
+    assert.equal(_events[2].AddressValue, eventStoreCreator, 'EventStore ContractOwnerAddress is invalid')
+  })
 
-        it('creates an event store contract', async () => {
-            let tx = await factory.createEventStore({
-                from: factoryCreatorAddress,
-                gas: 2000000,
-            })
-            let events = transactionToEventCollection(tx)
+  it('Verify EventStore address contained in EventStoreFactory addresses', async () => {
+    let _addresses = await factory.getEventStores()
+    assert(_.includes(_addresses, eventStoreAddress), 'EventStoreFactory addresses does not contain eventStoreAddress')
+  })
 
-            let createdEvent = events[0]
-            let auditEvent = events[1]
+  it('Verify EventStore owner', async () => {
+    let _eventStore = await EventStore.at(eventStoreAddress)
+    let _owner = await _eventStore.owner.call()
+    assert.equal(_owner, factory.address, 'EventStoreFactory is not EventStore owner')
+  })
 
-            assert(createdEvent.Type === 'EVENT_STORE_CREATED')
-            assert(auditEvent.Type === 'EVENT_STORE_AUDIT_LOG')
-        })
-    })
+  it('Verify creatorEventStoreMapping update', async () => {
+    let _eventStoreAddress = await factory.getEventStoreByCreator.call({ from: eventStoreCreator })
+    assert.equal(_eventStoreAddress, eventStoreAddress, 'Address for creatorEventStoreMapping for not match EventStore address')
+  })
 
-    describe('.getEventStores', async () => {
-        it('returns an array of event store contract addresses', async () => {
-            let eventStoreContractAddresses = await factory.getEventStores({ from: factoryCreatorAddress })
-            assert(eventStoreContractAddresses.length === 1)
-        })
-    })
-
-    describe('.getEventStoreByCreator', () => {
-        it('returns an event store contract by creator address', async () => {
-            let eventStoreContractAddress = await factory.getEventStoreByCreator(factoryCreatorAddress, {
-                from: factoryCreatorAddress
-            })
-            let isAddress = web3.isAddress(eventStoreContractAddress)
-            assert(isAddress === true)
-        })
-    })
-
+  it('Destroy EventStore', async () => {
+    let _tx = await factory.killEventStore(eventStoreAddress, { from: eventStoreCreator })
+    let _events = eventsFromTransaction(_tx)
+    assert.equal(_events[0].Type, 'EVENT_STORE_DESTROYED', 'EventStore Destroyed Event is invalid')
+    assert.equal(_events[1].AddressValue, eventStoreAddress, 'EventStore ContractAddress is invalid')
+  })
 })
