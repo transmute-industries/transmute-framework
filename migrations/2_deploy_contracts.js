@@ -1,6 +1,8 @@
 var Ownable = artifacts.require('./TransmuteFramework/zeppelin/ownership/Ownable.sol')
 var Killable = artifacts.require('./TransmuteFramework/zeppelin/lifecycle/Killable.sol')
 
+var StringUtils = artifacts.require("./TransmuteFramework/Utils/StringUtils.sol")
+
 var AddressSetLib = artifacts.require("./TransmuteFramework/SetLib/AddressSet/AddressSetLib.sol")
 var AddressSetSpec = artifacts.require("./TransmuteFramework/SetLib/AddressSet/AddressSetSpec.sol")
 
@@ -15,6 +17,8 @@ var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStoreFactor
 
 
 module.exports = function(deployer) {
+  deployer.deploy(StringUtils)
+
   deployer.deploy(Ownable)
   deployer.link(Ownable, Killable)
   deployer.deploy(Killable)
@@ -31,10 +35,12 @@ module.exports = function(deployer) {
   deployer.link(UIntSetLib, UIntSetSpec)
   deployer.deploy(UIntSetSpec)
 
+  deployer.link(StringUtils, EventStore)
   deployer.link(AddressSetLib, EventStore)
   deployer.link(Killable, EventStore)
   deployer.deploy(EventStore)
 
+  deployer.link(StringUtils, EventStoreFactory)
   deployer.link(AddressSetLib, EventStoreFactory)
   deployer.link(EventStore, EventStoreFactory)
   deployer.deploy(EventStoreFactory)

@@ -1,6 +1,7 @@
 pragma solidity ^0.4.8;
 import "./EventStore.sol";
 import "./SetLib/AddressSet/AddressSetLib.sol";
+import "./Utils/StringUtils.sol";
 
 contract EventStoreFactory is EventStore {
   using AddressSetLib for AddressSetLib.AddressSet;
@@ -52,36 +53,28 @@ contract EventStoreFactory is EventStore {
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender] = address(_newEventStore);
 
-    // Emit Events
-    uint eventIndex = solidityEventCount;
-
-    writeSolidityEvent('EVENT_STORE_CREATED', 1, '0x0');
-    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
-
-    eventIndex = solidityEventCount;
-
-    writeSolidityEvent('EVENT_STORE_AUDIT_LOG', 2, '0x1');
-    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
-    writeSolidityEventProperty(eventIndex, 1, 'ContractOwnerAddress', 'Address', address(msg.sender), 0, '');
+    writeSolidityEvent('EVENT_STORE_CREATED', 1, StringUtils.uintToBytes(solidityEventCount));
+    writeSolidityEventProperty(solidityEventCount, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
+    writeSolidityEventProperty(solidityEventCount, 1, 'ContractOwnerAddress', 'Address', msg.sender, 0, '');
 
     return address(_newEventStore);
 	}
 
-  function killEventStore(address _address, address _creator)  {
+  function killEventStore(address _address)  {
     // Validate Local State
-    if ((_creator != msg.sender && this.owner() != msg.sender) || creatorEventStoreMapping[_creator] == 0) {
+    if (this.owner() != msg.sender || creatorEventStoreMapping[msg.sender] == 0) {
       throw;
     }
 
     // Update Local State
-    delete creatorEventStoreMapping[_creator];
+    delete creatorEventStoreMapping[msg.sender];
     EventStoreAddresses.remove(_address);
 
     // Interact With Other Contracts
-    EventStore _EventStore = EventStore(_address);
-    _EventStore.kill();
+    EventStore _eventStore = EventStore(_address);
+    _eventStore.kill();
 
-    // Emit Events
-    // USE EVENT STORE
+    writeSolidityEvent('EVENT_STORE_DESTROYED', 1, StringUtils.uintToBytes(solidityEventCount));
+    writeSolidityEventProperty(solidityEventCount, 0, 'ContractAddress', 'Address', _address, 0, '');
   }
 }
