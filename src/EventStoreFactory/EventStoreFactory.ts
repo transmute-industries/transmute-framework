@@ -13,13 +13,17 @@ export module EventStoreFactory {
     EventStoreFactoryContract.setProvider(web3.currentProvider)
 
     export const createEventStore = async (factory, fromAddress) => {
-        // console.log(factory)
+        // console.log(fromAddress)
         let tx = await factory.createEventStore({
             from: fromAddress,
             gas: 2000000
         })
+        // console.log(tx)
         let events = Transactions.transactionToEventCollection(tx)
-        return events
+        return {
+            events: events,
+            tx: tx
+        }
     }
 
     export const getAllEventStoreContractAddresses = async (factory, fromAddress) => {
