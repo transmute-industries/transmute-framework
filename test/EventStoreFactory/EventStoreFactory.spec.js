@@ -26,7 +26,7 @@ contract('EventStoreFactory', function (accounts) {
   it('Create EventStore', async () => {
     let _tx = await factory.createEventStore({ from: eventStoreCreator, gas: 2000000 })
     let _events = eventsFromTransaction(_tx)
-    assert.equal(_events[0].Type, 'EVENT_STORE_CREATED', 'EventStore Created Event is invalid')
+    assert.equal(_events[0].Type, 'FACTORY_EVENT_STORE_CREATED', 'EventStore Created Event is invalid')
     assert.equal(_events[1].AddressValue, eventStoreAddress, 'EventStore ContractAddress is invalid')
     assert.equal(_events[2].AddressValue, eventStoreCreator, 'EventStore ContractOwnerAddress is invalid')
   })
@@ -42,15 +42,10 @@ contract('EventStoreFactory', function (accounts) {
     assert.equal(_owner, factory.address, 'EventStoreFactory is not EventStore owner')
   })
 
-  it('Verify creatorEventStoreMapping update', async () => {
-    let _eventStoreAddress = await factory.getEventStoreByCreator.call({ from: eventStoreCreator })
-    assert.equal(_eventStoreAddress, eventStoreAddress, 'Address for creatorEventStoreMapping for not match EventStore address')
-  })
-
   it('Destroy EventStore', async () => {
     let _tx = await factory.killEventStore(eventStoreAddress, { from: eventStoreCreator })
     let _events = eventsFromTransaction(_tx)
-    assert.equal(_events[0].Type, 'EVENT_STORE_DESTROYED', 'EventStore Destroyed Event is invalid')
+    assert.equal(_events[0].Type, 'FACTORY_EVENT_STORE_DESTROYED', 'EventStore Destroyed Event is invalid')
     assert.equal(_events[1].AddressValue, eventStoreAddress, 'EventStore ContractAddress is invalid')
   })
 })
