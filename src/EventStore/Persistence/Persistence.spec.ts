@@ -5,7 +5,7 @@ const firebase = require('firebase')
 import { expect } from 'chai'
 import { Persistence } from "./Persistence";
 
-import { firebaseConfig } from '../config'
+import { firebaseConfig } from '../../config'
 
 describe("Persistence", () => {
 

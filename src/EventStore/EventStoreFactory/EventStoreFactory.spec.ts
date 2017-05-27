@@ -1,11 +1,11 @@
 'use strict'
 
 import { expect } from 'chai'
-import { web3 } from '../env'
+import { web3 } from '../../env'
 
 import { EventStoreFactory } from './EventStoreFactory'
 
-const eventStoreFactoryArtifacts = require('../../build/contracts/EventStoreFactory')
+const eventStoreFactoryArtifacts = require('../../../build/contracts/EventStoreFactory')
 
 const contract = require('truffle-contract')
 const EventStoreFactoryContract = contract(eventStoreFactoryArtifacts)

@@ -6,7 +6,7 @@ import { expect } from 'chai'
 
 import {
   JSON_SCHEMA,
-} from '../EventStore/Mock/data'
+} from '../Mock/data'
 
 import {ReadModel} from './ReadModel'
 

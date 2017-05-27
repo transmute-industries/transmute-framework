@@ -3,7 +3,7 @@
 import { web3 } from '../env'
 
 import { Middleware } from './Middleware/Middleware'
-import { ReadModel } from '../ReadModel/ReadModel'
+import { ReadModel } from './ReadModel/ReadModel'
 
 export module EventStore{
 
@@ -12,7 +12,7 @@ export module EventStore{
     /**
     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
     * @param {Number} eventId - all events after this Id and includig it will be returned
-    * @return {Promise<SOLIDITY_EVENT, Error>} json object representing a Solidity SOLIDITY_EVENT
+    * @return {Promise<EsEvent, Error>} json object representing a Solidity EsEvent
     */
     export const readEvent = async (es, eventId) => {
         return Middleware.readSolidityEventAsync(es, eventId)
@@ -21,7 +21,7 @@ export module EventStore{
     /**
     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
     * @param {Number} eventId - all events after this Id and includig it will be returned
-    * @return {Promise<SOLIDITY_EVENT[], Error>} json objects representing SOLIDITY_EVENTs
+    * @return {Promise<EsEvent[], Error>} json objects representing SOLIDITY_EVENTs
     */
     export const readEvents = async (es, eventId = 0) => {
         let currentEvent = await es.solidityEventCount()
@@ -35,9 +35,9 @@ export module EventStore{
 
     /**
     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
-    * @param {SOLIDITY_EVENT} event - a SOLIDITY_EVENT object to be written to the chain
+    * @param {EsEvent} event - a EsEvent object to be written to the chain
     * @param {Address} fromAddress - the address you wish to deploy these events from
-    * @return {Promise<SOLIDITY_EVENT, Error>} json object representing the Solidity SOLIDITY_EVENT
+    * @return {Promise<EsEvent, Error>} json object representing the Solidity EsEvent
     */
     export const writeEvent = async (es, transmuteEvent, fromAddress) => {
         let meta = {
@@ -49,9 +49,9 @@ export module EventStore{
 
     /**
     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
-    * @param {SOLIDITY_EVENT} eventArray - an array of SOLIDITY_EVENT objects to be written to the chain
+    * @param {EsEvent} eventArray - an array of EsEvent objects to be written to the chain
     * @param {Address} fromAddress - the address you wish to deploy these events from
-    * @return {Promise<SOLIDITY_EVENT[], Error>} json objects representing the SOLIDITY_EVENTs which were written to chain
+    * @return {Promise<EsEvent[], Error>} json objects representing the SOLIDITY_EVENTs which were written to chain
     */
     export const writeEvents = async (es, eventArray, fromAddress) => {
         let eventPromises = eventArray

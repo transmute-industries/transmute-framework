@@ -6,7 +6,7 @@ import "./Utils/StringUtils.sol";
 contract EventStore is Killable {
   using AddressSetLib for AddressSetLib.AddressSet;
 
-  struct SolidityEventStruct {
+  struct EsEventStruct {
     uint Id;
     bytes32 Type;
     bytes32 Version;
@@ -19,9 +19,9 @@ contract EventStore is Killable {
     address TxOrigin;
     uint Created;
     uint PropertyCount;
-    mapping (uint => SolidityEventProperty) PropertyValues;
+    mapping (uint => EsEventPropertyStruct) PropertyValues;
   }
-  event SOLIDITY_EVENT(
+  event EsEvent(
     uint Id,
     bytes32 Type,
     bytes32 Version,
@@ -36,14 +36,14 @@ contract EventStore is Killable {
     uint PropertyCount
   );
 
-  struct SolidityEventProperty {
+  struct EsEventPropertyStruct {
     bytes32 Name;
     bytes32 Type;
     address AddressValue;
     uint UIntValue;
     bytes32 Bytes32Value;
   }
-  event SOLIDITY_EVENT_PROPERTY(
+  event EsEventProperty(
     uint EventIndex,
     uint EventPropertyIndex,
     bytes32 Name,
@@ -54,7 +54,7 @@ contract EventStore is Killable {
   );
 
   uint public solidityEventCount;
-  mapping (uint => SolidityEvent) solidityEvents;
+  mapping (uint => EsEventStruct) solidityEvents;
 
   mapping (address => bool) authorizedAddressesMapping;
   AddressSetLib.AddressSet requestorAddresses;
@@ -143,7 +143,7 @@ contract EventStore is Killable {
   {
     uint _created = now;
 
-    SolidityEvent memory solidityEvent;
+    EsEventStruct memory solidityEvent;
     solidityEvent.Id = solidityEventCount;
     solidityEvent.Type = _type;
     solidityEvent.Created = _created;
@@ -158,7 +158,7 @@ contract EventStore is Killable {
     solidityEvent.PropertyCount = _propCount;
     solidityEvents[solidityEventCount] = solidityEvent;
 
-    SOLIDITY_EVENT(solidityEventCount, _type, _version, _valueType, _addressValue, _uintValue, _bytes32Value, tx.origin, _created, _propCount);
+    EsEvent(solidityEventCount, _type, _version, _valueType, _addressValue, _uintValue, _bytes32Value, tx.origin, _created, _propCount);
     solidityEventCount += 1;
     return solidityEventCount;
   }
@@ -170,7 +170,7 @@ contract EventStore is Killable {
     if(solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex].Type != 0){
       throw;
     }
-    SolidityEventProperty memory solidityEventProperty;
+    EsEventPropertyStruct memory solidityEventProperty;
     solidityEventProperty.Name = _name;
     solidityEventProperty.Type = _type;
     solidityEventProperty.AddressValue = _address;
@@ -178,7 +178,7 @@ contract EventStore is Killable {
     solidityEventProperty.Bytes32Value = _string;
     solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex] = solidityEventProperty;
 
-    SOLIDITY_EVENT_PROPERTY(_eventIndex, _eventPropertyIndex, _name, _type, _address, _uint, _string);
+    EsEventProperty(_eventIndex, _eventPropertyIndex, _name, _type, _address, _uint, _string);
     return solidityEventCount;
   }
   
@@ -187,7 +187,7 @@ contract EventStore is Killable {
     public onlyAuthorized 
     returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, address, uint, uint)
   {
-    SolidityEvent memory solidityEvent = solidityEvents[_eventIndex];
+    EsEventStruct memory solidityEvent = solidityEvents[_eventIndex];
     return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.TxOrigin, solidityEvent.Created, solidityEvent.PropertyCount);
   }
 
@@ -195,7 +195,7 @@ contract EventStore is Killable {
     public onlyAuthorized
     returns (uint, uint, bytes32, bytes32, address, uint, bytes32)
   {
-    SolidityEventProperty memory prop = solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex];
+    EsEventPropertyStruct memory prop = solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex];
     return (_eventIndex, _eventPropertyIndex, prop.Name, prop.Type, prop.AddressValue, prop.UIntValue, prop.Bytes32Value);
   }
 

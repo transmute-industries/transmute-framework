@@ -2,25 +2,46 @@
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 import { web3 } from '../../env'
 
-import {EventTypes} from '../../EventTypes/EventTypes'
+import {EventTypes as ET} from '../EventTypes/EventTypes'
 
-import {Transactions} from '../../Transactions/Transactions'
+import {Transactions as TX} from '../Transactions/Transactions'
 
 export module Middleware {
 
-    export const readEventWithTruffle = async (eventStore: any, eventId: number, fromAddress: string) => {
+    export const EventTypes = ET
+    export const Transactions = TX
+
+    export const readEventWithTruffle = async (eventStore: any, eventId: number, fromAddress: string)  => {
         return await eventStore.readEvent.call(eventId, {
             from: fromAddress,
             gas: 2000000
         })
     }
 
-    export const eventValuesToEventObject = async (eventValues) =>{
-        let txLikeSOLIDITY_EVENT = EventTypes.eventValuesTo_SOLIDITY_EVENT(eventValues)
-        return 
+    export const writeValueTypeEvent = async (
+        eventStore: any, 
+        fromAddress: string,
+        valueEvent: ET.ITransmuteEvent
+    ) => {
+        let {
+            Type, 
+            Version, 
+            ValueType, 
+            AddressValue, 
+            UIntValue, 
+            Bytes32Value, 
+            PropertyCount
+        } = valueEvent
+         return await eventStore.writeEvent( 
+            Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount,
+            {
+                from: fromAddress,
+                gas: 2000000
+            })
     }
+    
 
-    const solidityEventProperties = keys(EventTypes.SolidityEventSchema)
+    const solidityEventProperties = keys(EventTypes.EsEventSchema)
     const objectToSolidityEvent = (_obj) => {
         return pick(_obj, solidityEventProperties)
     }
@@ -207,7 +228,7 @@ export module Middleware {
             propIndex++
         }
         props.forEach((prop) => {
-            let propObj = EventTypes.solidityEventPropertyToObject(prop)
+            let propObj = EventTypes.getTransmuteEventPropertyFromEsEventProperty(prop)
             event = Object.assign({}, event, propObj)
         })
         return event

@@ -1,6 +1,6 @@
 'use strict'
 
-import { web3 } from '../env'
+import { web3 } from '../../env'
 
 import { Transactions } from '../Transactions/Transactions'
 

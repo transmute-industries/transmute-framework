@@ -3,8 +3,8 @@
 import { expect } from 'chai'
 import { web3 } from '../env'
 import { EventStore } from './EventStore'
-import { Persistence } from '../Persistence/Persistence'
-import { ReadModel } from '../ReadModel/ReadModel'
+import { Persistence } from './Persistence/Persistence'
+import { ReadModel } from './ReadModel/ReadModel'
 import {
   initialProjectState,
   projectReducer

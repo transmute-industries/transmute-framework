@@ -1,11 +1,11 @@
 
-import { web3 } from '../env'
+import { web3 } from '../../env'
 
 import * as _ from 'lodash'
 
 export module EventTypes {
 
-    export interface ISolidityEventSchema {
+    export interface IEsEventSchema {
         Id: Object;
         Type: string;
         Version: string;
@@ -20,7 +20,7 @@ export module EventTypes {
         PropertyCount: Object;
     }
 
-    export interface ISolidityEventPropertySchema {
+    export interface IEsEventPropertySchema {
         EventIndex: Object;
         EventPropertyIndex: Object;
         Name: string;
@@ -31,21 +31,36 @@ export module EventTypes {
         Bytes32Value: string;
     }
 
+    export interface ITransmuteEvent {
+        Id?: number;
+        Type: string;
+        Version: string;
+
+        ValueType: string;
+        AddressValue: string;
+        UIntValue: number;
+        Bytes32Value: string;
+
+        TxOrigin?: string;
+        Created?: number;
+        PropertyCount?: number;
+    }
+
     export const toAscii = (value) => {
         return web3.toAscii(value).replace(/\u0000/g, '')
     }
 
     /**
-    * @typedef {String} SOLIDITY_EVENT
+    * @typedef {String} EsEvent
     */
-    export const SOLIDITY_EVENT = 'SOLIDITY_EVENT'
+    export const EsEvent = 'EsEvent'
     /**
-    * @typedef {String} SOLIDITY_EVENT_PROPERTY
+    * @typedef {String} EsEventProperty
     */
-    export const SOLIDITY_EVENT_PROPERTY = 'SOLIDITY_EVENT_PROPERTY'
+    export const EsEventProperty = 'EsEventProperty'
 
     /**
-    * @typedef {Object} SolidityEventPropertySchema
+    * @typedef {Object} EsEventPropertySchema
     * @property {Number} EventIndex  - the solidityEventId used by the EventStore
     * @property {Number} EventPropertyIndex  - the property index used by the EventStore
     * @property {String} Name - a string representing a key
@@ -54,7 +69,7 @@ export module EventTypes {
     * @property {Number} UIntValue  - a uint value
     * @property {String} Bytes32Value - a string value
     */
-    export const SolidityEventPropertySchema = {
+    export const EsEventPropertySchema = {
         EventIndex: 'BigNumber',
         EventPropertyIndex: 'BigNumber',
         Name: 'Bytes32',
@@ -66,14 +81,14 @@ export module EventTypes {
     }
 
     /**
-    * @typedef {Object} SolidityEventSchema
+    * @typedef {Object} EsEventSchema
     * @property {Number} Id - the solidityEventId used by the EventStore
     * @property {String} Type - a string representing the redux action
     * @property {Number} Created - the time (uint) the event was written by the EventStore
     * @property {String} IntegrityHash - web3.sha3(JSON.stringify(event)) an unsafe way to check if the object has changed
     * @property {Number} PropertyCount - a number (uint) of custom properties on the event
     */
-    export const SolidityEventSchema = {
+    export const EsEventSchema = {
         Id: 'BigNumber',
         Type: 'Bytes32',
         Version: 'Bytes32',
@@ -88,39 +103,34 @@ export module EventTypes {
         PropertyCount: 'BigNumber'
     }
 
-    // The event with all its types fixed...
-    export const TransmuteEvent = {
-
-    }
-
     /**
     * @typedef {Object} TruffleEventSchema
-    * @property {SolidityEventSchema} SOLIDITY_EVENT -  a Solidity Event Schema
-    * @property {SolidityEventPropertySchema} SOLIDITY_EVENT_PROPERTY - a Solidity Event Property Schema
+    * @property {EsEventSchema} EsEvent -  a Solidity Event Schema
+    * @property {EsEventPropertySchema} EsEventProperty - a Solidity Event Property Schema
     */
     export const TruffleEventSchema = {
-        [SOLIDITY_EVENT]: SolidityEventSchema,
-        [SOLIDITY_EVENT_PROPERTY]: SolidityEventPropertySchema
+        [EsEvent]: EsEventSchema,
+        [EsEventProperty]: EsEventPropertySchema
     }
 
      /**
-     * @type {Function} getPropFromSchema - convert truffle values by type
-     * @param {String} propType - the type of the truffle property
+     * @type {Function} getPropFromTruffleEventSchemaType - convert truffle values to transmute values (js types) from schema keys
+     * @param {String} schemaPropType - the type of the truffle property
      * @param {Object} readModel - a json object representing the state of a given model
      * @return {Object} the property type without truffle data types (no bid numbers or other truffle types...)
      */
-    export const getPropFromSchema = (propType, value) => {
-        switch (propType) {
-            case 'Address': return value.toString()
-            case 'String': return value.toString()
-            case 'Bytes32': return EventTypes.toAscii(value)
-            case 'BigNumber': return value.toNumber()
-            case 'UInt': return value.toNumber()
-            default: throw Error(`UNKNWON propType for value '${value}'. Make sure your schema is up to date.`)
+    export const getPropFromTruffleEventSchemaType = (schemaPropType, truffleValue) => {
+        switch (schemaPropType) {
+            case 'Address': return truffleValue.toString()
+            case 'String': return truffleValue.toString()
+            case 'Bytes32': return EventTypes.toAscii(truffleValue)
+            case 'BigNumber': return truffleValue.toNumber()
+            case 'UInt': return truffleValue.toNumber()
+            default: throw Error(`UNKNWON schemaPropType for truffleValue '${truffleValue}'. Make sure your schema is up to date.`)
         }
     }
 
-    export const solidityEventPropertyToObject = (prop) => {
+    export const getTransmuteEventPropertyFromEsEventProperty = (prop) => {
         let _obj = {}
         switch (prop.Type) {
             case 'Bytes32': _obj[prop.Name] = toAscii(prop.Bytes32Value); break;
@@ -130,19 +140,19 @@ export module EventTypes {
         return _obj
     }
 
-    export const eventValuesTo_SOLIDITY_EVENT = (eventValues) => {
+    export const getEsEventFromEsEventValues = (eventValues): IEsEventSchema  => {
         let evt = {};
-        _.keys(SolidityEventSchema).map((k, i ) =>{
+        _.keys(EsEventSchema).map((k, i ) =>{
             evt[k] = eventValues[i]
         })
-        return evt
+        return <IEsEventSchema> evt
     }
 
-    export const SOLIDITY_EVENT_to_payload = (eventType, solEvent) =>{
+    export const getTransmuteEventFromEsEvent = (eventType, solEvent) =>{
         let event = {}
         let schema = TruffleEventSchema[eventType]
         _.forIn(solEvent, (value, key) => {
-            let prop = getPropFromSchema(schema[key], value)
+            let prop = getPropFromTruffleEventSchemaType(schema[key], value)
             _.extend(event, {
                 [key]: prop
             })

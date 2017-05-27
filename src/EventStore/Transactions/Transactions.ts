@@ -12,7 +12,7 @@ export module Transactions {
      */
     export const eventsFromTransaction = (tx) => {
         let allEvents = tx.logs.map((log) => {
-            return EventTypes.SOLIDITY_EVENT_to_payload(log.event, log.args)
+            return EventTypes.getTransmuteEventFromEsEvent(log.event, log.args)
         })
         return allEvents
     }
@@ -28,7 +28,7 @@ export module Transactions {
                 let eventProp = find(events, (evt: any) => {
                     return evt.EventPropertyIndex === propIndex && evt.EventIndex === eventObj.Id
                 })
-                let eventPropObj = EventTypes.solidityEventPropertyToObject(eventProp)
+                let eventPropObj = EventTypes.getTransmuteEventPropertyFromEsEventProperty(eventProp)
                 extend(eventObj, eventPropObj)
                 propIndex++;
             }

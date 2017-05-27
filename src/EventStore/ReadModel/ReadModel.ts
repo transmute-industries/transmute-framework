@@ -1,4 +1,4 @@
-import { EventStore } from '../EventStore/EventStore'
+import { EventStore } from '../EventStore'
 import { Persistence } from '../Persistence/Persistence'
 
 export module ReadModel {

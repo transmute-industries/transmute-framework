@@ -91,11 +91,11 @@ contract('EventStore', (accounts) => {
     })
 
     contract('addRequestorAddress', async () => {
-        it('emits a SOLIDITY_EVENT, EVENT_STORE_ACCESS_REQUESTED of ValueType Address', async () => {
+        it('emits a EsEvent, EVENT_STORE_ACCESS_REQUESTED of ValueType Address', async () => {
             let tx = await _eventStore.addRequestorAddress(accounts[2])
             // console.log(tx)
             assert(tx.logs.length === 1)
-            assert(tx.logs[0].event === 'SOLIDITY_EVENT')
+            assert(tx.logs[0].event === 'EsEvent')
             let solidityEvent = tx.logs[0].args
 
             assert.equal(toAscii(solidityEvent.Type), 'EVENT_STORE_ACCESS_REQUESTED', 'expected event to be on type EVENT_STORE_ACCESS_REQUESTED')
@@ -123,13 +123,13 @@ contract('EventStore', (accounts) => {
 
 
     contract('authorizeRequestorAddress', async () => {
-        it('emits a SOLIDITY_EVENT, EVENT_STORE_ACCESS_GRANTED of ValueType Address', async () => {
+        it('emits a EsEvent, EVENT_STORE_ACCESS_GRANTED of ValueType Address', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[5])
             // console.log(reqTX)
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[5])
             // console.log(authTX)
             assert(authTX.logs.length === 1)
-            assert(authTX.logs[0].event === 'SOLIDITY_EVENT')
+            assert(authTX.logs[0].event === 'EsEvent')
             let solidityEvent = authTX.logs[0].args
 
             assert.equal(toAscii(solidityEvent.Type), 'EVENT_STORE_ACCESS_GRANTED', 'expected event to be on type EVENT_STORE_ACCESS_GRANTED')
@@ -153,7 +153,7 @@ contract('EventStore', (accounts) => {
     })
 
     contract('revokeRequestorAddress', async () => {
-        it('emits a SOLIDITY_EVENT, EVENT_STORE_ACCESS_REVOKED of ValueType Address', async () => {
+        it('emits a EsEvent, EVENT_STORE_ACCESS_REVOKED of ValueType Address', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[5])
             // console.log(reqTX)
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[5])
@@ -161,7 +161,7 @@ contract('EventStore', (accounts) => {
             let revokeTX = await _eventStore.revokeRequestorAddress(accounts[5])
             // console.log(authTX)
             assert(revokeTX.logs.length === 1)
-            assert(revokeTX.logs[0].event === 'SOLIDITY_EVENT')
+            assert(revokeTX.logs[0].event === 'EsEvent')
             let solidityEvent = revokeTX.logs[0].args
 
             assert.equal(toAscii(solidityEvent.Type), 'EVENT_STORE_ACCESS_REVOKED', 'expected event to be on type EVENT_STORE_ACCESS_REVOKED')
@@ -189,7 +189,7 @@ contract('EventStore', (accounts) => {
             // console.log(tx)
         })
 
-        it('emits a SOLIDITY_EVENT, ' + Type + ' of ValueType Address', async () => {
+        it('emits a EsEvent, ' + Type + ' of ValueType Address', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[5])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[5])
 
@@ -249,7 +249,7 @@ contract('EventStore', (accounts) => {
             }
         })
 
-        it('emit a SOLIDITY_EVENT_PROPERTY', async () => {
+        it('emit a EsEventProperty', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[7])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[7])
             let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
@@ -262,7 +262,7 @@ contract('EventStore', (accounts) => {
                 gas: 2000000
             })
             assert(propTx.logs.length === 1)
-            assert(propTx.logs[0].event === 'SOLIDITY_EVENT_PROPERTY')
+            assert(propTx.logs[0].event === 'EsEventProperty')
             let solidityEventProp = propTx.logs[0].args
             assert.equal(toAscii(solidityEventProp.Type), 'Bytes32', 'expected event prop type to be Bytes32')
             assert.equal(toAscii(solidityEventProp.Bytes32Value), 'CustomValue', 'expected event prop bytes32Value to be CustomValue')
@@ -290,7 +290,7 @@ contract('EventStore', (accounts) => {
                 assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
             }
         })
-        it('emits a SOLIDITY_EVENT', async () => {
+        it('emits a EsEvent', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[3])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[3])
             let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
@@ -354,7 +354,7 @@ contract('EventStore', (accounts) => {
                 assert.equal(isVmException(e), true, "expected an unauthorized write to cause a vm exception")
             }
         })
-        it('emits a SOLIDITY_EVENT_PROPERTY', async () => {
+        it('emits a EsEventProperty', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[3])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[3])
             let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {

@@ -12,7 +12,7 @@ import {
     JSON_LD,
     JSON_SCHEMA,
     JSON_LOGIC
-} from '../EventStore/Mock/data'
+} from '../Mock/data'
 
 // console.log(data)s
 // console.log(result)
