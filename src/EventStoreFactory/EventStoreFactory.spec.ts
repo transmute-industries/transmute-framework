@@ -5,7 +5,7 @@ import { web3 } from '../env'
 
 import { EventStoreFactory } from './EventStoreFactory'
 
-describe.only('EventStoreFactory', () => {
+describe('EventStoreFactory', () => {
 
     let factory
     let fromAddress = web3.eth.accounts[0];

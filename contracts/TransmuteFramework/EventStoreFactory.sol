@@ -5,7 +5,7 @@ import "./Utils/StringUtils.sol";
 
 contract EventStoreFactory is EventStore {
   using AddressSetLib for AddressSetLib.AddressSet;
-
+  mapping (address => AddressSetLib.AddressSet) creatorEventStoreMapping;
   AddressSetLib.AddressSet EventStoreAddresses;
 
   // Fallback Function
@@ -26,6 +26,11 @@ contract EventStoreFactory is EventStore {
   }
 
   // Helper Functions
+  function getEventStoresByCreator() constant
+    returns (address[])
+  {
+    return creatorEventStoreMapping[msg.sender].values;
+  }
 
   function getEventStores() constant
     returns (address[])
@@ -37,16 +42,12 @@ contract EventStoreFactory is EventStore {
 	function createEventStore() payable
     returns (address)
   {
-    // Validate Local State
- 
-
-    // Update Local State
-
     // Interact With Other Contracts
 		EventStore _newEventStore = new EventStore();
 
     // Update State Dependent On Other Contracts
     EventStoreAddresses.add(address(_newEventStore));
+    creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
     uint eventIndex = solidityEventCount;
 
@@ -57,13 +58,14 @@ contract EventStoreFactory is EventStore {
     return address(_newEventStore);
 	}
 
-  function killEventStore(address _address)  {
+  function killEventStore(address _address) checkExistence(_address) {
     // Validate Local State
-    if (this.owner() != msg.sender ) {
+    if (this.owner() != msg.sender || creatorEventStoreMapping[msg.sender].values.length == 0) {
       throw;
     }
 
     // Update Local State
+    creatorEventStoreMapping[msg.sender].remove(_address);
     EventStoreAddresses.remove(_address);
 
     // Interact With Other Contracts
