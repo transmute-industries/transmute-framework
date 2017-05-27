@@ -5,28 +5,33 @@ import { web3 } from '../env'
 
 import { EventStoreFactory } from './EventStoreFactory'
 
-describe.only('EventStoreFactory', () => {
+const eventStoreFactoryArtifacts = require('../../build/contracts/EventStoreFactory')
+
+const contract = require('truffle-contract')
+const EventStoreFactoryContract = contract(eventStoreFactoryArtifacts)
+EventStoreFactoryContract.setProvider(web3.currentProvider)
+
+describe('EventStoreFactory', () => {
 
     let factory
     let fromAddress = web3.eth.accounts[0];
 
     before(async () => {
-        factory = await EventStoreFactory.EventStoreFactoryContract.deployed()
+        factory = await EventStoreFactoryContract.deployed()
     })
 
     describe('.createEventStore...', () => {
         it('returns a transaction', async () => {
-            let txWithEvents = await EventStoreFactory.createEventStore(factory, fromAddress)
-            expect(txWithEvents.tx === undefined)
+            let { tx, events } = await EventStoreFactory.createEventStore(factory, fromAddress)
+            // console.log(txWithEvents)
+            expect(tx.tx !== undefined)
         })
 
         it('returns a FACTORY_EVENT_STORE_CREATED event', async () => {
-            let txWithEvents = await EventStoreFactory.createEventStore(factory, fromAddress)
-            let createEvent = txWithEvents.events[0]
-            expect(createEvent.Type === 'FACTORY_EVENT_STORE_CREATED')
+            let { tx, events } = await EventStoreFactory.createEventStore(factory, fromAddress)
+            expect(events[0].Type === 'FACTORY_EVENT_STORE_CREATED')
         })
     })
-
     describe('.getAllEventStoreContractAddresses...', () => {
         it('should create an event store and return event ', async () => {
             let addresses = await EventStoreFactory.getAllEventStoreContractAddresses(factory, fromAddress)

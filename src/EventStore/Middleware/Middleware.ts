@@ -8,6 +8,18 @@ import {Transactions} from '../../Transactions/Transactions'
 
 export module Middleware {
 
+    export const readEventWithTruffle = async (eventStore: any, eventId: number, fromAddress: string) => {
+        return await eventStore.readEvent.call(eventId, {
+            from: fromAddress,
+            gas: 2000000
+        })
+    }
+
+    export const eventValuesToEventObject = async (eventValues) =>{
+        let txLikeSOLIDITY_EVENT = EventTypes.eventValuesTo_SOLIDITY_EVENT(eventValues)
+        return 
+    }
+
     const solidityEventProperties = keys(EventTypes.SolidityEventSchema)
     const objectToSolidityEvent = (_obj) => {
         return pick(_obj, solidityEventProperties)
@@ -47,7 +59,7 @@ export module Middleware {
             if (web3.isAddress(value)) {
                 return 'Address'
             }
-            return 'String'
+            return 'Bytes32'
         }
         if (typeof value === 'number') {
             return 'BigNumber'
@@ -179,15 +191,6 @@ export module Middleware {
         }
     }
 
-    const solidityEventPropertyToObject = (prop) => {
-        let _obj = {}
-        switch (prop.Type) {
-            case 'String': _obj[prop.Name] = prop.StringValue; break
-            case 'BigNumber': _obj[prop.Name] = prop.UIntValue; break
-            case 'Address': _obj[prop.Name] = prop.AddressValue; break
-        }
-        return _obj
-    }
 
     /**
     * @param {TruffleContract} esInstance - a contract instance which is an EventStore
@@ -204,7 +207,7 @@ export module Middleware {
             propIndex++
         }
         props.forEach((prop) => {
-            let propObj = solidityEventPropertyToObject(prop)
+            let propObj = EventTypes.solidityEventPropertyToObject(prop)
             event = Object.assign({}, event, propObj)
         })
         return event

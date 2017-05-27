@@ -2,18 +2,12 @@
 
 import { web3 } from '../env'
 
-const contract  = require('truffle-contract') 
-const eventStoreArtifacts = require('../../build/contracts/EventStore')
-
 import { Middleware } from './Middleware/Middleware'
 import { ReadModel } from '../ReadModel/ReadModel'
 
 export module EventStore{
 
     export const ReadModelGenerator = ReadModel
-
-    export const ES = contract(eventStoreArtifacts)
-    ES.setProvider(web3.currentProvider)
 
     /**
     * @param {TruffleContract} eventStore - a contract instance which is an Event Store

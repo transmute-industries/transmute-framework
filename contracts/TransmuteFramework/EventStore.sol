@@ -6,7 +6,7 @@ import "./Utils/StringUtils.sol";
 contract EventStore is Killable {
   using AddressSetLib for AddressSetLib.AddressSet;
 
-  struct SolidityEvent {
+  struct SolidityEventStruct {
     uint Id;
     bytes32 Type;
     bytes32 Version;
