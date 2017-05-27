@@ -1,10 +1,11 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "description": "An ethereum smart contract framework.",
   "main": "build/TransmuteFramework.js",
   "scripts": {
     "clean": "rm -rf build docs coverage .nyc_output",
+    "transmute": "node cli/index.js",
     "start": "ts-node src/TransmuteFramework.ts",
     "build": "node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/ && cp -r cli build/cli && cp -r migrations build/migrations && cp -r test build/test",
     "watch": "node node_modules/typescript/bin/tsc --w --p tsconfig.json",
@@ -13,6 +14,7 @@
     "testrpc": "pm2 start testrpc",
     "truffle-test": "truffle migrate && truffle test",
     "test": "nyc mocha",
+    "test:all": "npm run clean && npm run truffle-test && npm run test",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "docs": "typedoc --gaID UA-99768185-1 --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
     "deploy:docs": "firebase deploy",

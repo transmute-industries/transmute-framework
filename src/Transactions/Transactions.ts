@@ -46,18 +46,17 @@ export module Transactions {
         })
         return allEvents
     }
-
+    // TODO: Add more rigorous testing of multiple events
+    // TODO: Add better error handling here, with instructions to make sure npm run test:all passes...
     export const transactionEventsToEventObject = (events) => {
-
-        let eventObjs = filter(events, (evt) => {
+        let eventObjs = filter(events, (evt: any) => {
             return evt.Id !== undefined
         })
-
-        eventObjs.forEach((eventObj: any) => {
+        eventObjs.forEach((eventObj) => {
             let propIndex = 0;
             while (propIndex < eventObj.PropertyCount) {
-                let eventProp = find(events, (evt) => {
-                    return evt.EventPropertyIndex === propIndex
+                let eventProp = find(events, (evt : any) => {
+                    return evt.EventPropertyIndex === propIndex && evt.EventIndex === eventObj.Id
                 })
                 let eventPropObj = EventTypes.solidityEventPropertyToObject(eventProp)
                 extend(eventObj, eventPropObj)
