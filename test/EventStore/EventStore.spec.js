@@ -54,7 +54,7 @@ contract('EventStore', (accounts) => {
             let originalCount = (await _eventStore.solidityEventCount()).toNumber()
             // console.log(count)
             assert(originalCount === 0)
-            let tx = await _eventStore.writeSolidityEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount)
+            let tx = await _eventStore.writeEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount)
             // console.log(tx)
             let newCount = (await _eventStore.solidityEventCount()).toNumber()
             assert(newCount === originalCount + 1)
@@ -175,10 +175,10 @@ contract('EventStore', (accounts) => {
         })
     })
 
-    contract('writeSolidityEvent', async () => {
+    contract('writeEvent', async () => {
         it('throws an error if called by an unauthorized address', async () => {
             try {
-                let tx = await _eventStore.writeSolidityEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount, {
+                let tx = await _eventStore.writeEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount, {
                     from: accounts[3],
                     gas: 2000000
                 })
@@ -193,7 +193,7 @@ contract('EventStore', (accounts) => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[5])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[5])
 
-            let tx = await _eventStore.writeSolidityEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount, {
+            let tx = await _eventStore.writeEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount, {
                 from: accounts[5],
                 gas: 2000000
             })
@@ -206,17 +206,17 @@ contract('EventStore', (accounts) => {
         })
     })
 
-    contract('writeSolidityEventProperty', async () => {
+    contract('writeEventProperty', async () => {
         it('throws an error if called by an unauthorized address', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[5])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[5])
-            let eventTx = await _eventStore.writeSolidityEvent(Type, Version, 'Object', 0, 0, '', 1, {
+            let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
                 from: accounts[5],
                 gas: 2000000
             })
             let solidityEvent = eventTx.logs[0].args
             try {
-                let propTx = await _eventStore.writeSolidityEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
+                let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
                     from: accounts[3],
                     gas: 2000000
                 })
@@ -229,17 +229,17 @@ contract('EventStore', (accounts) => {
         it('throws an error if property already exists', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[6])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[6])
-            let eventTx = await _eventStore.writeSolidityEvent(Type, Version, 'Object', 0, 0, '', 1, {
+            let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
                 from: accounts[6],
                 gas: 2000000
             })
             let solidityEvent = eventTx.logs[0].args
-            let propTx = await _eventStore.writeSolidityEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
+            let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
                 from: accounts[6],
                 gas: 2000000
             })
             try {
-                let propTx = await _eventStore.writeSolidityEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue2', {
+                let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue2', {
                     from: accounts[6],
                     gas: 2000000
                 })
@@ -252,12 +252,12 @@ contract('EventStore', (accounts) => {
         it('emit a SOLIDITY_EVENT_PROPERTY', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[7])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[7])
-            let eventTx = await _eventStore.writeSolidityEvent(Type, Version, 'Object', 0, 0, '', 1, {
+            let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
                 from: accounts[7],
                 gas: 2000000
             })
             let solidityEvent = eventTx.logs[0].args
-            let propTx = await _eventStore.writeSolidityEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
+            let propTx = await _eventStore.writeEventProperty(solidityEvent.Id, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
                 from: accounts[7],
                 gas: 2000000
             })
@@ -275,7 +275,7 @@ contract('EventStore', (accounts) => {
         it('throws an error if called by an unauthorized address', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[2])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[2])
-            let eventTx = await _eventStore.writeSolidityEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount, {
+            let eventTx = await _eventStore.writeEvent(Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount, {
                 from: accounts[2],
                 gas: 2000000
             })
@@ -293,7 +293,7 @@ contract('EventStore', (accounts) => {
         it('emits a SOLIDITY_EVENT', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[3])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[3])
-            let eventTx = await _eventStore.writeSolidityEvent(Type, Version, 'Object', 0, 0, '', 1, {
+            let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
                 from: accounts[3],
                 gas: 2000000
             })
@@ -339,10 +339,10 @@ contract('EventStore', (accounts) => {
 
     contract('readEventProperty', async () => {
         it('throws an error if called by an unauthorized address', async () => {
-            let eventTx = await _eventStore.writeSolidityEvent(Type, Version, 'Object', 0, 0, '', 1)
+            let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1)
             let solidityEvent = eventTx.logs[0].args
             let lastEventId = solidityEvent.Id.toNumber()
-            let propWriteTx = await _eventStore.writeSolidityEventProperty(lastEventId, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue')
+            let propWriteTx = await _eventStore.writeEventProperty(lastEventId, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue')
             try {
                 let eventType = await _eventStore.readEventProperty.call(lastEventId, 0, {
                     from: accounts[5],
@@ -357,13 +357,13 @@ contract('EventStore', (accounts) => {
         it('emits a SOLIDITY_EVENT_PROPERTY', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[3])
             let authTX = await _eventStore.authorizeRequestorAddress(accounts[3])
-            let eventTx = await _eventStore.writeSolidityEvent(Type, Version, 'Object', 0, 0, '', 1, {
+            let eventTx = await _eventStore.writeEvent(Type, Version, 'Object', 0, 0, '', 1, {
                 from: accounts[3],
                 gas: 2000000
             })
             let solidityEvent = eventTx.logs[0].args
             let lastEventId = solidityEvent.Id.toNumber()
-            let propWriteTx = await _eventStore.writeSolidityEventProperty(lastEventId, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
+            let propWriteTx = await _eventStore.writeEventProperty(lastEventId, 0, 'CustomKey', 'Bytes32', 0, 0, 'CustomValue', {
                 from: accounts[3],
                 gas: 2000000
             })

@@ -102,7 +102,7 @@ contract EventStore is Killable {
     requestorAddresses.add(_requestor);
     authorizedAddressesMapping[_requestor] = false;
 
-    writeSolidityEvent('EVENT_STORE_ACCESS_REQUESTED', 'v0', 'Address', _requestor, 0, '', 0);
+    writeEvent('EVENT_STORE_ACCESS_REQUESTED', 'v0', 'Address', _requestor, 0, '', 0);
   }
 
   function authorizeRequestorAddress(address _requestor) 
@@ -114,7 +114,7 @@ contract EventStore is Killable {
       throw;
     authorizedAddressesMapping[_requestor] = true;
 
-    writeSolidityEvent('EVENT_STORE_ACCESS_GRANTED', 'v0', 'Address', _requestor, 0, '', 0);
+    writeEvent('EVENT_STORE_ACCESS_GRANTED', 'v0', 'Address', _requestor, 0, '', 0);
   }
 
   function revokeRequestorAddress(address _requestor) 
@@ -126,7 +126,7 @@ contract EventStore is Killable {
       throw;
     authorizedAddressesMapping[_requestor] = false;
 
-     writeSolidityEvent('EVENT_STORE_ACCESS_REVOKED', 'v0', 'Address', _requestor, 0, '', 0);
+     writeEvent('EVENT_STORE_ACCESS_REVOKED', 'v0', 'Address', _requestor, 0, '', 0);
   }
 
   function isAddressAuthorized(address _address) 
@@ -136,8 +136,8 @@ contract EventStore is Killable {
     return authorizedAddressesMapping[_address];
   }
 
-  // EVENT STORE INTERFACE
-  function writeSolidityEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, address _addressValue, uint _uintValue, bytes32 _bytes32Value , uint _propCount) 
+  // WRITE EVENT
+  function writeEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, address _addressValue, uint _uintValue, bytes32 _bytes32Value , uint _propCount) 
     public onlyAuthorized
     returns (uint)
   {
@@ -163,7 +163,7 @@ contract EventStore is Killable {
     return solidityEventCount;
   }
 
-  function writeSolidityEventProperty(uint _eventIndex, uint _eventPropertyIndex, bytes32 _name, bytes32 _type, address _address, uint _uint, bytes32 _string) 
+  function writeEventProperty(uint _eventIndex, uint _eventPropertyIndex, bytes32 _name, bytes32 _type, address _address, uint _uint, bytes32 _string) 
     public onlyAuthorized
     returns (uint)
   {
@@ -183,7 +183,6 @@ contract EventStore is Killable {
   }
   
   // READ EVENT
-
   function readEvent(uint _eventIndex) 
     public onlyAuthorized 
     returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, address, uint, uint)
