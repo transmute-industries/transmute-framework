@@ -11,7 +11,7 @@ export module EventStoreFactory {
             from: fromAddress,
             gas: 2000000
         })
-        let events = Transactions.transactionToEventCollection(tx)
+        let events = Transactions.eventsFromTransaction(tx)
         return {
             events: events,
             tx: tx

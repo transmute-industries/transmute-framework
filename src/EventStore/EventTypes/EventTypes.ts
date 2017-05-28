@@ -99,6 +99,22 @@ export module EventTypes {
         return web3.toAscii(value).replace(/\u0000/g, '')
     }
 
+    export const guessType = (value) => {
+        if (typeof value === 'number') {
+            return 'UInt'
+        }
+        if (typeof value === 'object') {
+            return 'Object'
+        }
+        if (typeof value === 'string') {
+            if (web3.isAddress(value)) {
+                return 'Address'
+            }
+            return 'Bytes32'
+        }
+        throw Error('unable to guess type of value: ' + value)
+    }
+
     /**
     * @typedef {String} EsEvent
     */
@@ -181,7 +197,7 @@ export module EventTypes {
 
     export const getTransmuteEventPropertyFromEsEventProperty = (prop) => {
         let _obj = {}
-        switch (prop.Type) {
+        switch (prop.ValueType) {
             case 'Bytes32': _obj[prop.Name] = toAscii(prop.Bytes32Value); break;
             case 'BigNumber': _obj[prop.Name] = prop.UIntValue; break;
             case 'Address': _obj[prop.Name] = prop.AddressValue; break;
@@ -206,6 +222,8 @@ export module EventTypes {
     }
 
     export const getEsEventFromEsEventWithTruffleTypes = (eventType: string, solEvent: IEsEventFromTruffle): IEsEvent  =>{
+        // console.log('eventType: ', eventType )
+        // console.log('solEvent: ', solEvent )        
         let event = {}
         let schema = TruffleEventSchema[eventType]
         _.forIn(solEvent, (value, key) => {
@@ -215,6 +233,49 @@ export module EventTypes {
             })
         })
         return <IEsEvent> event
+    }
+
+    // http://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
+    export const flatten = (data) => {
+        var result = {};
+        function recurse (cur, prop) {
+            if (Object(cur) !== cur) {
+                result[prop] = cur;
+            } else if (Array.isArray(cur)) {
+                for(var i=0, l=cur.length; i<l; i++)
+                    recurse(cur[i], prop + "[" + i + "]");
+                if (l == 0)
+                    result[prop] = [];
+            } else {
+                var isEmpty = true;
+                for (var p in cur) {
+                    isEmpty = false;
+                    recurse(cur[p], prop ? prop+"."+p : p);
+                }
+                if (isEmpty && prop)
+                    result[prop] = {};
+            }
+        }
+        recurse(data, "");
+        return result;
+    }
+
+    export const unflatten = (data: Object): Object => {
+        if (Object(data) !== data || Array.isArray(data))
+            return data;
+        var regex = /\.?([^.\[\]]+)|\[(\d+)\]/g,
+            resultholder = {};
+        for (var p in data) {
+            var cur = resultholder,
+                prop = "",
+                m;
+            while (m = regex.exec(p)) {
+                cur = cur[prop] || (cur[prop] = (m[2] ? [] : {}));
+                prop = m[2] || m[1];
+            }
+            cur[prop] = data[p];
+        }
+        return resultholder[""] || resultholder;
     }
 
 }

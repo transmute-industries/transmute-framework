@@ -15,7 +15,7 @@ export module EventStore{
     * @return {Promise<EsEvent, Error>} json object representing a Solidity EsEvent
     */
     export const readEvent = async (es, eventId) => {
-        return Middleware.readSolidityEventAsync(es, eventId)
+        // return Middleware.readSolidityEventAsync(es, eventId)
     }
 
     /**
@@ -44,7 +44,7 @@ export module EventStore{
             from: fromAddress,
             gas: 2000000
         }
-        return await Middleware.writeSolidityEventAsync(es, meta, transmuteEvent)
+        // return await Middleware.writeSolidityEventAsync(es, meta, transmuteEvent)
     }
 
     /**
