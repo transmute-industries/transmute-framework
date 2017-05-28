@@ -6,14 +6,14 @@ import { EventTypes } from '../EventTypes/EventTypes'
 
 import { Transactions } from '../Transactions/Transactions'
 
-export module Middleware {
+import * as _ from 'lodash'
 
-    export const readEventWithTruffle = async (eventStore: any, eventId: number, fromAddress: string)  => {
-        return await eventStore.readEvent.call(eventId, {
-            from: fromAddress,
-            gas: 2000000
-        })
-    }
+import { isFSA } from 'flux-standard-action'
+const camelcaseKeys = require('camelcase-keys')
+
+let DEBUG = true; //should be only for dev envs for performance reasons...
+
+export module Middleware {
 
     export const writeEsEvent = async (
         eventStore: any, 
@@ -60,7 +60,69 @@ export module Middleware {
             })
     }
 
-  
+    export const readEsEventValues = async (eventStore: any,  fromAddress: string, eventId: number)  => {
+        // must be a .call constant modifier incompatible with _isAuthorized
+        return await eventStore.readEvent.call(eventId, {
+            from: fromAddress,
+            gas: 2000000
+        })
+    }
+
+    export const readEsEventPropertyValues = async (eventStore: any,  fromAddress: string, eventId: number, propId: number)  => {
+        // must be a .call constant modifier incompatible with _isAuthorized
+        return await eventStore.readEventProperty.call(eventId, propId, {
+            from: fromAddress,
+            gas: 2000000
+        })
+    }
+
+    const getValueType = (es: any) => {
+        switch(es.ValueType) {
+            case 'Address': return es.AddressValue
+            case 'UInt': return es.UIntValue
+            case 'Bytes32': return es.Bytes32Value
+            default: throw Error('ValueType invalid, must be [UInt, Address, Bytes32]')
+        }
+    }
+
+    const convertMeta = (esEvent: EventTypes.IEsEvent): any =>{
+        let metaKeys = ['Type', 'ValueType', 'PropertyCount', 'AddressValue', 'UIntValue', 'Bytes32Value']
+        let objectWithoutEsMeta = _.omit(esEvent, metaKeys);
+        let withProperCase =  camelcaseKeys(objectWithoutEsMeta);
+        return withProperCase
+    }
+
+    // ONLY SUPPORTS VALUE EVENTS...
+    const esEventToTransmuteEvent = async (esEvent: EventTypes.IEsEvent): Promise<EventTypes.ITransmuteEvent> =>{
+        // console.log('esEvent to be transmuted: ', esEvent)
+        let payload: any = {}
+        let meta: any = {}
+        if (!esEvent.PropertyCount){
+            meta =  convertMeta(esEvent)
+            payload = getValueType(esEvent)
+        }
+        return <EventTypes.ITransmuteEvent>{
+            type: esEvent.Type,
+            payload: payload,
+            meta: meta
+        }
+    }
+
+    export const readTransmuteEvent = async (eventStore: any,  fromAddress: string, eventId: number): Promise<EventTypes.ITransmuteEvent>  => {
+        let eventVals = await readEsEventValues(eventStore, fromAddress, eventId)
+        let esEventWithTruffleTypes: EventTypes.IEsEventFromTruffle = EventTypes.getEsEventFromEsEventValues(eventVals)
+        let esEvent: EventTypes.IEsEvent = EventTypes.getEsEventFromEsEventWithTruffleTypes('EsEvent', esEventWithTruffleTypes)
+        let transmuteEvent = await esEventToTransmuteEvent(esEvent)
+        if (DEBUG && !isFSA(transmuteEvent)){
+            console.warn('WARNING: transmuteEvent: ', transmuteEvent, ' is not a FSA. see https://github.com/acdlite/flux-standard-action')
+        }
+        return transmuteEvent
+    }
+
+    export const writeTransmuteCommand = async (eventStore: any,  fromAddress: string, transmuteEvent: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteEvent>  => {
+        return <any>{}
+    }
+    
     const solidityEventProperties = keys(EventTypes.EsEventSchema)
     const objectToSolidityEvent = (_obj) => {
         return pick(_obj, solidityEventProperties)

@@ -5,29 +5,33 @@ import * as _ from 'lodash'
 
 export module EventTypes {
 
-    export interface IEsEventTruffleSchema {
-        Id: Object;
+    export interface IBigNumber {
+        toNumber: ()=> number;
+    }
+
+    export interface IEsEventFromTruffle {
+        Id: IBigNumber;
         Type: string;
         Version: string;
 
         ValueType: string;
         AddressValue: string;
-        UIntValue: Object;
+        UIntValue: IBigNumber;
         Bytes32Value: string;
 
         TxOrigin: string;
-        Created: Object;
-        PropertyCount: Object;
+        Created: IBigNumber;
+        PropertyCount: IBigNumber;
     }
 
-    export interface IEsEventPropertyTruffleSchema {
-        EventIndex: Object;
-        EventPropertyIndex: Object;
+    export interface IEsEventPropertyFromTruffle {
+        EventIndex: IBigNumber;
+        EventPropertyIndex: IBigNumber;
         Name: string;
         ValueType: string;
 
         AddressValue: string;
-        UIntValue: Object;
+        UIntValue: IBigNumber;
         Bytes32Value: string;
     }
 
@@ -55,6 +59,40 @@ export module EventTypes {
         AddressValue: string;
         UIntValue: number;
         Bytes32Value: string;
+    }
+
+    export interface ITransmuteEventMeta{
+        id: number,
+        version: string,
+        txOrigin: string
+        created: number
+    }
+
+    // an event that is compatible with redux actions
+    // http://redux.js.org/docs/basics/Actions.html
+    // https://github.com/airbnb/javascript#objects
+    // https://github.com/acdlite/flux-standard-action
+    // TLDR; we are extending the FSA here, to add some required EventStore properties
+    export interface ITransmuteEvent {
+        type: string,
+        // The type of an action identifies to the consumer the nature of the action that has occurred. 
+        // By convention, type is usually a string constant or a Symbol. 
+        // If two types are the same, they MUST be strictly equivalent (using ===).
+        payload: any,
+        // The optional payload property MAY be any type of value. It represents the payload of the action. 
+        // Any information about the action that is not the type or status of the action should be part of the payload field.
+        // By convention, if error is true, the payload SHOULD be an error object. This is akin to rejecting a promise with an error object.
+        error?: any,
+        // The optional error property MAY be set to true if the action represents an error.
+        // An action whose error is true is analogous to a rejected Promise. By convention, the payload SHOULD be an error object.
+        // If error has any other value besides true, including undefined and null, the action MUST NOT be interpreted as an error.
+        meta:ITransmuteEventMeta
+        // meta data from the event, this keeps the payload clean of meta data, which is important!
+    }
+
+    export interface ITransmuteCommand {
+        type: string,
+        payload: any
     }
 
     export const toAscii = (value) => {
@@ -151,15 +189,23 @@ export module EventTypes {
         return _obj
     }
 
-    export const getEsEventFromEsEventValues = (eventValues): IEsEventTruffleSchema  => {
+    export const getEsEventFromEsEventValues = (eventValues): IEsEventFromTruffle  => {
         let evt = {};
         _.keys(EsEventSchema).map((k, i ) =>{
             evt[k] = eventValues[i]
         })
-        return <IEsEventTruffleSchema> evt
+        return <IEsEventFromTruffle> evt
     }
 
-    export const getTransmuteEventFromEsEvent = (eventType, solEvent) =>{
+    export const getEsEventPropertyFromEsEventPropertyValues = (eventPropValues): IEsEventPropertyFromTruffle  => {
+        let evt = {};
+        _.keys(EsEventPropertySchema).map((k, i ) =>{
+            evt[k] = eventPropValues[i]
+        })
+        return <IEsEventPropertyFromTruffle> evt
+    }
+
+    export const getEsEventFromEsEventWithTruffleTypes = (eventType: string, solEvent: IEsEventFromTruffle): IEsEvent  =>{
         let event = {}
         let schema = TruffleEventSchema[eventType]
         _.forIn(solEvent, (value, key) => {
@@ -168,6 +214,7 @@ export module EventTypes {
                 [key]: prop
             })
         })
-        return event
+        return <IEsEvent> event
     }
+
 }
