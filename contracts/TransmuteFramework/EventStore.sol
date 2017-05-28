@@ -38,7 +38,7 @@ contract EventStore is Killable {
 
   struct EsEventPropertyStruct {
     bytes32 Name;
-    bytes32 Type;
+    bytes32 ValueType;
     address AddressValue;
     uint UIntValue;
     bytes32 Bytes32Value;
@@ -47,7 +47,7 @@ contract EventStore is Killable {
     uint EventIndex,
     uint EventPropertyIndex,
     bytes32 Name,
-    bytes32 Type,
+    bytes32 ValueType,
     address AddressValue,
     uint UIntValue,
     bytes32 Bytes32Value
@@ -167,12 +167,12 @@ contract EventStore is Killable {
     public onlyAuthorized
     returns (uint)
   {
-    if(solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex].Type != 0){
+    if(solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex].ValueType != 0){
       throw;
     }
     EsEventPropertyStruct memory solidityEventProperty;
     solidityEventProperty.Name = _name;
-    solidityEventProperty.Type = _type;
+    solidityEventProperty.ValueType = _type;
     solidityEventProperty.AddressValue = _address;
     solidityEventProperty.UIntValue = _uint;
     solidityEventProperty.Bytes32Value = _string;
@@ -196,7 +196,7 @@ contract EventStore is Killable {
     returns (uint, uint, bytes32, bytes32, address, uint, bytes32)
   {
     EsEventPropertyStruct memory prop = solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex];
-    return (_eventIndex, _eventPropertyIndex, prop.Name, prop.Type, prop.AddressValue, prop.UIntValue, prop.Bytes32Value);
+    return (_eventIndex, _eventPropertyIndex, prop.Name, prop.ValueType, prop.AddressValue, prop.UIntValue, prop.Bytes32Value);
   }
 
 }

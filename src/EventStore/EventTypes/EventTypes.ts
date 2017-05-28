@@ -24,7 +24,7 @@ export module EventTypes {
         EventIndex: Object;
         EventPropertyIndex: Object;
         Name: string;
-        Type: string;
+        ValueType: string;
 
         AddressValue: string;
         UIntValue: Object;
@@ -44,6 +44,17 @@ export module EventTypes {
         TxOrigin?: string;
         Created?: number;
         PropertyCount?: number;
+    }
+
+    export interface ITransmuteEventProperty {
+        EventIndex: number;
+        EventPropertyIndex: number;
+        Name: string;
+        ValueType: string;
+
+        AddressValue: string;
+        UIntValue: number;
+        Bytes32Value: string;
     }
 
     export const toAscii = (value) => {
@@ -73,7 +84,7 @@ export module EventTypes {
         EventIndex: 'BigNumber',
         EventPropertyIndex: 'BigNumber',
         Name: 'Bytes32',
-        Type: 'Bytes32',
+        ValueType: 'Bytes32',
 
         AddressValue: 'String',
         UIntValue: 'BigNumber',

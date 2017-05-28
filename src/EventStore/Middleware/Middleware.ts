@@ -2,14 +2,11 @@
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 import { web3 } from '../../env'
 
-import {EventTypes as ET} from '../EventTypes/EventTypes'
+import {EventTypes} from '../EventTypes/EventTypes'
 
-import {Transactions as TX} from '../Transactions/Transactions'
+import {Transactions } from '../Transactions/Transactions'
 
 export module Middleware {
-
-    export const EventTypes = ET
-    export const Transactions = TX
 
     export const readEventWithTruffle = async (eventStore: any, eventId: number, fromAddress: string)  => {
         return await eventStore.readEvent.call(eventId, {
@@ -21,7 +18,7 @@ export module Middleware {
     export const writeValueTypeEvent = async (
         eventStore: any, 
         fromAddress: string,
-        valueEvent: ET.ITransmuteEvent
+        valueEvent: EventTypes.ITransmuteEvent
     ) => {
         let {
             Type, 
@@ -38,6 +35,16 @@ export module Middleware {
                 from: fromAddress,
                 gas: 2000000
             })
+    }
+
+    export const writeObjectTypeEvent = async (
+        eventStore: any, 
+        fromAddress: string,
+        objectEvent: EventTypes.ITransmuteEvent
+    ) => {
+        let tx = await writeValueTypeEvent(eventStore, fromAddress, objectEvent)
+
+        return tx
     }
     
 

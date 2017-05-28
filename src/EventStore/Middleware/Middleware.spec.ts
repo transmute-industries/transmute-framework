@@ -12,17 +12,8 @@ const contract = require('truffle-contract')
 export const EventStoreContract = contract(eventStoreArtifacts)
 EventStoreContract.setProvider(web3.currentProvider)
 
-let eventStore
+import { testAddressValueEvent } from '../Mock/Events/TestEvents'
 
-let testAddressValueEvent: EventTypes.ITransmuteEvent = {
-    Type: 'TEST_EVENT',
-    Version: 'v0',
-    ValueType: 'Address',
-    AddressValue: web3.eth.accounts[1],
-    UIntValue: 0,
-    Bytes32Value: '',
-    PropertyCount: 0
-}
 let {
     Type,
     Version,
@@ -34,6 +25,8 @@ let {
 } = testAddressValueEvent
 
 describe.only('Middleware', () => {
+
+    let eventStore
 
     before(async () => {
         eventStore = await EventStoreContract.deployed()
@@ -52,7 +45,7 @@ describe.only('Middleware', () => {
     describe('EventTypes.getEsEventFromEsEventValues', () => {
         it('converts a list of EsValues to an EsEvent object, like we get in tx.logs', async () => {
             let eventValues = await Middleware.readEventWithTruffle(eventStore, 0, web3.eth.accounts[0])
-            let esEvent = Middleware.EventTypes.getEsEventFromEsEventValues(eventValues)
+            let esEvent = EventTypes.getEsEventFromEsEventValues(eventValues)
             // console.log(esEvent)
             assert.equal(esEvent.Type, '0x0000000000000000000000000000000000000000000000000000000000000000')
             assert.equal(web3.isAddress(esEvent.TxOrigin), true, "expected TxOrigin to be an address")
@@ -61,10 +54,22 @@ describe.only('Middleware', () => {
         })
     })
 
-    describe.only('writeValueTypeEvent', () => {
-        it('should write a value event to the chain and emit an EsEvent', async () => {
-           let esEvent = await Middleware.writeValueTypeEvent(eventStore, web3.eth.accounts[0], testAddressValueEvent)
-           console.log(esEvent)
+    describe('writeValueTypeEvent', () => {
+        it('should return a tx containing an EsEvent in logs', async () => {
+            let tx = await Middleware.writeValueTypeEvent(eventStore, web3.eth.accounts[0], testAddressValueEvent)
+            assert.lengthOf(tx.logs, 1)
+            assert.equal(tx.logs[0].event, 'EsEvent')
+            //console.log(tx)
         })
     })
+
+    describe.only('writeObjectTypeEvent', () => {
+        it('should return a tx containing an EsEvent in logs', async () => {
+            let tx = await Middleware.writeObjectTypeEvent(eventStore, web3.eth.accounts[0], testAddressValueEvent)
+            assert.lengthOf(tx.logs, 1)
+            assert.equal(tx.logs[0].event, 'EsEvent')
+            //console.log(tx)
+        })
+    })
+
 })
