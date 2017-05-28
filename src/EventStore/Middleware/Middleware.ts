@@ -2,9 +2,9 @@
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 import { web3 } from '../../env'
 
-import {EventTypes} from '../EventTypes/EventTypes'
+import { EventTypes } from '../EventTypes/EventTypes'
 
-import {Transactions } from '../Transactions/Transactions'
+import { Transactions } from '../Transactions/Transactions'
 
 export module Middleware {
 
@@ -15,11 +15,11 @@ export module Middleware {
         })
     }
 
-    export const writeValueTypeEvent = async (
+    export const writeEsEvent = async (
         eventStore: any, 
         fromAddress: string,
-        valueEvent: EventTypes.ITransmuteEvent
-    ) => {
+        esEvent: EventTypes.IEsEvent
+    ): Promise<Transactions.ITransaction> => {
         let {
             Type, 
             Version, 
@@ -28,7 +28,7 @@ export module Middleware {
             UIntValue, 
             Bytes32Value, 
             PropertyCount
-        } = valueEvent
+        } = esEvent
          return await eventStore.writeEvent( 
             Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount,
             {
@@ -37,17 +37,30 @@ export module Middleware {
             })
     }
 
-    export const writeObjectTypeEvent = async (
+    export const writeEsEventProperty = async (
         eventStore: any, 
         fromAddress: string,
-        objectEvent: EventTypes.ITransmuteEvent
-    ) => {
-        let tx = await writeValueTypeEvent(eventStore, fromAddress, objectEvent)
+        esEventProp: EventTypes.IEsEventProperty
+    ): Promise<Transactions.ITransaction> => {
+        let {
+            EventIndex,
+            EventPropertyIndex,
+            Name,
+            ValueType,
 
-        return tx
+            AddressValue,
+            UIntValue,
+            Bytes32Value
+        } = esEventProp
+         return await eventStore.writeEventProperty( 
+            EventIndex, EventPropertyIndex, Name, ValueType, AddressValue, UIntValue, Bytes32Value,
+            {
+                from: fromAddress,
+                gas: 2000000
+            })
     }
-    
 
+  
     const solidityEventProperties = keys(EventTypes.EsEventSchema)
     const objectToSolidityEvent = (_obj) => {
         return pick(_obj, solidityEventProperties)

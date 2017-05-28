@@ -2,7 +2,7 @@ import { web3 } from '../../../env'
 
 import {EventTypes} from '../../EventTypes/EventTypes'
 
-export const testAddressValueEvent: EventTypes.ITransmuteEvent = {
+export const esEvent: EventTypes.IEsEvent = {
     Type: 'ADDRESS_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'Address',
@@ -12,7 +12,7 @@ export const testAddressValueEvent: EventTypes.ITransmuteEvent = {
     PropertyCount: 0
 }
 
-export const testObjectEvent: EventTypes.ITransmuteEvent = {
+export const esEventWithProp: EventTypes.IEsEvent = {
     Type: 'OBJECT_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'Object',
@@ -22,17 +22,7 @@ export const testObjectEvent: EventTypes.ITransmuteEvent = {
     PropertyCount: 1
 }
 
-
-// EventIndex: number;
-// EventPropertyIndex: number;
-// Name: string;
-// Type: string;
-
-// AddressValue: string;
-// UIntValue: number;
-// Bytes32Value: string;
-
-export const testObjectEventProperty: EventTypes.ITransmuteEventProperty = {
+export const esEventProp: EventTypes.IEsEventProperty = {
     EventIndex: 0,
     EventPropertyIndex: 0,
     Name: 'CustomKey',

@@ -5,6 +5,12 @@ const { find, filter, forIn, extend } = require('lodash')
 
 export module Transactions {
 
+    export interface ITransaction {
+        tx: string;
+        receipt: any;
+        logs: any[]
+    }
+
     /**
      * @type {Function} eventsFromTransaction - extract an array of events from a truffle transaction
      * @param {Object} tx - an ethereum log from a transaction

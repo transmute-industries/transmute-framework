@@ -5,7 +5,7 @@ import * as _ from 'lodash'
 
 export module EventTypes {
 
-    export interface IEsEventSchema {
+    export interface IEsEventTruffleSchema {
         Id: Object;
         Type: string;
         Version: string;
@@ -20,7 +20,7 @@ export module EventTypes {
         PropertyCount: Object;
     }
 
-    export interface IEsEventPropertySchema {
+    export interface IEsEventPropertyTruffleSchema {
         EventIndex: Object;
         EventPropertyIndex: Object;
         Name: string;
@@ -31,7 +31,7 @@ export module EventTypes {
         Bytes32Value: string;
     }
 
-    export interface ITransmuteEvent {
+    export interface IEsEvent {
         Id?: number;
         Type: string;
         Version: string;
@@ -46,7 +46,7 @@ export module EventTypes {
         PropertyCount?: number;
     }
 
-    export interface ITransmuteEventProperty {
+    export interface IEsEventProperty {
         EventIndex: number;
         EventPropertyIndex: number;
         Name: string;
@@ -151,12 +151,12 @@ export module EventTypes {
         return _obj
     }
 
-    export const getEsEventFromEsEventValues = (eventValues): IEsEventSchema  => {
+    export const getEsEventFromEsEventValues = (eventValues): IEsEventTruffleSchema  => {
         let evt = {};
         _.keys(EsEventSchema).map((k, i ) =>{
             evt[k] = eventValues[i]
         })
-        return <IEsEventSchema> evt
+        return <IEsEventTruffleSchema> evt
     }
 
     export const getTransmuteEventFromEsEvent = (eventType, solEvent) =>{
