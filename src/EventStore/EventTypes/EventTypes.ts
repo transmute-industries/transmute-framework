@@ -3,6 +3,8 @@ import { web3 } from '../../env'
 
 import * as _ from 'lodash'
 
+const camelcaseKeys = require('camelcase-keys')
+
 export module EventTypes {
 
     export interface IBigNumber {
@@ -233,6 +235,50 @@ export module EventTypes {
             })
         })
         return <IEsEvent> event
+    }
+
+    export const getValueType = (es: any) => {
+        switch(es.ValueType) {
+            case 'Address': return es.AddressValue
+            case 'UInt': return es.UIntValue
+            case 'Bytes32': return es.Bytes32Value
+            default: throw Error('ValueType invalid, must be [UInt, Address, Bytes32]')
+        }
+    }
+
+    export const convertMeta = (esEvent: EventTypes.IEsEvent): any =>{
+        let metaKeys = ['Type', 'ValueType', 'PropertyCount', 'AddressValue', 'UIntValue', 'Bytes32Value']
+        let objectWithoutEsMeta = _.omit(esEvent, metaKeys);
+        let withProperCase =  camelcaseKeys(objectWithoutEsMeta);
+        return withProperCase
+    }
+
+     export const payloadReducer = (state: any = {}, esEvenProperty: EventTypes.IEsEventProperty) => {
+        return Object.assign({}, state, {
+            [esEvenProperty.Name]: getValueType(esEvenProperty)
+        })
+    }
+
+    export const esEventToTransmuteEvent = async (
+        esEvent: EventTypes.IEsEvent, 
+        esEventProps?: Array<EventTypes.IEsEventProperty>
+    ): Promise<EventTypes.ITransmuteEvent> =>{
+        // console.log('esEvent to be transmuted: ', esEvent)
+        let payload: any = {}
+        let meta: ITransmuteEventMeta = convertMeta(esEvent)
+        if (!esEvent.PropertyCount){
+            payload = getValueType(esEvent)
+        } else {
+            esEventProps.forEach((esEventProp) =>{
+                payload = payloadReducer(payload, esEventProp)
+            })
+            payload = EventTypes.unflatten(payload)
+        }
+        return <EventTypes.ITransmuteEvent>{
+            type: esEvent.Type,
+            payload: payload,
+            meta: meta
+        }
     }
 
     // http://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects

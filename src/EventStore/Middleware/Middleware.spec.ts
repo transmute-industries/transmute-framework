@@ -114,7 +114,7 @@ describe('Middleware', () => {
         })
     })
 
-    describe('readTransmuteEvent', () => {
+    describe.only('readTransmuteEvent', () => {
 
         it('read address value event should return an FSA with event store meta', async () => {
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
@@ -149,7 +149,47 @@ describe('Middleware', () => {
             assert.equal(transmuteEvent.type, EventTypes.toAscii(txArgs.Type), 'expected type to match transaction event log')
             assert.equal(transmuteEvent.payload, EventTypes.toAscii(txArgs.Bytes32Value), 'expected payload to match ascii(bytes32Value) in transaction event log')
             assert.equal(transmuteEvent.meta.id, eventIndex, 'expected eventId to be eventIndex')
-            // console.log(transmuteEvent)
+            console.log(transmuteEvent)
+        })
+    })
+
+    // command types and event types should be different... smells... not great...
+    describe('writeTransmuteCommand', () => {
+
+        it('should validate and write addressCommand as an EsEvent but return an ITransmuteEvent', async () => {
+            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], addressCommand)
+            // console.log('cmdResponse: ', cmdResponse)
+            assert.lengthOf(cmdResponse.events, 1)
+            assert.lengthOf(cmdResponse.transactions, 1)
+            assert.equal(cmdResponse.events[0].type, addressCommand.type)
+            assert.equal(cmdResponse.events[0].payload, addressCommand.payload)
+        })
+
+        it('should validate and write numberCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
+            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], numberCommand)
+            // console.log('cmdResponse: ', cmdResponse)
+            assert.lengthOf(cmdResponse.events, 1)
+            assert.lengthOf(cmdResponse.transactions, 1)
+            assert.equal(cmdResponse.events[0].type, numberCommand.type)
+            assert.equal(cmdResponse.events[0].payload, numberCommand.payload)
+        })
+
+        it('should validate and write stringCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
+            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], stringCommand)
+            // console.log('cmdResponse: ', cmdResponse)
+            assert.lengthOf(cmdResponse.events, 1)
+            assert.lengthOf(cmdResponse.transactions, 1)
+            assert.equal(cmdResponse.events[0].type, stringCommand.type)
+            assert.equal(cmdResponse.events[0].payload, stringCommand.payload)
+        })
+
+        it.only('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
+            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
+            // console.log('cmdResponse: ', cmdResponse)
+            // assert.lengthOf(cmdResponse.events, 1)
+            // assert.lengthOf(cmdResponse.transactions, 1)
+            // assert.equal(cmdResponse.events[0].type, objectCommand.type)
+            // assert.equal(cmdResponse.events[0].payload, objectCommand.payload)
         })
     })
 
@@ -199,46 +239,6 @@ describe('Middleware', () => {
             assert.equal(esEventProperty.ValueType, txArgs.ValueType)
             assert.equal(web3.isAddress(esEventProperty.AddressValue), true, "expected AddressValue to be an address")
             assert.equal(esEventProperty.AddressValue, txArgs.AddressValue, "expected AddressValue to be 0x0...")
-        })
-    })
-
-    // command types and event types should be different... smells... not great...
-    describe('writeTransmuteCommand', () => {
-
-        it('should validate and write addressCommand as an EsEvent but return an ITransmuteEvent', async () => {
-            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], addressCommand)
-            // console.log('cmdResponse: ', cmdResponse)
-            assert.lengthOf(cmdResponse.events, 1)
-            assert.lengthOf(cmdResponse.transactions, 1)
-            assert.equal(cmdResponse.events[0].type, addressCommand.type)
-            assert.equal(cmdResponse.events[0].payload, addressCommand.payload)
-        })
-
-        it('should validate and write numberCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
-            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], numberCommand)
-            // console.log('cmdResponse: ', cmdResponse)
-            assert.lengthOf(cmdResponse.events, 1)
-            assert.lengthOf(cmdResponse.transactions, 1)
-            assert.equal(cmdResponse.events[0].type, numberCommand.type)
-            assert.equal(cmdResponse.events[0].payload, numberCommand.payload)
-        })
-
-        it('should validate and write stringCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
-            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], stringCommand)
-            // console.log('cmdResponse: ', cmdResponse)
-            assert.lengthOf(cmdResponse.events, 1)
-            assert.lengthOf(cmdResponse.transactions, 1)
-            assert.equal(cmdResponse.events[0].type, stringCommand.type)
-            assert.equal(cmdResponse.events[0].payload, stringCommand.payload)
-        })
-
-        it.only('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
-            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
-            // console.log('cmdResponse: ', cmdResponse)
-            // assert.lengthOf(cmdResponse.events, 1)
-            // assert.lengthOf(cmdResponse.transactions, 1)
-            // assert.equal(cmdResponse.events[0].type, objectCommand.type)
-            // assert.equal(cmdResponse.events[0].payload, objectCommand.payload)
         })
     })
 })

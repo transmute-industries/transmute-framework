@@ -9,7 +9,6 @@ import { Transactions } from '../Transactions/Transactions'
 import * as _ from 'lodash'
 
 import { isFSA } from 'flux-standard-action'
-const camelcaseKeys = require('camelcase-keys')
 
 let DEBUG = true; //should be only for dev envs for performance reasons...
 
@@ -95,43 +94,11 @@ export module Middleware {
         })
     }
 
-    const getValueType = (es: any) => {
-        switch(es.ValueType) {
-            case 'Address': return es.AddressValue
-            case 'UInt': return es.UIntValue
-            case 'Bytes32': return es.Bytes32Value
-            default: throw Error('ValueType invalid, must be [UInt, Address, Bytes32]')
-        }
-    }
-
-    const convertMeta = (esEvent: EventTypes.IEsEvent): any =>{
-        let metaKeys = ['Type', 'ValueType', 'PropertyCount', 'AddressValue', 'UIntValue', 'Bytes32Value']
-        let objectWithoutEsMeta = _.omit(esEvent, metaKeys);
-        let withProperCase =  camelcaseKeys(objectWithoutEsMeta);
-        return withProperCase
-    }
-
-    // ONLY SUPPORTS VALUE EVENTS...
-    const esEventToTransmuteEvent = async (esEvent: EventTypes.IEsEvent): Promise<EventTypes.ITransmuteEvent> =>{
-        // console.log('esEvent to be transmuted: ', esEvent)
-        let payload: any = {}
-        let meta: any = {}
-        if (!esEvent.PropertyCount){
-            meta =  convertMeta(esEvent)
-            payload = getValueType(esEvent)
-        }
-        return <EventTypes.ITransmuteEvent>{
-            type: esEvent.Type,
-            payload: payload,
-            meta: meta
-        }
-    }
-
     export const readTransmuteEvent = async (eventStore: any,  fromAddress: string, eventId: number): Promise<EventTypes.ITransmuteEvent>  => {
         let eventVals = await readEsEventValues(eventStore, fromAddress, eventId)
         let esEventWithTruffleTypes: EventTypes.IEsEventFromTruffle = EventTypes.getEsEventFromEsEventValues(eventVals)
         let esEvent: EventTypes.IEsEvent = EventTypes.getEsEventFromEsEventWithTruffleTypes('EsEvent', esEventWithTruffleTypes)
-        let transmuteEvent = await esEventToTransmuteEvent(esEvent)
+        let transmuteEvent = await EventTypes.esEventToTransmuteEvent(esEvent)
         if (DEBUG && !isFSA(transmuteEvent)){
             console.warn('WARNING: transmuteEvent: ', transmuteEvent, ' is not a FSA. see https://github.com/acdlite/flux-standard-action')
         }
@@ -210,8 +177,6 @@ export module Middleware {
         return <any> esEventProps
     }
 
-    // THIS NEEDS TO BE DONE AFTER ADDING OBJECT EVENT TESTS
-    // ONLY SUPPORTS VALUE EVENTS
     // can be extended later to handle validation... maybe...
     export const writeTransmuteCommand = async (eventStore: any,  fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<ITransmuteCommandResponse>  => {
         // console.log('transmuteCommand: ', transmuteCommand)
@@ -220,10 +185,19 @@ export module Middleware {
         let tx = await writeEsEvent(eventStore, fromAddress, esEvent)
         let eventsFromWriteEsEvent = await Transactions.eventsFromTransaction(tx)
         // console.log('eventsFromWriteEsEvent', eventsFromWriteEsEvent)
+        let esEventWithIndex = eventsFromWriteEsEvent[0]
+        let esEventProperties = convertCommandToEsEventProperties(esEventWithIndex, transmuteCommand)
+        // console.log('esEventProperties: ', esEventProperties)
 
+        let esEventPropertiesWithTxs = esEventProperties.map(async (esp) =>{
+            return await writeEsEventProperty(eventStore, fromAddress, esp)
+        })
 
-        // // let esEventProperties = convertCommandToEsEventProperties(esEvent, transmuteCommand)
-        // // console.log('esEventProperties: ', esEventProperties)
+        let txs = await Promise.all(esEventPropertiesWithTxs)
+        let allTxs = _.flatten(txs.concat(tx))
+        // console.log('allTxs: ', allTxs)
+
+        let transmuteEvents = Transactions.reconstructTransmuteEventsFromTxs(allTxs)
        
         // // console.log('eventsFromWriteEsEvent', eventsFromWriteEsEvent)
         // let transmuteEvents = await eventsFromWriteEsEvent.map(async (evt) =>{
@@ -232,8 +206,8 @@ export module Middleware {
         // // console.log('transmuteEvents', transmuteEvents)
         // let awaitedEvents = await Promise.all(transmuteEvents)
         return <ITransmuteCommandResponse>{
-            events: [],
-            transactions: [tx]
+            events: transmuteEvents,
+            transactions: allTxs
         }
     }
     
