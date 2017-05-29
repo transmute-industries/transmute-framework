@@ -2,11 +2,13 @@
 
 import { web3 } from '../env'
 
-import { EventTypes } from './EventTypes/EventTypes'
+import { EventTypes as ET } from './EventTypes/EventTypes'
 import { Middleware } from './Middleware/Middleware'
-import { ReadModel } from './ReadModel/ReadModel'
+import { ReadModel as RM } from './ReadModel/ReadModel'
 
 export module EventStore {
+    export import EventTypes = ET
+    export import ReadModel = RM
 
     /**
      * @param {TruffleContract} eventStore - a contract instance which is an Event Store
@@ -57,6 +59,5 @@ export module EventStore {
     export const readTransmuteEvents = async (eventStore: any, fromAddress: string, eventId: number): Promise<Array<EventTypes.ITransmuteEvent>> => {
         return Middleware.readTransmuteEvents(eventStore, fromAddress, eventId)
     }
-
 
 }

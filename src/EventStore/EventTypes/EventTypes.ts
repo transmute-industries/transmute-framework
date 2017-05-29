@@ -123,6 +123,14 @@ export module EventTypes {
         transactions: Array<ITransaction>
     }
 
+    export interface IReadModel {
+        lastEvent: number;
+        readModelType: string;
+        readModelStoreKey: string;
+        contractAddress: string;
+        model: any;
+    }
+
     export const toAscii = (value) => {
         return web3.toAscii(value).replace(/\u0000/g, '')
     }

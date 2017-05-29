@@ -81,7 +81,7 @@ describe('EventStore', () => {
     })
   })
 
-  describe('writeTransmuteCommands', () => {
+  describe('.writeTransmuteCommands', () => {
     it('should write an array of ITransmuteCommands and return and array of ITransmuteCommandResponse', async () => {
       let commands = [addressCommand, numberCommand, stringCommand, objectCommand]
       let cmdResponses = await EventStore.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
@@ -141,4 +141,5 @@ describe('EventStore', () => {
       // Add more tests here...
     })
   })
+
 })

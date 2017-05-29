@@ -4,25 +4,17 @@ import { EventTypes } from '../EventTypes/EventTypes'
 
 export module ReadModel {
 
-    export interface IReadModel {
-        lastEvent: number;
-        readModelType: string;
-        readModelStoreKey: string;
-        contractAddress: string;
-        model: any;
-    }
-
     /**
     * @type {Function} readModelGenerator - transform an event stream into a json object
     * @param {Object} readModel - a json object representing the state of a given model
     * @param {Function} reducer - a function which reduces events into a read model state object
     * @param {Object[]} events - events from an eventStore contract
     */
-    export const readModelGenerator = (readModel: IReadModel, reducer: any, events: Array<EventTypes.ITransmuteEvent>): IReadModel => {
+    export const readModelGenerator = (readModel: EventTypes.IReadModel, reducer: any, events: Array<EventTypes.ITransmuteEvent>): EventTypes.IReadModel => {
         events.forEach((event) => {
             readModel = reducer(readModel, event)
         })
-        return <IReadModel> readModel
+        return <EventTypes.IReadModel> readModel
     }
 
     /**
@@ -32,12 +24,12 @@ export module ReadModel {
     * @param {Function} reducer - a function which reduces events into a read model state object
     * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
     */
-    export const maybeSyncReadModel = async (eventStore: any, fromAddress: string, readModel: IReadModel, reducer: any): Promise<IReadModel> => {
+    export const maybeSyncReadModel = async (eventStore: any, fromAddress: string, readModel: EventTypes.IReadModel, reducer: any): Promise<EventTypes.IReadModel> => {
         // console.log('called: ')
         let solidityEventCount = (await eventStore.solidityEventCount()).toNumber()
         // console.log('solidityEventCount: ', solidityEventCount)
         return Persistence.LocalStore.getItem(readModel.readModelStoreKey)
-            .then(async (_readModel: IReadModel) => {
+            .then(async (_readModel: EventTypes.IReadModel) => {
                 if (!_readModel) {
                     _readModel = readModel
                 }

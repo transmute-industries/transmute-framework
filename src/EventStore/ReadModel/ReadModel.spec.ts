@@ -7,6 +7,7 @@ import { expect, assert, should } from 'chai'
 import { web3 } from '../../env'
 
 import { Middleware } from '../Middleware/Middleware'
+import { EventTypes } from '../EventTypes/EventTypes'
 import { ReadModel } from './ReadModel'
 import events from '../Mock/Demo/Healthcare/events'
 import { reducer, readModel } from '../Mock/Demo/Healthcare/reducer'
@@ -37,10 +38,9 @@ const eventStoreArtifacts = require('../../../build/contracts/EventStore')
 export const EventStoreContract = contract(eventStoreArtifacts)
 EventStoreContract.setProvider(web3.currentProvider)
 
-
 describe("ReadModel", () => {
 
-    describe("readModelGenerator", () => {
+    describe(".readModelGenerator", () => {
         it("should return the initial read model when passed an empty array", () => {
             // This will usually be overidden by the consumer
             readModel.contractAddress = '0x0000000000000000000000000000000000000000'
@@ -67,9 +67,9 @@ describe("ReadModel", () => {
     })
 
 
-    describe("maybeSyncReadModel", () => {
+    describe(".maybeSyncReadModel", () => {
         let eventStore
-        let updatedReadModel: ReadModel.IReadModel
+        let updatedReadModel: EventTypes.IReadModel
         before(async () => {
             eventStore = await EventStoreContract.deployed()
             let firstEvent = <any>_.omit(events[0], 'meta')
@@ -83,14 +83,14 @@ describe("ReadModel", () => {
         })
 
         it("should return the same read model if it is up to date", async () => {
-            let maybeUpdatedReadModel: ReadModel.IReadModel = await ReadModel.maybeSyncReadModel(eventStore, web3.eth.accounts[0], updatedReadModel, reducer)
+            let maybeUpdatedReadModel: EventTypes.IReadModel = await ReadModel.maybeSyncReadModel(eventStore, web3.eth.accounts[0], updatedReadModel, reducer)
             assert(_.isEqual(maybeUpdatedReadModel, updatedReadModel), 'expected no changes when no new events have been saved')
         })
 
         it("should return an updated read model when new events have been saved", async () => {
             let secondEvent = <any>_.omit(events[1], 'meta')
             let txWithEvents = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], secondEvent)
-            let maybeUpdatedReadModel: ReadModel.IReadModel = await ReadModel.maybeSyncReadModel(eventStore, web3.eth.accounts[0], updatedReadModel, reducer)
+            let maybeUpdatedReadModel: EventTypes.IReadModel = await ReadModel.maybeSyncReadModel(eventStore, web3.eth.accounts[0], updatedReadModel, reducer)
             // compareReadModels(updatedReadModel, maybeUpdatedReadModel)
             assert.equal(maybeUpdatedReadModel.lastEvent, updatedReadModel.lastEvent + 1, 'expected 1 more event to have been applied')
         })

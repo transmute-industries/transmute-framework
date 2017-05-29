@@ -39,7 +39,7 @@ describe('Middleware', () => {
         eventStore = await EventStoreContract.deployed()
     })
 
-    describe('writeEsEvent', () => {
+    describe('.writeEsEvent', () => {
         it('should return a tx containing an EsEvent in logs', async () => {
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
             assert.lengthOf(tx.logs, 1)
@@ -48,7 +48,7 @@ describe('Middleware', () => {
         })
     })
 
-    describe('writeEsEventProperty', () => {
+    describe('.writeEsEventProperty', () => {
         // TODO: add more tests for EsEventProperties
 
         it('should return a tx containing an EsEvent in logs', async () => {
@@ -66,7 +66,7 @@ describe('Middleware', () => {
 
     // Then add tests for reading 
 
-    describe('readEsEventValues', () => {
+    describe('.readEsEventValues', () => {
         before(async () => {
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
             assert.lengthOf(tx.logs, 1)
@@ -82,7 +82,7 @@ describe('Middleware', () => {
         })
     })
 
-    describe('readEsEventPropertyValues', () => {
+    describe('.readEsEventPropertyValues', () => {
         let eventIndex
         let txArgs
         before(async () => {
@@ -113,7 +113,7 @@ describe('Middleware', () => {
         })
     })
 
-    describe('readTransmuteEvent', () => {
+    describe('.readTransmuteEvent', () => {
 
         it('read address value event should return an FSA with event store meta', async () => {
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
@@ -153,7 +153,7 @@ describe('Middleware', () => {
     })
 
     // command types and event types should be different... smells... not great...
-    describe('writeTransmuteCommand', () => {
+    describe('.writeTransmuteCommand', () => {
 
         it('should validate and write addressCommand as an EsEvent but return an ITransmuteEvent', async () => {
             let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], addressCommand)
@@ -193,7 +193,7 @@ describe('Middleware', () => {
         })
     })
 
-    describe('writeTransmuteCommands', () => {
+    describe('.writeTransmuteCommands', () => {
         it('should write an array of ITransmuteCommands and return and array of ITransmuteCommandResponse', async () => {
             let commands = [addressCommand, numberCommand, stringCommand, objectCommand]
             let cmdResponses = await Middleware.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
@@ -203,52 +203,4 @@ describe('Middleware', () => {
         })
     })
 
-    // Please move these tests to EventTypes.spec...
-    describe('EventTypes.getEsEventFromEsEventValues', () => {
-        let eventIndex
-        let txArgs
-        before(async () => {
-            let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
-            assert.lengthOf(tx.logs, 1)
-            assert.equal(tx.logs[0].event, 'EsEvent')
-            txArgs = tx.logs[0].args
-            eventIndex = tx.logs[0].args.Id.toNumber()
-        })
-
-        it('converts a list of EsValues to an EsEvent object, like we get in tx.logs', async () => {
-            let eventValues = await Middleware.readEsEventValues(eventStore, web3.eth.accounts[0], eventIndex)
-            let esEvent = EventTypes.getEsEventFromEsEventValues(eventValues)
-            // console.log(esEvent)
-            assert.equal(esEvent.Type, txArgs.Type)
-            assert.equal(web3.isAddress(esEvent.TxOrigin), true, "expected TxOrigin to be an address")
-            assert.equal(esEvent.TxOrigin, txArgs.TxOrigin, "expected TxOrigin to be 0x0...")
-        })
-    })
-
-    describe('EventTypes.getEsEventPropertyFromEsEventPropertyValues', () => {
-        let eventIndex
-        let txArgs
-        before(async () => {
-            let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
-            assert.lengthOf(tx.logs, 1)
-            assert.equal(tx.logs[0].event, 'EsEvent')
-            eventIndex = tx.logs[0].args.Id.toNumber()
-            addressValueEsEventProperty.EventIndex = eventIndex
-            tx = await Middleware.writeEsEventProperty(eventStore, web3.eth.accounts[0], addressValueEsEventProperty)
-            assert.lengthOf(tx.logs, 1)
-            assert.equal(tx.logs[0].event, 'EsEventProperty')
-            txArgs = tx.logs[0].args
-        })
-
-        it('converts a list of EsValues to an EsEvent object, like we get in tx.logs', async () => {
-            let eventPropVals = await Middleware.readEsEventPropertyValues(eventStore, web3.eth.accounts[0], eventIndex, 0)
-            let esEventProperty = EventTypes.getEsEventPropertyFromEsEventPropertyValues(eventPropVals)
-            // console.log(esEventProperty)
-            // These comparisons are on truffle types
-            assert.equal(esEventProperty.Name, txArgs.Name)
-            assert.equal(esEventProperty.ValueType, txArgs.ValueType)
-            assert.equal(web3.isAddress(esEventProperty.AddressValue), true, "expected AddressValue to be an address")
-            assert.equal(esEventProperty.AddressValue, txArgs.AddressValue, "expected AddressValue to be 0x0...")
-        })
-    })
 })

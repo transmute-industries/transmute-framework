@@ -18,7 +18,7 @@ describe("Persistence", () => {
          let db = Persistence.FireStore.init()
     })
     
-    describe("setItem", () => {
+    describe(".setItem", () => {
 
         it("should return a promise for the value", () => {
             return Persistence.setItem(key, value)
@@ -88,7 +88,7 @@ describe("Persistence", () => {
     })
 
 
-    describe("getItem", () => {
+    describe(".getItem", () => {
         before( () =>{
             let expires = moment().add(5, 'seconds').toISOString()
             Persistence.setItem(key, value, expires)
@@ -119,7 +119,7 @@ describe("Persistence", () => {
         })
     })
 
-      describe("expireItem", () => {
+      describe(".expireItem", () => {
         before( () =>{
             let expires = moment().add(10, 'seconds').toISOString()
             Persistence.setItem(key, value, expires)
