@@ -238,6 +238,7 @@ export module EventTypes {
         return <IEsEventPropertyFromTruffle> evt
     }
 
+    // these 2 should be more DRY
     export const getEsEventFromEsEventWithTruffleTypes = (eventType: string, solEvent: IEsEventFromTruffle): IEsEvent  =>{      
         let event = {}
         let schema = TruffleEventSchema[eventType]
@@ -249,6 +250,21 @@ export module EventTypes {
         })
         return <IEsEvent> event
     }
+    
+    // these 2 should be more DRY
+    export const getEsEventPropertyFromEsEventPropertyWithTruffleTypes = (eventType: string, solEvent: IEsEventPropertyFromTruffle): IEsEventProperty  =>{      
+        let event = {}
+        let schema = TruffleEventSchema[eventType]
+        _.forIn(solEvent, (value, key) => {
+            let prop = getPropFromTruffleEventSchemaType(schema[key], value)
+            _.extend(event, {
+                [key]: prop
+            })
+        })
+        return <IEsEventProperty> event
+    }
+
+    
 
     export const getValueType = (es: any) => {
         switch(es.ValueType) {
