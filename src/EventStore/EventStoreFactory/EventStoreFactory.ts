@@ -2,7 +2,7 @@
 
 import { web3 } from '../../env'
 
-import { Transactions } from '../Transactions/Transactions'
+import { EventTypes } from '../EventTypes/EventTypes'
 
 export module EventStoreFactory {
 
@@ -11,7 +11,7 @@ export module EventStoreFactory {
             from: fromAddress,
             gas: 2000000
         })
-        let events = Transactions.eventsFromTransaction(tx)
+        let events = EventTypes.eventsFromTransaction(tx)
         return {
             events: events,
             tx: tx

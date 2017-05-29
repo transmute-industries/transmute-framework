@@ -22,7 +22,6 @@ import {
   uIntValueEsEventProperty,
   bytes32ValueEsEventProperty,
 
-
   addressCommand,
   numberCommand,
   stringCommand,

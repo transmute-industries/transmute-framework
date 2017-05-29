@@ -4,8 +4,6 @@ import { web3 } from '../../env'
 
 import { EventTypes } from '../EventTypes/EventTypes'
 
-import { Transactions } from '../Transactions/Transactions'
-
 import * as _ from 'lodash'
 
 import { isFSA } from 'flux-standard-action'
@@ -123,7 +121,7 @@ export module Middleware {
         let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
         // console.log('esEvent: ', esEvent)
         let tx = await writeEsEvent(eventStore, fromAddress, esEvent)
-        let eventsFromWriteEsEvent = await Transactions.eventsFromTransaction(tx)
+        let eventsFromWriteEsEvent = await EventTypes.eventsFromTransaction(tx)
         // console.log('eventsFromWriteEsEvent', eventsFromWriteEsEvent)
         let esEventWithIndex = eventsFromWriteEsEvent[0]
         let esEventProperties = EventTypes.convertCommandToEsEventProperties(esEventWithIndex, transmuteCommand)
@@ -138,7 +136,7 @@ export module Middleware {
         }
         allTxs = _.flatten(allTxs)
         // console.log('allTxs: ', allTxs)
-        let transmuteEvents = await Promise.all(Transactions.reconstructTransmuteEventsFromTxs(allTxs))
+        let transmuteEvents = await Promise.all(EventTypes.reconstructTransmuteEventsFromTxs(allTxs))
         return <EventTypes.ITransmuteCommandResponse>{
             events: transmuteEvents,
             transactions: allTxs
