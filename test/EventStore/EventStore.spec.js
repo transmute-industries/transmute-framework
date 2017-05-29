@@ -270,8 +270,6 @@ contract('EventStore', (accounts) => {
         })
     })
 
-
-
     contract('readEvent', async () => {
         it('throws an error if called by an unauthorized address', async () => {
             let reqTX = await _eventStore.addRequestorAddress(accounts[2])
