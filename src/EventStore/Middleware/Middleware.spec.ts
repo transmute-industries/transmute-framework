@@ -1,4 +1,7 @@
 'use strict'
+import { isFSA } from 'flux-standard-action'
+import * as _ from 'lodash'
+const contract = require('truffle-contract')
 
 import { assert, expect, should } from 'chai'
 import { web3 } from '../../env'
@@ -8,9 +11,6 @@ import { Middleware } from './Middleware'
 import { EventTypes } from '../EventTypes/EventTypes'
 
 const eventStoreArtifacts = require('../../../build/contracts/EventStore')
-const contract = require('truffle-contract')
-export const EventStoreContract = contract(eventStoreArtifacts)
-EventStoreContract.setProvider(web3.currentProvider)
 
 import { 
     addressValueEsEvent, 
@@ -29,7 +29,8 @@ import {
 
 } from '../Mock/Events/TestEvents'
 
-import { isFSA } from 'flux-standard-action'
+export const EventStoreContract = contract(eventStoreArtifacts)
+EventStoreContract.setProvider(web3.currentProvider)
 
 describe('Middleware', () => {
 
@@ -149,7 +150,7 @@ describe('Middleware', () => {
             assert.equal(transmuteEvent.type, EventTypes.toAscii(txArgs.Type), 'expected type to match transaction event log')
             assert.equal(transmuteEvent.payload, EventTypes.toAscii(txArgs.Bytes32Value), 'expected payload to match ascii(bytes32Value) in transaction event log')
             assert.equal(transmuteEvent.meta.id, eventIndex, 'expected eventId to be eventIndex')
-            console.log(transmuteEvent)
+            // console.log(transmuteEvent)
         })
     })
 
@@ -183,18 +184,18 @@ describe('Middleware', () => {
             assert.equal(cmdResponse.events[0].payload, stringCommand.payload)
         })
 
-        it.only('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
+        it('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
             let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
-            console.log('cmdResponse: ', cmdResponse)
-            // assert.lengthOf(cmdResponse.events, 1)
-            // assert.lengthOf(cmdResponse.transactions, 1)
-            // assert.equal(cmdResponse.events[0].type, objectCommand.type)
+            // console.log('cmdResponse: ', cmdResponse)
+            assert.lengthOf(cmdResponse.events, 1)
+            assert.lengthOf(cmdResponse.transactions, 9)
+            assert.equal(cmdResponse.events[0].type, objectCommand.type)
+            assert(_.isEqual(cmdResponse.events[0].payload, objectCommand.payload))
             // assert.equal(cmdResponse.events[0].payload, objectCommand.payload)
         })
     })
 
     describe('EventTypes.getEsEventFromEsEventValues', () => {
-
         let eventIndex
         let txArgs
         before(async ()=>{
