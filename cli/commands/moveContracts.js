@@ -3,8 +3,8 @@ var fs = require('fs')
 var rimraf = require('rimraf')
 var path = require('path')
 
-let sourceDirectory = path.resolve(__dirname,  '../../contracts/TransmuteFramework/') 
-let destinationDirectory = path.resolve(__dirname,  '../../../../../contracts/TransmuteFramework/')  
+let sourceDirectory = path.resolve(__dirname,  '../../contracts/') 
+let destinationDirectory = path.resolve(__dirname,  '../../../../../contracts/TransmuteFramework/')
 
 var ncp = require('ncp').ncp
 ncp.limit = 16
