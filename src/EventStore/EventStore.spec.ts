@@ -1,128 +1,145 @@
 'use strict'
 
-import { expect } from 'chai'
+const contract = require('truffle-contract')
+
+import * as _ from 'lodash'
+import { isFSA } from 'flux-standard-action'
+import { expect, assert, should } from 'chai'
 import { web3 } from '../env'
 import { EventStore } from './EventStore'
-import { Persistence } from './Persistence/Persistence'
-import { ReadModel } from './ReadModel/ReadModel'
-import {
-  initialProjectState,
-  projectReducer
-} from './Mock/reducer'
-import {
-  transmuteTestEvent,
-  transmuteTestEventStream,
-  expectedProjectState
-} from './Mock/data'
 
-let es, startEventCount, maybeUpdatedReadModel, initialTestProjectState, expectedTestProjectState
+const eventStoreArtifacts = require('../../build/contracts/EventStore')
+
+import events from './Mock/Demo/Healthcare/events'
+import { reducer, readModel } from './Mock/Demo/Healthcare/reducer'
+
+import {
+  addressValueEsEvent,
+  bytes32ValueEsEvent,
+  uIntValueEsEvent,
+
+  addressValueEsEventProperty,
+  uIntValueEsEventProperty,
+  bytes32ValueEsEventProperty,
+
+
+  addressCommand,
+  numberCommand,
+  stringCommand,
+  objectCommand
+
+} from './Mock/Events/TestEvents'
+
+export const EventStoreContract = contract(eventStoreArtifacts)
+EventStoreContract.setProvider(web3.currentProvider)
 
 describe('EventStore', () => {
 
-  // before(async () => {
-  //   es = await EventStore.ES.deployed()
-  //   startEventCount = (await es.solidityEventCount()).toNumber()
+  let eventStore
 
-  //   initialTestProjectState = Object.assign(initialProjectState, {
-  //     ReadModelStoreKey: 'ProjectSummary' + '@' + es.address,
-  //     ReadModelType: 'ProjectSummary',
-  //     ContractAddress: es.address
-  //   })
+  before(async () => {
+    eventStore = await EventStoreContract.deployed()
+    readModel.contractAddress = eventStore.address
+    readModel.readModelStoreKey = `${readModel.readModelType}:${readModel.contractAddress}`
+  })
 
-  //   expectedTestProjectState = Object.assign(expectedProjectState, {
-  //     ReadModelStoreKey: 'ProjectSummary' + '@' + es.address,
-  //     ReadModelType: 'ProjectSummary',
-  //     ContractAddress: es.address
-  //   })
+  describe('.writeTransmuteCommand', () => {
+    it('should validate and write addressCommand as an EsEvent but return an ITransmuteEvent', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], addressCommand)
+      // console.log('cmdResponse: ', cmdResponse)
+      assert.lengthOf(cmdResponse.events, 1)
+      assert.lengthOf(cmdResponse.transactions, 1)
+      assert.equal(cmdResponse.events[0].type, addressCommand.type)
+      assert.equal(cmdResponse.events[0].payload, addressCommand.payload)
+    })
 
-  // })
+    it('should validate and write numberCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], numberCommand)
+      // console.log('cmdResponse: ', cmdResponse)
+      assert.lengthOf(cmdResponse.events, 1)
+      assert.lengthOf(cmdResponse.transactions, 1)
+      assert.equal(cmdResponse.events[0].type, numberCommand.type)
+      assert.equal(cmdResponse.events[0].payload, numberCommand.payload)
+    })
 
-  // describe('.writeEvent', () => {
-  //   it('should write an event and return it ', async () => {
-  //     let event: any = await EventStore.writeEvent(es, transmuteTestEvent, web3.eth.accounts[0])
-  //     expect(event.Type === transmuteTestEvent.Type)
-  //     expect(event.Name === transmuteTestEvent.Name)
-  //   })
-  // })
+    it('should validate and write stringCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], stringCommand)
+      // console.log('cmdResponse: ', cmdResponse)
+      assert.lengthOf(cmdResponse.events, 1)
+      assert.lengthOf(cmdResponse.transactions, 1)
+      assert.equal(cmdResponse.events[0].type, stringCommand.type)
+      assert.equal(cmdResponse.events[0].payload, stringCommand.payload)
+    })
 
-  // describe('.readEvent', () => {
-  //   it('should return the event at the index', async () => {
-  //     let transmuteEvent: any = await EventStore.readEvent(es, 0)
-  //     expect(transmuteEvent.Type === transmuteTestEvent.Type)
-  //     expect(transmuteEvent.Name === transmuteTestEvent.Name)
-  //   })
-  // })
+    it('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
+      // console.log('cmdResponse: ', cmdResponse)
+      assert.lengthOf(cmdResponse.events, 1)
+      assert.lengthOf(cmdResponse.transactions, 9)
+      assert.equal(cmdResponse.events[0].type, objectCommand.type)
+      assert(_.isEqual(cmdResponse.events[0].payload, objectCommand.payload))
+      // assert.equal(cmdResponse.events[0].payload, objectCommand.payload)
+    })
+  })
 
-  // describe('.writeEvents', () => {
-  //   it('should return the events written to the event store', async () => {
-  //     let transmuteEvents = await EventStore.writeEvents(es, transmuteTestEventStream, web3.eth.accounts[0])
-  //     expect(transmuteEvents.length === 3)
-  //   })
-  // })
+  describe('writeTransmuteCommands', () => {
+    it('should write an array of ITransmuteCommands and return and array of ITransmuteCommandResponse', async () => {
+      let commands = [addressCommand, numberCommand, stringCommand, objectCommand]
+      let cmdResponses = await EventStore.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
+      // console.log('cmdResponse: ', cmdResponses)
+      assert.lengthOf(cmdResponses, commands.length)
+      // add more tests here...
+    })
+  })
 
-  // describe('.readEvents', () => {
-  //   it('should return the events in the contract starting with the index', async () => {
-  //     let transmuteEvents = await EventStore.readEvents(es, startEventCount)
-  //     // console.log(transmuteEvents)
-  //     expect(transmuteEvents.length === 4)
-  //   })
-  // })
+  describe('.readTransmuteEvent', () => {
+    it('read address value event should return an FSA with event store meta', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], addressCommand)
+      let eventIndex = cmdResponse.events[0].meta.id
+      let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
+      assert.equal(isFSA(transmuteEvent), true)
+      assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
+    })
 
-  // describe('.setItem', () => {
-  //   it('should return the value when passed a valid key, after saving the value', async () => {
-  //     Persistence.LocalStore.setItem(initialTestProjectState.ReadModelStoreKey, initialTestProjectState)
-  //       .then((readModel: any) => {
-  //         expect(initialTestProjectState.ReadModelStoreKey === readModel.ReadModelStoreKey)
-  //         expect(initialTestProjectState.Name === readModel.Name)
-  //       })
-  //   })
-  // })
+    it('read number value event should return an FSA with event store meta', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], numberCommand)
+      let eventIndex = cmdResponse.events[0].meta.id
+      let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
+      assert.equal(isFSA(transmuteEvent), true)
+      assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
+    })
 
-  // describe('.getItem', () => {
-  //   it('should return null for invalid key', async () => {
-  //     // TODO: Move this to Persistence tests
-  //     Persistence.LocalStore.getItem('not-a-real-key')
-  //       .then((readModel) => {
-  //         expect(readModel === null)
-  //       })
-  //   })
+    it('read string value event should return an FSA with event store meta', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], stringCommand)
+      let eventIndex = cmdResponse.events[0].meta.id
+      let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
+      assert.equal(isFSA(transmuteEvent), true)
+      assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
+    })
 
-  //   it('should return a readModel when passed valid readModelKey', async () => {
-  //     Persistence.LocalStore.getItem(initialTestProjectState.ReadModelStoreKey)
-  //       .then((readModel: any) => {
-  //         expect(initialTestProjectState.ReadModelStoreKey === readModel.ReadModelStoreKey)
-  //         expect(initialTestProjectState.Name === readModel.Name)
-  //       })
-  //   })
-  // })
+    it('read object value event should return an FSA with event store meta', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
+      let eventIndex = cmdResponse.events[0].meta.id
+      let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
+      assert.equal(isFSA(transmuteEvent), true)
+      assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
+    })
 
-  // describe('.readModelGenerator', () => {
-  //   it('should return the the initial reducer state when no events exist', async () => {
-  //     let projectModel: any = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, [])
-  //     expect(projectModel.ReadModelStoreKey === initialTestProjectState.ReadModelStoreKey)
-  //     expect(projectModel.LastEvent === initialTestProjectState.LastEvent)
-  //     expect(projectModel.Users === initialTestProjectState.Users)
-  //     expect(projectModel.Milestones === initialTestProjectState.Milestones)
-  //   })
+  })
 
-  //   it('should return the updated read model when passed events', async () => {
-  //     let projectHistory: any = await EventStore.readEvents(es, startEventCount)
-  //     let projectModel: any = ReadModel.readModelGenerator(initialTestProjectState, projectReducer, projectHistory)
-  //     expect(projectModel.ReadModelStoreKey === expectedTestProjectState.ReadModelStoreKey)
-  //     expect(projectModel.Name === expectedTestProjectState.Name)
-  //   })
-  // })
-
-  // describe('maybeSyncReadModel', () => {
-  //   it('should retrieve a read model and sync any missing events from the contract', async () => {
-  //     let _maybeUpdatedReadModel = await ReadModel.maybeSyncReadModel(es, initialTestProjectState, projectReducer)
-  //     maybeUpdatedReadModel = _maybeUpdatedReadModel
-  //   })
-
-  //   it('should return quickly if no new events exist', async () => {
-  //     let sameReadModel: any = await ReadModel.maybeSyncReadModel(es, maybeUpdatedReadModel, projectReducer)
-  //     expect(sameReadModel.Name === maybeUpdatedReadModel.Name)
-  //     expect(sameReadModel.LastEvent === maybeUpdatedReadModel.LastEvent)
-  //   })
-  // })
+  describe('.readTransmuteEvents', () => {
+    let initialEventId, commands, cmdResponses
+    before(async () => {
+      initialEventId = (await eventStore.solidityEventCount()).toNumber()
+      commands = [addressCommand, numberCommand, stringCommand, objectCommand]
+      cmdResponses = await EventStore.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
+      // console.log('cmdResponse: ', cmdResponses)
+      assert.lengthOf(cmdResponses, commands.length)
+    })
+    it('should return all transmute events after and including the given eventId', async () => {
+      let transmuteEvents = await EventStore.readTransmuteEvents(eventStore, web3.eth.accounts[0], initialEventId)
+      assert.lengthOf(transmuteEvents, commands.length)
+      // Add more tests here...
+    })
+  })
 })

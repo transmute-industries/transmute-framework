@@ -14,16 +14,11 @@ let DEBUG = true; //should be only for dev envs for performance reasons...
 
 export module Middleware {
 
-    export interface ITransmuteCommandResponse {
-        events: Array<EventTypes.ITransmuteEvent>,
-        transactions: Array<Transactions.ITransaction>
-    }
-
     export const writeEsEvent = async (
         eventStore: any,
         fromAddress: string,
         esEvent: EventTypes.IEsEvent
-    ): Promise<Transactions.ITransaction> => {
+    ): Promise<EventTypes.ITransaction> => {
         let {
             Type,
             Version,
@@ -45,7 +40,7 @@ export module Middleware {
         eventStore: any,
         fromAddress: string,
         esEventProp: EventTypes.IEsEventProperty
-    ): Promise<Transactions.ITransaction> => {
+    ): Promise<EventTypes.ITransaction> => {
         let {
             EventIndex,
             EventPropertyIndex,
@@ -123,7 +118,7 @@ export module Middleware {
     }
 
     // can be extended later to handle validation... maybe...
-    export const writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<ITransmuteCommandResponse> => {
+    export const writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
         // console.log('transmuteCommand: ', transmuteCommand)
         let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
         // console.log('esEvent: ', esEvent)
@@ -141,13 +136,19 @@ export module Middleware {
             let txs = await Promise.all(esEventPropertiesWithTxs)
             allTxs = allTxs.concat(txs)
         }
-
         allTxs = _.flatten(allTxs)
         // console.log('allTxs: ', allTxs)
         let transmuteEvents = await Promise.all(Transactions.reconstructTransmuteEventsFromTxs(allTxs))
-        return <ITransmuteCommandResponse>{
+        return <EventTypes.ITransmuteCommandResponse>{
             events: transmuteEvents,
             transactions: allTxs
         }
+    }
+
+    export const writeTransmuteCommands = async (eventStore: any, fromAddress: string, transmuteCommands: Array<EventTypes.ITransmuteCommand>): Promise<Array<EventTypes.ITransmuteCommandResponse>> => {
+        let promises = transmuteCommands.map(async (cmd) => {
+            return await writeTransmuteCommand(eventStore, fromAddress, cmd)
+        })
+        return await Promise.all(promises)
     }
 }

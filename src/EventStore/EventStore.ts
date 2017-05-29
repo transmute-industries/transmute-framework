@@ -2,66 +2,61 @@
 
 import { web3 } from '../env'
 
+import { EventTypes } from './EventTypes/EventTypes'
 import { Middleware } from './Middleware/Middleware'
 import { ReadModel } from './ReadModel/ReadModel'
 
-export module EventStore{
-
-    export const ReadModelGenerator = ReadModel
+export module EventStore {
 
     /**
-    * @param {TruffleContract} eventStore - a contract instance which is an Event Store
-    * @param {Number} eventId - all events after this Id and includig it will be returned
-    * @return {Promise<EsEvent, Error>} json object representing a Solidity EsEvent
-    */
-    export const readEvent = async (es, eventId) => {
-        // return Middleware.readSolidityEventAsync(es, eventId)
+     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
+     * @param {Address} fromAddress - the address you wish to deploy these events from
+     * @param {ITransmuteCommand} transmuteCommand - an FSA object to be written to the chain
+     * @return {Promise<EventTypes.ITransmuteCommandResponse>} - an ITransmuteCommandResponse object
+     */
+    export const writeTransmuteCommand = async (
+        eventStore: any,
+        fromAddress: string,
+        transmuteCommand: EventTypes.ITransmuteCommand
+    ): Promise<EventTypes.ITransmuteCommandResponse> => {
+        // Analytics middleware can be added here...
+        return await Middleware.writeTransmuteCommand(eventStore, fromAddress, transmuteCommand)
+    }
+
+    /**
+     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
+     * @param {Address} fromAddress - the address you wish to deploy these events from
+     * @param {Array<ITransmuteCommand>} transmuteCommands - an array of FSA objects to be written to the chain
+     * @return {Array<EventTypes.ITransmuteCommandResponse>} - an array of transmute command responses
+     */
+    export const writeTransmuteCommands = async (
+        eventStore: any,
+        fromAddress: string,
+        transmuteCommands: Array<EventTypes.ITransmuteCommand>
+    ): Promise<Array<EventTypes.ITransmuteCommandResponse>> => {
+        // Analytics middleware can be added here...
+        return await Middleware.writeTransmuteCommands(eventStore, fromAddress, transmuteCommands)
     }
 
     /**
     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
-    * @param {Number} eventId - all events after this Id and includig it will be returned
-    * @return {Promise<EsEvent[], Error>} json objects representing SOLIDITY_EVENTs
-    */
-    export const readEvents = async (es, eventId = 0) => {
-        let currentEvent = await es.solidityEventCount()
-        let eventPromises = []
-        while (eventId < currentEvent) {
-            eventPromises.push(await readEvent(es, eventId))
-            eventId++
-        }
-        return await Promise.all(eventPromises)
-    }
-
-    /**
-    * @param {TruffleContract} eventStore - a contract instance which is an Event Store
-    * @param {EsEvent} event - a EsEvent object to be written to the chain
     * @param {Address} fromAddress - the address you wish to deploy these events from
-    * @return {Promise<EsEvent, Error>} json object representing the Solidity EsEvent
+    * @param {Number} eventId - the event ID to be read
+    * @return {Promise<EventTypes.ITransmuteEvent>} - a json object of type ITransmuteEvent
     */
-    export const writeEvent = async (es, transmuteEvent, fromAddress) => {
-        let meta = {
-            from: fromAddress,
-            gas: 2000000
-        }
-        // return await Middleware.writeSolidityEventAsync(es, meta, transmuteEvent)
+    export const readTransmuteEvent = async (eventStore: any, fromAddress: string, eventId: number): Promise<EventTypes.ITransmuteEvent> => {
+        return Middleware.readTransmuteEvent(eventStore, fromAddress, eventId)
     }
 
     /**
     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
-    * @param {EsEvent} eventArray - an array of EsEvent objects to be written to the chain
     * @param {Address} fromAddress - the address you wish to deploy these events from
-    * @return {Promise<EsEvent[], Error>} json objects representing the SOLIDITY_EVENTs which were written to chain
+    * @param {Number} eventId - the event ID to read from and including
+    * @return {Promise<Array<EventTypes.ITransmuteEvent>>} - an array of json objects of type ITransmuteEvent
     */
-    export const writeEvents = async (es, eventArray, fromAddress) => {
-        let eventPromises = eventArray
-            .map((transmuteEvent) => {
-            return writeEvent(es, transmuteEvent, fromAddress)
-            })
-        return await Promise.all(eventPromises)
-            .then((newEvents) => {
-            return newEvents
-            })
+    export const readTransmuteEvents = async (eventStore: any, fromAddress: string, eventId: number): Promise<Array<EventTypes.ITransmuteEvent>> => {
+        return Middleware.readTransmuteEvents(eventStore, fromAddress, eventId)
     }
+
 
 }

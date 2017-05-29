@@ -5,12 +5,6 @@ import * as _ from 'lodash'
 
 export module Transactions {
 
-    export interface ITransaction {
-        tx: string;
-        receipt: any;
-        logs: any[]
-    }
-
     /**
      * @type {Function} eventsFromTransaction - extract an array of events from a truffle transaction
      * @param {Object} tx - an ethereum log from a transaction
@@ -23,7 +17,7 @@ export module Transactions {
         return allEvents
     }
 
-    export const reconstructTransmuteEventsFromTxs = (txs: Array<ITransaction>) =>{
+    export const reconstructTransmuteEventsFromTxs = (txs: Array<EventTypes.ITransaction>) =>{
         let esEventsAndEventProps = _.flatten(txs.map(eventsFromTransaction))
         // console.log('esEventsAndEventProps: ', esEventsAndEventProps)
         let esEvents = _.filter(esEventsAndEventProps, (obj) => {
