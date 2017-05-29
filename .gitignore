@@ -7,6 +7,7 @@ dist
 build
 .nyc_output
 
+temp
 sigmate-v3-ti.json
 src/creds.js
 .nyc_output

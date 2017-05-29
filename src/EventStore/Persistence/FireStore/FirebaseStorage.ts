@@ -1,4 +1,4 @@
-import { firebaseConfig } from '../../config'
+import { firebaseConfig } from '../../../config'
 const firebase = require('firebase')
 
 // // TODO: Add Encryption here

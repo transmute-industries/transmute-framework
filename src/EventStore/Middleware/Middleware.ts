@@ -2,227 +2,151 @@
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 import { web3 } from '../../env'
 
-import {EventTypes} from '../../EventTypes/EventTypes'
+import { EventTypes } from '../EventTypes/EventTypes'
 
-import {Transactions} from '../../Transactions/Transactions'
+import * as _ from 'lodash'
+
+import { isFSA } from 'flux-standard-action'
+
+let DEBUG = true; //should be only for dev envs for performance reasons...
 
 export module Middleware {
 
-    const solidityEventProperties = keys(EventTypes.SolidityEventSchema)
-    const objectToSolidityEvent = (_obj) => {
-        return pick(_obj, solidityEventProperties)
-    }
-    const objectToSolidityEventProperties = (_obj) => {
-        return omit(_obj, solidityEventProperties)
-    }
-    const writeSolidityEventHelper = async (_esInstance, _callerMeta, _type, _propCount, _integrity) => {
-        return await _esInstance.writeSolidityEvent(_type, _propCount, _integrity, _callerMeta)
-    }
-
-    const writeSolidityEventPropertyHelper = async (
-        _esInstance,
-        _callerMeta,
-        _eventIndex,
-        _eventPropertyIndex,
-        _name,
-        _type,
-        _address,
-        _uint,
-        _string
-    ) => {
-        return await _esInstance.writeSolidityEventProperty(
-            _eventIndex,
-            _eventPropertyIndex,
-            _name,
-            _type,
-            _address,
-            _uint,
-            _string,
-            _callerMeta
-        )
+    export const writeEsEvent = async (
+        eventStore: any,
+        fromAddress: string,
+        esEvent: EventTypes.IEsEvent
+    ): Promise<EventTypes.ITransaction> => {
+        let {
+            Type,
+            Version,
+            ValueType,
+            AddressValue,
+            UIntValue,
+            Bytes32Value,
+            PropertyCount
+        } = esEvent
+        return await eventStore.writeEvent(
+            Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount,
+            {
+                from: fromAddress,
+                gas: 2000000
+            })
     }
 
-    const guessType = (value) => {
-        if (typeof value === 'string') {
-            if (web3.isAddress(value)) {
-                return 'Address'
-            }
-            return 'String'
-        }
-        if (typeof value === 'number') {
-            return 'BigNumber'
-        }
-        return null
+    export const writeEsEventProperty = async (
+        eventStore: any,
+        fromAddress: string,
+        esEventProp: EventTypes.IEsEventProperty
+    ): Promise<EventTypes.ITransaction> => {
+        let {
+            EventIndex,
+            EventPropertyIndex,
+            Name,
+            ValueType,
+
+            AddressValue,
+            UIntValue,
+            Bytes32Value
+        } = esEventProp
+        return await eventStore.writeEventProperty(
+            EventIndex, EventPropertyIndex, Name, ValueType, AddressValue, UIntValue, Bytes32Value,
+            {
+                from: fromAddress,
+                gas: 2000000
+            })
     }
 
-    const writePropsToEvent = async (_es, _callerMeta, _event, _eventProps) => {
-        let propKeys = keys(_eventProps)
+    export const readEsEventValues = async (eventStore: any, fromAddress: string, eventId: number) => {
+        // must be a .call constant modifier incompatible with _isAuthorized
+        return await eventStore.readEvent.call(eventId, {
+            from: fromAddress,
+            gas: 2000000
+        })
+    }
+
+    export const readEsEventPropertyValues = async (eventStore: any, fromAddress: string, eventId: number, propId: number) => {
+        // must be a .call constant modifier incompatible with _isAuthorized
+        return await eventStore.readEventProperty.call(eventId, propId, {
+            from: fromAddress,
+            gas: 2000000
+        })
+    }
+
+    export const readEsEventPropertiesFromEsEvent = async (eventStore: any, fromAddress: string, esEvent: EventTypes.IEsEvent) => {
+        let eventId = esEvent.Id
+        let propId = 0
         let promises = []
-        let propIndex = 0
-        while (propIndex < propKeys.length) {
-            let pp
-            let wp = writeSolidityEventPropertyHelper
-            let key = propKeys[propIndex]
-            let value = _eventProps[key]
-            let propType = guessType(value)
-            switch (propType) {
-                case 'String': pp = await wp(_es, _callerMeta, _event.Id, propIndex, key, propType, 0, 0, value); break
-                case 'BigNumber': pp = await wp(_es, _callerMeta, _event.Id, propIndex, key, propType, 0, value, ''); break
-                case 'Address': pp = await wp(_es, _callerMeta, _event.Id, propIndex, key, propType, value, 0, ''); break
-            }
-            promises.push(pp)
-            propIndex++
+        while (propId < esEvent.PropertyCount) {
+            let eventPropVals = await readEsEventPropertyValues(eventStore, fromAddress, eventId, propId)
+            let esEventPropWithTruffleTypes = EventTypes.getEsEventPropertyFromEsEventPropertyValues(eventPropVals)
+            let esEventProp = EventTypes.getEsEventPropertyFromEsEventPropertyWithTruffleTypes('EsEventProperty', esEventPropWithTruffleTypes)
+            promises.push(esEventProp)
+            propId++
         }
-        return promises
+        return await Promise.all(promises)
     }
 
-    const hasRequiredProps = (eventObj) => {
-        if (eventObj.Type === undefined){
-            throw Error('Event requires Type property: ' + JSON.stringify(eventObj))
-        }
-        return true
-    }
+    export const readTransmuteEvent = async (eventStore: any, fromAddress: string, eventId: number): Promise<EventTypes.ITransmuteEvent> => {
+        let eventVals = await readEsEventValues(eventStore, fromAddress, eventId)
+        let esEventWithTruffleTypes: EventTypes.IEsEventFromTruffle = EventTypes.getEsEventFromEsEventValues(eventVals)
+        let esEvent: EventTypes.IEsEvent = EventTypes.getEsEventFromEsEventWithTruffleTypes('EsEvent', esEventWithTruffleTypes)
 
-    // Needs work... This function parses the events we have extracted from tx logs (multiple txs)
-    // It then reconstructs the original event from the logs
-    // dangerous if other events are fireing in the tx, consider a string property on both event and prop event types
-    export const solidityEventReducer = (events) => {
-        // console.log('rebuild the event here...', events)
-        let _event = {}
-        events.forEach((event) => {
-            // NOT GOOD way of determing event type...
-            if (event.Type && event.Created) {
-                extend(_event, event)
-            } else {
-                switch (event.Type) {
-                    case 'String': _event[event.Name] = event.StringValue; break
-                    case 'BigNumber': _event[event.Name] = event.UIntValue; break
-                    case 'Address': _event[event.Name] = event.AddressValue; break
-                }
-            }
-        })
-        return _event
+        let esEventProps = await readEsEventPropertiesFromEsEvent(eventStore, fromAddress, esEvent)
+        let transmuteEvent = await EventTypes.esEventToTransmuteEvent(esEvent, esEventProps)
+        if (DEBUG && !isFSA(transmuteEvent)) {
+            console.warn('WARNING: transmuteEvent: ', transmuteEvent, ' is not a FSA. see https://github.com/acdlite/flux-standard-action')
+        }
+        return transmuteEvent
     }
 
     /**
-    * @param {TruffleContract} esInstance - a contract instance which is an Event Store
-    * @param {Object} _callerMeta - from address and gas
-    * @param {Object} event - an event to be written to the EventStore
-    * @return {Promise<Object, Error>} a reconstructed event from the transaction logs
+    * @param {TruffleContract} eventStore - a contract instance which is an Event Store
+    * @param {Number} eventId - all events after this Id and includig it will be returned
+    * @return {Promise<EsEvent[], Error>} json objects representing SOLIDITY_EVENTs
     */
-    export const writeSolidityEventAsync = async (esInstance, _callerMeta, event) => {
-
-        // TODO: Add check to make sure event does not contain reserved keys, throw error if so
-
-        // danger hashing stringified objects may not be safe...
-        event.PropertyCount = difference(keys(event), solidityEventProperties).length
-        event.IntegrityHash = web3.sha3(JSON.stringify(event))
-
-        hasRequiredProps(event)
-
-        let _solEvent = objectToSolidityEvent(event)
-        let _solEventProps = objectToSolidityEventProperties(event)
-        let allEvents = []
-        let wp = writeSolidityEventHelper
-        return wp(esInstance, _callerMeta, _solEvent.Type, _solEvent.PropertyCount, _solEvent.IntegrityHash)
-            .then((tx) => {
-                let _events = Transactions.eventsFromTransaction(tx)
-                let event = _events[0]
-                allEvents.push(event)
-                return event
-            })
-            .then((_event) => {
-                return writePropsToEvent(esInstance, _callerMeta, _event, _solEventProps)
-            })
-            .then((txs) => {
-                let dirtyEvents = txs.map((tx) => {
-                    return Transactions.eventsFromTransaction(tx)
-                })
-                let propEvents = flatten(dirtyEvents)
-                allEvents = allEvents.concat(propEvents)
-                let reconstructedEvent = solidityEventReducer(allEvents)
-                return reconstructedEvent
-            })
-    }
-
-    /**
-    * @param {TruffleContract} esInstance - a contract instance which is an EventStore
-    * @param {Object} _callerMeta - from address and gas
-    * @param {Array} events - the events to be written to the EventStore
-    * @return {Promise<Array<Object>, Error>} an array of reconstructed events from the transaction logs
-    */
-    export const writeSolidityEventsAsync = async (esInstance, _callerMeta, _events) => {
-        return Promise.all(_events.map(async (_event) => {
-            return await writeSolidityEventAsync(esInstance, _callerMeta, _event)
-        }))
-    }
-
-    const readSolidityEventHelper = async (esInstance, eventId) => {
-        return {
-            Id: eventId,
-            Type: (await esInstance.readSolidityEventType.call(eventId)).toString(),
-            Created: (await esInstance.readSolidityEventCreated.call(eventId)).toNumber(),
-            IntegrityHash: (await esInstance.readSolidityEventIntegrityHash.call(eventId)).toString(),
-            PropertyCount: (await esInstance.readSolidityEventPropertyCount.call(eventId)).toNumber()
-        }
-    }
-
-    const readSolidityEventPropertyHelper = async (esInstance, eventId, propIndex) => {
-        return {
-            Id: eventId,
-            EventPropertyIndex: propIndex,
-            Name: (await esInstance.readSolidityEventPropertyName.call(eventId, propIndex)).toString(),
-            Type: (await esInstance.readSolidityEventPropertyType.call(eventId, propIndex)).toString(),
-            AddressValue: (await esInstance.readSolidityEventPropertyAddressValue.call(eventId, propIndex)).toString(),
-            UIntValue: (await esInstance.readSolidityEventPropertyUIntValue.call(eventId, propIndex)).toNumber(),
-            StringValue: (await esInstance.readSolidityEventPropertyStringValue.call(eventId, propIndex)).toString()
-        }
-    }
-
-    const solidityEventPropertyToObject = (prop) => {
-        let _obj = {}
-        switch (prop.Type) {
-            case 'String': _obj[prop.Name] = prop.StringValue; break
-            case 'BigNumber': _obj[prop.Name] = prop.UIntValue; break
-            case 'Address': _obj[prop.Name] = prop.AddressValue; break
-        }
-        return _obj
-    }
-
-    /**
-    * @param {TruffleContract} esInstance - a contract instance which is an EventStore
-    * @param {Number} eventId - the solidityEventId to be read
-    * @return {Promise<Object, Error>} a solidity event from the EventStore
-    */
-    export const readSolidityEventAsync = async (esInstance, eventId) => {
-        let event = await readSolidityEventHelper(esInstance, eventId)
-        let propIndex = 0
-        let props = []
-        while (propIndex < event.PropertyCount) {
-            let prop = await readSolidityEventPropertyHelper(esInstance, eventId, propIndex)
-            props.push(prop)
-            propIndex++
-        }
-        props.forEach((prop) => {
-            let propObj = solidityEventPropertyToObject(prop)
-            event = Object.assign({}, event, propObj)
-        })
-        return event
-    }
-
-    /**
-    * @param {TruffleContract} esInstance - a contract instance which is an EventStore
-    * @param {Number} eventId - the starting index to read from the EventStore
-    * @return {Promise<Array<Object>, Error>} the solidity events from the EventStore
-    */
-    export const readSolidityEventsAsync = async (esInstance, eventId = 0) => {
-        let currentEvent = await esInstance.solidityEventCount()
+    export const readTransmuteEvents = async (eventStore: any, fromAddress: string, eventId: number = 0) => {
+        let currentEvent = (await eventStore.solidityEventCount()).toNumber()
         let eventPromises = []
         while (eventId < currentEvent) {
-            eventPromises.push(await readSolidityEventAsync(esInstance, eventId))
+            eventPromises.push(await readTransmuteEvent(eventStore, fromAddress, eventId))
             eventId++
         }
         return await Promise.all(eventPromises)
     }
 
+    // can be extended later to handle validation... maybe...
+    export const writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
+        // console.log('transmuteCommand: ', transmuteCommand)
+        let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
+        // console.log('esEvent: ', esEvent)
+        let tx = await writeEsEvent(eventStore, fromAddress, esEvent)
+        let eventsFromWriteEsEvent = await EventTypes.eventsFromTransaction(tx)
+        // console.log('eventsFromWriteEsEvent', eventsFromWriteEsEvent)
+        let esEventWithIndex = eventsFromWriteEsEvent[0]
+        let esEventProperties = EventTypes.convertCommandToEsEventProperties(esEventWithIndex, transmuteCommand)
+        // console.log('esEventProperties: ', esEventProperties)
+        let allTxs = [tx]
+        if (esEventWithIndex.PropertyCount) {
+            let esEventPropertiesWithTxs = esEventProperties.map(async (esp) => {
+                return await writeEsEventProperty(eventStore, fromAddress, esp)
+            })
+            let txs = await Promise.all(esEventPropertiesWithTxs)
+            allTxs = allTxs.concat(txs)
+        }
+        allTxs = _.flatten(allTxs)
+        // console.log('allTxs: ', allTxs)
+        let transmuteEvents = await Promise.all(EventTypes.reconstructTransmuteEventsFromTxs(allTxs))
+        return <EventTypes.ITransmuteCommandResponse>{
+            events: transmuteEvents,
+            transactions: allTxs
+        }
+    }
+
+    export const writeTransmuteCommands = async (eventStore: any, fromAddress: string, transmuteCommands: Array<EventTypes.ITransmuteCommand>): Promise<Array<EventTypes.ITransmuteCommandResponse>> => {
+        let promises = transmuteCommands.map(async (cmd) => {
+            return await writeTransmuteCommand(eventStore, fromAddress, cmd)
+        })
+        return await Promise.all(promises)
+    }
 }

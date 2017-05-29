@@ -13,9 +13,7 @@ contract EventStoreFactory is EventStore {
 
   // Constructor
   function EventStoreFactory() payable {
-    uint eventIndex = solidityEventCount;
-    writeSolidityEvent('FACTORY_CREATED', 1, '');
-    writeSolidityEventProperty(eventIndex, 0, 'ContractOwnerAddress', 'Address', msg.sender, 0, '');
+    writeEvent('FACTORY_CREATED', 'v0', 'Address', tx.origin, 0, '', 0);
   }
 
   // Modifiers
@@ -50,11 +48,7 @@ contract EventStoreFactory is EventStore {
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
     uint eventIndex = solidityEventCount;
-
-    writeSolidityEvent('FACTORY_EVENT_STORE_CREATED', 2, '');
-    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', address(_newEventStore), 0, '');
-    writeSolidityEventProperty(eventIndex, 1, 'ContractOwnerAddress', 'Address', msg.sender, 0, '');
-
+    writeEvent('FACTORY_EVENT_STORE_CREATED', 'v0', 'Address', address(_newEventStore), 0, '', 0);
     return address(_newEventStore);
 	}
 
@@ -74,7 +68,6 @@ contract EventStoreFactory is EventStore {
 
     uint eventIndex = solidityEventCount;
 
-    writeSolidityEvent('FACTORY_EVENT_STORE_DESTROYED', 1, StringUtils.uintToBytes(eventIndex));
-    writeSolidityEventProperty(eventIndex, 0, 'ContractAddress', 'Address', _address, 0, '');
+    writeEvent('FACTORY_EVENT_STORE_DESTROYED', 'v0', 'Address', address(_address), 0, '', 0);
   }
 }

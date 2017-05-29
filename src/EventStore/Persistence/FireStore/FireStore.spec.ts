@@ -11,7 +11,7 @@ let value = {
     name: 'a valid value'
 }
 
-import { firebaseConfig } from '../../config'
+import { firebaseConfig } from '../../../config'
 
 describe("Persistence.FireStore", () => {
 

@@ -1,25 +1,17 @@
 'use strict'
 
-import { web3 } from '../env'
+import { web3 } from '../../env'
 
-const contract = require('truffle-contract')
-const eventStoreFactoryArtifacts = require('../../build/contracts/EventStoreFactory')
-
-import { Transactions } from '../Transactions/Transactions'
+import { EventTypes } from '../EventTypes/EventTypes'
 
 export module EventStoreFactory {
 
-    export const EventStoreFactoryContract = contract(eventStoreFactoryArtifacts)
-    EventStoreFactoryContract.setProvider(web3.currentProvider)
-
     export const createEventStore = async (factory, fromAddress) => {
-        // console.log(fromAddress)
         let tx = await factory.createEventStore({
             from: fromAddress,
             gas: 2000000
         })
-        // console.log(tx)
-        let events = Transactions.transactionToEventCollection(tx)
+        let events = EventTypes.eventsFromTransaction(tx)
         return {
             events: events,
             tx: tx
