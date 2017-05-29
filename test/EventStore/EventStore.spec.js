@@ -261,10 +261,11 @@ contract('EventStore', (accounts) => {
                 from: accounts[7],
                 gas: 2000000
             })
+            // console.log(propTx)
             assert(propTx.logs.length === 1)
             assert(propTx.logs[0].event === 'EsEventProperty')
             let solidityEventProp = propTx.logs[0].args
-            assert.equal(toAscii(solidityEventProp.Type), 'Bytes32', 'expected event prop type to be Bytes32')
+            assert.equal(toAscii(solidityEventProp.ValueType), 'Bytes32', 'expected event prop type to be Bytes32')
             assert.equal(toAscii(solidityEventProp.Bytes32Value), 'CustomValue', 'expected event prop bytes32Value to be CustomValue')
         })
     })
