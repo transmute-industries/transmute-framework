@@ -89,7 +89,7 @@ export module EventTypes {
     // http://redux.js.org/docs/basics/Actions.html
     // https://github.com/airbnb/javascript#objects
     // https://github.com/acdlite/flux-standard-action
-    // TLDR; we are extending the FSA here, to add some required EventStore properties
+    // TLDR; we are extending the FSA here, to add some required EventStore properties to meta, making it required
     export interface ITransmuteEvent {
         type: string,
         // The type of an action identifies to the consumer the nature of the action that has occurred. 
