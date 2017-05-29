@@ -1,5 +1,7 @@
 import Constants from './constants'
 
+// https://github.com/reactjs/redux/blob/master/docs/recipes/reducers/ImmutableUpdatePatterns.md
+
 export const readModel = {
   readModelStoreKey: '', // CONTRACT_ADDRESS:READ_MODEL_NAME
   readModelType: 'HealthcareSystem', // READ_MODEL_NAME
