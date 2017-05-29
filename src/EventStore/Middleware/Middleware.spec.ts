@@ -114,7 +114,7 @@ describe('Middleware', () => {
         })
     })
 
-    describe.only('readTransmuteEvent', () => {
+    describe('readTransmuteEvent', () => {
 
         it('read address value event should return an FSA with event store meta', async () => {
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
@@ -185,7 +185,7 @@ describe('Middleware', () => {
 
         it.only('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
             let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
-            // console.log('cmdResponse: ', cmdResponse)
+            console.log('cmdResponse: ', cmdResponse)
             // assert.lengthOf(cmdResponse.events, 1)
             // assert.lengthOf(cmdResponse.transactions, 1)
             // assert.equal(cmdResponse.events[0].type, objectCommand.type)

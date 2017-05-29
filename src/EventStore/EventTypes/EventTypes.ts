@@ -5,6 +5,21 @@ import * as _ from 'lodash'
 
 const camelcaseKeys = require('camelcase-keys')
 
+
+// code smell these should be defaults??? but I kinda like not having mocks and defaults all over the place...
+// dry is more important imo...
+import { 
+    addressValueEsEvent, 
+    uIntValueEsEvent,
+    bytes32ValueEsEvent,
+    objectValueEsEvent,
+
+    addressValueEsEventProperty,
+    uIntValueEsEventProperty,
+    bytes32ValueEsEventProperty
+} from '../Mock/Events/TestEvents'
+
+
 export module EventTypes {
 
     export interface IBigNumber {
@@ -223,9 +238,7 @@ export module EventTypes {
         return <IEsEventPropertyFromTruffle> evt
     }
 
-    export const getEsEventFromEsEventWithTruffleTypes = (eventType: string, solEvent: IEsEventFromTruffle): IEsEvent  =>{
-        // console.log('eventType: ', eventType )
-        // console.log('solEvent: ', solEvent )        
+    export const getEsEventFromEsEventWithTruffleTypes = (eventType: string, solEvent: IEsEventFromTruffle): IEsEvent  =>{      
         let event = {}
         let schema = TruffleEventSchema[eventType]
         _.forIn(solEvent, (value, key) => {
@@ -280,6 +293,79 @@ export module EventTypes {
             meta: meta
         }
     }
+
+    export const convertCommandToEsEvent = (transmuteCommand: EventTypes.ITransmuteCommand): EventTypes.IEsEvent =>{
+        let valueType = EventTypes.guessType(transmuteCommand.payload)
+        let esEvent
+        // console.log('valueType: ', valueType)
+        switch(valueType){
+            case 'Address': 
+                esEvent = _.cloneDeep(addressValueEsEvent); 
+                esEvent.AddressValue = transmuteCommand.payload
+                break
+            case 'UInt': 
+                esEvent = _.cloneDeep(uIntValueEsEvent); 
+                esEvent.UIntValue = transmuteCommand.payload
+                break
+            case 'Bytes32': 
+                esEvent = _.cloneDeep(bytes32ValueEsEvent); 
+                esEvent.Bytes32Value = transmuteCommand.payload
+                break
+            case 'Object': 
+                esEvent = _.cloneDeep(objectValueEsEvent); 
+                esEvent.PropertyCount = Object.keys(transmuteCommand.payload).length
+                break
+            default:
+                throw Error('Unkown valueType: ' + valueType)
+        }
+        esEvent.Type = transmuteCommand.type
+        return <EventTypes.IEsEvent> esEvent
+    }
+
+      export const convertCommandToEsEventProperties = (
+        esEvent: EventTypes.IEsEvent, 
+        transmuteCommand: EventTypes.ITransmuteCommand
+    ): Array<EventTypes.IEsEventProperty> =>{
+        let payload = transmuteCommand.payload
+        let flatPayload = EventTypes.flatten(payload)
+        // console.log('flatPayload: ', flatPayload )
+        let payloadKeys = _.keys(flatPayload)
+        let payloadVals = _.values(flatPayload)
+        let payLoadValueTypes = payloadVals.map(EventTypes.guessType)
+        // console.log('payloadKeys: ', payloadKeys )
+        // console.log('payloadVals: ', payloadVals )
+        // console.log('payLoadValueTypes: ', payLoadValueTypes )
+        let esEventProps = []
+        payloadKeys.forEach((key, i) =>{
+            // console.log(i)
+            let esEventProp
+            let valueType = payLoadValueTypes[i]
+            let value = payloadVals[i]
+            let name = payloadKeys[i]
+            switch(valueType){
+                case 'Address': 
+                    esEventProp = _.cloneDeep(addressValueEsEventProperty); 
+                    esEventProp.AddressValue = value
+                    break
+                case 'UInt': 
+                    esEventProp = _.cloneDeep(uIntValueEsEventProperty); 
+                    esEventProp.UIntValue = value
+                    break
+                case 'Bytes32': 
+                    esEventProp = _.cloneDeep(bytes32ValueEsEventProperty); 
+                    esEventProp.Bytes32Value = value
+                    break
+                default:
+                    throw Error('Unkown valueType: ' + valueType)
+            }
+            esEventProp.EventIndex = esEvent.Id
+            esEventProp.EventPropertyIndex = i
+            esEventProp.Name = name
+            esEventProps.push(esEventProp)
+        })
+        return <any> esEventProps
+    }
+    
 
     // http://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
     export const flatten = (data) => {
