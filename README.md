@@ -8,7 +8,7 @@ $ npm install transmute-framework@latest --save
 
 [![NPM version](https://img.shields.io/npm/v/transmute-framework.svg)](https://www.npmjs.com/package/transmute-framework)
 [![Build Status](https://travis-ci.org/transmute-industries/transmute-framework.svg?branch=master)](https://travis-ci.org/transmute-industries/transmute-framework)
-[![Coverage Status](https://coveralls.io/repos/transmute-industries/transmute-framework/badge.svg?branch=master&service=github)](https://coveralls.io/github/transmute-industries/transmute-framework?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/transmute-industries/transmute-framework/badge.svg?branch=master)](https://coveralls.io/github/transmute-industries/transmute-framework?branch=master)
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 
 EventStore provides a simple javascript event based interface to the ethereum blockchain.
