@@ -1,5 +1,5 @@
 import { LocalStorage } from './LocalStore/LocalStorage'
-import  { FirebaseStorage  }   from './FireStore/FirebaseStorage'
+// import  { FirebaseStorage  }   from './FireStore/FirebaseStorage'
 
 const moment = require('moment')
 
@@ -16,7 +16,7 @@ export module Persistence {
         setItem: (key: string, value: Object) => Promise<Object>;
     }
     export const LocalStore = LocalStorage
-    export const FireStore = FirebaseStorage
+    export const FireStore = null
 
 
     /**

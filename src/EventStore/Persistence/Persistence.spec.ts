@@ -15,7 +15,7 @@ describe("Persistence", () => {
     }
 
     before(()=>{
-         let db = Persistence.FireStore.init()
+        //  let db = Persistence.FireStore.init()
     })
     
     describe(".setItem", () => {
@@ -53,37 +53,37 @@ describe("Persistence", () => {
             }, 15 * 1000)
         })
 
-        it("supports custom expiration in 5 seconds", (done) => {
-            let expires = moment().add(5, 'seconds').toISOString()
-            Persistence.setItem(key, value, expires)
-                .then((dataReadFromCache: any) => {
-                    expect(dataReadFromCache !== null)
-                    expect(dataReadFromCache.name == value.name)
-                })
-            setTimeout(() => {
-                Persistence.getItem(key)
-                    .then((dataReadFromCache: any) => {
-                        expect(dataReadFromCache !== null)
-                        expect(dataReadFromCache.name == value.name)
-                    })
-            }, 3 * 1000)
-            setTimeout(() => {
-                Persistence.getItem(key)
-                    .then((dataReadFromCache: any) => {
-                        expect(dataReadFromCache === null)
-                        done()
-                    })
-            }, 6 * 1000)
-        })
+    //     it("supports custom expiration in 5 seconds", (done) => {
+    //         let expires = moment().add(5, 'seconds').toISOString()
+    //         Persistence.setItem(key, value, expires)
+    //             .then((dataReadFromCache: any) => {
+    //                 expect(dataReadFromCache !== null)
+    //                 expect(dataReadFromCache.name == value.name)
+    //             })
+    //         setTimeout(() => {
+    //             Persistence.getItem(key)
+    //                 .then((dataReadFromCache: any) => {
+    //                     expect(dataReadFromCache !== null)
+    //                     expect(dataReadFromCache.name == value.name)
+    //                 })
+    //         }, 3 * 1000)
+    //         setTimeout(() => {
+    //             Persistence.getItem(key)
+    //                 .then((dataReadFromCache: any) => {
+    //                     expect(dataReadFromCache === null)
+    //                     done()
+    //                 })
+    //         }, 6 * 1000)
+    //     })
 
-        it("supports custom firebase store", () => {
-            let expires = moment().add(5, 'seconds').toISOString()
-            return Persistence.setItem(key, value, expires, Persistence.FireStore)
-                .then((dataReadFromCache: any) => {
-                    expect(dataReadFromCache !== null)
-                    expect(dataReadFromCache.name == value.name)
-                })
-        })
+    //     it("supports custom firebase store", () => {
+    //         let expires = moment().add(5, 'seconds').toISOString()
+    //         return Persistence.setItem(key, value, expires, Persistence.FireStore)
+    //             .then((dataReadFromCache: any) => {
+    //                 expect(dataReadFromCache !== null)
+    //                 expect(dataReadFromCache.name == value.name)
+    //             })
+    //     })
 
     })
 
@@ -96,11 +96,11 @@ describe("Persistence", () => {
                 expect(dataReadFromCache !== null)
                 expect(dataReadFromCache.name == value.name)
             })
-            Persistence.setItem(key, value, expires, Persistence.FireStore)
-            .then((dataReadFromCache: any) => {
-                expect(dataReadFromCache !== null)
-                expect(dataReadFromCache.name == value.name)
-            })
+            // Persistence.setItem(key, value, expires, Persistence.FireStore)
+            // .then((dataReadFromCache: any) => {
+            //     expect(dataReadFromCache !== null)
+            //     expect(dataReadFromCache.name == value.name)
+            // })
         })
         it("should return a promise for the value", () => {
             return Persistence.getItem(key)
@@ -110,13 +110,13 @@ describe("Persistence", () => {
             })
         })
 
-        it("supports custom firebase store", () => {
-            return Persistence.getItem(key, Persistence.FireStore)
-                .then((dataReadFromCache: any) => {
-                    expect(dataReadFromCache !== null)
-                    expect(dataReadFromCache.name == value.name)
-                })
-        })
+        // it("supports custom firebase store", () => {
+        //     return Persistence.getItem(key, Persistence.FireStore)
+        //         .then((dataReadFromCache: any) => {
+        //             expect(dataReadFromCache !== null)
+        //             expect(dataReadFromCache.name == value.name)
+        //         })
+        // })
     })
 
       describe(".expireItem", () => {
@@ -142,8 +142,8 @@ describe("Persistence", () => {
 
     })
 
-    after(()=>{
-        firebase.app('[DEFAULT]').delete();
-    })
+    // after(()=>{
+    //     firebase.app('[DEFAULT]').delete();
+    // })
     
-});
+})
