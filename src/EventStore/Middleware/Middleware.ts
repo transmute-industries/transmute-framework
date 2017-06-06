@@ -1,10 +1,4 @@
 
-// import TransmuteFramework from '../../TransmuteFramework'
-
-// const { web3 } = TransmuteFramework
-
-let web3
-
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 
 import { EventTypes } from '../EventTypes/EventTypes'

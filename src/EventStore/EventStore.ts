@@ -1,13 +1,4 @@
 'use strict'
-import { TransmuteFramework }  from '../TransmuteFramework'
-
-
-// const { web3 } = TransmuteFramework
-// .init({
-//     env: 'testrpc'
-// })
-
-let web3
 
 import { EventTypes as ET } from './EventTypes/EventTypes'
 import { Middleware } from './Middleware/Middleware'
