@@ -4,9 +4,12 @@ import { EventTypes as ET } from './EventTypes/EventTypes'
 import { Middleware } from './Middleware/Middleware'
 import { ReadModel as RM } from './ReadModel/ReadModel'
 
+import { EventStoreFactory as FC } from './EventStoreFactory/EventStoreFactory'
+
 export module EventStore {
     export import EventTypes = ET
     export import ReadModel = RM
+    export import EventStoreFactory = FC
 
     /**
      * @param {TruffleContract} eventStore - a contract instance which is an Event Store
