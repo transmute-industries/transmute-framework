@@ -45,6 +45,23 @@ vorpal
   })
 
 vorpal
+  .command('eventstore', 'A command line interface to eventstores')
+  .action((args, callback) => {
+    console.log()
+    console.log('EventStore.....')
+    // var exec = require('child_process').exec
+    // exec('truffle migrate',  (error, stdout, stderr) => {
+    //   console.log()
+    //   console.log(stdout)
+
+    //   if (error !== null) {
+    //     console.log('exec error: ' + error)
+    //   }
+    //   callback()
+    // })
+  })
+
+vorpal
   .delimiter('🦄   $')
   .show()
   .parse(process.argv)

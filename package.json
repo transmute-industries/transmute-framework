@@ -14,6 +14,7 @@
     "testrpc": "pm2 start testrpc",
     "truffle-test": "truffle migrate && truffle test",
     "test": "nyc mocha",
+    "test:cli": "truffle test ./cli/**/*.spec.js",
     "test:all": "npm run clean && npm run truffle-test && npm run test",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "docs": "typedoc --gaID UA-99768185-1 --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
