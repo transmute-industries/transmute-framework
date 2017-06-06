@@ -1,15 +1,12 @@
 'use strict'
 
+import TransmuteFramework from '../../TransmuteFramework'
+
+const { web3, EventStoreFactoryContract } = TransmuteFramework.init()
+
 import { expect } from 'chai'
-import { web3 } from '../../env'
 
 import { EventStoreFactory } from './EventStoreFactory'
-
-const eventStoreFactoryArtifacts = require('../../../build/contracts/EventStoreFactory')
-
-const contract = require('truffle-contract')
-const EventStoreFactoryContract = contract(eventStoreFactoryArtifacts)
-EventStoreFactoryContract.setProvider(web3.currentProvider)
 
 describe('EventStoreFactory', () => {
 

@@ -1,4 +1,13 @@
-import { web3 } from '../../../env'
+// import TransmuteFramework from '../../../TransmuteFramework'
+
+// const { web3 } = TransmuteFramework
+
+let web3
+
+let account0 = '0x0000000000000000000000000000000000000000'
+// account0 = web3.eth.accounts[0]
+let account1 = '0x0000000000000000000000000000000000000000'
+// account1 = web3.eth.accounts[1]
 
 import {EventTypes} from '../../EventTypes/EventTypes'
 
@@ -6,7 +15,7 @@ export const addressValueEsEvent: EventTypes.IEsEvent = {
     Type: 'ADDRESS_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'Address',
-    AddressValue: web3.eth.accounts[1],
+    AddressValue: account1,
     UIntValue: 0,
     Bytes32Value: '',
     PropertyCount: 0
@@ -54,13 +63,13 @@ export const stringCommand: EventTypes.ITransmuteCommand = {
 
 export const addressCommand: EventTypes.ITransmuteCommand = {
     type: 'ADDRESS_SELECTED',
-    payload: web3.eth.accounts[1],
+    payload: account1,
 }
 
 export const objectCommand: EventTypes.ITransmuteCommand = {
     type: 'USER_REGISTERED',
     payload: {
-        address: web3.eth.accounts[0],
+        address: account0,
         name: 'Vitalic',
         title: 'God Emperor',
         hobbies: ['knowing the answer to p v np', 'being fleek af'],

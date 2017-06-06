@@ -1,6 +1,8 @@
 'use strict'
 
-import { web3 } from '../../env'
+import TransmuteFramework from '../../TransmuteFramework'
+
+const { web3 } = TransmuteFramework
 
 import { EventTypes } from '../EventTypes/EventTypes'
 
