@@ -1,7 +1,5 @@
 'use strict'
 
-import { web3 } from '../env'
-
 import { EventTypes as ET } from './EventTypes/EventTypes'
 import { Middleware } from './Middleware/Middleware'
 import { ReadModel as RM } from './ReadModel/ReadModel'

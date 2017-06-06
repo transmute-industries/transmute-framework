@@ -1,10 +1,13 @@
 "use strict";
+
+import TransmuteFramework from '../../TransmuteFramework'
+
+const { web3, EventStoreContract } = TransmuteFramework.init()
+
 const moment = require('moment')
 const contract = require('truffle-contract')
 
 import { expect, assert, should } from 'chai'
-
-import { web3 } from '../../env'
 
 import {
   JSON_SCHEMA,
@@ -13,7 +16,6 @@ import {
 import { Middleware } from '../Middleware/Middleware'
 import { EventTypes } from './EventTypes'
 
-const eventStoreArtifacts = require('../../../build/contracts/EventStore')
 
 import {
     addressValueEsEvent,
@@ -31,10 +33,6 @@ import {
     objectCommand
 
 } from '../Mock/Events/TestEvents'
-
-export const EventStoreContract = contract(eventStoreArtifacts)
-EventStoreContract.setProvider(web3.currentProvider)
-
 
 describe("EventTypes", () => {
 

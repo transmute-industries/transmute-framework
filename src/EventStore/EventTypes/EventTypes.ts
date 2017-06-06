@@ -1,10 +1,8 @@
-
-import { web3 } from '../../env'
-
-import * as _ from 'lodash'
+var ethUtils = require('ethereumjs-util')
 
 const camelcaseKeys = require('camelcase-keys')
 
+import * as _ from 'lodash'
 
 // code smell these should be defaults??? but I kinda like not having mocks and defaults all over the place...
 // dry is more important imo...
@@ -132,7 +130,7 @@ export module EventTypes {
     }
 
     export const toAscii = (value) => {
-        return web3.toAscii(value).replace(/\u0000/g, '')
+        return ethUtils.toAscii(value).replace(/\u0000/g, '')
     }
 
     export const guessType = (value) => {
@@ -143,7 +141,7 @@ export module EventTypes {
             return 'Object'
         }
         if (typeof value === 'string') {
-            if (web3.isAddress(value)) {
+            if (ethUtils.isValidAddress(value)) {
                 return 'Address'
             }
             return 'Bytes32'

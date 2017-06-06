@@ -1,18 +1,20 @@
 "use strict";
+
+
+import TransmuteFramework from '../../TransmuteFramework'
+
+const { web3, EventStoreContract } = TransmuteFramework.init()
+
 import * as moment from 'moment'
 import * as _ from 'lodash'
 
 import { expect, assert, should } from 'chai'
-
-import { web3 } from '../../env'
 
 import { Middleware } from '../Middleware/Middleware'
 import { EventTypes } from '../EventTypes/EventTypes'
 import { ReadModel } from './ReadModel'
 import events from '../Mock/Demo/Healthcare/events'
 import { reducer, readModel } from '../Mock/Demo/Healthcare/reducer'
-
-
 
 var fs = require('fs');
 const contract = require('truffle-contract')
@@ -33,10 +35,6 @@ const compareReadModels = (current, next) => {
     console.log('diff=' + JSON.stringify(diff));
 }
 
-
-const eventStoreArtifacts = require('../../../build/contracts/EventStore')
-export const EventStoreContract = contract(eventStoreArtifacts)
-EventStoreContract.setProvider(web3.currentProvider)
 
 describe("ReadModel", () => {
 

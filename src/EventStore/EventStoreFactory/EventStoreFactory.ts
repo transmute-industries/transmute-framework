@@ -1,7 +1,5 @@
 'use strict'
 
-import { web3 } from '../../env'
-
 import { EventTypes } from '../EventTypes/EventTypes'
 
 export module EventStoreFactory {

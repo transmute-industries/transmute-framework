@@ -1,6 +1,5 @@
 
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
-import { web3 } from '../../env'
 
 import { EventTypes } from '../EventTypes/EventTypes'
 

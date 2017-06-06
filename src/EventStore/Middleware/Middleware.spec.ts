@@ -1,15 +1,17 @@
 'use strict'
+
+import TransmuteFramework from '../../TransmuteFramework'
+
+const { web3, EventStoreContract } = TransmuteFramework.init()
+
 import { isFSA } from 'flux-standard-action'
 import * as _ from 'lodash'
 const contract = require('truffle-contract')
 
 import { assert, expect, should } from 'chai'
-import { web3 } from '../../env'
 
 import { Middleware } from './Middleware'
 import { EventTypes } from '../EventTypes/EventTypes'
-
-const eventStoreArtifacts = require('../../../build/contracts/EventStore')
 
 import {
     addressValueEsEvent,
@@ -27,9 +29,6 @@ import {
     objectCommand
 
 } from '../Mock/Events/TestEvents'
-
-export const EventStoreContract = contract(eventStoreArtifacts)
-EventStoreContract.setProvider(web3.currentProvider)
 
 describe('Middleware', () => {
 
