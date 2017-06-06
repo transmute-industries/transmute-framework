@@ -47,7 +47,6 @@ contract EventStoreFactory is EventStore {
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
-    uint eventIndex = solidityEventCount;
     writeEvent('FACTORY_EVENT_STORE_CREATED', 'v0', 'Address', address(_newEventStore), 0, '', 0);
     return address(_newEventStore);
 	}
@@ -65,8 +64,6 @@ contract EventStoreFactory is EventStore {
     // Interact With Other Contracts
     EventStore _eventStore = EventStore(_address);
     _eventStore.kill();
-
-    uint eventIndex = solidityEventCount;
 
     writeEvent('FACTORY_EVENT_STORE_DESTROYED', 'v0', 'Address', address(_address), 0, '', 0);
   }

@@ -1,5 +1,7 @@
 import { Constants } from './constants'
 
+// TODO: This is old, and needs to be updated to use the new reducer patterns and FSAs
+
 export const initialProjectState = {
   ReadModelStoreKey: '', // CONTRACT_ADDRESS:READ_MODEL_NAME
   ReadModelType: '', // READ_MODEL_NAME
