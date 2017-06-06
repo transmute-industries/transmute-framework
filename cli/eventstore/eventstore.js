@@ -4,6 +4,8 @@ var { TransmuteFramework } = require('../../build/TransmuteFramework')
 
 let { web3, EventStoreContract, EventStoreFactoryContract } = TransmuteFramework.init()
 
+let { getCachedReadModel } = TransmuteFramework.EventStore.ReadModel
+
 // These should be updated to be permissions and default event oriented
 var { readModel, reducer } = require('./legacy/reducer')
 
@@ -17,14 +19,6 @@ const createEventStore = async (fromAddress) => {
     const { tx, events } = await esf.createEventStore(factory, fromAddress)
     const newEsAddress = events[0].AddressValue
     return newEsAddress
-}
-
-const getCachedReadModel = async (contractAddress, eventStore, fromAddress, readModel, reducer) =>{
-  readModel.readModelStoreKey = `${readModel.readModelType}:${contractAddress}`
-  readModel.contractAddress = contractAddress
-  let maybeSyncReadModel = TransmuteFramework.EventStore.ReadModel.maybeSyncReadModel
-  readModel = await maybeSyncReadModel(eventStore, fromAddress, readModel, reducer)
-  return readModel
 }
 
 // transmute eventstore show

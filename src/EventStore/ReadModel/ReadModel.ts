@@ -44,5 +44,18 @@ export module ReadModel {
             })
     }
 
-    
+
+    export const getCachedReadModel = async (
+        contractAddress : string, 
+        eventStore : any, 
+        fromAddress: string, 
+        readModel: EventTypes.IReadModel, 
+        reducer: any 
+        ) =>{
+        readModel.readModelStoreKey = `${readModel.readModelType}:${contractAddress}`
+        readModel.contractAddress = contractAddress
+        readModel = await maybeSyncReadModel(eventStore, fromAddress, readModel, reducer)
+        return readModel
+    }
+
 }
