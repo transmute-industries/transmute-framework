@@ -15,7 +15,7 @@ contract('Transmute CLI', (accounts) => {
             assert(ethUtils.isValidAddress(newAddress), ' expected a valid address to be returned')
         })
     })
-    describe.only('writeEvent', async () => {
+    describe('writeEvent', async () => {
         it('should write an event and return updated read model', async () => {
             let newAddress = await createEventStore(account0)
             let readModel = await writeEvent({
