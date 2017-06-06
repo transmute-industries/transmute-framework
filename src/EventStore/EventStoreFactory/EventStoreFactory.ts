@@ -1,9 +1,5 @@
 'use strict'
 
-import TransmuteFramework from '../../TransmuteFramework'
-
-const { web3 } = TransmuteFramework
-
 import { EventTypes } from '../EventTypes/EventTypes'
 
 export module EventStoreFactory {

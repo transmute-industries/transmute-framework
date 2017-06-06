@@ -1,13 +1,7 @@
-// import TransmuteFramework from '../../../TransmuteFramework'
 
-// const { web3 } = TransmuteFramework
-
-let web3
-
+// These values cannot come from web3
 let account0 = '0x0000000000000000000000000000000000000000'
-// account0 = web3.eth.accounts[0]
 let account1 = '0x0000000000000000000000000000000000000000'
-// account1 = web3.eth.accounts[1]
 
 import {EventTypes} from '../../EventTypes/EventTypes'
 
