@@ -27,16 +27,19 @@ const init = (confObj = config) => {
   }
   this.web3 = web3
 
-  this.EventStoreFactoryContract = contract(this.config.esfa)
-  this.EventStoreFactoryContract.setProvider(this.web3.currentProvider)
+  if (this.web3) {
+    this.EventStoreFactoryContract = contract(this.config.esfa)
+    this.EventStoreFactoryContract.setProvider(this.web3.currentProvider)
 
-  this.EventStoreContract = contract(this.config.esa)
-  this.EventStoreContract.setProvider(this.web3.currentProvider)
-
+    this.EventStoreContract = contract(this.config.esa)
+    this.EventStoreContract.setProvider(this.web3.currentProvider)
+  } else {
+    console.warn('web3 is not available, install metamask.')
+  }
   return this
 }
 
-export interface ITransmuteFramework{
+export interface ITransmuteFramework {
   EventStoreFactoryContract: any,
   EventStoreContract: any,
   EventStore: any,
@@ -45,7 +48,7 @@ export interface ITransmuteFramework{
   web3: any
 }
 
-export const TransmuteFramework = <ITransmuteFramework> {
+export const TransmuteFramework = <ITransmuteFramework>{
   EventStore,
   init,
   config,
