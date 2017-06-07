@@ -3,7 +3,7 @@
   "path": "typings",
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2015",
     "moduleResolution": "node",
     "sourceMap": false,
     "importHelpers": true,
