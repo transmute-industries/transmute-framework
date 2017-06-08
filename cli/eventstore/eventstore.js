@@ -1,6 +1,6 @@
 var path = require('path')
 
-var { TransmuteFramework } = require('../../build/TransmuteFramework')
+var TransmuteFramework = require('../../build/TransmuteFramework').default
 
 let { web3, EventStoreContract, EventStoreFactoryContract } = TransmuteFramework.init()
 
