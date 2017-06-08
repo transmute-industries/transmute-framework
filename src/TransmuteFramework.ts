@@ -11,32 +11,10 @@ declare var window: any
 const eventStoreArtifacts = require('../build/contracts/EventStore')
 const eventStoreFactoryArtifacts = require('../build/contracts/EventStoreFactory')
 
-const config = <any>{
+const config = <any> {
   env: 'testrpc',
   esa: eventStoreArtifacts,
   esfa: eventStoreFactoryArtifacts,
-}
-
-const init = (confObj = config) => {
-  this.config = confObj
-  switch (this.config.env) {
-    case 'testrpc': web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); break
-    case 'parity': web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); break
-    case 'infura': web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io')); break
-    case 'metamask': web3 = window.web3; break
-  }
-  this.web3 = web3
-
-  if (this.web3) {
-    this.EventStoreFactoryContract = contract(this.config.esfa)
-    this.EventStoreFactoryContract.setProvider(this.web3.currentProvider)
-
-    this.EventStoreContract = contract(this.config.esa)
-    this.EventStoreContract.setProvider(this.web3.currentProvider)
-  } else {
-    console.warn('web3 is not available, install metamask.')
-  }
-  return this
 }
 
 export interface ITransmuteFramework {
@@ -48,12 +26,35 @@ export interface ITransmuteFramework {
   web3: any
 }
 
-export const TransmuteFramework = <ITransmuteFramework>{
-  EventStore,
-  init,
-  config,
-  web3
+export class TransmuteFramework implements ITransmuteFramework {
+
+  EventStoreFactoryContract = null
+  EventStoreContract = null
+  EventStore = EventStore
+  config = config
+  web3 = null
+
+  public init = (confObj = config) => {
+    this.config = confObj
+    switch (this.config.env) {
+      case 'testrpc': web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); break
+      case 'parity': web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); break
+      case 'infura': web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io')); break
+      case 'metamask': web3 = window.web3; break
+    }
+    this.web3 = web3
+    if (this.web3) {
+      this.EventStoreFactoryContract = contract(this.config.esfa)
+      this.EventStoreFactoryContract.setProvider(this.web3.currentProvider)
+      this.EventStoreContract = contract(this.config.esa)
+      this.EventStoreContract.setProvider(this.web3.currentProvider)
+    } else {
+      console.warn('web3 is not available, install metamask.')
+    }
+    return this
+  }
+
 }
 
-export default TransmuteFramework
+export default new TransmuteFramework()
 

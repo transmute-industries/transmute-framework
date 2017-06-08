@@ -36,14 +36,16 @@ npm install            - install the package and its dependencies
 npm run clean          - clean the project of all build and debug data
 npm run testrpc        - run testrpc
 pm2 logs testrpc       - review testrpc logs
+npm run transmute      - transmute cli
 truffle migrate        - migrate truffle contracts
-truffle test           - test truffle contracts
-npm run test           - run framework middleware tests
+truffle test           - test framework truffle contracts
+npm run test           - test framework module (web and nodejs)
+npm run test:cli       - test framework nodejs cli
 npm run build          - build the library
 npm run docs           - build the docs
+npm run docs:deploy    - deploy the docs to 
 npm run patch          - increment the package version and create a tag
 npm publish            - deploy the package to npm
-npm run deploy:docs    - deploy the docs to https://framework.transmute.industries
 pm2 kill               - kill testrpc and any other pm2 processes
 ```
 
