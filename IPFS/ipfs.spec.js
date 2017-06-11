@@ -35,14 +35,10 @@ const readFilesFromHashAsync = (hash) => {
         })
     })
 }
-
 const writeFilesAsync = (files) => {
     return ipfs.files.add(files)
 }
-
-
 describe('IPFS Tests', () => {
-
     describe('IPFS Middleware', () => {
         it('Can read a json object from IPFS', async () => {
             const hash = 'QmUSP6XraEyCHSDhehrFsHK1MvwthbZccwnh9fBmNj3jQr'
@@ -77,24 +73,21 @@ describe('IPFS Tests', () => {
             })
             let eventStoreAddress = tx.logs[0].args.AddressValue
             eventStore = await EventStore.at(eventStoreAddress)
-            // console.log(eventStore)
         })
-
-        // Bytes32 is not long enough to store IPFS hashes, need StringValue Type
-        // it('An IPFS events is a Bytes32Value event', async () => {
-        //     const multihashStr = 'QmUSP6XraEyCHSDhehrFsHK1MvwthbZccwnh9fBmNj3jQr'
-        //     let tx = await eventStore.writeEvent(
-        //         'IPFS:RECORD:CREATED',
-        //         'v0',
-        //         'Bytes32',
-        //         0,
-        //         0,
-        //         multihashStr,
-        //         0
-        //     )
-        //     let eventBytes32 = tx.logs[0].args.Bytes32Value
-        //     console.log(toAscii(eventBytes32))
-        //     // assert( === multihashStr)
-        // })
+        it('An IPFS events is a StringValue event', async () => {
+            const multihashStr = 'QmUSP6XraEyCHSDhehrFsHK1MvwthbZccwnh9fBmNj3jQr'
+            let tx = await eventStore.writeEvent(
+                'IPFS:RECORD:CREATED',
+                'v0',
+                'String',
+                0,
+                0,
+                '',
+                multihashStr,
+                0
+            )
+            let stringValue = tx.logs[0].args.StringValue
+            assert(stringValue === multihashStr)
+        })
     })
 })
