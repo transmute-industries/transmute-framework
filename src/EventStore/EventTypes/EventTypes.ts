@@ -10,11 +10,13 @@ import {
     addressValueEsEvent,
     uIntValueEsEvent,
     bytes32ValueEsEvent,
+    stringValueEsEvent,
     objectValueEsEvent,
 
     addressValueEsEventProperty,
     uIntValueEsEventProperty,
-    bytes32ValueEsEventProperty
+    bytes32ValueEsEventProperty,
+    stringValueEsEventProperty
 } from '../Mock/Events/TestEvents'
 
 
@@ -59,6 +61,7 @@ export module EventTypes {
         AddressValue: string;
         UIntValue: number;
         Bytes32Value: string;
+        StringValue: string;
 
         TxOrigin?: string;
         Created?: number;
@@ -74,6 +77,7 @@ export module EventTypes {
         AddressValue: string;
         UIntValue: number;
         Bytes32Value: string;
+        StringValue: string;
     }
 
     export interface ITransmuteEventMeta {
@@ -144,7 +148,7 @@ export module EventTypes {
             if (ethUtils.isValidAddress(value)) {
                 return 'Address'
             }
-            return 'Bytes32'
+            return 'String'
         }
         throw Error('unable to guess type of value: ' + value)
     }
@@ -176,7 +180,8 @@ export module EventTypes {
 
         AddressValue: 'String',
         UIntValue: 'BigNumber',
-        Bytes32Value: 'Bytes32'
+        Bytes32Value: 'Bytes32',
+        StringValue: 'String'
     }
 
     /**
@@ -196,6 +201,7 @@ export module EventTypes {
         AddressValue: 'String',
         UIntValue: 'BigNumber',
         Bytes32Value: 'Bytes32',
+        StringValue: 'String',
 
         TxOrigin: 'String',
         Created: 'BigNumber',
@@ -220,6 +226,7 @@ export module EventTypes {
     */
     export const getPropFromTruffleEventSchemaType = (schemaPropType, truffleValue) => {
         switch (schemaPropType) {
+            case 'String': return truffleValue.toString()
             case 'Address': return truffleValue.toString()
             case 'String': return truffleValue.toString()
             case 'Bytes32': return EventTypes.toAscii(truffleValue)
@@ -232,6 +239,7 @@ export module EventTypes {
     export const getTransmuteEventPropertyFromEsEventProperty = (prop) => {
         let _obj = {}
         switch (prop.ValueType) {
+            case 'String': _obj[prop.Name] = toAscii(prop.StringValue); break;
             case 'Bytes32': _obj[prop.Name] = toAscii(prop.Bytes32Value); break;
             case 'BigNumber': _obj[prop.Name] = prop.UIntValue; break;
             case 'Address': _obj[prop.Name] = prop.AddressValue; break;
@@ -281,19 +289,18 @@ export module EventTypes {
         return <IEsEventProperty>event
     }
 
-
-
     export const getValueType = (es: any) => {
         switch (es.ValueType) {
             case 'Address': return es.AddressValue
+            case 'String': return es.StringValue
             case 'UInt': return es.UIntValue
             case 'Bytes32': return es.Bytes32Value
-            default: throw Error('ValueType invalid, must be [UInt, Address, Bytes32]')
+            default: throw Error('ValueType invalid, must be [UInt, Address, Bytes32, String]')
         }
     }
 
     export const convertMeta = (esEvent: EventTypes.IEsEvent): any => {
-        let metaKeys = ['Type', 'ValueType', 'PropertyCount', 'AddressValue', 'UIntValue', 'Bytes32Value']
+        let metaKeys = ['Type', 'ValueType', 'PropertyCount', 'AddressValue', 'UIntValue', 'Bytes32Value', 'StringValue']
         let objectWithoutEsMeta = _.omit(esEvent, metaKeys);
         let withProperCase = camelcaseKeys(objectWithoutEsMeta);
         return withProperCase
@@ -344,6 +351,10 @@ export module EventTypes {
                 esEvent = _.cloneDeep(bytes32ValueEsEvent);
                 esEvent.Bytes32Value = transmuteCommand.payload
                 break
+            case 'String':
+                esEvent = _.cloneDeep(stringValueEsEvent);
+                esEvent.StringValue = transmuteCommand.payload
+                break
             case 'Object':
                 esEvent = _.cloneDeep(objectValueEsEvent);
                 esEvent.PropertyCount = Object.keys(transmuteCommand.payload).length
@@ -387,6 +398,10 @@ export module EventTypes {
                 case 'Bytes32':
                     esEventProp = _.cloneDeep(bytes32ValueEsEventProperty);
                     esEventProp.Bytes32Value = value
+                    break
+                case 'String':
+                    esEventProp = _.cloneDeep(stringValueEsEventProperty);
+                    esEventProp.StringValue = value
                     break
                 default:
                     throw Error('Unkown valueType: ' + valueType)

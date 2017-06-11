@@ -23,10 +23,11 @@ export module Middleware {
             AddressValue,
             UIntValue,
             Bytes32Value,
+            StringValue,
             PropertyCount
         } = esEvent
         return await eventStore.writeEvent(
-            Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, PropertyCount,
+            Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, StringValue, PropertyCount,
             {
                 from: fromAddress,
                 gas: 2000000
@@ -46,10 +47,11 @@ export module Middleware {
 
             AddressValue,
             UIntValue,
-            Bytes32Value
+            Bytes32Value,
+            StringValue
         } = esEventProp
         return await eventStore.writeEventProperty(
-            EventIndex, EventPropertyIndex, Name, ValueType, AddressValue, UIntValue, Bytes32Value,
+            EventIndex, EventPropertyIndex, Name, ValueType, AddressValue, UIntValue, Bytes32Value, StringValue,
             {
                 from: fromAddress,
                 gas: 2000000
@@ -116,15 +118,11 @@ export module Middleware {
 
     // can be extended later to handle validation... maybe...
     export const writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
-        // console.log('transmuteCommand: ', transmuteCommand)
         let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
-        // console.log('esEvent: ', esEvent)
         let tx = await writeEsEvent(eventStore, fromAddress, esEvent)
         let eventsFromWriteEsEvent = await EventTypes.eventsFromTransaction(tx)
-        // console.log('eventsFromWriteEsEvent', eventsFromWriteEsEvent)
         let esEventWithIndex = eventsFromWriteEsEvent[0]
         let esEventProperties = EventTypes.convertCommandToEsEventProperties(esEventWithIndex, transmuteCommand)
-        // console.log('esEventProperties: ', esEventProperties)
         let allTxs = [tx]
         if (esEventWithIndex.PropertyCount) {
             let esEventPropertiesWithTxs = esEventProperties.map(async (esp) => {
@@ -134,7 +132,6 @@ export module Middleware {
             allTxs = allTxs.concat(txs)
         }
         allTxs = _.flatten(allTxs)
-        // console.log('allTxs: ', allTxs)
         let transmuteEvents = await Promise.all(EventTypes.reconstructTransmuteEventsFromTxs(allTxs))
         return <EventTypes.ITransmuteCommandResponse>{
             events: transmuteEvents,

@@ -12,6 +12,7 @@ export const addressValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: account1,
     UIntValue: 0,
     Bytes32Value: '',
+    StringValue: '',
     PropertyCount: 0
 }
 
@@ -22,6 +23,7 @@ export const uIntValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
+    StringValue: '',
     PropertyCount: 0
 }
 
@@ -32,8 +34,21 @@ export const bytes32ValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '0x6e6f74207265616c6c79206120627974657320333220737472696e6721000000',
+    StringValue: '',
     PropertyCount: 0
 }
+export const stringValueEsEvent: EventTypes.IEsEvent = {
+    Type: 'STRING_EVENT_TESTED',
+    Version: 'v0',
+    ValueType: 'String',
+    AddressValue: '0x0000000000000000000000000000000000000000',
+    UIntValue: 0,
+    Bytes32Value: '',
+    StringValue: 'COOL:STRING',
+    PropertyCount: 0
+}
+
+
 
 export const objectValueEsEvent: EventTypes.IEsEvent = {
     Type: 'OBJECT_EVENT_TESTED',
@@ -42,6 +57,7 @@ export const objectValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
+    StringValue: '',
     PropertyCount: 0
 }
 
@@ -86,7 +102,9 @@ export const addressValueEsEventProperty: EventTypes.IEsEventProperty = {
 
     AddressValue: '0x0000000000000000000000000000000000000000', // should be overwritten
     UIntValue: 0,
-    Bytes32Value: ''
+    Bytes32Value: '',
+    StringValue: ''
+
 }
 
 export const uIntValueEsEventProperty: EventTypes.IEsEventProperty = {
@@ -97,7 +115,8 @@ export const uIntValueEsEventProperty: EventTypes.IEsEventProperty = {
 
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0, // should be overwritten
-    Bytes32Value: ''
+    Bytes32Value: '',
+    StringValue: ''
 }
 
 export const bytes32ValueEsEventProperty: EventTypes.IEsEventProperty = {
@@ -108,6 +127,21 @@ export const bytes32ValueEsEventProperty: EventTypes.IEsEventProperty = {
 
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0, 
-    Bytes32Value: '' // should be overwritten
+    Bytes32Value: '', // should be overwritten
+    StringValue: ''
 }
+
+export const stringValueEsEventProperty: EventTypes.IEsEventProperty = {
+    EventIndex: 0,              // should be overwritten
+    EventPropertyIndex: 0,      // should be overwritten
+    Name: 'SomeStringKeyName', // should be overwritten
+    ValueType: 'String',
+
+    AddressValue: '0x0000000000000000000000000000000000000000',
+    UIntValue: 0, 
+    Bytes32Value: '',
+    StringValue: ''  // should be overwritten
+}
+
+
 

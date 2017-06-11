@@ -43,7 +43,6 @@ describe('EventStore', () => {
   describe('.writeTransmuteCommand', () => {
     it('should validate and write addressCommand as an EsEvent but return an ITransmuteEvent', async () => {
       let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], addressCommand)
-      // console.log('cmdResponse: ', cmdResponse)
       assert.lengthOf(cmdResponse.events, 1)
       assert.lengthOf(cmdResponse.transactions, 1)
       assert.equal(cmdResponse.events[0].type, addressCommand.type)
@@ -52,7 +51,6 @@ describe('EventStore', () => {
 
     it('should validate and write numberCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
       let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], numberCommand)
-      // console.log('cmdResponse: ', cmdResponse)
       assert.lengthOf(cmdResponse.events, 1)
       assert.lengthOf(cmdResponse.transactions, 1)
       assert.equal(cmdResponse.events[0].type, numberCommand.type)
@@ -61,21 +59,17 @@ describe('EventStore', () => {
 
     it('should validate and write stringCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
       let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], stringCommand)
-      // console.log('cmdResponse: ', cmdResponse)
       assert.lengthOf(cmdResponse.events, 1)
       assert.lengthOf(cmdResponse.transactions, 1)
       assert.equal(cmdResponse.events[0].type, stringCommand.type)
-      assert.equal(cmdResponse.events[0].payload, stringCommand.payload)
     })
 
     it('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
       let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
-      // console.log('cmdResponse: ', cmdResponse)
       assert.lengthOf(cmdResponse.events, 1)
       assert.lengthOf(cmdResponse.transactions, 9)
       assert.equal(cmdResponse.events[0].type, objectCommand.type)
       assert(_.isEqual(cmdResponse.events[0].payload, objectCommand.payload))
-      // assert.equal(cmdResponse.events[0].payload, objectCommand.payload)
     })
   })
 
@@ -83,7 +77,6 @@ describe('EventStore', () => {
     it('should write an array of ITransmuteCommands and return and array of ITransmuteCommandResponse', async () => {
       let commands = [addressCommand, numberCommand, stringCommand, objectCommand]
       let cmdResponses = await EventStore.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
-      // console.log('cmdResponse: ', cmdResponses)
       assert.lengthOf(cmdResponses, commands.length)
       // add more tests here...
     })
@@ -130,7 +123,6 @@ describe('EventStore', () => {
       initialEventId = (await eventStore.solidityEventCount()).toNumber()
       commands = [addressCommand, numberCommand, stringCommand, objectCommand]
       cmdResponses = await EventStore.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
-      // console.log('cmdResponse: ', cmdResponses)
       assert.lengthOf(cmdResponses, commands.length)
     })
     it('should return all transmute events after and including the given eventId', async () => {

@@ -13,7 +13,7 @@ contract EventStoreFactory is EventStore {
 
   // Constructor
   function EventStoreFactory() payable {
-    writeEvent('FACTORY_CREATED', 'v0', 'Address', tx.origin, 0, '', 0);
+    writeEvent('FACTORY_CREATED', 'v0', 'Address', tx.origin, 0, '', '', 0);
   }
 
   // Modifiers
@@ -47,7 +47,7 @@ contract EventStoreFactory is EventStore {
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
-    writeEvent('FACTORY_EVENT_STORE_CREATED', 'v0', 'Address', address(_newEventStore), 0, '', 0);
+    writeEvent('FACTORY_EVENT_STORE_CREATED', 'v0', 'Address', address(_newEventStore), 0, '', '', 0);
     return address(_newEventStore);
 	}
 
@@ -65,6 +65,6 @@ contract EventStoreFactory is EventStore {
     EventStore _eventStore = EventStore(_address);
     _eventStore.kill();
 
-    writeEvent('FACTORY_EVENT_STORE_DESTROYED', 'v0', 'Address', address(_address), 0, '', 0);
+    writeEvent('FACTORY_EVENT_STORE_DESTROYED', 'v0', 'Address', address(_address), 0, '', '', 0);
   }
 }

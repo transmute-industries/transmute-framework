@@ -21,6 +21,7 @@ import {
     addressValueEsEventProperty,
     uIntValueEsEventProperty,
     bytes32ValueEsEventProperty,
+    stringValueEsEventProperty,
 
 
     addressCommand,
@@ -43,14 +44,13 @@ describe('Middleware', () => {
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
             assert.lengthOf(tx.logs, 1)
             assert.equal(tx.logs[0].event, 'EsEvent')
-            // console.log(tx)
         })
     })
 
     describe('.writeEsEventProperty', () => {
         // TODO: add more tests for EsEventProperties
 
-        it('should return a tx containing an EsEvent in logs', async () => {
+        it('should return a tx containing an EsEventProperty in logs', async () => {
             let eventIndex = (await eventStore.solidityEventCount()).toNumber()
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
             addressValueEsEventProperty.EventIndex = eventIndex
@@ -59,7 +59,6 @@ describe('Middleware', () => {
             assert.equal(tx.logs[0].event, 'EsEventProperty')
             let eventFromPropTx = tx.logs[0].args
             assert.equal(EventTypes.toAscii(eventFromPropTx.ValueType), addressValueEsEventProperty.ValueType)
-            // console.log(eventFromPropTx)
         })
     })
 
@@ -74,9 +73,8 @@ describe('Middleware', () => {
 
         it('should return eventValues as truffle types (unusable)', async () => {
             let eventValues = await Middleware.readEsEventValues(eventStore, web3.eth.accounts[0], 0)
-            // console.log(eventValues)
             assert.equal(eventValues[0].toNumber(), 0)
-            assert.lengthOf(eventValues, 10)
+            assert.lengthOf(eventValues, 11)
 
         })
     })
@@ -98,7 +96,6 @@ describe('Middleware', () => {
 
         it('should return eventValues as truffle types (unusable)', async () => {
             let eventPropVals = await Middleware.readEsEventPropertyValues(eventStore, web3.eth.accounts[0], eventIndex, 0)
-            // console.log(eventPropVals)
             // These comparisons are not on truffle types
             assert.equal(eventPropVals[0].toNumber(), eventIndex)
             assert.equal(eventPropVals[1].toNumber(), 0)
@@ -107,8 +104,7 @@ describe('Middleware', () => {
             assert.equal(eventPropVals[4], addressValueEsEventProperty.AddressValue)
             assert.equal(eventPropVals[5].toNumber(), addressValueEsEventProperty.UIntValue)
             assert.equal(EventTypes.toAscii(eventPropVals[6]), addressValueEsEventProperty.Bytes32Value)
-            // assert.lengthOf(eventPropVals, 10)
-
+            assert.equal(eventPropVals[7], addressValueEsEventProperty.StringValue)
         })
     })
 
@@ -129,7 +125,6 @@ describe('Middleware', () => {
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], uIntValueEsEvent)
             let eventIndex = tx.logs[0].args.Id.toNumber()
             let txArgs = tx.logs[0].args
-            // console.log(txArgs)
             let transmuteEvent = await Middleware.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
             assert.equal(isFSA(transmuteEvent), true)
             assert.equal(transmuteEvent.type, EventTypes.toAscii(txArgs.Type), 'expected type to match transaction event log')
@@ -141,13 +136,11 @@ describe('Middleware', () => {
             let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], bytes32ValueEsEvent)
             let eventIndex = tx.logs[0].args.Id.toNumber()
             let txArgs = tx.logs[0].args
-            // console.log(txArgs)
             let transmuteEvent = await Middleware.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
             assert.equal(isFSA(transmuteEvent), true)
             assert.equal(transmuteEvent.type, EventTypes.toAscii(txArgs.Type), 'expected type to match transaction event log')
             assert.equal(transmuteEvent.payload, EventTypes.toAscii(txArgs.Bytes32Value), 'expected payload to match ascii(bytes32Value) in transaction event log')
             assert.equal(transmuteEvent.meta.id, eventIndex, 'expected eventId to be eventIndex')
-            // console.log(transmuteEvent)
         })
     })
 
@@ -156,7 +149,6 @@ describe('Middleware', () => {
 
         it('should validate and write addressCommand as an EsEvent but return an ITransmuteEvent', async () => {
             let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], addressCommand)
-            // console.log('cmdResponse: ', cmdResponse)
             assert.lengthOf(cmdResponse.events, 1)
             assert.lengthOf(cmdResponse.transactions, 1)
             assert.equal(cmdResponse.events[0].type, addressCommand.type)
@@ -165,7 +157,6 @@ describe('Middleware', () => {
 
         it('should validate and write numberCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
             let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], numberCommand)
-            // console.log('cmdResponse: ', cmdResponse)
             assert.lengthOf(cmdResponse.events, 1)
             assert.lengthOf(cmdResponse.transactions, 1)
             assert.equal(cmdResponse.events[0].type, numberCommand.type)
@@ -174,7 +165,6 @@ describe('Middleware', () => {
 
         it('should validate and write stringCommand as an EsEvent but return an ITransmuteCommandResponse', async () => {
             let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], stringCommand)
-            // console.log('cmdResponse: ', cmdResponse)
             assert.lengthOf(cmdResponse.events, 1)
             assert.lengthOf(cmdResponse.transactions, 1)
             assert.equal(cmdResponse.events[0].type, stringCommand.type)
@@ -183,12 +173,10 @@ describe('Middleware', () => {
 
         it('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
             let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
-            // console.log('cmdResponse: ', cmdResponse)
             assert.lengthOf(cmdResponse.events, 1)
             assert.lengthOf(cmdResponse.transactions, 9)
             assert.equal(cmdResponse.events[0].type, objectCommand.type)
             assert(_.isEqual(cmdResponse.events[0].payload, objectCommand.payload))
-            // assert.equal(cmdResponse.events[0].payload, objectCommand.payload)
         })
     })
 
@@ -196,7 +184,6 @@ describe('Middleware', () => {
         it('should write an array of ITransmuteCommands and return and array of ITransmuteCommandResponse', async () => {
             let commands = [addressCommand, numberCommand, stringCommand, objectCommand]
             let cmdResponses = await Middleware.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
-            // console.log('cmdResponse: ', cmdResponses)
             assert.lengthOf(cmdResponses, commands.length)
             // add more tests here...
         })
