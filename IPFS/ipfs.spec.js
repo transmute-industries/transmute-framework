@@ -15,7 +15,8 @@ function toAscii(value) {
 
 var ipfsAPI = require('ipfs-api')
 // connect to ipfs daemon API server
-var ipfs = ipfsAPI('localhost', '5001', { protocol: 'http' }) // leaving out the arguments will default to these values
+var ipfs = ipfsAPI('localhost', '5001', { protocol: 'http' }) 
+// leaving out the arguments will default to these values
 
 const readFilesFromHashAsync = (hash) => {
     return ipfs.files.get(hash).then((stream) => {
@@ -35,9 +36,11 @@ const readFilesFromHashAsync = (hash) => {
         })
     })
 }
+
 const writeFilesAsync = (files) => {
     return ipfs.files.add(files)
 }
+
 describe('IPFS Tests', () => {
     describe('IPFS Middleware', () => {
         it('Can read a json object from IPFS', async () => {
@@ -46,7 +49,6 @@ describe('IPFS Tests', () => {
             // console.log('files: ', files)
             assert(files[0].path == hash)
         })
-
         it('Can write a json object from IPFS', async () => {
             const tfpath = path.join(__dirname, '/edit.json')
             const rs = fs.createReadStream(tfpath)
