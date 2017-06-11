@@ -17,6 +17,7 @@ import {
   addressValueEsEvent,
   bytes32ValueEsEvent,
   uIntValueEsEvent,
+  ipfsValueEsEvent,
 
   addressValueEsEventProperty,
   uIntValueEsEventProperty,
@@ -25,6 +26,7 @@ import {
   addressCommand,
   numberCommand,
   stringCommand,
+  ipfsCommand,
   objectCommand
 
 } from './Mock/Events/TestEvents'
@@ -103,6 +105,15 @@ describe('EventStore', () => {
       let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], stringCommand)
       let eventIndex = cmdResponse.events[0].meta.id
       let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
+      assert.equal(isFSA(transmuteEvent), true)
+      assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
+    })
+
+    it('read an ipfs value event should return an FSA with event store meta, and payload from ipfs', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], ipfsCommand)
+      let eventIndex = cmdResponse.events[0].meta.id
+      let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
+      // console.log('client sees: ', transmuteEvent)
       assert.equal(isFSA(transmuteEvent), true)
       assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
     })
