@@ -19,11 +19,11 @@ before_install:
   - export PATH="$HOME/bin/go-ipfs:$PATH"
   - ipfs init
   - ipfs daemon &
-  - npm run testrpc
   - sleep 5
 
 install:
   - npm install
+  - npm run testrpc
 
 script:
   - npm run test:all
