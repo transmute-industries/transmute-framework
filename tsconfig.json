@@ -23,6 +23,7 @@
     "typings/index.d.ts"
   ],
   "files": [
-    "./src/TransmuteFramework.ts"
+    "./src/TransmuteFramework.ts",
+    "./src/CLI/index.ts"
   ]
 }
