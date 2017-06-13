@@ -9,35 +9,6 @@ import { isFSA } from 'flux-standard-action'
 
 let DEBUG = true; //should be only for dev envs for performance reasons...
 
-// not sure if this is allowed here...
-// these includes might fail on the web.
-var ipfsAPI = require('ipfs-api')
-const through = require('through2')
-const concat = require('concat-stream')
-
-// connect to ipfs daemon API server
-var ipfs = ipfsAPI('localhost', '5001', { protocol: 'http' })
-// leaving out the arguments will default to these values
-
-const readFilesFromHashAsync = (hash) => {
-    return ipfs.files.get(hash).then((stream) => {
-        let files = []
-        return new Promise((resolve, reject) => {
-            stream.pipe(through.obj((file, enc, next) => {
-                file.content.pipe(concat((content) => {
-                    files.push({
-                        path: file.path,
-                        content: content.toString()
-                    })
-                    next()
-                }))
-            }, () => {
-                resolve(files)
-            }))
-        })
-    })
-}
-
 export module Middleware {
 
     export const writeEsEvent = async (
@@ -125,15 +96,17 @@ export module Middleware {
         let esEventProps = await readEsEventPropertiesFromEsEvent(eventStore, fromAddress, esEvent)
         let transmuteEvent = await EventTypes.esEventToTransmuteEvent(esEvent, esEventProps)
         
+        // Here we need to know about the framework config... but we are in middleware
+        // how best to read from the config without alerting the aruments of this function...????
         // horrible rough impl of ipfs events
-        if (transmuteEvent.type.indexOf('IPFS') !== -1) {
-            let hash = transmuteEvent.payload
-            // console.log(hash)
-            let ipfsPayload = await readFilesFromHashAsync(hash)
-            let payload = JSON.parse(ipfsPayload[0].content)
-            payload.hash = hash
-            transmuteEvent.payload = payload
-        }
+        // if (transmuteEvent.type.indexOf('IPFS') !== -1) {
+        //     let hash = transmuteEvent.payload
+        //     // console.log(hash)
+        //     let ipfsPayload = await readFilesFromHashAsync(hash)
+        //     let payload = JSON.parse(ipfsPayload[0].content)
+        //     payload.hash = hash
+        //     transmuteEvent.payload = payload
+        // }
 
         if (DEBUG && !isFSA(transmuteEvent)) {
             console.warn('WARNING: transmuteEvent: ', transmuteEvent, ' is not a FSA. see https://github.com/acdlite/flux-standard-action')

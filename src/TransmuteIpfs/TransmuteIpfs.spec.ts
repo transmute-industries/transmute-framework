@@ -3,7 +3,7 @@ import { expect, assert, should } from 'chai'
 
 import { TransmuteIpfs } from './TransmuteIpfs'
 
-describe.only('TransmuteIpfs', () => {
+describe('TransmuteIpfs', () => {
     describe('#init()', () => {
         it('should use infura by default', () => {
             TransmuteIpfs.init()
