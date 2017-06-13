@@ -1,6 +1,8 @@
 
 import { EventStore } from './EventStore/EventStore'
 
+import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
+
 const Web3 = require('web3')
 const contract = require('truffle-contract')
 
@@ -11,7 +13,7 @@ declare var window: any
 const eventStoreArtifacts = require('../build/contracts/EventStore')
 const eventStoreFactoryArtifacts = require('../build/contracts/EventStoreFactory')
 
-const config = <any> {
+const config = <any>{
   env: 'testrpc',
   esa: eventStoreArtifacts,
   esfa: eventStoreFactoryArtifacts,
@@ -33,6 +35,8 @@ export class TransmuteFramework implements ITransmuteFramework {
   EventStore = EventStore
   config = config
   web3 = null
+
+  TransmuteIpfs: ITransmuteIpfs = TransmuteIpfs
 
   public init = (confObj = config) => {
     this.config = confObj
