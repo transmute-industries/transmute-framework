@@ -13,6 +13,12 @@ declare var window: any
 const eventStoreArtifacts = require('../build/contracts/EventStore')
 const eventStoreFactoryArtifacts = require('../build/contracts/EventStoreFactory')
 
+export interface ITransmuteFrameworkConfig {
+  env: string
+  esa: any,
+  esfa: any,
+  ipfsConfig?: any
+}
 const config = <any>{
   env: 'testrpc',
   esa: eventStoreArtifacts,
@@ -55,6 +61,15 @@ export class TransmuteFramework implements ITransmuteFramework {
     } else {
       console.warn('web3 is not available, install metamask.')
     }
+
+    let ipfsConfig = confObj.ipfsConfig || {
+      host: 'localhost',
+      port: '5001',
+      options: {
+        protocol: 'http'
+      }
+    }
+    this.TransmuteIpfs = TransmuteIpfs.init(ipfsConfig)
     return this
   }
 
