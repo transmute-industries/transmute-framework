@@ -16,7 +16,7 @@
     "test": "nyc mocha",
     "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'",
     "ipfs": "npm run ipfs:allow && ipfs daemon",
-    "test:all": "npm run clean && npm run truffle-test && npm run test && npm run test:cli",
+    "test:all": "npm run clean && npm run truffle-test && npm run test ",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "docs": "typedoc --gaID UA-99768185-1 --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
     "docs:deploy": "firebase deploy",
