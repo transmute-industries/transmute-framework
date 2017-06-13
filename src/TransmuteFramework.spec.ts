@@ -7,7 +7,7 @@ import { expect, assert, should } from 'chai'
 
 import TransmuteFramework from './TransmuteFramework'
 
-describe('TransmuteFramework', () => {
+describe.only('TransmuteFramework', () => {
 
     before(async () => {
 
@@ -28,6 +28,10 @@ describe('TransmuteFramework', () => {
                 esfa: eventStoreFactoryArtifacts
             })
             assert(TransmuteFramework.web3._requestManager.provider.host === 'https://ropsten.infura.io')
+        })
+        it('should use local ipfs as default ', async () => {
+            TransmuteFramework.init()
+            assert(TransmuteFramework.TransmuteIpfs.config.host === 'localhost')
         })
     })
 })
