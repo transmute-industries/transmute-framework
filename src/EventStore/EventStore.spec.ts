@@ -18,6 +18,8 @@ import {
   bytes32ValueEsEvent,
   uIntValueEsEvent,
   ipfsValueEsEvent,
+  // not used yet!!!! make sure the hash is updated before testing
+  // see command for example
 
   addressValueEsEventProperty,
   uIntValueEsEventProperty,
@@ -110,6 +112,19 @@ describe('EventStore', () => {
     })
 
     it('read an ipfs value event should return an FSA with event store meta, and payload from ipfs', async () => {
+      let obj = { cool: 'story...bro' }
+      if (!TransmuteFramework.TransmuteIpfs.ipfs) {
+        // force local ipfs, protect infura from spam
+        TransmuteFramework.init({
+          host: 'localhost',
+          port: '5001',
+          options: {
+            protocol: 'http'
+          }
+        })
+      }
+      let hash = await TransmuteFramework.TransmuteIpfs.writeObject(obj)
+      ipfsCommand.payload = hash
       let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], ipfsCommand)
       let eventIndex = cmdResponse.events[0].meta.id
       let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)

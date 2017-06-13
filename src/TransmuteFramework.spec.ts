@@ -7,7 +7,7 @@ import { expect, assert, should } from 'chai'
 
 import TransmuteFramework from './TransmuteFramework'
 
-describe.only('TransmuteFramework', () => {
+describe('TransmuteFramework', () => {
 
     before(async () => {
 
