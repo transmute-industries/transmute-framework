@@ -3,7 +3,7 @@
 import TransmuteFramework from '../TransmuteFramework'
 
 const { web3, EventStoreContract } = TransmuteFramework.init()
- 
+
 import * as _ from 'lodash'
 import { isFSA } from 'flux-standard-action'
 import { expect, assert, should } from 'chai'
@@ -113,9 +113,9 @@ describe('EventStore', () => {
       let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], ipfsCommand)
       let eventIndex = cmdResponse.events[0].meta.id
       let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
-      // console.log('client sees: ', transmuteEvent)
       assert.equal(isFSA(transmuteEvent), true)
       assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
+      assert.equal(transmuteEvent.meta.hash, ipfsCommand.payload, 'expected meta.has to be command payload')
     })
 
     it('read object value event should return an FSA with event store meta', async () => {

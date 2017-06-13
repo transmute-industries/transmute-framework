@@ -81,10 +81,11 @@ export module EventTypes {
     }
 
     export interface ITransmuteEventMeta {
-        id: number,
-        version: string,
-        txOrigin: string
-        created: number
+        id: number;
+        version: string;
+        txOrigin: string;
+        created: number;
+        hash?: string;
     }
 
     // an event that is compatible with redux actions

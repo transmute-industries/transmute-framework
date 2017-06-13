@@ -55,7 +55,7 @@ export const ipfsValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
-    StringValue: 'QmUSP6XraEyCHSDhehrFsHK1MvwthbZccwnh9fBmNj3jQr',
+    StringValue: 'QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU',
     PropertyCount: 0
 }
 
@@ -82,7 +82,7 @@ export const stringCommand: EventTypes.ITransmuteCommand = {
 
 export const ipfsCommand: EventTypes.ITransmuteCommand = {
     type: 'IPFS:RECORD:CREATED',
-    payload: 'QmUSP6XraEyCHSDhehrFsHK1MvwthbZccwnh9fBmNj3jQr'
+    payload: 'QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU'
 }
 
 export const addressCommand: EventTypes.ITransmuteCommand = {

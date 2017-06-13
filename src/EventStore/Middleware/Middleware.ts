@@ -9,6 +9,8 @@ import { isFSA } from 'flux-standard-action'
 
 let DEBUG = true; //should be only for dev envs for performance reasons...
 
+import TransmuteFramework from '../../TransmuteFramework'
+
 export module Middleware {
 
     export const writeEsEvent = async (
@@ -95,18 +97,23 @@ export module Middleware {
 
         let esEventProps = await readEsEventPropertiesFromEsEvent(eventStore, fromAddress, esEvent)
         let transmuteEvent = await EventTypes.esEventToTransmuteEvent(esEvent, esEventProps)
-        
-        // Here we need to know about the framework config... but we are in middleware
-        // how best to read from the config without alerting the aruments of this function...????
-        // horrible rough impl of ipfs events
-        // if (transmuteEvent.type.indexOf('IPFS') !== -1) {
-        //     let hash = transmuteEvent.payload
-        //     // console.log(hash)
-        //     let ipfsPayload = await readFilesFromHashAsync(hash)
-        //     let payload = JSON.parse(ipfsPayload[0].content)
-        //     payload.hash = hash
-        //     transmuteEvent.payload = payload
-        // }
+
+        // consider moving this to TransmuteIpfs an exposing dehydrate and rehydrate
+        if (transmuteEvent.type.indexOf('IPFS') !== -1) {
+            if (!TransmuteFramework.TransmuteIpfs.ipfs) {
+                // force local ipfs, protect infura from spam
+                TransmuteFramework.init({
+                    host: 'localhost',
+                    port: '5001',
+                    options: {
+                        protocol: 'http'
+                    }
+                })
+            }
+            let hash = transmuteEvent.payload
+            transmuteEvent.payload = await TransmuteFramework.TransmuteIpfs.readObject(hash)
+            transmuteEvent.meta.hash = hash
+        }
 
         if (DEBUG && !isFSA(transmuteEvent)) {
             console.warn('WARNING: transmuteEvent: ', transmuteEvent, ' is not a FSA. see https://github.com/acdlite/flux-standard-action')
