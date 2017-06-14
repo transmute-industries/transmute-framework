@@ -22,13 +22,7 @@ describe('TransmuteIpfs', () => {
     })
     describe('#addFromFs(folderPath, options)', () => {
         before(() => {
-            TransmuteIpfs.init({
-                host: 'localhost',
-                port: '5001',
-                options: {
-                    protocol: 'http'
-                }
-            })
+            TransmuteIpfs.init()
         })
         it('should add folder to ipfs and return the result', () => {
             return TransmuteIpfs.addFromFs('./src/TransmuteIpfs/mock')
@@ -40,13 +34,7 @@ describe('TransmuteIpfs', () => {
     })
     describe('#addFromURL(url)', () => {
         before(() => {
-            TransmuteIpfs.init({
-                host: 'localhost',
-                port: '5001',
-                options: {
-                    protocol: 'http'
-                }
-            })
+            TransmuteIpfs.init()
         })
         it('should add folder to ipfs and return the result', () => {
             return TransmuteIpfs.addFromURL('https://vignette3.wikia.nocookie.net/nyancat/images/7/7c/Nyan_gary.gif')
@@ -58,13 +46,7 @@ describe('TransmuteIpfs', () => {
     })
     describe('#writeObject(obj)', () => {
         before(() => {
-            TransmuteIpfs.init({
-                host: 'localhost',
-                port: '5001',
-                options: {
-                    protocol: 'http'
-                }
-            })
+            TransmuteIpfs.init()
         })
         it('should add json object to ipfs and return the path', () => {
             let obj = { cool: 'story...bro' }
@@ -76,13 +58,7 @@ describe('TransmuteIpfs', () => {
     })
     describe('#readObject(path)', () => {
         before(() => {
-            TransmuteIpfs.init({
-                host: 'localhost',
-                port: '5001',
-                options: {
-                    protocol: 'http'
-                }
-            })
+            TransmuteIpfs.init()
         })
         it('should add json object to ipfs and return the path', () => {
             return TransmuteIpfs.readObject('Qmf4GZbciiPLMTZYLpM88GB2CpopCJszdwybUnnwswkpKE')

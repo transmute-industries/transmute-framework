@@ -12,16 +12,16 @@ export default (vorpal) => {
     const transmuteIpfsDeploy = async (bindingModel) => {
         let ti
         if (bindingModel.env === 'infura') {
-            ti = TransmuteFramework.TransmuteIpfs.init()
-        }
-        if (bindingModel.env === 'local') {
             ti = TransmuteFramework.TransmuteIpfs.init({
-                host: 'localhost',
+                host: 'ipfs.infura.io',
                 port: '5001',
                 options: {
-                    protocol: 'http'
+                    protocol: 'https'
                 }
             })
+        }
+        if (bindingModel.env === 'local') {
+            ti = TransmuteFramework.TransmuteIpfs.init()
         }
         if (!ti) {
             throw Error('transmuteIpfsDeploy requires env: "local"|"infura"')
