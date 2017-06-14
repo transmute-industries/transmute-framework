@@ -15,6 +15,7 @@ export interface IIpfsConfig {
 
 export interface ITransmuteIpfs {
     ipfs: any
+    isObjectStore: boolean;
     config: IIpfsConfig
     init: (config: IIpfsConfig) => ITransmuteIpfs
     addFromFs: (path: string) => Promise<any>
@@ -25,12 +26,13 @@ export interface ITransmuteIpfs {
 
 export class TransmuteIpfsSingleton implements ITransmuteIpfs {
     ipfs: any
+    isObjectStore: boolean = true //used to tell if objects are stored on ipfs or in ethereum... pretty hacky...
     config: IIpfsConfig
     init(config = {
-        host: 'ipfs.infura.io',
+        host: 'localhost',
         port: '5001',
         options: {
-            protocol: 'https'
+            protocol: 'http'
         }
     }) {
         this.config = config
@@ -76,6 +78,9 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
     }
 
     readObject(path) {
+        if (path.indexOf('ipfs/') !== -1) {
+            path = path.split('ipfs/')[1]
+        }
         return new Promise((resolve, reject) => {
             this.ipfs.cat(path, (err, stream) => {
                 if (err) {

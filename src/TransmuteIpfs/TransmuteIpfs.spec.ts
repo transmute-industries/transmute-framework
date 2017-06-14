@@ -5,19 +5,19 @@ import { TransmuteIpfs } from './TransmuteIpfs'
 
 describe('TransmuteIpfs', () => {
     describe('#init()', () => {
-        it('should use infura by default', () => {
+        it('should use local ipfs by default', () => {
             TransmuteIpfs.init()
-            assert.equal(TransmuteIpfs.config.host, 'ipfs.infura.io')
+            assert.equal(TransmuteIpfs.config.host, 'localhost')
         })
-        it('should support local ipfs node', () => {
+        it('should support infura via config', () => {
             TransmuteIpfs.init({
-                host: 'localhost',
+                host: 'ipfs.infura.io',
                 port: '5001',
                 options: {
-                    protocol: 'http'
+                    protocol: 'https'
                 }
             })
-            assert.equal(TransmuteIpfs.config.host, 'localhost')
+            assert.equal(TransmuteIpfs.config.host, 'ipfs.infura.io')
         })
     })
     describe('#addFromFs(folderPath, options)', () => {

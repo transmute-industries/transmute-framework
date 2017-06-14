@@ -55,7 +55,7 @@ export const ipfsValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
-    StringValue: 'QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU',
+    StringValue: 'ipfs/QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU',
     PropertyCount: 0
 }
 
@@ -80,9 +80,16 @@ export const stringCommand: EventTypes.ITransmuteCommand = {
     payload: 'ethereum'
 }
 
-export const ipfsCommand: EventTypes.ITransmuteCommand = {
+
+
+export const ipfsObjectCommand: EventTypes.ITransmuteCommand = {
     type: 'IPFS:RECORD:CREATED',
-    payload: 'QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU'
+    payload: {
+        cool: 'story...bro'
+    },
+    meta: {
+        handlers: ['ipfs']
+    }
 }
 
 export const addressCommand: EventTypes.ITransmuteCommand = {

@@ -27,7 +27,8 @@ import {
     addressCommand,
     numberCommand,
     stringCommand,
-    objectCommand
+    objectCommand,
+    ipfsObjectCommand
 
 } from '../Mock/Events/TestEvents'
 
@@ -178,6 +179,15 @@ describe('Middleware', () => {
             assert.equal(cmdResponse.events[0].type, objectCommand.type)
             assert(_.isEqual(cmdResponse.events[0].payload, objectCommand.payload))
         })
+
+        it('should validate and write ipfsObjectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
+            let cmdResponse = await Middleware.writeTransmuteCommand(eventStore, web3.eth.accounts[0], ipfsObjectCommand)
+            // console.log(cmdResponse.events[0])
+            assert.lengthOf(cmdResponse.events, 1)
+            assert.lengthOf(cmdResponse.transactions, 1)
+            assert.equal(cmdResponse.events[0].type, ipfsObjectCommand.type)
+            assert(_.isEqual(cmdResponse.events[0].payload, ipfsObjectCommand.payload))
+        })
     })
 
     describe('.writeTransmuteCommands', () => {
@@ -188,5 +198,4 @@ describe('Middleware', () => {
             // add more tests here...
         })
     })
-
 })

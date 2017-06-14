@@ -28,7 +28,7 @@ import {
   addressCommand,
   numberCommand,
   stringCommand,
-  ipfsCommand,
+  ipfsObjectCommand,
   objectCommand
 
 } from './Mock/Events/TestEvents'
@@ -69,11 +69,13 @@ describe('EventStore', () => {
     })
 
     it('should validate and write objectCommand as an EsEvent with EsEventProperties but return an ITransmuteCommandResponse', async () => {
+      TransmuteFramework.TransmuteIpfs.isObjectStore = false
       let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], objectCommand)
       assert.lengthOf(cmdResponse.events, 1)
       assert.lengthOf(cmdResponse.transactions, 9)
       assert.equal(cmdResponse.events[0].type, objectCommand.type)
       assert(_.isEqual(cmdResponse.events[0].payload, objectCommand.payload))
+      TransmuteFramework.TransmuteIpfs.isObjectStore = true
     })
   })
 
@@ -111,26 +113,14 @@ describe('EventStore', () => {
       assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
     })
 
-    it('read an ipfs value event should return an FSA with event store meta, and payload from ipfs', async () => {
-      let obj = { cool: 'story...bro' }
-      if (!TransmuteFramework.TransmuteIpfs.ipfs) {
-        // force local ipfs, protect infura from spam
-        TransmuteFramework.init({
-          host: 'localhost',
-          port: '5001',
-          options: {
-            protocol: 'http'
-          }
-        })
-      }
-      let hash = await TransmuteFramework.TransmuteIpfs.writeObject(obj)
-      ipfsCommand.payload = hash
-      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], ipfsCommand)
+    it('write an ipfsObjectCommand and then read it', async () => {
+      let cmdResponse = await EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], ipfsObjectCommand)
       let eventIndex = cmdResponse.events[0].meta.id
+      // console.log('cmdResponse: ', cmdResponse.events[0].meta.path)
       let transmuteEvent = await EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
       assert.equal(isFSA(transmuteEvent), true)
       assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
-      assert.equal(transmuteEvent.meta.hash, ipfsCommand.payload, 'expected meta.has to be command payload')
+      assert.equal(transmuteEvent.meta.path, 'ipfs/Qmf4GZbciiPLMTZYLpM88GB2CpopCJszdwybUnnwswkpKE', 'expected meta.has to be command payload')
     })
 
     it('read object value event should return an FSA with event store meta', async () => {

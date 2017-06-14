@@ -99,10 +99,10 @@ export module Middleware {
         let transmuteEvent = await EventTypes.esEventToTransmuteEvent(esEvent, esEventProps)
 
         // consider moving this to TransmuteIpfs an exposing dehydrate and rehydrate
-        if (transmuteEvent.type.indexOf('IPFS') !== -1) {
+        if (typeof transmuteEvent.payload === 'string' && transmuteEvent.payload.indexOf('ipfs/') !== -1) {
             if (!TransmuteFramework.TransmuteIpfs.ipfs) {
                 // force local ipfs, protect infura from spam
-                TransmuteFramework.init({
+                TransmuteFramework.TransmuteIpfs.init({
                     host: 'localhost',
                     port: '5001',
                     options: {
@@ -110,9 +110,11 @@ export module Middleware {
                     }
                 })
             }
-            let hash = transmuteEvent.payload
-            transmuteEvent.payload = await TransmuteFramework.TransmuteIpfs.readObject(hash)
-            transmuteEvent.meta.hash = hash
+           
+            let path = transmuteEvent.payload
+            //  console.log('path: ', path)
+            transmuteEvent.payload = await TransmuteFramework.TransmuteIpfs.readObject(path)
+            transmuteEvent.meta.path = path
         }
 
         if (DEBUG && !isFSA(transmuteEvent)) {
@@ -139,6 +141,14 @@ export module Middleware {
     // can be extended later to handle validation... maybe...
     export const writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
         let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
+        let isIpfsObject = typeof transmuteCommand.payload === 'object' && transmuteCommand.meta && transmuteCommand.meta.handlers.indexOf('ipfs') !== -1
+        let hash
+        if (isIpfsObject) {
+            hash = await TransmuteFramework.TransmuteIpfs.writeObject(transmuteCommand.payload)
+            esEvent.ValueType = 'String'
+            esEvent.StringValue = 'ipfs/' + hash
+            esEvent.PropertyCount = 0
+        }
         let tx = await writeEsEvent(eventStore, fromAddress, esEvent)
         let eventsFromWriteEsEvent = await EventTypes.eventsFromTransaction(tx)
         let esEventWithIndex = eventsFromWriteEsEvent[0]
@@ -153,6 +163,11 @@ export module Middleware {
         }
         allTxs = _.flatten(allTxs)
         let transmuteEvents = await Promise.all(EventTypes.reconstructTransmuteEventsFromTxs(allTxs))
+
+        if (isIpfsObject) {
+            transmuteEvents[0].payload = transmuteCommand.payload
+            transmuteEvents[0].meta.path = 'ipfs/' + hash
+        }
         return <EventTypes.ITransmuteCommandResponse>{
             events: transmuteEvents,
             transactions: allTxs

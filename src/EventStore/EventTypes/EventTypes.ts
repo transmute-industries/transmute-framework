@@ -85,7 +85,7 @@ export module EventTypes {
         version: string;
         txOrigin: string;
         created: number;
-        hash?: string;
+        path?: string;
     }
 
     // an event that is compatible with redux actions
@@ -110,9 +110,13 @@ export module EventTypes {
         // meta data from the event, this keeps the payload clean of meta data, which is important!
     }
 
+    export interface ITransmuteCommandMeta {
+        handlers: Array<string>
+    }
     export interface ITransmuteCommand {
         type: string,
-        payload: any
+        payload: any,
+        meta?: ITransmuteCommandMeta
     }
 
     export interface ITransaction {
