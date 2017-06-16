@@ -2,6 +2,8 @@
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 
 import { EventTypes } from './EventTypes/EventTypes'
+import { EventStoreFactory } from './Factory/EventStoreFactory'
+import { Persistence } from './Persistence/Persistence'
 
 import * as _ from 'lodash'
 
@@ -15,7 +17,8 @@ export class EventStore {
 
     // Add modules here for convenience
     EventTypes = EventTypes
-    // export import EventStoreFactory = FC
+    EventStoreFactory = EventStoreFactory
+    Persistence = Persistence
 
     constructor(
         public framework: ITransmuteFramework,
