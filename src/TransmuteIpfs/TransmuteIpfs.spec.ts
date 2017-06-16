@@ -4,7 +4,7 @@ import { expect, assert, should } from 'chai'
 import { TransmuteIpfs } from './TransmuteIpfs'
 
 describe('TransmuteIpfs', () => {
-    describe('#init()', () => {
+    describe('init()', () => {
         it('should use local ipfs by default', () => {
             TransmuteIpfs.init()
             assert.equal(TransmuteIpfs.config.host, 'localhost')
@@ -20,7 +20,7 @@ describe('TransmuteIpfs', () => {
             assert.equal(TransmuteIpfs.config.host, 'ipfs.infura.io')
         })
     })
-    describe('#addFromFs(folderPath, options)', () => {
+    describe('addFromFs(folderPath, options)', () => {
         before(() => {
             TransmuteIpfs.init()
         })
@@ -32,7 +32,7 @@ describe('TransmuteIpfs', () => {
                 })
         })
     })
-    describe('#addFromURL(url)', () => {
+    describe('addFromURL(url)', () => {
         before(() => {
             TransmuteIpfs.init()
         })
@@ -44,7 +44,7 @@ describe('TransmuteIpfs', () => {
                 })
         })
     })
-    describe('#writeObject(obj)', () => {
+    describe('writeObject(obj)', () => {
         before(() => {
             TransmuteIpfs.init()
         })
@@ -56,7 +56,7 @@ describe('TransmuteIpfs', () => {
                 })
         })
     })
-    describe('#readObject(path)', () => {
+    describe('readObject(path)', () => {
         before(() => {
             TransmuteIpfs.init()
         })

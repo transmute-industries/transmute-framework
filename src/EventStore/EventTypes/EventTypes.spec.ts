@@ -13,7 +13,7 @@ import {
   JSON_SCHEMA,
 } from '../Mock/data'
 
-import { Middleware } from '../Middleware/Middleware'
+
 import { EventTypes } from './EventTypes'
 
 
@@ -46,7 +46,7 @@ describe("EventTypes", () => {
         let eventIndex
         let txArgs
         before(async () => {
-            let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
+            let tx = await TransmuteFramework.EventStore.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
             assert.lengthOf(tx.logs, 1)
             assert.equal(tx.logs[0].event, 'EsEvent')
             txArgs = tx.logs[0].args
@@ -54,7 +54,7 @@ describe("EventTypes", () => {
         })
 
         it('converts a list of EsValues to an EsEvent object, like we get in tx.logs', async () => {
-            let eventValues = await Middleware.readEsEventValues(eventStore, web3.eth.accounts[0], eventIndex)
+            let eventValues = await TransmuteFramework.EventStore.readEsEventValues(eventStore, web3.eth.accounts[0], eventIndex)
             let esEvent = EventTypes.getEsEventFromEsEventValues(eventValues)
             // console.log(esEvent)
             assert.equal(esEvent.Type, txArgs.Type)
@@ -67,19 +67,19 @@ describe("EventTypes", () => {
         let eventIndex
         let txArgs
         before(async () => {
-            let tx = await Middleware.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
+            let tx = await TransmuteFramework.EventStore.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
             assert.lengthOf(tx.logs, 1)
             assert.equal(tx.logs[0].event, 'EsEvent')
             eventIndex = tx.logs[0].args.Id.toNumber()
             addressValueEsEventProperty.EventIndex = eventIndex
-            tx = await Middleware.writeEsEventProperty(eventStore, web3.eth.accounts[0], addressValueEsEventProperty)
+            tx = await TransmuteFramework.EventStore.writeEsEventProperty(eventStore, web3.eth.accounts[0], addressValueEsEventProperty)
             assert.lengthOf(tx.logs, 1)
             assert.equal(tx.logs[0].event, 'EsEventProperty')
             txArgs = tx.logs[0].args
         })
 
         it('converts a list of EsValues to an EsEvent object, like we get in tx.logs', async () => {
-            let eventPropVals = await Middleware.readEsEventPropertyValues(eventStore, web3.eth.accounts[0], eventIndex, 0)
+            let eventPropVals = await TransmuteFramework.EventStore.readEsEventPropertyValues(eventStore, web3.eth.accounts[0], eventIndex, 0)
             let esEventProperty = EventTypes.getEsEventPropertyFromEsEventPropertyValues(eventPropVals)
             // console.log(esEventProperty)
             // These comparisons are on truffle types
