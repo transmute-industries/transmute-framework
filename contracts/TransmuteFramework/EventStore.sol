@@ -75,8 +75,8 @@ contract EventStore is Killable {
   }
 
   // CONSTRUCTOR
-  function () payable {}
-  function EventStore() payable {
+  function () {}
+  function EventStore() {
     creator = tx.origin;
     requestorAddresses.add(creator);
     authorizedAddressesMapping[creator] = true;
