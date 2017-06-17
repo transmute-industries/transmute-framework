@@ -1,6 +1,12 @@
 
 import { EventStore } from './EventStore/EventStore'
 
+import { EventTypes } from './EventStore/EventTypes/EventTypes'
+
+import { Persistence } from './EventStore/Persistence/Persistence'
+
+import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
+
 const Web3 = require('web3')
 const contract = require('truffle-contract')
 
@@ -11,7 +17,13 @@ declare var window: any
 const eventStoreArtifacts = require('../build/contracts/EventStore')
 const eventStoreFactoryArtifacts = require('../build/contracts/EventStoreFactory')
 
-const config = <any> {
+export interface ITransmuteFrameworkConfig {
+  env: string
+  esa: any,
+  esfa: any,
+  ipfsConfig?: any
+}
+const config = <any>{
   env: 'testrpc',
   esa: eventStoreArtifacts,
   esfa: eventStoreFactoryArtifacts,
@@ -23,16 +35,22 @@ export interface ITransmuteFramework {
   EventStore: any,
   init: (confObj?: any) => any,
   config: any,
-  web3: any
+  web3: any,
+  TransmuteIpfs: any,
+  Persistence: any
 }
 
 export class TransmuteFramework implements ITransmuteFramework {
 
   EventStoreFactoryContract = null
   EventStoreContract = null
-  EventStore = EventStore
+  EventStore: any = null
   config = config
   web3 = null
+
+  TransmuteIpfs: ITransmuteIpfs = TransmuteIpfs
+  EventTypes = EventTypes
+  Persistence = Persistence
 
   public init = (confObj = config) => {
     this.config = confObj
@@ -51,6 +69,17 @@ export class TransmuteFramework implements ITransmuteFramework {
     } else {
       console.warn('web3 is not available, install metamask.')
     }
+
+    let ipfsConfig = confObj.ipfsConfig || {
+      host: 'localhost',
+      port: '5001',
+      options: {
+        protocol: 'http'
+      }
+    }
+    // This is initialized like so because it can be useful outside framework...
+    this.TransmuteIpfs = TransmuteIpfs.init(ipfsConfig)
+    this.EventStore = new EventStore(this)
     return this
   }
 

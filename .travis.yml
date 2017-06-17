@@ -1,9 +1,6 @@
 
 sudo: required
-
 dist: trusty
-
-
 language: node_js
 
 node_js:
@@ -16,6 +13,13 @@ before_install:
   - sudo add-apt-repository -y ppa:ethereum/ethereum-dev
   - sudo apt-get update -qq
   - sudo apt-get install geth -y -qq
+  - wget "https://dist.ipfs.io/go-ipfs/v0.4.9/go-ipfs_v0.4.9_linux-amd64.tar.gz" -O /tmp/ipfs.tar.gz
+  - mkdir $HOME/bin
+  - pushd . && cd $HOME/bin && tar -xzvf /tmp/ipfs.tar.gz && popd
+  - export PATH="$HOME/bin/go-ipfs:$PATH"
+  - ipfs init
+  - ipfs daemon &
+  - sleep 5
 
 install:
   - npm install

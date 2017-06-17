@@ -29,5 +29,16 @@ describe('TransmuteFramework', () => {
             })
             assert(TransmuteFramework.web3._requestManager.provider.host === 'https://ropsten.infura.io')
         })
+        it('should use local ipfs as default ', async () => {
+            TransmuteFramework.init()
+            assert(TransmuteFramework.TransmuteIpfs.config.host === 'localhost')
+        })
+
+        it('should initialize EventStore with config', async () => {
+            TransmuteFramework.init()
+            assert(TransmuteFramework.EventStore.framework.TransmuteIpfs.config.host === 'localhost')
+        })
     })
+
+
 })

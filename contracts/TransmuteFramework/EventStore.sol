@@ -15,6 +15,7 @@ contract EventStore is Killable {
     address AddressValue;
     uint UIntValue;
     bytes32 Bytes32Value;
+    string StringValue;
 
     address TxOrigin;
     uint Created;
@@ -30,6 +31,7 @@ contract EventStore is Killable {
     address AddressValue,
     uint UIntValue,
     bytes32 Bytes32Value,
+    string StringValue,
 
     address TxOrigin,
     uint Created,
@@ -42,6 +44,7 @@ contract EventStore is Killable {
     address AddressValue;
     uint UIntValue;
     bytes32 Bytes32Value;
+    string StringValue;
   }
   event EsEventProperty(
     uint EventIndex,
@@ -50,7 +53,8 @@ contract EventStore is Killable {
     bytes32 ValueType,
     address AddressValue,
     uint UIntValue,
-    bytes32 Bytes32Value
+    bytes32 Bytes32Value,
+    string StringValue
   );
 
   uint public solidityEventCount;
@@ -104,7 +108,7 @@ contract EventStore is Killable {
     requestorAddresses.add(_requestor);
     authorizedAddressesMapping[_requestor] = false;
 
-    writeEvent('EVENT_STORE_ACCESS_REQUESTED', 'v0', 'Address', _requestor, 0, '', 0);
+    writeEvent('EVENT_STORE_ACCESS_REQUESTED', 'v0', 'Address', _requestor, 0, '', '', 0);
   }
 
   function authorizeRequestorAddress(address _requestor) 
@@ -116,7 +120,7 @@ contract EventStore is Killable {
       throw;
     authorizedAddressesMapping[_requestor] = true;
 
-    writeEvent('EVENT_STORE_ACCESS_GRANTED', 'v0', 'Address', _requestor, 0, '', 0);
+    writeEvent('EVENT_STORE_ACCESS_GRANTED', 'v0', 'Address', _requestor, 0, '', '', 0);
   }
 
   function revokeRequestorAddress(address _requestor) 
@@ -128,7 +132,7 @@ contract EventStore is Killable {
       throw;
     authorizedAddressesMapping[_requestor] = false;
 
-     writeEvent('EVENT_STORE_ACCESS_REVOKED', 'v0', 'Address', _requestor, 0, '', 0);
+     writeEvent('EVENT_STORE_ACCESS_REVOKED', 'v0', 'Address', _requestor, 0, '', '', 0);
   }
 
   function isAddressAuthorized(address _address) 
@@ -139,7 +143,7 @@ contract EventStore is Killable {
   }
 
   // WRITE EVENT
-  function writeEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, address _addressValue, uint _uintValue, bytes32 _bytes32Value , uint _propCount) 
+  function writeEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, address _addressValue, uint _uintValue, bytes32 _bytes32Value, string _stringValue, uint _propCount) 
     public onlyAuthorized
     returns (uint)
   {
@@ -156,16 +160,17 @@ contract EventStore is Killable {
     solidityEvent.AddressValue = _addressValue;
     solidityEvent.UIntValue = _uintValue;
     solidityEvent.Bytes32Value = _bytes32Value;
+    solidityEvent.StringValue = _stringValue;
 
     solidityEvent.PropertyCount = _propCount;
     solidityEvents[solidityEventCount] = solidityEvent;
 
-    EsEvent(solidityEventCount, _type, _version, _valueType, _addressValue, _uintValue, _bytes32Value, tx.origin, _created, _propCount);
+    EsEvent(solidityEventCount, _type, _version, _valueType, _addressValue, _uintValue, _bytes32Value, _stringValue, tx.origin, _created, _propCount);
     solidityEventCount += 1;
     return solidityEventCount;
   }
 
-  function writeEventProperty(uint _eventIndex, uint _eventPropertyIndex, bytes32 _name, bytes32 _type, address _address, uint _uint, bytes32 _string) 
+  function writeEventProperty(uint _eventIndex, uint _eventPropertyIndex, bytes32 _name, bytes32 _type, address _address, uint _uintValue, bytes32 _bytes32Value, string _stringValue) 
     public onlyAuthorized
     returns (uint)
   {
@@ -176,29 +181,31 @@ contract EventStore is Killable {
     solidityEventProperty.Name = _name;
     solidityEventProperty.ValueType = _type;
     solidityEventProperty.AddressValue = _address;
-    solidityEventProperty.UIntValue = _uint;
-    solidityEventProperty.Bytes32Value = _string;
+    solidityEventProperty.UIntValue = _uintValue;
+    solidityEventProperty.Bytes32Value = _bytes32Value;
+    solidityEventProperty.StringValue = _stringValue;
+    
     solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex] = solidityEventProperty;
 
-    EsEventProperty(_eventIndex, _eventPropertyIndex, _name, _type, _address, _uint, _string);
+    EsEventProperty(_eventIndex, _eventPropertyIndex, _name, _type, _address, _uintValue, _bytes32Value, _stringValue);
     return solidityEventCount;
   }
   
   // READ EVENT
   function readEvent(uint _eventIndex) 
     public onlyAuthorized 
-    returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, address, uint, uint)
+    returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, string, address, uint, uint)
   {
     EsEventStruct memory solidityEvent = solidityEvents[_eventIndex];
-    return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.TxOrigin, solidityEvent.Created, solidityEvent.PropertyCount);
+    return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.StringValue, solidityEvent.TxOrigin, solidityEvent.Created, solidityEvent.PropertyCount);
   }
 
   function readEventProperty(uint _eventIndex, uint _eventPropertyIndex) 
     public onlyAuthorized
-    returns (uint, uint, bytes32, bytes32, address, uint, bytes32)
+    returns (uint, uint, bytes32, bytes32, address, uint, bytes32, string)
   {
     EsEventPropertyStruct memory prop = solidityEvents[_eventIndex].PropertyValues[_eventPropertyIndex];
-    return (_eventIndex, _eventPropertyIndex, prop.Name, prop.ValueType, prop.AddressValue, prop.UIntValue, prop.Bytes32Value);
+    return (_eventIndex, _eventPropertyIndex, prop.Name, prop.ValueType, prop.AddressValue, prop.UIntValue, prop.Bytes32Value, prop.StringValue);
   }
 
 }

@@ -3,7 +3,7 @@
 let account0 = '0x0000000000000000000000000000000000000000'
 let account1 = '0x0000000000000000000000000000000000000000'
 
-import {EventTypes} from '../../EventTypes/EventTypes'
+import { EventTypes } from '../../EventTypes/EventTypes'
 
 export const addressValueEsEvent: EventTypes.IEsEvent = {
     Type: 'ADDRESS_EVENT_TESTED',
@@ -12,6 +12,7 @@ export const addressValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: account1,
     UIntValue: 0,
     Bytes32Value: '',
+    StringValue: '',
     PropertyCount: 0
 }
 
@@ -22,6 +23,7 @@ export const uIntValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
+    StringValue: '',
     PropertyCount: 0
 }
 
@@ -32,6 +34,28 @@ export const bytes32ValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '0x6e6f74207265616c6c79206120627974657320333220737472696e6721000000',
+    StringValue: '',
+    PropertyCount: 0
+}
+export const stringValueEsEvent: EventTypes.IEsEvent = {
+    Type: 'STRING_EVENT_TESTED',
+    Version: 'v0',
+    ValueType: 'String',
+    AddressValue: '0x0000000000000000000000000000000000000000',
+    UIntValue: 0,
+    Bytes32Value: '',
+    StringValue: 'COOL:STRING',
+    PropertyCount: 0
+}
+
+export const ipfsValueEsEvent: EventTypes.IEsEvent = {
+    Type: 'IPFS:RECORD:CREATED',
+    Version: 'v0',
+    ValueType: 'String',
+    AddressValue: '0x0000000000000000000000000000000000000000',
+    UIntValue: 0,
+    Bytes32Value: '',
+    StringValue: 'ipfs/QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU',
     PropertyCount: 0
 }
 
@@ -42,6 +66,7 @@ export const objectValueEsEvent: EventTypes.IEsEvent = {
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
+    StringValue: '',
     PropertyCount: 0
 }
 
@@ -53,6 +78,18 @@ export const numberCommand: EventTypes.ITransmuteCommand = {
 export const stringCommand: EventTypes.ITransmuteCommand = {
     type: 'TOPIC_SET',
     payload: 'ethereum'
+}
+
+
+
+export const ipfsObjectCommand: EventTypes.ITransmuteCommand = {
+    type: 'IPFS:RECORD:CREATED',
+    payload: {
+        cool: 'story...bro'
+    },
+    meta: {
+        handlers: ['ipfs']
+    }
 }
 
 export const addressCommand: EventTypes.ITransmuteCommand = {
@@ -86,7 +123,9 @@ export const addressValueEsEventProperty: EventTypes.IEsEventProperty = {
 
     AddressValue: '0x0000000000000000000000000000000000000000', // should be overwritten
     UIntValue: 0,
-    Bytes32Value: ''
+    Bytes32Value: '',
+    StringValue: ''
+
 }
 
 export const uIntValueEsEventProperty: EventTypes.IEsEventProperty = {
@@ -97,7 +136,8 @@ export const uIntValueEsEventProperty: EventTypes.IEsEventProperty = {
 
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0, // should be overwritten
-    Bytes32Value: ''
+    Bytes32Value: '',
+    StringValue: ''
 }
 
 export const bytes32ValueEsEventProperty: EventTypes.IEsEventProperty = {
@@ -107,7 +147,22 @@ export const bytes32ValueEsEventProperty: EventTypes.IEsEventProperty = {
     ValueType: 'Bytes32',
 
     AddressValue: '0x0000000000000000000000000000000000000000',
-    UIntValue: 0, 
-    Bytes32Value: '' // should be overwritten
+    UIntValue: 0,
+    Bytes32Value: '', // should be overwritten
+    StringValue: ''
 }
+
+export const stringValueEsEventProperty: EventTypes.IEsEventProperty = {
+    EventIndex: 0,              // should be overwritten
+    EventPropertyIndex: 0,      // should be overwritten
+    Name: 'SomeStringKeyName', // should be overwritten
+    ValueType: 'String',
+
+    AddressValue: '0x0000000000000000000000000000000000000000',
+    UIntValue: 0,
+    Bytes32Value: '',
+    StringValue: ''  // should be overwritten
+}
+
+
 

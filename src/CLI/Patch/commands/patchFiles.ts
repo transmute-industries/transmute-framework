@@ -51,9 +51,7 @@ const patchFileAsync = (targetPath, patchFileString) => {
         })
 }
 
-const patchMigrations = () => {
-    let patchTargetPath = path.resolve(__dirname, '../../../../../migrations/2_deploy_contracts.js')
-    let transmuteMigrations = path.resolve(__dirname, '../../migrations/2_deploy_contracts.js')
+export const patchFiles = (patchTargetPath, transmuteMigrations) => {
 
     backupPatchTarget(patchTargetPath)
         .then((contents) => {
@@ -73,6 +71,22 @@ const patchMigrations = () => {
         })
 }
 
-module.exports = {
-    patchMigrations
+const deleteFile = (file) => {
+    return fs.unlink(file, (err) => {
+    })
 }
+
+export const unpatchFiles = (patchedFilePath, backupFilePath) => {
+    let contents
+    return fs.readFileAsync(backupFilePath, "utf8")
+        .then((_contents) => {
+            contents = _contents
+            return fs.writeFileAsync(patchedFilePath, contents, {})
+        })
+        .then(() => {
+            return deleteFile(backupFilePath)
+        })
+}
+
+
+
