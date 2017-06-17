@@ -1,4 +1,4 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.11;
 
 /// @title Library implementing an array type which allows O(1) lookups on values.
 /// @author Piper Merriam <pipermerriam@gmail.com>, Eric Olszewski <eolszewski@gmail.com>
@@ -12,14 +12,12 @@ library UIntSetLib {
   }
 
   modifier inBounds(UIntSet storage self, uint index) {
-    if (index >= self.values.length)
-      throw;
+    require(index < self.values.length);
     _;
   }
 
   modifier notEmpty(UIntSet storage self) {
-    if (self.values.length == 0)
-      throw;
+    require(self.values.length != 0);
     _;
   }
 

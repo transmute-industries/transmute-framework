@@ -1,4 +1,4 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.11;
 // String Utils v0.1
 
 /// @title String Utils - String utility functions
@@ -25,9 +25,7 @@ library StringUtils {
   /// @param v The string to be converted.
   function bytesToUInt(bytes32 v) constant
     returns (uint ret) {
-    if (v == 0x0) {
-      throw;
-    }
+    require(v != 0x0);
 
     uint digit;
 
@@ -36,9 +34,7 @@ library StringUtils {
       if (digit == 0) {
         break;
       }
-      else if (digit < 48 || digit > 57) {
-        throw;
-      }
+      require(digit >= 48 && digit <= 57);
       ret *= 10;
       ret += (digit - 48);
     }
