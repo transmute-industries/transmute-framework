@@ -32,6 +32,8 @@ export interface ITransmuteIpfs {
     hashesToPatches: (hashes: string[]) => Promise<any[]>
     applyPatches: (obj: any, patches: any[]) => any
     applyIPLDHashes: (obj: any, hashes: string[]) => Promise<any>
+    diff: (start: any, end: any) => any
+    patch: (target: any, patch: any) => any
 }
 
 export class TransmuteIpfsSingleton implements ITransmuteIpfs {
@@ -162,6 +164,14 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
     applyIPLDHashes = async (obj, hashes) => {
         let patches = await this.hashesToPatches(hashes)
         return this.applyPatches(obj, patches)
+    }
+
+    patch = (target, patch) => {
+        return jiff.patchInPlace(patch, target)
+    }
+
+    diff = (start, end) => {
+        return jiff.diff(start, end)
     }
 }
 
