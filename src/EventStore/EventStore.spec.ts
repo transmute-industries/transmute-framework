@@ -289,7 +289,7 @@ describe('EventStore', () => {
       let transmuteEvent = await TransmuteFramework.EventStore.readTransmuteEvent(eventStore, web3.eth.accounts[0], eventIndex)
       assert.equal(isFSA(transmuteEvent), true)
       assert.equal(transmuteEvent.type, cmdResponse.events[0].type, 'expected type to match command response built from event log')
-      assert.equal(transmuteEvent.meta.path, 'ipfs/Qmf4GZbciiPLMTZYLpM88GB2CpopCJszdwybUnnwswkpKE', 'expected meta.has to be command payload')
+      assert.equal(transmuteEvent.meta.path, 'ipfs/Qmc1JeeB3FheBYaMRFcwT6v5pwmhxeh7pGmVNuQPekA7m9', 'expected meta.has to be command payload')
     })
 
     it('read object value event should return an FSA with event store meta', async () => {
