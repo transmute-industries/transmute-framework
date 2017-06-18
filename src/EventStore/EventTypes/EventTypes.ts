@@ -240,7 +240,6 @@ export module EventTypes {
     export const esEventToTransmuteEvent = async (
         esEvent: EventTypes.IEsEvent
     ): Promise<EventTypes.ITransmuteEvent> => {
-        // console.log('esEvent to be transmuted: ', esEvent)
         let payload: any = {}
         let meta: ITransmuteEventMeta = convertMeta(esEvent)
         payload = getValueType(esEvent)
@@ -254,7 +253,12 @@ export module EventTypes {
     export const convertCommandToEsEvent = (transmuteCommand: EventTypes.ITransmuteCommand): EventTypes.IEsEvent => {
         let valueType = EventTypes.guessType(transmuteCommand.payload)
         let esEvent
-        // console.log('valueType: ', valueType)
+
+        // TODO: Add a test for this.
+        if (valueType === 'UInt' && transmuteCommand.payload < 0){
+            throw Error('Only unsigned integers are supported for number payloads. consider using a string.')
+        }
+
         switch (valueType) {
             case 'Address':
                 esEvent = _.cloneDeep(addressValueEsEvent);
@@ -340,11 +344,9 @@ export module EventTypes {
 
     export const reconstructTransmuteEventsFromTxs = (txs: Array<EventTypes.ITransaction>) => {
         let esEventsAndEventProps = _.flatten(txs.map(eventsFromTransaction))
-        // console.log('esEventsAndEventProps: ', esEventsAndEventProps)
         let esEvents = _.filter(esEventsAndEventProps, (obj) => {
             return obj.Id !== undefined
         })
-        // console.log('esEvents: ', esEvents)
         let transmuteEvents = []
         esEvents.forEach((esEvent) => {
             let transmuteEvent = EventTypes.esEventToTransmuteEvent(esEvent)
