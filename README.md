@@ -68,8 +68,7 @@ Events have happened, they are an object that represents a state transition. If 
 
 Events have a `type` that is past tense, 'SESSION_STARTED', 'INVOICE_PAID', 'USER_SUBSCRIBED'.
 
-| A point of confustion in our framework is that often times, we are saving an event that has already happened, 
-| so the commands often represent the intention _save this event which already happened_ and thus share the same type as | the event, namely a past tense string and not a present tense directive, such as 'START_USER_SESSION'.
+A point of confustion in our framework is that often times, we are saving an event that has already happened, so the commands often represent the intention _save this event which already happened_ and thus share the same type as the event, namely a past tense string and not a present tense directive, such as 'START_USER_SESSION'.
 
 ###### payload
 Events have a `payload` that represents what changed, or new information about a domain.
