@@ -1,7 +1,16 @@
+const ipfsAPI = require('ipfs-api')
+const ipld = require('ipld')
+const jiff = require('jiff')
 
 import { expect, assert, should } from 'chai'
 
 import { TransmuteIpfs } from './TransmuteIpfs'
+
+import * as _ from 'lodash'
+
+let e0 = require('./mock/events/0.json')
+let e1 = require('./mock/events/1.json')
+let e2 = require('./mock/events/2.json')
 
 describe('TransmuteIpfs', () => {
     describe('init()', () => {
@@ -67,4 +76,122 @@ describe('TransmuteIpfs', () => {
                 })
         })
     })
+
+
+    describe('statesToPatches(states)', () => {
+        before(() => {
+            TransmuteIpfs.init()
+        })
+        it('should convert an array of states to an array of patches from state 0 to state n', async () => {
+            let articleStates = [e0, e1, e2]
+            let patches = await TransmuteIpfs.statesToPatches(articleStates)
+            assert.equal(patches[0].op, 'add')
+        })
+    })
+
+    describe('patchesToHashes(patches)', () => {
+        before(() => {
+            TransmuteIpfs.init()
+
+        })
+        it('should save patchObjects as CBOR encoded Buffers on IPFS and return as hashes', async () => {
+            let articleStates = [e0, e1, e2]
+            let patches = await TransmuteIpfs.statesToPatches(articleStates)
+            let hashes = await TransmuteIpfs.patchesToHashes(patches)
+            // console.log(hashes)
+        })
+    })
+
+    describe('hashesToPatches(hashes)', () => {
+        before(() => {
+            TransmuteIpfs.init()
+        })
+        it('should rehydrate CBOR encoded Buffers from IPFS hashes as patch objects', async () => {
+            let articleStates = [e0, e1, e2]
+            let patches = await TransmuteIpfs.statesToPatches(articleStates)
+            let hashes = await TransmuteIpfs.patchesToHashes(patches)
+            let reconstructedPatches = await TransmuteIpfs.hashesToPatches(hashes)
+            // console.log(reconstructedPatches)
+            assert.equal(reconstructedPatches[0].op, 'add')
+        })
+    })
+
+    describe.only('applyIPLDHashes(hashes)', () => {
+        before(() => {
+            TransmuteIpfs.init()
+        })
+        it('should rehydrate CBOR encoded Buffers from IPFS hashes as patch objects', async () => {
+            let articleStates = [e0, e1, e2]
+            let patches = await TransmuteIpfs.statesToPatches(articleStates)
+            let hashes = await TransmuteIpfs.patchesToHashes(patches)
+            let patched = await TransmuteIpfs.applyIPLDHashes(_.clone(e0), hashes)
+            console.log(patched)
+            // assert.equal(reconstructedPatches[0].op, 'add')
+        })
+    })
+
+
+    describe('Sanity', () => {
+        before(() => {
+            TransmuteIpfs.init()
+        })
+        it('jiff patching works as expected', (done) => {
+            let start = {
+                a: [0, 1],
+                b: {
+                    cool: 'story'
+                }
+            }
+            let end = {
+                a: [3],
+                b: {
+                    dead: 'pool'
+                }
+            }
+
+            let patch = jiff.diff(start, end)
+
+            let patched = jiff.patch(patch, start)
+
+            assert(_.isEqual(patched, end))
+
+            done()
+
+        })
+        it('IPLD + IPFS raw checks', (done) => {
+            let rawJsonObject = {
+                hello: 'world',
+                probablyError: undefined
+            }
+            let test = async () => {
+                let buffer = ipld.marshal(rawJsonObject)
+                // console.log(buffer)
+                let data = await TransmuteIpfs.ipfs.add(buffer)
+                let { hash } = data[0]
+                // console.log(hash)
+                // var newBuffer = Buffer.concat([buffer1, buffer2]);
+                TransmuteIpfs.ipfs.cat(hash, function (err, stream) {
+                    var res = new Buffer('')
+                    stream.on('data', function (chunk) {
+                        res = Buffer.concat([res, chunk]);
+                    })
+                    stream.on('error', function (err) {
+                        // console.error('Oh nooo', err)
+                    })
+                    stream.on('end', function () {
+                        // console.log('Got:', res)
+                        let unm = ipld.unmarshal(res)
+                        // console.log(unm)
+                        assert.equal(unm.probablyError, undefined)
+                        done()
+                    })
+                })
+            }
+            test()
+            // console.log(rawJsonObject)
+            // console.log(bufFromIpfs)
+        })
+    })
+
+
 })
