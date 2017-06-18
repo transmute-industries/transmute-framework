@@ -34,10 +34,10 @@ describe('TransmuteIpfs', () => {
             TransmuteIpfs.init()
         })
         it('should add folder to ipfs and return the result', () => {
-            return TransmuteIpfs.addFromFs('./src/TransmuteIpfs/mock/dist')
+            return TransmuteIpfs.addFromFs('./src/TransmuteIpfs/mock/demo')
                 .then((res) => {
-                    assert.equal(res[0].path, 'dist/config.json')
-                    assert.equal(res[1].path, 'dist')
+                    assert.equal(res[0].path, 'demo/config.json')
+                    assert.equal(res[1].path, 'demo')
                 })
         })
     })
