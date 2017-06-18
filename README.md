@@ -60,3 +60,5 @@ If these fail, expect your PR to be rejected ; )
 - https://github.com/transmute-industries/eth-faucet
 - https://github.com/AugurProject/augur/blob/master/src/modules/auth/actions/register.js
 - https://airbitz.co/developer-api-library/
+
+
