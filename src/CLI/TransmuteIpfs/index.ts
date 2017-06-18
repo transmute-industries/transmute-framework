@@ -3,7 +3,7 @@ var path = require('path')
 var TransmuteFramework = require('../../TransmuteFramework').default
 
 let { web3, EventStoreContract, EventStoreFactoryContract } = TransmuteFramework.init()
-let { getCachedReadModel } = TransmuteFramework.EventStore.ReadModel
+let { getCachedReadModel } = TransmuteFramework.EventStore
 
 var _ = require('lodash')
 

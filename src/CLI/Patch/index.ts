@@ -15,10 +15,18 @@ export default (vorpal) => {
                 let sourceDirectory = path.resolve(__dirname, '../../test/')
                 let destinationDirectory = path.resolve(__dirname, '../../../../../test/TransmuteFramework/')
                 add(sourceDirectory, destinationDirectory, (err) => {
+
                     let patchTargetPath = path.resolve(__dirname, '../../../../../migrations/2_deploy_contracts.js')
                     let transmuteMigrations = path.resolve(__dirname, '../../migrations/2_deploy_contracts.js')
+
+                    // console.log(patchTargetPath)
+                    // console.log(transmuteMigrations)
+
                     patchFiles(patchTargetPath, transmuteMigrations)
-                    callback()
+                        .then(() => {
+                            callback()
+                        })
+
                 })
             })
         })
@@ -27,7 +35,14 @@ export default (vorpal) => {
         .command('unpatch', 'UnPatch Truffle Migrations')
         .action((args, callback) => {
             console.log('unpatching...')
-            let destinationDirectory = path.resolve(__dirname, '../../../../../contracts/TransmuteFramework/')
+
+            let destinationDirectory = path.resolve(__dirname, '../../../../../test/TransmuteFramework/')
+            remove(destinationDirectory, (err) => {
+                // remove tests
+            })
+
+            destinationDirectory = path.resolve(__dirname, '../../../../../contracts/TransmuteFramework/')
+
             remove(destinationDirectory, (err) => {
                 let patchFilePath = path.resolve(__dirname, '../../../../../migrations/2_deploy_contracts.js')
                 let backupPath = path.resolve(__dirname, '../../../../../migrations/2_deploy_contracts.js.transmute.bak')

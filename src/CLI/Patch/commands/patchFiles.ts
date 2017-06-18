@@ -53,9 +53,9 @@ const patchFileAsync = (targetPath, patchFileString) => {
 
 export const patchFiles = (patchTargetPath, transmuteMigrations) => {
 
-    backupPatchTarget(patchTargetPath)
+    return backupPatchTarget(patchTargetPath)
         .then((contents) => {
-
+            // console.log('got here...')
             if (contents.indexOf(patchBegin) !== -1) {
                 throw Error('Already patched, aborting... consider unpatch')
             } else {
