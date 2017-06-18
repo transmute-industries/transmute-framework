@@ -81,6 +81,14 @@ Our framework supports 3 kinds of payloads: `uint`, `address`, `string`. In addi
 For now, commands look like events, but have different meta data which indicated persistence extensions.
 A typical command from a transmute client will be to save an event which has happened.
 
+## IPLD 
+
+What is IPLD? - https://ipld.io/
+
+### How does the framework use IPLD?
+
+We use IPLD for object payloads. This means that by default any object payload will be converted to IPLD and persisted.
+This data conversion is transparent to the user.
 
 ### Contributing 
 
