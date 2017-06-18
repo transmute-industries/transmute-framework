@@ -61,7 +61,7 @@ describe('TransmuteIpfs', () => {
             let obj = { cool: 'story...bro' }
             return TransmuteIpfs.writeObject(obj)
                 .then((path) => {
-                    assert.equal(path, 'Qmf4GZbciiPLMTZYLpM88GB2CpopCJszdwybUnnwswkpKE')
+                    assert.equal(path, 'Qmc1JeeB3FheBYaMRFcwT6v5pwmhxeh7pGmVNuQPekA7m9')
                 })
         })
     })
@@ -70,7 +70,7 @@ describe('TransmuteIpfs', () => {
             TransmuteIpfs.init()
         })
         it('should add json object to ipfs and return the path', () => {
-            return TransmuteIpfs.readObject('Qmf4GZbciiPLMTZYLpM88GB2CpopCJszdwybUnnwswkpKE')
+            return TransmuteIpfs.readObject('Qmc1JeeB3FheBYaMRFcwT6v5pwmhxeh7pGmVNuQPekA7m9')
                 .then((obj: any) => {
                     assert.equal(obj.cool, 'story...bro')
                 })

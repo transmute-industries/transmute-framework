@@ -89,7 +89,7 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
     }
 
     writeObject(obj) {
-        let buffer = new Buffer(JSON.stringify(obj))
+        let buffer = ipld.marshal(obj)
         return this.writeBuffer(buffer)
     }
 
@@ -116,7 +116,7 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
         }
         return this.readBuffer(path)
             .then((data: any) => {
-                return JSON.parse(data.toString())
+                return ipld.unmarshal(data)
             })
 
     }
