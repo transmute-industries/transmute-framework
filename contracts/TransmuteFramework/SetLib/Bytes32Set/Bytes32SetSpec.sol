@@ -1,4 +1,4 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.11;
 
 import './Bytes32SetLib.sol';
 import '../../zeppelin/lifecycle/Killable.sol';

@@ -1,43 +1,50 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.11;
 import "./EventStore.sol";
 import "./SetLib/AddressSet/AddressSetLib.sol";
-import "./Utils/StringUtils.sol";
 
 contract EventStoreFactory is EventStore {
   using AddressSetLib for AddressSetLib.AddressSet;
   mapping (address => AddressSetLib.AddressSet) creatorEventStoreMapping;
   AddressSetLib.AddressSet EventStoreAddresses;
+  bytes32 ESFactoryPermissionDomain = 'ESF';
+  bytes32 ESPermissionDomain = 'ES';
 
   // Fallback Function
-  function() payable {}
+  function () payable { throw; }
 
   // Constructor
-  function EventStoreFactory() payable {
-    writeEvent('FACTORY_CREATED', 'v0', 'Address', tx.origin, 0, '', '', 0);
+  function EventStoreFactory()
+  payable
+  {
+    addACLAddress('ESF_CREATED', 'ESF_READ_GRANTED', 'ESF_WRITE_GRANTED', false, ESFactoryPermissionDomain, tx.origin);
   }
 
   // Modifiers
-  modifier checkExistence(address _EventStoreAddress) {
-    if (!EventStoreAddresses.contains(_EventStoreAddress))
-      throw;
+  modifier checkExistence(address _EventStoreAddress)
+  {
+    require(EventStoreAddresses.contains(_EventStoreAddress));
     _;
   }
 
   // Helper Functions
-  function getEventStoresByCreator() constant
+  function getEventStoresByCreator()
+    public constant
+    isACLAddress(msg.sender)
     returns (address[])
   {
     return creatorEventStoreMapping[msg.sender].values;
   }
 
-  function getEventStores() constant
+  function getEventStores()
+    public constant
     returns (address[])
   {
     return EventStoreAddresses.values;
   }
 
   // Interface
-	function createEventStore() payable
+	function createEventStore()
+    public
     returns (address)
   {
     // Interact With Other Contracts
@@ -47,15 +54,17 @@ contract EventStoreFactory is EventStore {
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
-    writeEvent('FACTORY_EVENT_STORE_CREATED', 'v0', 'Address', address(_newEventStore), 0, '', '', 0);
+    writeEvent('ES_CREATED', 'v0', 'Address', false, ESPermissionDomain, address(_newEventStore), 0, '', '');
+
     return address(_newEventStore);
 	}
 
-  function killEventStore(address _address) checkExistence(_address) {
+  function killEventStore(address _address)
+    public
+    checkExistence(_address)
+  {
     // Validate Local State
-    if (this.owner() != msg.sender || creatorEventStoreMapping[msg.sender].values.length == 0) {
-      throw;
-    }
+    require(this.owner() == msg.sender && creatorEventStoreMapping[msg.sender].values.length != 0);
 
     // Update Local State
     creatorEventStoreMapping[msg.sender].remove(_address);
@@ -65,6 +74,6 @@ contract EventStoreFactory is EventStore {
     EventStore _eventStore = EventStore(_address);
     _eventStore.kill();
 
-    writeEvent('FACTORY_EVENT_STORE_DESTROYED', 'v0', 'Address', address(_address), 0, '', '', 0);
+    writeEvent('ES_DESTROYED', 'v0', 'Address', false, ESPermissionDomain, address(_address), 0, '', '');
   }
 }

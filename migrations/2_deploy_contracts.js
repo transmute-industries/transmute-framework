@@ -35,12 +35,10 @@ module.exports = function(deployer) {
   deployer.link(UIntSetLib, UIntSetSpec)
   deployer.deploy(UIntSetSpec)
 
-  deployer.link(StringUtils, EventStore)
   deployer.link(AddressSetLib, EventStore)
   deployer.link(Killable, EventStore)
   deployer.deploy(EventStore)
 
-  deployer.link(StringUtils, EventStoreFactory)
   deployer.link(AddressSetLib, EventStoreFactory)
   deployer.link(EventStore, EventStoreFactory)
   deployer.deploy(EventStoreFactory)

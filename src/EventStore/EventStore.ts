@@ -34,38 +34,15 @@ export class EventStore {
             Type,
             Version,
             ValueType,
-            AddressValue,
-            UIntValue,
-            Bytes32Value,
-            StringValue,
-            PropertyCount
-        } = esEvent
-        return await eventStore.writeEvent(
-            Type, Version, ValueType, AddressValue, UIntValue, Bytes32Value, StringValue, PropertyCount,
-            {
-                from: fromAddress,
-                gas: 2000000
-            })
-    }
-
-    writeEsEventProperty = async (
-        eventStore: any,
-        fromAddress: string,
-        esEventProp: EventTypes.IEsEventProperty
-    ): Promise<EventTypes.ITransaction> => {
-        let {
-            EventIndex,
-            EventPropertyIndex,
-            Name,
-            ValueType,
-
+            IsAuthorized,
+            PermissionDomain,
             AddressValue,
             UIntValue,
             Bytes32Value,
             StringValue
-        } = esEventProp
-        return await eventStore.writeEventProperty(
-            EventIndex, EventPropertyIndex, Name, ValueType, AddressValue, UIntValue, Bytes32Value, StringValue,
+        } = esEvent
+        return await eventStore.writeEvent(
+            Type, Version, ValueType, IsAuthorized, PermissionDomain, AddressValue, UIntValue, Bytes32Value, StringValue,
             {
                 from: fromAddress,
                 gas: 2000000
@@ -80,28 +57,6 @@ export class EventStore {
         })
     }
 
-    readEsEventPropertyValues = async (eventStore: any, fromAddress: string, eventId: number, propId: number) => {
-        // must be a .call constant modifier incompatible with _isAuthorized
-        return await eventStore.readEventProperty.call(eventId, propId, {
-            from: fromAddress,
-            gas: 2000000
-        })
-    }
-
-    readEsEventPropertiesFromEsEvent = async (eventStore: any, fromAddress: string, esEvent: EventTypes.IEsEvent) => {
-        let eventId = esEvent.Id
-        let propId = 0
-        let promises = []
-        while (propId < esEvent.PropertyCount) {
-            let eventPropVals = await this.readEsEventPropertyValues(eventStore, fromAddress, eventId, propId)
-            let esEventPropWithTruffleTypes = EventTypes.getEsEventPropertyFromEsEventPropertyValues(eventPropVals)
-            let esEventProp = EventTypes.getEsEventPropertyFromEsEventPropertyWithTruffleTypes('EsEventProperty', esEventPropWithTruffleTypes)
-            promises.push(esEventProp)
-            propId++
-        }
-        return await Promise.all(promises)
-    }
-
      /**
     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
     * @param {Address} fromAddress - the address you wish to deploy these events from
@@ -113,8 +68,7 @@ export class EventStore {
         let esEventWithTruffleTypes: EventTypes.IEsEventFromTruffle = EventTypes.getEsEventFromEsEventValues(eventVals)
         let esEvent: EventTypes.IEsEvent = EventTypes.getEsEventFromEsEventWithTruffleTypes('EsEvent', esEventWithTruffleTypes)
 
-        let esEventProps = await this.readEsEventPropertiesFromEsEvent(eventStore, fromAddress, esEvent)
-        let transmuteEvent = await EventTypes.esEventToTransmuteEvent(esEvent, esEventProps)
+        let transmuteEvent = await EventTypes.esEventToTransmuteEvent(esEvent)
 
         // consider moving this to TransmuteIpfs an exposing dehydrate and rehydrate
         if (typeof transmuteEvent.payload === 'string' && transmuteEvent.payload.indexOf('ipfs/') !== -1) {
@@ -164,26 +118,19 @@ export class EventStore {
      */
     writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
         let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
-        let isIpfsObject = typeof transmuteCommand.payload === 'object' && transmuteCommand.meta && transmuteCommand.meta.handlers.indexOf('ipfs') !== -1
+        let isIpfsObject = typeof transmuteCommand.payload === 'object'
         let hash
+        // NOTE: We are only supporting IPFS for object storage from now on.
+        // IPLD and TransmuteIPFS can be better integrated now that we are focusing on supporting them.
         if (isIpfsObject) {
             hash = await this.framework.TransmuteIpfs.writeObject(transmuteCommand.payload)
             esEvent.ValueType = 'String'
             esEvent.StringValue = 'ipfs/' + hash
-            esEvent.PropertyCount = 0
         }
         let tx = await this.writeEsEvent(eventStore, fromAddress, esEvent)
         let eventsFromWriteEsEvent = await EventTypes.eventsFromTransaction(tx)
         let esEventWithIndex = eventsFromWriteEsEvent[0]
-        let esEventProperties = EventTypes.convertCommandToEsEventProperties(esEventWithIndex, transmuteCommand)
         let allTxs = [tx]
-        if (esEventWithIndex.PropertyCount) {
-            let esEventPropertiesWithTxs = esEventProperties.map(async (esp) => {
-                return await this.writeEsEventProperty(eventStore, fromAddress, esp)
-            })
-            let txs = await Promise.all(esEventPropertiesWithTxs)
-            allTxs = allTxs.concat(txs)
-        }
         allTxs = _.flatten(allTxs)
         let transmuteEvents = await Promise.all(EventTypes.reconstructTransmuteEventsFromTxs(allTxs))
 
@@ -252,11 +199,11 @@ export class EventStore {
 
 
     getCachedReadModel = async (
-        contractAddress : string, 
-        eventStore : any, 
-        fromAddress: string, 
-        readModel: EventTypes.IReadModel, 
-        reducer: any 
+        contractAddress : string,
+        eventStore : any,
+        fromAddress: string,
+        readModel: EventTypes.IReadModel,
+        reducer: any
         ) =>{
         readModel.readModelStoreKey = `${readModel.readModelType}:${contractAddress}`
         readModel.contractAddress = contractAddress

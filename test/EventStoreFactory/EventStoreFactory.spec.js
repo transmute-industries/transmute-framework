@@ -36,7 +36,6 @@ contract('EventStoreFactory', function (accounts) {
       // Add owner / creator tests here...
       // let creatorAddress = event.Id.toNumber()
     })
-
   })
 
   it('createEventStore', async () => {
