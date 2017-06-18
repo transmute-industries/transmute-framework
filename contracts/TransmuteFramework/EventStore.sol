@@ -76,10 +76,11 @@ contract EventStore is Killable {
   }
 
   // FALLBACK
-  function () { throw; }
+  function () payable { throw; }
 
   // CONSTRUCTOR
-  function EventStore() {}
+  function EventStore() payable {}
+
 
   // VERSION
   function getVersion()

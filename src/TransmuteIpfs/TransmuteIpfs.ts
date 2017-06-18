@@ -1,5 +1,10 @@
 const ipfsAPI = require('ipfs-api')
 
+var ipld = require('ipld')
+var jiff = require('jiff')
+
+import * as _ from 'lodash'
+
 // IPFS Gateway
 // https://ipfs.infura.io 
 // IPFS RPC
@@ -22,6 +27,13 @@ export interface ITransmuteIpfs {
     addFromURL: (url: string) => Promise<any>
     writeObject: (obj: any) => Promise<string>
     readObject: (hash: string) => Promise<any>
+    statesToPatches: (states: any[]) => Promise<any[]>
+    patchesToHashes: (patches: any[]) => Promise<string[]>
+    hashesToPatches: (hashes: string[]) => Promise<any[]>
+    applyPatches: (obj: any, patches: any[]) => any
+    applyIPLDHashes: (obj: any, hashes: string[]) => Promise<any>
+    diff: (start: any, end: any) => any
+    patch: (target: any, patch: any) => any
 }
 
 export class TransmuteIpfsSingleton implements ITransmuteIpfs {
@@ -65,8 +77,7 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
         })
     }
 
-    writeObject(obj) {
-        let buffer = new Buffer(JSON.stringify(obj))
+    writeBuffer(buffer) {
         return new Promise((resolve, reject) => {
             this.ipfs.add(buffer, (err, res) => {
                 if (err || !res) {
@@ -77,28 +88,95 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
         })
     }
 
-    readObject(path) {
-        if (path.indexOf('ipfs/') !== -1) {
-            path = path.split('ipfs/')[1]
-        }
+    writeObject(obj) {
+        let buffer = new Buffer(JSON.stringify(obj))
+        return this.writeBuffer(buffer)
+    }
+
+    readBuffer(hash) {
         return new Promise((resolve, reject) => {
-            this.ipfs.cat(path, (err, stream) => {
+            this.ipfs.cat(hash, (err, stream) => {
                 if (err) {
                     reject(err)
                 }
-                let data = ''
-                stream.on('data', (d) => {
-                    data = data + d
+                let data = new Buffer('')
+                stream.on('data', (chunk) => {
+                    data = Buffer.concat([data, chunk]);
                 })
                 stream.on('end', () => {
-                    let obj = JSON.parse(data)
-                    resolve(obj)
+                    resolve(data)
                 })
             })
         })
     }
 
+    readObject(path) {
+        if (path.indexOf('ipfs/') !== -1) {
+            path = path.split('ipfs/')[1]
+        }
+        return this.readBuffer(path)
+            .then((data: any) => {
+                return JSON.parse(data.toString())
+            })
+
+    }
+
+    // See https://github.com/cujojs/jiff
+    statesToPatches(states) {
+        return new Promise((resolve, reject) => {
+            let patches = []
+            for (var i = 0; i <= states.length - 2; i++) {
+                patches.push(jiff.diff(states[i], states[i + 1]))
+            }
+            resolve(patches)
+        })
+    }
+
+    patchesToHashes(patches) {
+        return new Promise((resolve, reject) => {
+            let marshalledPatches = patches.map((patch) => {
+                return ipld.marshal(patch)
+            })
+            let promises = marshalledPatches.map((mp) => {
+                return this.writeBuffer(mp)
+            })
+            resolve(Promise.all(promises))
+        })
+    }
+
+    hashesToPatches = async (hashes) => {
+        let marshalledPatches = await Promise.all(hashes.map((hash) => {
+            return this.readBuffer(hash)
+        }))
+        return marshalledPatches.map((marshalled: string) => {
+            return ipld.unmarshal(new Buffer(marshalled))
+        })
+    }
+
+    applyPatches = (obj, patches) => {
+        let patched = _.clone(obj)
+        patches.forEach((patch) => {
+            patched = jiff.patchInPlace(patch, patched)
+        })
+        return patched
+    }
+
+    applyIPLDHashes = async (obj, hashes) => {
+        let patches = await this.hashesToPatches(hashes)
+        return this.applyPatches(obj, patches)
+    }
+
+    patch = (target, patch) => {
+        return jiff.patchInPlace(patch, target)
+    }
+
+    diff = (start, end) => {
+        return jiff.diff(start, end)
+    }
 }
 
 export var TransmuteIpfs = new TransmuteIpfsSingleton()
+
+
+
 
