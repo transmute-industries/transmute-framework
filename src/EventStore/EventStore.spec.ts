@@ -45,7 +45,7 @@ import {
 
 } from './Mock/Events/TestEvents'
 
-describe.only('EventStore', () => {
+describe('EventStore', () => {
 
   let eventStore
 
@@ -115,6 +115,7 @@ describe.only('EventStore', () => {
 
   // command types and event types should be different... smells... not great...
   describe('.writeTransmuteCommand', () => {
+
     it('should validate and write addressCommand as an EsEvent but return an ITransmuteEvent', async () => {
       let cmdResponse = await TransmuteFramework.EventStore.writeTransmuteCommand(eventStore, web3.eth.accounts[0], addressCommand)
       assert.lengthOf(cmdResponse.events, 1)

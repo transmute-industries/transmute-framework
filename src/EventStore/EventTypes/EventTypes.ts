@@ -10,8 +10,7 @@ import {
     addressValueEsEvent,
     uIntValueEsEvent,
     bytes32ValueEsEvent,
-    stringValueEsEvent,
-    objectValueEsEvent
+    stringValueEsEvent
 } from '../Mock/Events/TestEvents'
 
 
@@ -27,7 +26,7 @@ export module EventTypes {
         Version: string;
 
         ValueType: string;
-        IsAuthorizedEvent: boolean;
+        IsAuthorized: boolean;
         PermissionDomain: string;
 
         AddressValue: string;
@@ -44,7 +43,7 @@ export module EventTypes {
         Version: string;
 
         ValueType: string;
-        IsAuthorizedEvent: boolean;
+        IsAuthorized: boolean;
         PermissionDomain: string;
 
         AddressValue: string;
@@ -123,7 +122,7 @@ export module EventTypes {
             return 'UInt'
         }
         if (typeof value === 'object') {
-            return 'Object'
+            return 'String'
         }
         if (typeof value === 'string') {
             if (ethUtils.isValidAddress(value)) {
@@ -145,7 +144,7 @@ export module EventTypes {
     * @property {String} Type - a string representing the redux action
     * @property {String} Version - the current version of the EventStore
     * @property {String} ValueType - the type of value stored in the event
-    * @property {Boolean} IsAuthorizedEvent - flag determining whether or not the sender needs to be authorized under a domain to read / write this event
+    * @property {Boolean} IsAuthorized - flag determining whether or not the sender needs to be authorized under a domain to read / write this event
     * @property {String} PermissionDomain - domain under which an event is scoped
     * @property {String} AddressValue - address value of event
     * @property {Number} UIntValue - uint value of event
@@ -160,7 +159,7 @@ export module EventTypes {
         Version: 'Bytes32',
 
         ValueType: 'Bytes32',
-        IsAuthorizedEvent: 'Boolean',
+        IsAuthorized: 'Boolean',
         PermissionDomain: 'Bytes32',
 
         AddressValue: 'String',
@@ -186,7 +185,8 @@ export module EventTypes {
     * @param {Object} readModel - a json object representing the state of a given model
     * @return {Object} the property type without truffle data types (no bid numbers or other truffle types...)
     */
-    export const getPropFromTruffleEventSchemaType = (schemaPropType, truffleValue) => {
+    export const getPropFromTruffleEventSchemaType = (key: string, schema: any, truffleValue) => {
+        let schemaPropType = schema[key]
         switch (schemaPropType) {
             case 'String': return truffleValue.toString()
             case 'Address': return truffleValue.toString()
@@ -195,7 +195,7 @@ export module EventTypes {
             case 'BigNumber': return truffleValue.toNumber()
             case 'UInt': return truffleValue.toNumber()
             case 'Boolean': return truffleValue
-            default: throw Error(`UNKNOWN schemaPropType for truffleValue '${truffleValue}'. Make sure your schema is up to date.`)
+            default: throw Error(`UNKNOWN schemaPropType for key: '${key} for truffleValue '${truffleValue}'. Make sure your schema is up to date and contains all keys`)
         }
     }
 
@@ -212,7 +212,7 @@ export module EventTypes {
         let event = {}
         let schema = TruffleEventSchema[eventType]
         _.forIn(solEvent, (value, key) => {
-            let prop = getPropFromTruffleEventSchemaType(schema[key], value)
+            let prop = getPropFromTruffleEventSchemaType(key, schema, value)
             _.extend(event, {
                 [key]: prop
             })
@@ -231,7 +231,7 @@ export module EventTypes {
     }
 
     export const convertMeta = (esEvent: EventTypes.IEsEvent): any => {
-        let metaKeys = ['Type', 'ValueType', 'IsAuthorizedEvent', 'PermissionDomain', 'AddressValue', 'UIntValue', 'Bytes32Value', 'StringValue']
+        let metaKeys = ['Type', 'ValueType', 'IsAuthorized', 'PermissionDomain', 'AddressValue', 'UIntValue', 'Bytes32Value', 'StringValue']
         let objectWithoutEsMeta = _.omit(esEvent, metaKeys);
         let withProperCase = camelcaseKeys(objectWithoutEsMeta);
         return withProperCase

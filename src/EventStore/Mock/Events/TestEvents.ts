@@ -9,7 +9,7 @@ export const addressValueEsEvent: EventTypes.IEsEvent = {
     Type: 'ADDRESS_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'Address',
-    IsAuthorizedEvent: false,
+    IsAuthorized: false,
     PermissionDomain: 'ES',
     AddressValue: account1,
     UIntValue: 0,
@@ -21,7 +21,7 @@ export const uIntValueEsEvent: EventTypes.IEsEvent = {
     Type: 'UINT_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'UInt',
-    IsAuthorizedEvent: false,
+    IsAuthorized: false,
     PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
@@ -33,7 +33,7 @@ export const bytes32ValueEsEvent: EventTypes.IEsEvent = {
     Type: 'BYTES32_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'Bytes32',
-    IsAuthorizedEvent: false,
+    IsAuthorized: false,
     PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
@@ -44,7 +44,7 @@ export const stringValueEsEvent: EventTypes.IEsEvent = {
     Type: 'STRING_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'String',
-    IsAuthorizedEvent: false,
+    IsAuthorized: false,
     PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
@@ -56,7 +56,7 @@ export const ipfsValueEsEvent: EventTypes.IEsEvent = {
     Type: 'IPFS:RECORD:CREATED',
     Version: 'v0',
     ValueType: 'String',
-    IsAuthorizedEvent: false,
+    IsAuthorized: false,
     PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
@@ -64,17 +64,6 @@ export const ipfsValueEsEvent: EventTypes.IEsEvent = {
     StringValue: 'ipfs/QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU'
 }
 
-export const objectValueEsEvent: EventTypes.IEsEvent = {
-    Type: 'OBJECT_EVENT_TESTED',
-    Version: 'v0',
-    ValueType: 'Object',
-    IsAuthorizedEvent: false,
-    PermissionDomain: 'ES',
-    AddressValue: '0x0000000000000000000000000000000000000000',
-    UIntValue: 0,
-    Bytes32Value: '',
-    StringValue: ''
-}
 
 export const numberCommand: EventTypes.ITransmuteCommand = {
     type: 'USERS_COUNTED',

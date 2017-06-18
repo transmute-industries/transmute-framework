@@ -34,7 +34,7 @@ export class EventStore {
             Type,
             Version,
             ValueType,
-            IsAuthorizedEvent,
+            IsAuthorized,
             PermissionDomain,
             AddressValue,
             UIntValue,
@@ -42,7 +42,7 @@ export class EventStore {
             StringValue
         } = esEvent
         return await eventStore.writeEvent(
-            Type, Version, ValueType, IsAuthorizedEvent, PermissionDomain, AddressValue, UIntValue, Bytes32Value, StringValue,
+            Type, Version, ValueType, IsAuthorized, PermissionDomain, AddressValue, UIntValue, Bytes32Value, StringValue,
             {
                 from: fromAddress,
                 gas: 2000000
@@ -118,8 +118,10 @@ export class EventStore {
      */
     writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
         let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
-        let isIpfsObject = typeof transmuteCommand.payload === 'object' && transmuteCommand.meta && transmuteCommand.meta.handlers.indexOf('ipfs') !== -1
+        let isIpfsObject = typeof transmuteCommand.payload === 'object'
         let hash
+        // NOTE: We are only supporting IPFS for object storage from now on.
+        // IPLD and TransmuteIPFS can be better integrated now that we are focusing on supporting them.
         if (isIpfsObject) {
             hash = await this.framework.TransmuteIpfs.writeObject(transmuteCommand.payload)
             esEvent.ValueType = 'String'

@@ -13,8 +13,8 @@ describe('', () => {
         _eventStore = await EventStore.deployed()
     })
 
-    function writeEvent({Type, Version, ValueType, IsAuthorizedEvent, PermissionDomain, AddressValue, UIntValue, Bytes32Value, StringValue}, options) {
-        return _eventStore.writeEvent(Type, Version, ValueType, IsAuthorizedEvent, PermissionDomain, AddressValue, UIntValue, Bytes32Value, StringValue, options)
+    function writeEvent({Type, Version, ValueType, IsAuthorized, PermissionDomain, AddressValue, UIntValue, Bytes32Value, StringValue}, options) {
+        return _eventStore.writeEvent(Type, Version, ValueType, IsAuthorized, PermissionDomain, AddressValue, UIntValue, Bytes32Value, StringValue, options)
     }
 
     contract('EventStore', (accounts) => {
