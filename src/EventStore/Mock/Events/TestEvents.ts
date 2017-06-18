@@ -9,65 +9,71 @@ export const addressValueEsEvent: EventTypes.IEsEvent = {
     Type: 'ADDRESS_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'Address',
+    IsAuthorizedEvent: false,
+    PermissionDomain: 'ES',
     AddressValue: account1,
     UIntValue: 0,
     Bytes32Value: '',
-    StringValue: '',
-    PropertyCount: 0
+    StringValue: ''
 }
 
 export const uIntValueEsEvent: EventTypes.IEsEvent = {
     Type: 'UINT_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'UInt',
+    IsAuthorizedEvent: false,
+    PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
-    StringValue: '',
-    PropertyCount: 0
+    StringValue: ''
 }
 
 export const bytes32ValueEsEvent: EventTypes.IEsEvent = {
     Type: 'BYTES32_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'Bytes32',
+    IsAuthorizedEvent: false,
+    PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '0x6e6f74207265616c6c79206120627974657320333220737472696e6721000000',
-    StringValue: '',
-    PropertyCount: 0
+    StringValue: ''
 }
 export const stringValueEsEvent: EventTypes.IEsEvent = {
     Type: 'STRING_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'String',
+    IsAuthorizedEvent: false,
+    PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
-    StringValue: 'COOL:STRING',
-    PropertyCount: 0
+    StringValue: 'COOL:STRING'
 }
 
 export const ipfsValueEsEvent: EventTypes.IEsEvent = {
     Type: 'IPFS:RECORD:CREATED',
     Version: 'v0',
     ValueType: 'String',
+    IsAuthorizedEvent: false,
+    PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
-    StringValue: 'ipfs/QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU',
-    PropertyCount: 0
+    StringValue: 'ipfs/QmRa8NrWWxRa1TTenL8V3en9hbpQdPpjaURkz68wL7NfKU'
 }
 
 export const objectValueEsEvent: EventTypes.IEsEvent = {
     Type: 'OBJECT_EVENT_TESTED',
     Version: 'v0',
     ValueType: 'Object',
+    IsAuthorizedEvent: false,
+    PermissionDomain: 'ES',
     AddressValue: '0x0000000000000000000000000000000000000000',
     UIntValue: 0,
     Bytes32Value: '',
-    StringValue: '',
-    PropertyCount: 0
+    StringValue: ''
 }
 
 export const numberCommand: EventTypes.ITransmuteCommand = {
@@ -111,58 +117,3 @@ export const objectCommand: EventTypes.ITransmuteCommand = {
         }
     }
 }
-
-
-// NEEDING MORE TESTING FOR THESE
-
-export const addressValueEsEventProperty: EventTypes.IEsEventProperty = {
-    EventIndex: 0,              // should be overwritten
-    EventPropertyIndex: 0,      // should be overwritten
-    Name: 'SomeAddressKeyName', // should be overwritten
-    ValueType: 'Address',
-
-    AddressValue: '0x0000000000000000000000000000000000000000', // should be overwritten
-    UIntValue: 0,
-    Bytes32Value: '',
-    StringValue: ''
-
-}
-
-export const uIntValueEsEventProperty: EventTypes.IEsEventProperty = {
-    EventIndex: 0,              // should be overwritten
-    EventPropertyIndex: 0,      // should be overwritten
-    Name: 'SomeUIntKeyName',    // should be overwritten
-    ValueType: 'UInt',
-
-    AddressValue: '0x0000000000000000000000000000000000000000',
-    UIntValue: 0, // should be overwritten
-    Bytes32Value: '',
-    StringValue: ''
-}
-
-export const bytes32ValueEsEventProperty: EventTypes.IEsEventProperty = {
-    EventIndex: 0,              // should be overwritten
-    EventPropertyIndex: 0,      // should be overwritten
-    Name: 'SomeBytes32KeyName', // should be overwritten
-    ValueType: 'Bytes32',
-
-    AddressValue: '0x0000000000000000000000000000000000000000',
-    UIntValue: 0,
-    Bytes32Value: '', // should be overwritten
-    StringValue: ''
-}
-
-export const stringValueEsEventProperty: EventTypes.IEsEventProperty = {
-    EventIndex: 0,              // should be overwritten
-    EventPropertyIndex: 0,      // should be overwritten
-    Name: 'SomeStringKeyName', // should be overwritten
-    ValueType: 'String',
-
-    AddressValue: '0x0000000000000000000000000000000000000000',
-    UIntValue: 0,
-    Bytes32Value: '',
-    StringValue: ''  // should be overwritten
-}
-
-
-

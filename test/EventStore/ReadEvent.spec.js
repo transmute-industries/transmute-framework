@@ -53,22 +53,28 @@ describe('EventStore.readEvent', () => {
                 let valueType = toAscii(returnVals[3])
                 assert.equal(valueType, toAscii(solidityEvent.ValueType), 'expected read to match write')
 
-                let addressValue = returnVals[4]
+                let isAuthorized = returnVals[4]
+                assert.equal(isAuthorized, solidityEvent.IsAuthorized, 'expected read to match write')
+
+                let permissionDomain = returnVals[5]
+                assert.equal(permissionDomain, solidityEvent.PermissionDomain, 'expected read to match write')
+
+                let addressValue = returnVals[6]
                 assert.equal(addressValue, solidityEvent.AddressValue, 'expected read to match write')
 
-                let uintValue = returnVals[5].toNumber()
+                let uintValue = returnVals[7].toNumber()
                 assert.equal(uintValue, solidityEvent.UIntValue.toNumber(), 'expected read to match write')
 
-                let bytes32Value = toAscii(returnVals[6])
+                let bytes32Value = toAscii(returnVals[8])
                 assert.equal(bytes32Value, toAscii(solidityEvent.Bytes32Value), 'expected read to match write')
 
-                let stringValue = toAscii(returnVals[7])
+                let stringValue = toAscii(returnVals[9])
                 assert.equal(stringValue, toAscii(solidityEvent.StringValue), 'expected read to match write')
 
-                let txOrigin = returnVals[8]
+                let txOrigin = returnVals[10]
                 assert.equal(txOrigin, solidityEvent.TxOrigin, 'expected read to match write')
 
-                let created = returnVals[9].toNumber()
+                let created = returnVals[11].toNumber()
                 assert.equal(created, solidityEvent.Created.toNumber(), 'expected read to match write')
             })
 
@@ -92,22 +98,28 @@ describe('EventStore.readEvent', () => {
                 let valueType = toAscii(returnVals[3])
                 assert.equal(valueType, toAscii(solidityEvent.ValueType), 'expected read to match write')
 
-                let addressValue = returnVals[4]
+                let isAuthorized = returnVals[4]
+                assert.equal(isAuthorized, solidityEvent.IsAuthorized, 'expected read to match write')
+
+                let permissionDomain = returnVals[5]
+                assert.equal(permissionDomain, solidityEvent.PermissionDomain, 'expected read to match write')
+
+                let addressValue = returnVals[6]
                 assert.equal(addressValue, solidityEvent.AddressValue, 'expected read to match write')
 
-                let uintValue = returnVals[5].toNumber()
+                let uintValue = returnVals[7].toNumber()
                 assert.equal(uintValue, solidityEvent.UIntValue.toNumber(), 'expected read to match write')
 
-                let bytes32Value = toAscii(returnVals[6])
+                let bytes32Value = toAscii(returnVals[8])
                 assert.equal(bytes32Value, toAscii(solidityEvent.Bytes32Value), 'expected read to match write')
 
-                let stringValue = toAscii(returnVals[7])
+                let stringValue = toAscii(returnVals[9])
                 assert.equal(stringValue, toAscii(solidityEvent.StringValue), 'expected read to match write')
 
-                let txOrigin = returnVals[8]
+                let txOrigin = returnVals[10]
                 assert.equal(txOrigin, solidityEvent.TxOrigin, 'expected read to match write')
 
-                let created = returnVals[9].toNumber()
+                let created = returnVals[11].toNumber()
                 assert.equal(created, solidityEvent.Created.toNumber(), 'expected read to match write')
             })
         })

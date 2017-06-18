@@ -11,6 +11,9 @@ contract EventStore is Killable {
     bytes32 Version;
 
     bytes32 ValueType;
+    bool IsAuthorized;
+    bytes32 PermissionDomain;
+
     address AddressValue;
     uint UIntValue;
     bytes32 Bytes32Value;
@@ -18,8 +21,6 @@ contract EventStore is Killable {
 
     address TxOrigin;
     uint Created;
-    bool IsAuthorized;
-    bytes32 PermissionDomain;
   }
   event EsEvent(
     uint Id,
@@ -27,6 +28,9 @@ contract EventStore is Killable {
     bytes32 Version,
 
     bytes32 ValueType,
+    bool IsAuthorized,
+    bytes32 PermissionDomain,
+
     address AddressValue,
     uint UIntValue,
     bytes32 Bytes32Value,
@@ -172,7 +176,7 @@ contract EventStore is Killable {
 
     solidityEvents[solidityEventCount] = solidityEvent;
 
-    EsEvent(solidityEventCount, _eventType, _version, _valueType, _addressValue, _uintValue, _bytes32Value, _stringValue, tx.origin, _created);
+    EsEvent(solidityEventCount, _eventType, _version, _valueType, _isAuthorizedEvent, _permissionDomain, _addressValue, _uintValue, _bytes32Value, _stringValue, tx.origin, _created);
     solidityEventCount += 1;
     return solidityEventCount;
   }
@@ -180,11 +184,11 @@ contract EventStore is Killable {
   // READ EVENT
   function readEvent(uint _eventIndex)
     public constant
-    returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, string, address, uint)
+    returns (uint, bytes32, bytes32, bytes32, bool, bytes32, address, uint, bytes32, string, address, uint)
   {
     EsEventStruct memory solidityEvent = solidityEvents[_eventIndex];
     require(!solidityEvent.IsAuthorized || (ACLAddresses.contains(tx.origin) && ACLMapping[tx.origin][solidityEvent.PermissionDomain].read));
 
-    return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.StringValue, solidityEvent.TxOrigin, solidityEvent.Created);
+    return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.IsAuthorized, solidityEvent.PermissionDomain, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.StringValue, solidityEvent.TxOrigin, solidityEvent.Created);
   }
 }

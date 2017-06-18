@@ -11,12 +11,7 @@ import {
     uIntValueEsEvent,
     bytes32ValueEsEvent,
     stringValueEsEvent,
-    objectValueEsEvent,
-
-    addressValueEsEventProperty,
-    uIntValueEsEventProperty,
-    bytes32ValueEsEventProperty,
-    stringValueEsEventProperty
+    objectValueEsEvent
 } from '../Mock/Events/TestEvents'
 
 
@@ -32,24 +27,15 @@ export module EventTypes {
         Version: string;
 
         ValueType: string;
+        IsAuthorizedEvent: boolean;
+        PermissionDomain: string;
+
         AddressValue: string;
         UIntValue: IBigNumber;
         Bytes32Value: string;
 
         TxOrigin: string;
         Created: IBigNumber;
-        PropertyCount: IBigNumber;
-    }
-
-    export interface IEsEventPropertyFromTruffle {
-        EventIndex: IBigNumber;
-        EventPropertyIndex: IBigNumber;
-        Name: string;
-        ValueType: string;
-
-        AddressValue: string;
-        UIntValue: IBigNumber;
-        Bytes32Value: string;
     }
 
     export interface IEsEvent {
@@ -58,6 +44,9 @@ export module EventTypes {
         Version: string;
 
         ValueType: string;
+        IsAuthorizedEvent: boolean;
+        PermissionDomain: string;
+
         AddressValue: string;
         UIntValue: number;
         Bytes32Value: string;
@@ -65,19 +54,6 @@ export module EventTypes {
 
         TxOrigin?: string;
         Created?: number;
-        PropertyCount?: number;
-    }
-
-    export interface IEsEventProperty {
-        EventIndex: number;
-        EventPropertyIndex: number;
-        Name: string;
-        ValueType: string;
-
-        AddressValue: string;
-        UIntValue: number;
-        Bytes32Value: string;
-        StringValue: string;
     }
 
     export interface ITransmuteEventMeta {
@@ -95,11 +71,11 @@ export module EventTypes {
     // TLDR; we are extending the FSA here, to add some required EventStore properties to meta, making it required
     export interface ITransmuteEvent {
         type: string,
-        // The type of an action identifies to the consumer the nature of the action that has occurred. 
-        // By convention, type is usually a string constant or a Symbol. 
+        // The type of an action identifies to the consumer the nature of the action that has occurred.
+        // By convention, type is usually a string constant or a Symbol.
         // If two types are the same, they MUST be strictly equivalent (using ===).
         payload: any,
-        // The optional payload property MAY be any type of value. It represents the payload of the action. 
+        // The optional payload property MAY be any type of value. It represents the payload of the action.
         // Any information about the action that is not the type or status of the action should be part of the payload field.
         // By convention, if error is true, the payload SHOULD be an error object. This is akin to rejecting a promise with an error object.
         error?: any,
@@ -162,40 +138,21 @@ export module EventTypes {
     * @typedef {String} EsEvent
     */
     export const EsEvent = 'EsEvent'
-    /**
-    * @typedef {String} EsEventProperty
-    */
-    export const EsEventProperty = 'EsEventProperty'
-
-    /**
-    * @typedef {Object} EsEventPropertySchema
-    * @property {Number} EventIndex  - the solidityEventId used by the EventStore
-    * @property {Number} EventPropertyIndex  - the property index used by the EventStore
-    * @property {String} Name - a string representing a key
-    * @property {String} Type - a string representing the type of the value
-    * @property {String} AddressValue - an address value
-    * @property {Number} UIntValue  - a uint value
-    * @property {String} Bytes32Value - a string value
-    */
-    export const EsEventPropertySchema = {
-        EventIndex: 'BigNumber',
-        EventPropertyIndex: 'BigNumber',
-        Name: 'Bytes32',
-        ValueType: 'Bytes32',
-
-        AddressValue: 'String',
-        UIntValue: 'BigNumber',
-        Bytes32Value: 'Bytes32',
-        StringValue: 'String'
-    }
 
     /**
     * @typedef {Object} EsEventSchema
     * @property {Number} Id - the solidityEventId used by the EventStore
     * @property {String} Type - a string representing the redux action
+    * @property {String} Version - the current version of the EventStore
+    * @property {String} ValueType - the type of value stored in the event
+    * @property {Boolean} IsAuthorizedEvent - flag determining whether or not the sender needs to be authorized under a domain to read / write this event
+    * @property {String} PermissionDomain - domain under which an event is scoped
+    * @property {String} AddressValue - address value of event
+    * @property {Number} UIntValue - uint value of event
+    * @property {String} Bytes32Value - bytes32 value of event
+    * @property {String} StringValue - string value of event
+    * @property {String} TxOrigin - the original message sender for this event
     * @property {Number} Created - the time (uint) the event was written by the EventStore
-    * @property {String} IntegrityHash - web3.sha3(JSON.stringify(event)) an unsafe way to check if the object has changed
-    * @property {Number} PropertyCount - a number (uint) of custom properties on the event
     */
     export const EsEventSchema = {
         Id: 'BigNumber',
@@ -203,24 +160,24 @@ export module EventTypes {
         Version: 'Bytes32',
 
         ValueType: 'Bytes32',
+        IsAuthorizedEvent: 'Boolean',
+        PermissionDomain: 'Bytes32',
+
         AddressValue: 'String',
         UIntValue: 'BigNumber',
         Bytes32Value: 'Bytes32',
         StringValue: 'String',
 
         TxOrigin: 'String',
-        Created: 'BigNumber',
-        PropertyCount: 'BigNumber'
+        Created: 'BigNumber'
     }
 
     /**
     * @typedef {Object} TruffleEventSchema
     * @property {EsEventSchema} EsEvent -  a Solidity Event Schema
-    * @property {EsEventPropertySchema} EsEventProperty - a Solidity Event Property Schema
     */
     export const TruffleEventSchema = {
-        [EsEvent]: EsEventSchema,
-        [EsEventProperty]: EsEventPropertySchema
+        [EsEvent]: EsEventSchema
     }
 
     /**
@@ -237,19 +194,9 @@ export module EventTypes {
             case 'Bytes32': return EventTypes.toAscii(truffleValue)
             case 'BigNumber': return truffleValue.toNumber()
             case 'UInt': return truffleValue.toNumber()
-            default: throw Error(`UNKNWON schemaPropType for truffleValue '${truffleValue}'. Make sure your schema is up to date.`)
+            case 'Boolean': return truffleValue
+            default: throw Error(`UNKNOWN schemaPropType for truffleValue '${truffleValue}'. Make sure your schema is up to date.`)
         }
-    }
-
-    export const getTransmuteEventPropertyFromEsEventProperty = (prop) => {
-        let _obj = {}
-        switch (prop.ValueType) {
-            case 'String': _obj[prop.Name] = toAscii(prop.StringValue); break;
-            case 'Bytes32': _obj[prop.Name] = toAscii(prop.Bytes32Value); break;
-            case 'BigNumber': _obj[prop.Name] = prop.UIntValue; break;
-            case 'Address': _obj[prop.Name] = prop.AddressValue; break;
-        }
-        return _obj
     }
 
     export const getEsEventFromEsEventValues = (eventValues): IEsEventFromTruffle => {
@@ -258,14 +205,6 @@ export module EventTypes {
             evt[k] = eventValues[i]
         })
         return <IEsEventFromTruffle>evt
-    }
-
-    export const getEsEventPropertyFromEsEventPropertyValues = (eventPropValues): IEsEventPropertyFromTruffle => {
-        let evt = {};
-        _.keys(EsEventPropertySchema).map((k, i) => {
-            evt[k] = eventPropValues[i]
-        })
-        return <IEsEventPropertyFromTruffle>evt
     }
 
     // these 2 should be more DRY
@@ -281,19 +220,6 @@ export module EventTypes {
         return <IEsEvent>event
     }
 
-    // these 2 should be more DRY
-    export const getEsEventPropertyFromEsEventPropertyWithTruffleTypes = (eventType: string, solEvent: IEsEventPropertyFromTruffle): IEsEventProperty => {
-        let event = {}
-        let schema = TruffleEventSchema[eventType]
-        _.forIn(solEvent, (value, key) => {
-            let prop = getPropFromTruffleEventSchemaType(schema[key], value)
-            _.extend(event, {
-                [key]: prop
-            })
-        })
-        return <IEsEventProperty>event
-    }
-
     export const getValueType = (es: any) => {
         switch (es.ValueType) {
             case 'Address': return es.AddressValue
@@ -305,33 +231,19 @@ export module EventTypes {
     }
 
     export const convertMeta = (esEvent: EventTypes.IEsEvent): any => {
-        let metaKeys = ['Type', 'ValueType', 'PropertyCount', 'AddressValue', 'UIntValue', 'Bytes32Value', 'StringValue']
+        let metaKeys = ['Type', 'ValueType', 'IsAuthorizedEvent', 'PermissionDomain', 'AddressValue', 'UIntValue', 'Bytes32Value', 'StringValue']
         let objectWithoutEsMeta = _.omit(esEvent, metaKeys);
         let withProperCase = camelcaseKeys(objectWithoutEsMeta);
         return withProperCase
     }
 
-    export const payloadReducer = (state: any = {}, esEvenProperty: EventTypes.IEsEventProperty) => {
-        return Object.assign({}, state, {
-            [esEvenProperty.Name]: getValueType(esEvenProperty)
-        })
-    }
-
     export const esEventToTransmuteEvent = async (
-        esEvent: EventTypes.IEsEvent,
-        esEventProps?: Array<EventTypes.IEsEventProperty>
+        esEvent: EventTypes.IEsEvent
     ): Promise<EventTypes.ITransmuteEvent> => {
         // console.log('esEvent to be transmuted: ', esEvent)
         let payload: any = {}
         let meta: ITransmuteEventMeta = convertMeta(esEvent)
-        if (!esEvent.PropertyCount) {
-            payload = getValueType(esEvent)
-        } else {
-            esEventProps.forEach((esEventProp) => {
-                payload = payloadReducer(payload, esEventProp)
-            })
-            payload = EventTypes.unflatten(payload)
-        }
+        payload = getValueType(esEvent)
         return <EventTypes.ITransmuteEvent>{
             type: esEvent.Type,
             payload: payload,
@@ -360,9 +272,9 @@ export module EventTypes {
                 esEvent = _.cloneDeep(stringValueEsEvent);
                 esEvent.StringValue = transmuteCommand.payload
                 break
-            case 'Object':
-                esEvent = _.cloneDeep(objectValueEsEvent);
-                esEvent.PropertyCount = Object.keys(transmuteCommand.payload).length
+            case 'Boolean':
+                esEvent = _.cloneDeep(stringValueEsEvent);
+                esEvent.StringValue = transmuteCommand.payload
                 break
             default:
                 throw Error('Unkown valueType: ' + valueType)
@@ -370,55 +282,6 @@ export module EventTypes {
         esEvent.Type = transmuteCommand.type
         return <EventTypes.IEsEvent>esEvent
     }
-
-    export const convertCommandToEsEventProperties = (
-        esEvent: EventTypes.IEsEvent,
-        transmuteCommand: EventTypes.ITransmuteCommand
-    ): Array<EventTypes.IEsEventProperty> => {
-        let payload = transmuteCommand.payload
-        let flatPayload = EventTypes.flatten(payload)
-        // console.log('flatPayload: ', flatPayload )
-        let payloadKeys = _.keys(flatPayload)
-        let payloadVals = _.values(flatPayload)
-        let payLoadValueTypes = payloadVals.map(EventTypes.guessType)
-        // console.log('payloadKeys: ', payloadKeys )
-        // console.log('payloadVals: ', payloadVals )
-        // console.log('payLoadValueTypes: ', payLoadValueTypes )
-        let esEventProps = []
-        payloadKeys.forEach((key, i) => {
-            // console.log(i)
-            let esEventProp
-            let valueType = payLoadValueTypes[i]
-            let value = payloadVals[i]
-            let name = payloadKeys[i]
-            switch (valueType) {
-                case 'Address':
-                    esEventProp = _.cloneDeep(addressValueEsEventProperty);
-                    esEventProp.AddressValue = value
-                    break
-                case 'UInt':
-                    esEventProp = _.cloneDeep(uIntValueEsEventProperty);
-                    esEventProp.UIntValue = value
-                    break
-                case 'Bytes32':
-                    esEventProp = _.cloneDeep(bytes32ValueEsEventProperty);
-                    esEventProp.Bytes32Value = value
-                    break
-                case 'String':
-                    esEventProp = _.cloneDeep(stringValueEsEventProperty);
-                    esEventProp.StringValue = value
-                    break
-                default:
-                    throw Error('Unkown valueType: ' + valueType)
-            }
-            esEventProp.EventIndex = esEvent.Id
-            esEventProp.EventPropertyIndex = i
-            esEventProp.Name = name
-            esEventProps.push(esEventProp)
-        })
-        return <any>esEventProps
-    }
-
 
     // http://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
     export const flatten = (data) => {
@@ -484,12 +347,8 @@ export module EventTypes {
         // console.log('esEvents: ', esEvents)
         let transmuteEvents = []
         esEvents.forEach((esEvent) => {
-            let esEventProps = _.filter(esEventsAndEventProps, (obj) => {
-                return obj.EventIndex === esEvent.Id
-            })
-            let transmuteEvent = EventTypes.esEventToTransmuteEvent(esEvent, esEventProps)
+            let transmuteEvent = EventTypes.esEventToTransmuteEvent(esEvent)
             transmuteEvents.push(transmuteEvent)
-            // console.log('expect well formed event here: ', transmuteEvent)
         })
         return transmuteEvents
     }

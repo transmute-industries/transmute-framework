@@ -7,7 +7,7 @@ const jsonLogic = require('json-logic-js')
 const {extend}  = require('lodash')
 const moment = require('moment')
 
-import { 
+import {
     JSON_FEED,
     JSON_LD,
     JSON_SCHEMA,
@@ -32,7 +32,7 @@ describe("TransmuteLogic", () => {
 
         it(" can be used to tell if invoice is past due", () => {
             let rule = JSON_LOGIC.isInvoicePastDue
-            let data = JSON_LD.Invoice 
+            let data = JSON_LD.Invoice
             let now = moment().format('YYYY-MM-DD')
             extend( data, {
                 "now": now
@@ -52,7 +52,7 @@ describe("TransmuteLogic", () => {
             let result = TransmuteLogic.projection(rule, data)
             expect(result[0] === false)
             expect(result[1] === false)
-        }) 
+        })
     })
 
 })
