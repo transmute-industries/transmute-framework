@@ -39,7 +39,7 @@ module.exports = function(deployer) {
   deployer.link(Killable, EventStore)
   deployer.deploy(EventStore)
 
-  // deployer.link(AddressSetLib, EventStoreFactory)
-  // deployer.link(EventStore, EventStoreFactory)
-  // deployer.deploy(EventStoreFactory)
+  deployer.link(AddressSetLib, EventStoreFactory)
+  deployer.link(EventStore, EventStoreFactory)
+  deployer.deploy(EventStoreFactory)
 }
