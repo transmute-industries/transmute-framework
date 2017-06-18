@@ -121,7 +121,6 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
             for (var i = 0; i <= states.length - 2; i++) {
                 patches.push(jiff.diff(states[i], states[i + 1]))
             }
-            patches = _.flatten(patches)
             resolve(patches)
         })
     }
@@ -147,17 +146,17 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
         })
     }
 
-    // some thing is broken here...
-    applyIPLDHashes = async (stateObj, hashes) => {
-        let patches = await this.hashesToPatches(hashes)
-        let patched = jiff.patch(patches[0], stateObj) 
-
-        // console.log(patches)
-        // patches.forEach((patch) => {
-        //     patched = jiff.patch(patch, patched)
-        //     // console.log(patched)
-        // })
+    applyPatches = (obj, patches) => {
+        let patched = _.clone(obj)
+        patches.forEach((patch) => {
+            patched = jiff.patchInPlace(patch, patched)
+        })
         return patched
+    }
+
+    applyIPLDHashes = async (obj, hashes) => {
+        let patches = await this.hashesToPatches(hashes)
+        return this.applyPatches(obj, patches)
     }
 }
 

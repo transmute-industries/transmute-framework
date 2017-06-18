@@ -34,10 +34,10 @@ describe('TransmuteIpfs', () => {
             TransmuteIpfs.init()
         })
         it('should add folder to ipfs and return the result', () => {
-            return TransmuteIpfs.addFromFs('./src/TransmuteIpfs/mock')
+            return TransmuteIpfs.addFromFs('./src/TransmuteIpfs/mock/dist')
                 .then((res) => {
-                    assert.equal(res[0].path, 'mock/config.json')
-                    assert.equal(res[1].path, 'mock')
+                    assert.equal(res[0].path, 'dist/config.json')
+                    assert.equal(res[1].path, 'dist')
                 })
         })
     })
@@ -85,7 +85,8 @@ describe('TransmuteIpfs', () => {
         it('should convert an array of states to an array of patches from state 0 to state n', async () => {
             let articleStates = [e0, e1, e2]
             let patches = await TransmuteIpfs.statesToPatches(articleStates)
-            assert.equal(patches[0].op, 'add')
+            // console.log(patches)
+            assert.equal(patches[0][0].op, 'add')
         })
     })
 
@@ -112,11 +113,11 @@ describe('TransmuteIpfs', () => {
             let hashes = await TransmuteIpfs.patchesToHashes(patches)
             let reconstructedPatches = await TransmuteIpfs.hashesToPatches(hashes)
             // console.log(reconstructedPatches)
-            assert.equal(reconstructedPatches[0].op, 'add')
+            assert.equal(reconstructedPatches[0][0].op, 'add')
         })
     })
 
-    describe.only('applyIPLDHashes(hashes)', () => {
+    describe('applyIPLDHashes(hashes)', () => {
         before(() => {
             TransmuteIpfs.init()
         })
@@ -124,17 +125,35 @@ describe('TransmuteIpfs', () => {
             let articleStates = [e0, e1, e2]
             let patches = await TransmuteIpfs.statesToPatches(articleStates)
             let hashes = await TransmuteIpfs.patchesToHashes(patches)
-            let patched = await TransmuteIpfs.applyIPLDHashes(_.clone(e0), hashes)
-            console.log(patched)
-            // assert.equal(reconstructedPatches[0].op, 'add')
+            let patched = await TransmuteIpfs.applyIPLDHashes(e0, hashes)
+            // console.log(patched)
+            assert.equal(patched.blocks[1].text, 'Welcome to IPFS and Ethereum')
         })
     })
-
 
     describe('Sanity', () => {
         before(() => {
             TransmuteIpfs.init()
         })
+        it('jiff patching works as expected', () => {
+            let start = {
+                a: [0, 1],
+                b: {
+                    cool: 'story'
+                }
+            }
+            let end = {
+                a: [3],
+                b: {
+                    dead: 'pool'
+                }
+            }
+            let patch = jiff.diff(start, end)
+            let patched = TransmuteIpfs.applyPatches(start, [ patch ])
+            // console.log(patched)
+            assert(_.isEqual(patched, end))
+        })
+
         it('jiff patching works as expected', (done) => {
             let start = {
                 a: [0, 1],
@@ -148,15 +167,10 @@ describe('TransmuteIpfs', () => {
                     dead: 'pool'
                 }
             }
-
             let patch = jiff.diff(start, end)
-
             let patched = jiff.patch(patch, start)
-
             assert(_.isEqual(patched, end))
-
             done()
-
         })
         it('IPLD + IPFS raw checks', (done) => {
             let rawJsonObject = {
