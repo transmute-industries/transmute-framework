@@ -10,10 +10,11 @@ contract EventStoreFactory is EventStore {
   bytes32 ESPermissionDomain = 'ES';
 
   // Fallback Function
-  function () { throw; }
+  function () payable { throw; }
 
   // Constructor
   function EventStoreFactory()
+  payable
   {
     addACLAddress('ESF_CREATED', 'ESF_READ_GRANTED', 'ESF_WRITE_GRANTED', false, ESFactoryPermissionDomain, tx.origin);
   }
