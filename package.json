@@ -17,7 +17,7 @@
     "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'",
     "ipfs": "npm run ipfs:allow && ipfs daemon",
     "test:all": "npm run clean && npm run truffle-test && npm run test ",
-    "test:site": "pm2 start http-server -- -p 3030 ",
+    "test:react": "cd ./examples/react-webpack-babel && pm2 start npm -- run start",
     "test:browser": "nyc mocha --compilers ts-node/register --require source-map-support/register --full-trace --bail --timeout 30000 src/**/*.browser.spec.ts",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "docs": "typedoc --gaID UA-99768185-1 --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
