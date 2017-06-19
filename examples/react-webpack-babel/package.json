@@ -11,6 +11,7 @@
     "path": "^0.12.7",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "transmute-framework": "^0.1.35",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"
   },
