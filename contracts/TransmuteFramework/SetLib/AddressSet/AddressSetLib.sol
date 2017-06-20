@@ -81,6 +81,12 @@ library AddressSetLib {
     return value;
   }
 
+  function replace(AddressSet storage self, address old, address nu) public
+    returns (bool)
+  {
+    return remove(self, old) && add(self, nu);
+  }
+  
   function first(AddressSet storage self) public constant
     notEmpty(self)
     returns (address)
