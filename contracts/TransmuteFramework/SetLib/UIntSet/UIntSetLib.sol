@@ -81,6 +81,12 @@ library UIntSetLib {
     return value;
   }
 
+  function replace(UIntSet storage self, uint old, uint nu) public
+    returns (bool)
+  {
+    return remove(self, old) && add(self, nu);
+  }
+
   function first(UIntSet storage self) public constant
     notEmpty(self)
     returns (uint)
