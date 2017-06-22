@@ -1,84 +1,100 @@
-// var Web3 = require('web3')
-// const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
-// var Bytes32SetLib = artifacts.require('./TransmuteFramework/SetLib/Bytes32SetSpec.sol')
-//
-// contract('Bytes32SetLib', function (accounts) {
-//
-//   var testInstance = null
-//   var size = 0
-//
-//   it('test deployed', (done) => {
-//     Bytes32SetLib.deployed().then((_instance) => {
-//       testInstance = _instance
-//       done()
-//     })
-//   })
-//
-//   it('test add, last', (done) => {
-//     testInstance.add('A').then((_tx) => ++size)
-//     testInstance.last.call().then((_last) => assert.equal(toAscii(_last), 'A'))
-//     testInstance.add('B').then((_tx) => ++size)
-//     testInstance.add('C').then((_tx) => ++size)
-//     testInstance.add('D').then((_tx) => ++size)
-//     testInstance.add('E').then((_tx) => ++size)
-//     testInstance.last.call().then((_last) => assert.equal(toAscii(_last), 'E'))
-//     done()
-//   })
-//
-//   it('test indexOf', (done) => {
-//     testInstance.indexOf.call('A').then((_index) => assert.equal(_index, 0))
-//     testInstance.indexOf.call('B').then((_index) => assert.equal(_index, 1))
-//     testInstance.indexOf.call('C').then((_index) => assert.equal(_index, 2))
-//     testInstance.indexOf.call('D').then((_index) => assert.equal(_index, 3))
-//     testInstance.indexOf.call('E').then((_index) => assert.equal(_index, 4))
-//     done()
-//   })
-//
-//   it('test remove, first', (done) => {
-//     testInstance.size.call().then((_size) => assert.equal(_size, size))
-//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'A'))
-//     testInstance.remove('A').then((_tx) => --size)
-//     testInstance.size.call().then((_size) => assert.equal(_size, size))
-//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'E'))
-//     testInstance.remove('E').then((_tx) => --size)
-//     testInstance.size.call().then((_size) => assert.equal(_size, size))
-//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'D'))
-//     testInstance.remove('D').then((_tx) => --size)
-//     testInstance.size.call().then((_size) => assert.equal(_size, size))
-//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'C'))
-//     testInstance.remove('C').then((_tx) => --size)
-//     testInstance.size.call().then((_size) => assert.equal(_size, size))
-//     testInstance.first.call().then((_first) => assert.equal(toAscii(_first), 'B'))
-//     testInstance.remove('B').then((_tx) => --size)
-//     testInstance.size.call().then((_size) => assert.equal(_size, size))
-//     done()
-//   })
-//
-//   it('test add, remove, contains', (done) => {
-//     testInstance.contains.call('H').then((_bool) => assert.equal(_bool, false))
-//     testInstance.add('F').then((_tx) => ++size)
-//     testInstance.add('G').then((_tx) => ++size)
-//     testInstance.add('H').then((_tx) => ++size)
-//     testInstance.add('I').then((_tx) => ++size)
-//     testInstance.add('J').then((_tx) => ++size)
-//     testInstance.contains.call('H').then((_bool) => assert.equal(_bool, true))
-//     testInstance.contains.call('I').then((_bool) => assert.equal(_bool, true))
-//     testInstance.remove('J').then((_tx) => --size)
-//     testInstance.remove('I').then((_tx) => --size)
-//     testInstance.remove('H').then((_tx) => --size)
-//     testInstance.contains.call('I').then((_bool) => assert.equal(_bool, false))
-//     done()
-//   })
-//
-//   it('test get, set', (done) => {
-//     testInstance.set(0, 'A');
-//     testInstance.get.call(0).then((_value) => assert.equal(toAscii(_value), 'A'))
-//     testInstance.set(1, 'A');
-//     testInstance.get.call(1).then((_value) => assert.equal(toAscii(_value), 'G'))
-//     done()
-//   })
-//
-//   function toAscii(value) {
-//     return web3.toAscii(value).replace(/\u0000/g, '')
-//   }
-// })
+var Web3 = require('web3')
+const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
+var Bytes32SetSpec = artifacts.require('./TransmuteFramework/SetLib/Bytes32Set/Bytes32SetSpec.sol')
+
+contract('bytes32Set', function(accounts) {
+
+  let _bytes32Set;
+  let size = 0
+
+  function toAscii(value) {
+    return web3.toAscii(value).replace(/\u0000/g, '')
+  }
+
+  before(async function() {
+    _bytes32Set = await Bytes32SetSpec.new();
+  });
+
+  it('test add, last', async () => {
+    await _bytes32Set.add('A')
+    ++size
+    assert.equal(toAscii((await _bytes32Set.last.call())), 'A')
+    await _bytes32Set.add('B')
+    ++size
+    assert.equal(toAscii((await _bytes32Set.last.call())), 'B')
+    await _bytes32Set.add('C')
+    ++size
+    assert.equal(toAscii((await _bytes32Set.last.call())), 'C')
+    await _bytes32Set.add('D')
+    ++size
+    assert.equal(toAscii((await _bytes32Set.last.call())), 'D')
+    await _bytes32Set.add('E')
+    ++size
+    assert.equal(toAscii((await _bytes32Set.last.call())), 'E')
+  })
+
+  it('test indexOf', async () => {
+    assert.equal(await _bytes32Set.indexOf.call('A'), 0)
+    assert.equal(await _bytes32Set.indexOf.call('B'), 1)
+    assert.equal(await _bytes32Set.indexOf.call('C'), 2)
+    assert.equal(await _bytes32Set.indexOf.call('D'), 3)
+    assert.equal(await _bytes32Set.indexOf.call('E'), 4)
+  })
+
+  it('test remove, first', async () => {
+    assert.equal(toAscii((await _bytes32Set.first.call())), 'A')
+    await _bytes32Set.remove('A')
+    --size
+    assert.equal(await _bytes32Set.size.call(), size)
+    assert.equal(toAscii((await _bytes32Set.first.call())), 'E')
+    await _bytes32Set.remove('E')
+    --size
+    assert.equal(await _bytes32Set.size.call(), size)
+    assert.equal(toAscii((await _bytes32Set.first.call())), 'D')
+    await _bytes32Set.remove('D')
+    --size
+    assert.equal(await _bytes32Set.size.call(), size)
+    assert.equal(toAscii((await _bytes32Set.first.call())), 'C')
+    await _bytes32Set.remove('C')
+    --size
+    assert.equal(await _bytes32Set.size.call(), size)
+    assert.equal(toAscii((await _bytes32Set.first.call())), 'B')
+    await _bytes32Set.remove('B')
+    --size
+    assert.equal(await _bytes32Set.size.call(), size)
+  })
+
+  it('test add, remove, contains', async () => {
+    await _bytes32Set.add('F')
+    ++size
+    await _bytes32Set.add('G')
+    ++size
+    await _bytes32Set.add('H')
+    ++size
+    await _bytes32Set.add('I')
+    ++size
+    await _bytes32Set.add('J')
+    ++size
+    assert.equal(await _bytes32Set.contains.call('F'), true)
+    assert.equal(await _bytes32Set.contains.call('G'), true)
+    assert.equal(await _bytes32Set.contains.call('H'), true)
+    assert.equal(await _bytes32Set.contains.call('I'), true)
+    assert.equal(await _bytes32Set.contains.call('J'), true)
+    await _bytes32Set.remove('J')
+    --size
+    await _bytes32Set.remove('I')
+    --size
+    await _bytes32Set.remove('H')
+    --size
+    assert.equal(await _bytes32Set.contains.call('H'), false)
+    assert.equal(await _bytes32Set.contains.call('I'), false)
+    assert.equal(await _bytes32Set.contains.call('J'), false)
+  })
+
+  it('test get, set', async () => {
+    await _bytes32Set.set(0, 'A')
+    assert.equal(toAscii((await _bytes32Set.get.call(0))), 'A')
+    await _bytes32Set.set(1, 'A')
+    assert.equal(toAscii((await _bytes32Set.get.call(1))), 'G')
+  })
+})

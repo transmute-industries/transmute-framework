@@ -24,14 +24,17 @@ module.exports = function(deployer) {
   deployer.deploy(Killable)
 
   deployer.deploy(AddressSetLib)
+  deployer.link(Killable, AddressSetSpec)
   deployer.link(AddressSetLib, AddressSetSpec)
   deployer.deploy(AddressSetSpec)
 
   deployer.deploy(Bytes32SetLib)
+  deployer.link(Killable, Bytes32SetSpec)
   deployer.link(Bytes32SetLib, Bytes32SetSpec)
   deployer.deploy(Bytes32SetSpec)
 
   deployer.deploy(UIntSetLib)
+  deployer.link(Killable, UIntSetLib)
   deployer.link(UIntSetLib, UIntSetSpec)
   deployer.deploy(UIntSetSpec)
 

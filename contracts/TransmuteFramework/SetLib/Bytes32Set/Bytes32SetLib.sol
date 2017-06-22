@@ -81,6 +81,12 @@ library Bytes32SetLib {
     return value;
   }
 
+  function replace(Bytes32Set storage self, bytes32 old, bytes32 nu) public
+    returns (bool)
+  {
+    return remove(self, old) && add(self, nu);
+  }
+
   function first(Bytes32Set storage self) public constant
     notEmpty(self)
     returns (bytes32)

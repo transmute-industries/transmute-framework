@@ -1,78 +1,96 @@
-// var Web3 = require('web3')
-// const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
-// var UIntSetSpec = artifacts.require('./TransmuteFramework/SetLib/UIntSet/UIntSetSpec.sol')
+var Web3 = require('web3')
+const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
+var UIntSetSpec = artifacts.require('./TransmuteFramework/SetLib/UIntSet/UIntSetSpec.sol')
 
-// contract('UIntSetSpec', function (accounts) {
+contract('UIntSet', function (accounts) {
 
-//   var testInstance = null
-//   var size = 0
+  var _uintSet = null
+  var size = 0
 
-//   it('test deployed', async () => {
-//     testInstance = await UIntSetSpec.deployed()
-//   })
+  before(async function() {
+    _uintSet = await UIntSetSpec.new();
+  });
 
-//   it('test add, last', async () => {
-//     testInstance.add(0).then((_tx) => ++size)
-//     assert.equal((await testInstance.last.call()).toNumber(), 0)
-//     testInstance.add(1).then((_tx) => ++size)
-//     assert.equal((await testInstance.last.call()).toNumber(), 1)
-//     testInstance.add(2).then((_tx) => ++size)
-//     assert.equal((await testInstance.last.call()).toNumber(), 2)
-//     testInstance.add(3).then((_tx) => ++size)
-//     assert.equal((await testInstance.last.call()).toNumber(), 3)
-//     testInstance.add(4).then((_tx) => ++size)
-//     assert.equal((await testInstance.last.call()).toNumber(), 4)
-//   })
+  it('test add, last', async () => {
+    await _uintSet.add(0)
+    ++size
+    assert.equal((await _uintSet.last.call()).toNumber(), 0)
+    await _uintSet.add(1)
+    ++size
+    assert.equal((await _uintSet.last.call()).toNumber(), 1)
+    await _uintSet.add(2)
+    ++size
+    assert.equal((await _uintSet.last.call()).toNumber(), 2)
+    await _uintSet.add(3)
+    ++size
+    assert.equal((await _uintSet.last.call()).toNumber(), 3)
+    await _uintSet.add(4)
+    ++size
+    assert.equal((await _uintSet.last.call()).toNumber(), 4)
+  })
 
-//   it('test indexOf', async () => {
-//     testInstance.indexOf.call(0).then((_index) => assert.equal(_index, 0))
-//     testInstance.indexOf.call(1).then((_index) => assert.equal(_index, 1))
-//     testInstance.indexOf.call(2).then((_index) => assert.equal(_index, 2))
-//     testInstance.indexOf.call(3).then((_index) => assert.equal(_index, 3))
-//     testInstance.indexOf.call(4).then((_index) => assert.equal(_index, 4))
-//   })
+  it('test indexOf', async () => {
+    assert.equal(await _uintSet.indexOf.call(0), 0)
+    assert.equal(await _uintSet.indexOf.call(1), 1)
+    assert.equal(await _uintSet.indexOf.call(2), 2)
+    assert.equal(await _uintSet.indexOf.call(3), 3)
+    assert.equal(await _uintSet.indexOf.call(4), 4)
+  })
 
-//   it('test remove, first', async () => {
-//     assert.equal((await testInstance.first.call()).toNumber(), 0)
-//     testInstance.remove(0).then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//     assert.equal((await testInstance.first.call()).toNumber(), 4)
-//     testInstance.remove(4).then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//     assert.equal((await testInstance.first.call()).toNumber(), 3)
-//     testInstance.remove(3).then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//     assert.equal((await testInstance.first.call()).toNumber(), 2)
-//     testInstance.remove(2).then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//     assert.equal((await testInstance.first.call()).toNumber(), 1)
-//     testInstance.remove(1).then((_tx) => --size)
-//     assert.equal(await testInstance.size.call(), size)
-//   })
+  it('test remove, first', async () => {
+    assert.equal((await _uintSet.first.call()).toNumber(), 0)
+    await _uintSet.remove(0)
+    --size
+    assert.equal(await _uintSet.size.call(), size)
+    assert.equal((await _uintSet.first.call()).toNumber(), 4)
+    await _uintSet.remove(4)
+    --size
+    assert.equal(await _uintSet.size.call(), size)
+    assert.equal((await _uintSet.first.call()).toNumber(), 3)
+    await _uintSet.remove(3)
+    --size
+    assert.equal(await _uintSet.size.call(), size)
+    assert.equal((await _uintSet.first.call()).toNumber(), 2)
+    await _uintSet.remove(2)
+    --size
+    assert.equal(await _uintSet.size.call(), size)
+    assert.equal((await _uintSet.first.call()).toNumber(), 1)
+    await _uintSet.remove(1)
+    --size
+    assert.equal(await _uintSet.size.call(), size)
+  })
 
-//   it('test add, remove, contains', async () => {
-//     await testInstance.add(5).then((_tx) => ++size)
-//     await testInstance.add(6).then((_tx) => ++size)
-//     await testInstance.add(7).then((_tx) => ++size)
-//     await testInstance.add(8).then((_tx) => ++size)
-//     await testInstance.add(9).then((_tx) => ++size)
-//     assert.equal(await testInstance.contains.call(5), true)
-//     assert.equal(await testInstance.contains.call(6), true)
-//     assert.equal(await testInstance.contains.call(7), true)
-//     assert.equal(await testInstance.contains.call(8), true)
-//     assert.equal(await testInstance.contains.call(9), true)
-//     await testInstance.remove(9).then((_tx) => --size)
-//     await testInstance.remove(8).then((_tx) => --size)
-//     await testInstance.remove(7).then((_tx) => --size)
-//     assert.equal(await testInstance.contains.call(7), false)
-//     assert.equal(await testInstance.contains.call(8), false)
-//     assert.equal(await testInstance.contains.call(9), false)
-//   })
+  it('test add, remove, contains', async () => {
+    await _uintSet.add(5)
+    ++size
+    await _uintSet.add(6)
+    ++size
+    await _uintSet.add(7)
+    ++size
+    await _uintSet.add(8)
+    ++size
+    await _uintSet.add(9)
+    ++size
+    assert.equal(await _uintSet.contains.call(5), true)
+    assert.equal(await _uintSet.contains.call(6), true)
+    assert.equal(await _uintSet.contains.call(7), true)
+    assert.equal(await _uintSet.contains.call(8), true)
+    assert.equal(await _uintSet.contains.call(9), true)
+    await _uintSet.remove(9)
+    --size
+    await _uintSet.remove(8)
+    --size
+    await _uintSet.remove(7)
+    --size
+    assert.equal(await _uintSet.contains.call(7), false)
+    assert.equal(await _uintSet.contains.call(8), false)
+    assert.equal(await _uintSet.contains.call(9), false)
+  })
 
-//   it('test get, set', async () => {
-//     await testInstance.set(0, 0)
-//     testInstance.get.call(0).then((_value) => assert.equal(_value.toNumber(), 0))
-//     await testInstance.set(1, 0)
-//     testInstance.get.call(1).then((_value) => assert.equal(_value.toNumber(), 6))
-//   })
-// })
+  it('test get, set', async () => {
+    await _uintSet.set(0, 0)
+    assert.equal((await _uintSet.get.call(0)).toNumber(), 0)
+    await _uintSet.set(1, 0)
+    assert.equal((await _uintSet.get.call(1)).toNumber(), 6)
+  })
+})
