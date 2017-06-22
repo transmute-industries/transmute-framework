@@ -8,9 +8,11 @@ console.log('\n👑   Transmute Framework   👑\n')
 
 import Patch from './Patch/index'
 import TransmuteIpfs from './TransmuteIpfs/index'
+import EventStore from './EventStore/api'
 
 Patch(vorpal)
 TransmuteIpfs(vorpal)
+EventStore(vorpal)
 
 vorpal
     .command('web3 [cmd]', 'A command line interface to web3')
