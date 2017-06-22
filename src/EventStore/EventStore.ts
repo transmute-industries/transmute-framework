@@ -57,12 +57,12 @@ export class EventStore {
         })
     }
 
-     /**
-    * @param {TruffleContract} eventStore - a contract instance which is an Event Store
-    * @param {Address} fromAddress - the address you wish to deploy these events from
-    * @param {Number} eventId - the event ID to be read
-    * @return {Promise<EventTypes.ITransmuteEvent>} - a json object of type ITransmuteEvent
-    */
+    /**
+   * @param {TruffleContract} eventStore - a contract instance which is an Event Store
+   * @param {Address} fromAddress - the address you wish to deploy these events from
+   * @param {Number} eventId - the event ID to be read
+   * @return {Promise<EventTypes.ITransmuteEvent>} - a json object of type ITransmuteEvent
+   */
     readTransmuteEvent = async (eventStore: any, fromAddress: string, eventId: number): Promise<EventTypes.ITransmuteEvent> => {
         let eventVals = await this.readEsEventValues(eventStore, fromAddress, eventId)
         let esEventWithTruffleTypes: EventTypes.IEsEventFromTruffle = EventTypes.getEsEventFromEsEventValues(eventVals)
@@ -110,12 +110,12 @@ export class EventStore {
         return await Promise.all(eventPromises)
     }
 
-     /**
-     * @param {TruffleContract} eventStore - a contract instance which is an Event Store
-     * @param {Address} fromAddress - the address you wish to deploy these events from
-     * @param {ITransmuteCommand} transmuteCommand - an FSA object to be written to the chain
-     * @return {Promise<EventTypes.ITransmuteCommandResponse>} - an ITransmuteCommandResponse object
-     */
+    /**
+    * @param {TruffleContract} eventStore - a contract instance which is an Event Store
+    * @param {Address} fromAddress - the address you wish to deploy these events from
+    * @param {ITransmuteCommand} transmuteCommand - an FSA object to be written to the chain
+    * @return {Promise<EventTypes.ITransmuteCommandResponse>} - an ITransmuteCommandResponse object
+    */
     writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
         let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
         let isIpfsObject = typeof transmuteCommand.payload === 'object'
@@ -167,7 +167,7 @@ export class EventStore {
         events.forEach((event) => {
             readModel = reducer(readModel, event)
         })
-        return <EventTypes.IReadModel> readModel
+        return <EventTypes.IReadModel>readModel
     }
 
     /**
@@ -190,21 +190,22 @@ export class EventStore {
                     return readModel
                 }
                 // console.log('_readModel: ', _readModel)
-                let events = await this.readTransmuteEvents(eventStore, fromAddress, _readModel.lastEvent || 0)
+                let startIndex = _readModel.lastEvent !== null ? _readModel.lastEvent + 1 : 0
+                let events = await this.readTransmuteEvents(eventStore, fromAddress, startIndex)
                 // console.log('events: ', events)
                 let updatedReadModel = this.readModelGenerator(_readModel, reducer, events)
-                return <any> this.framework.Persistence.LocalStore.setItem(updatedReadModel.readModelStoreKey, updatedReadModel)
+                return <any>this.framework.Persistence.LocalStore.setItem(updatedReadModel.readModelStoreKey, updatedReadModel)
             })
     }
 
 
     getCachedReadModel = async (
-        contractAddress : string,
-        eventStore : any,
+        contractAddress: string,
+        eventStore: any,
         fromAddress: string,
         readModel: EventTypes.IReadModel,
         reducer: any
-        ) =>{
+    ) => {
         readModel.readModelStoreKey = `${readModel.readModelType}:${contractAddress}`
         readModel.contractAddress = contractAddress
         readModel = await this.maybeSyncReadModel(eventStore, fromAddress, readModel, reducer)

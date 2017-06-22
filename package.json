@@ -13,7 +13,7 @@
     "pretest": "npm run build",
     "testrpc": "pm2 start testrpc",
     "truffle-test": "truffle migrate && truffle test",
-    "test": "nyc mocha --compilers ts-node/register --require source-map-support/register --full-trace --bail --timeout 30000 src/**/*.spec.ts",
+    "test": "nyc mocha ",
     "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'",
     "ipfs": "npm run ipfs:allow && ipfs daemon",
     "test:all": "npm run clean && npm run truffle-test && npm run test ",
