@@ -40,6 +40,24 @@ vorpal
         })
     })
 
+
+vorpal
+    .command('test', 'Wrapper around truffle test')
+    .action((args, callback) => {
+        console.log()
+        console.log('🍄  Running Truffle Test ...')
+        var exec = require('child_process').exec
+        exec('truffle test', (error, stdout, stderr) => {
+            console.log()
+            console.log(stdout)
+
+            if (error !== null) {
+                console.log('exec error: ' + error)
+            }
+            callback()
+        })
+    })
+
 vorpal
     // .delimiter('🦄   $')
     // .show()
