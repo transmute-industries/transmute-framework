@@ -125,7 +125,7 @@ export class EventStore {
         if (isIpfsObject) {
             hash = await this.framework.TransmuteIpfs.writeObject(transmuteCommand.payload)
             esEvent.ValueType = 'String'
-            esEvent.StringValue = 'ipfs/' + hash
+            esEvent.StringValue = '/ipfs/' + hash
         }
         let tx = await this.writeEsEvent(eventStore, fromAddress, esEvent)
         let eventsFromWriteEsEvent = await EventTypes.eventsFromTransaction(tx)
@@ -136,7 +136,7 @@ export class EventStore {
 
         if (isIpfsObject) {
             transmuteEvents[0].payload = transmuteCommand.payload
-            transmuteEvents[0].meta.path = 'ipfs/' + hash
+            transmuteEvents[0].meta.path = '/ipfs/' + hash
         }
         return <EventTypes.ITransmuteCommandResponse>{
             events: transmuteEvents,
