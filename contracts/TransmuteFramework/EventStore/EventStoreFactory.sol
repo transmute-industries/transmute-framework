@@ -51,7 +51,7 @@ contract EventStoreFactory is EventStore {
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
-    writeEvent('ES_CREATED', 'v0', 'Address', address(_newEventStore), 0, '', '');
+    writeEvent('ES_CREATED', 'A', bytes32(address(_newEventStore)));
 
     return address(_newEventStore);
 	}
@@ -60,17 +60,17 @@ contract EventStoreFactory is EventStore {
     public
     checkExistence(_address)
   {
-    // Validate Local State
-    require(this.owner() == msg.sender && creatorEventStoreMapping[msg.sender].values.length != 0);
+    // Validate Local State - Only the Factory owner can destroy stores with this method
+    require(this.owner() == msg.sender);
+
+    EventStore _eventStore = EventStore(_address);
 
     // Update Local State
-    creatorEventStoreMapping[msg.sender].remove(_address);
+    creatorEventStoreMapping[_eventStore.owner()].remove(_address);
     EventStoreAddresses.remove(_address);
 
-    // Interact With Other Contracts
-    EventStore _eventStore = EventStore(_address);
     _eventStore.kill();
 
-    writeEvent('ES_DESTROYED', 'v0', 'Address', address(_address), 0, '', '');
+    writeEvent('ES_DESTROYED', 'A', bytes32(_address));
   }
 }

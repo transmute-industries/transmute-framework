@@ -1,38 +1,11 @@
 pragma solidity ^0.4.11;
 import '../zeppelin/lifecycle/Killable.sol';
+import "./EventStoreLib.sol";
 
 contract EventStore is Killable {
+  using EventStoreLib for EventStoreLib.EsEventStorage;
 
-  struct EsEventStruct {
-    uint Id;
-    bytes32 Type;
-    bytes32 Version;
-
-    bytes32 ValueType;
-    address AddressValue;
-    uint UIntValue;
-    bytes32 Bytes32Value;
-    string StringValue;
-
-    address TxOrigin;
-    uint Created;
-  }
-  event EsEvent(
-    uint Id,
-    bytes32 Type,
-    bytes32 Version,
-
-    bytes32 ValueType,
-    address AddressValue,
-    uint UIntValue,
-    bytes32 Bytes32Value,
-    string StringValue,
-
-    address TxOrigin,
-    uint Created
-  );
-
-  EsEventStruct[] events;
+  EventStoreLib.EsEventStorage store;
 
   address public creator;
   uint public timeCreated;
@@ -46,38 +19,42 @@ contract EventStore is Killable {
     timeCreated = now;
   }
 
-  // WRITE EVENT
-  function writeEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, address _addressValue, uint _uintValue, bytes32 _bytes32Value, string _stringValue) 
+  function writeEvent(
+    bytes32 _meta, 
+    bytes1 _type,
+    bytes32 _data
+  ) 
     returns (uint)
   {
-    uint _created = now;
-    uint _eventId = events.length;
-
-    EsEventStruct memory solidityEvent;
-    solidityEvent.Id = _eventId;
-    solidityEvent.Type = _type;
-    solidityEvent.Created = _created;
-    solidityEvent.TxOrigin = tx.origin;
-    solidityEvent.Version = _version;
-
-    solidityEvent.ValueType = _valueType;
-    solidityEvent.AddressValue = _addressValue;
-    solidityEvent.UIntValue = _uintValue;
-    solidityEvent.Bytes32Value = _bytes32Value;
-    solidityEvent.StringValue = _stringValue;
-
-    EsEvent(_eventId, _type, _version, _valueType, _addressValue, _uintValue, _bytes32Value, _stringValue, tx.origin, _created);
-    events.push(solidityEvent);
-    return _eventId;
+    return EventStoreLib.writeEvent(
+      store, 
+      _meta, 
+      _type,
+      _data
+    );
   }
 
   // READ EVENT
-  function readEvent(uint _eventIndex) 
-    returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, string, address, uint)
+  function readEvent(uint _eventId) 
+    returns (
+      uint, 
+      address, 
+      uint, 
+      bytes32, 
+      bytes1,
+      bytes32
+    )
   {
-    EsEventStruct memory solidityEvent = events[_eventIndex];
-    return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.StringValue, solidityEvent.TxOrigin, solidityEvent.Created);
+    return EventStoreLib.readEvent(store, _eventId);
   }
 
+  event EsEvent(
+    uint Id,
+    address TxOrigin,
+    uint Created,
+    bytes32 Meta,
+    bytes1 Type,
+    bytes32 Data
+  );
 
 }
