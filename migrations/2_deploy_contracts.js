@@ -12,8 +12,8 @@ var Bytes32SetSpec = artifacts.require("./TransmuteFramework/SetLib/Bytes32Set/B
 var UIntSetLib = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSetLib.sol")
 var UIntSetSpec = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSetSpec.sol")
 
-var EventStore = artifacts.require('./TransmuteFramework/EventStore.sol')
-var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStoreFactory.sol')
+var EventStore = artifacts.require('./TransmuteFramework/EventStore/EventStore.sol')
+var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/EventStoreFactory.sol')
 
 
 module.exports = function(deployer) {

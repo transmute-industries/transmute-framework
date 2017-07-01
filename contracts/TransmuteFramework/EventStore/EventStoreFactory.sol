@@ -1,13 +1,11 @@
 pragma solidity ^0.4.11;
 import "./EventStore.sol";
-import "./SetLib/AddressSet/AddressSetLib.sol";
+import "../SetLib/AddressSet/AddressSetLib.sol";
 
 contract EventStoreFactory is EventStore {
   using AddressSetLib for AddressSetLib.AddressSet;
   mapping (address => AddressSetLib.AddressSet) creatorEventStoreMapping;
   AddressSetLib.AddressSet EventStoreAddresses;
-  bytes32 ESFactoryPermissionDomain = 'ESF';
-  bytes32 ESPermissionDomain = 'ES';
 
   // Fallback Function
   function () payable { throw; }
@@ -16,7 +14,7 @@ contract EventStoreFactory is EventStore {
   function EventStoreFactory()
   payable
   {
-    addACLAddress('ESF_CREATED', 'ESF_READ_GRANTED', 'ESF_WRITE_GRANTED', false, ESFactoryPermissionDomain, tx.origin);
+
   }
 
   // Modifiers
@@ -29,7 +27,6 @@ contract EventStoreFactory is EventStore {
   // Helper Functions
   function getEventStoresByCreator()
     public constant
-    isACLAddress(msg.sender)
     returns (address[])
   {
     return creatorEventStoreMapping[msg.sender].values;
@@ -43,18 +40,18 @@ contract EventStoreFactory is EventStore {
   }
 
   // Interface
-	function createEventStore()
+	function createEventStore(string storeName)
     public
     returns (address)
   {
     // Interact With Other Contracts
-		EventStore _newEventStore = new EventStore();
+		EventStore _newEventStore = new EventStore(storeName);
 
     // Update State Dependent On Other Contracts
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
-    writeEvent('ES_CREATED', 'v0', 'Address', false, ESPermissionDomain, address(_newEventStore), 0, '', '');
+    writeEvent('ES_CREATED', 'v0', 'Address', address(_newEventStore), 0, '', '');
 
     return address(_newEventStore);
 	}
@@ -74,6 +71,6 @@ contract EventStoreFactory is EventStore {
     EventStore _eventStore = EventStore(_address);
     _eventStore.kill();
 
-    writeEvent('ES_DESTROYED', 'v0', 'Address', false, ESPermissionDomain, address(_address), 0, '', '');
+    writeEvent('ES_DESTROYED', 'v0', 'Address', address(_address), 0, '', '');
   }
 }

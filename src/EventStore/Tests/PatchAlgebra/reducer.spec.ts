@@ -1,14 +1,14 @@
 'use strict'
 
-import TransmuteFramework from '../../TransmuteFramework'
+import TransmuteFramework from '../../../TransmuteFramework'
 
 const { web3, EventStoreContract, EventStore } = TransmuteFramework.init()
 
-import { EventTypes } from '../../EventStore/EventTypes/EventTypes'
+import { EventTypes } from '../../../EventStore/EventTypes/EventTypes'
 
 import { assert, expect, should } from 'chai'
 
-import { isFSA } from 'flux-standard-action'
+
 import * as _ from 'lodash'
 const contract = require('truffle-contract')
 
@@ -44,9 +44,7 @@ describe('Patch Alegbra', () => {
             }
 
             let model = <any>updatedReadModel.model
-
             assert(model.hero.health === 30)
-
         })
     })
 
