@@ -19,11 +19,20 @@ contract EventStore is Killable {
     timeCreated = now;
   }
 
+  // Modifiers
+  modifier isWriteAuthorized()
+  {
+    require(tx.origin == owner || msg.sender == creator);
+    _;
+  }
+
   function writeEvent(
     bytes32 _meta, 
     bytes1 _type,
     bytes32 _data
   ) 
+    public 
+    isWriteAuthorized
     returns (uint)
   {
     return EventStoreLib.writeEvent(

@@ -6,7 +6,7 @@ const EventStore = artifacts.require('./TransmuteFramework/EventStore/EventStore
 
 const { marshalEvent, unMarshalEvent } = require('./Common')
 
-describe.only('', () => {
+describe('', () => {
 
     let factory, eventStore
 
@@ -47,7 +47,6 @@ describe.only('', () => {
                 event.Type, 
                 event.Data
             )
-
             eventStore = EventStore.at(unMarshalledEvent.data)
             let creator = await eventStore.creator()
             assert(creator === accounts[1])
