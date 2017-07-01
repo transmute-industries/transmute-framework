@@ -40,12 +40,12 @@ contract EventStoreFactory is EventStore {
   }
 
   // Interface
-	function createEventStore(string storeName)
+	function createEventStore()
     public
     returns (address)
   {
     // Interact With Other Contracts
-		EventStore _newEventStore = new EventStore(storeName);
+		EventStore _newEventStore = new EventStore();
 
     // Update State Dependent On Other Contracts
     EventStoreAddresses.add(address(_newEventStore));

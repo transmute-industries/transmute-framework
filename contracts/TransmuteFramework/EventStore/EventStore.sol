@@ -9,7 +9,6 @@ contract EventStore is Killable {
     bytes32 Version;
 
     bytes32 ValueType;
-
     address AddressValue;
     uint UIntValue;
     bytes32 Bytes32Value;
@@ -24,7 +23,6 @@ contract EventStore is Killable {
     bytes32 Version,
 
     bytes32 ValueType,
-
     address AddressValue,
     uint UIntValue,
     bytes32 Bytes32Value,
@@ -34,45 +32,30 @@ contract EventStore is Killable {
     uint Created
   );
 
-  string storeName;
+  uint public solidityEventCount;
+  mapping (uint => EsEventStruct) solidityEvents;
+
   address public creator;
   uint public timeCreated;
 
-
   // FALLBACK
   function () payable { throw; }
-
-  // CONSTRUCTOR
-  function EventStore(string _storeName) payable {
-     storeName = _storeName;
-  }
-
-  // VERSION
-  function getVersion()
-    public constant
-    returns (uint)
-  {
-    return 1;
+  
+  // CONSTRUCTOR  
+  function EventStore() payable {
+    creator = tx.origin;
+    timeCreated = now;
   }
 
   // WRITE EVENT
-  function writeEvent(
-    bytes32 _eventType, 
-    bytes32 _version, 
-    bytes32 _valueType, 
-    address _addressValue, 
-    uint _uintValue, 
-    bytes32 _bytes32Value, 
-    string _stringValue
-    )
-    public 
+  function writeEvent(bytes32 _type, bytes32 _version, bytes32 _valueType, address _addressValue, uint _uintValue, bytes32 _bytes32Value, string _stringValue) 
     returns (uint)
   {
     uint _created = now;
 
     EsEventStruct memory solidityEvent;
     solidityEvent.Id = solidityEventCount;
-    solidityEvent.Type = _eventType;
+    solidityEvent.Type = _type;
     solidityEvent.Created = _created;
     solidityEvent.TxOrigin = tx.origin;
     solidityEvent.Version = _version;
@@ -85,40 +68,18 @@ contract EventStore is Killable {
 
     solidityEvents[solidityEventCount] = solidityEvent;
 
-    EsEvent(solidityEventCount, _eventType, _version, _valueType, _addressValue, _uintValue, _bytes32Value, _stringValue, tx.origin, _created);
+    EsEvent(solidityEventCount, _type, _version, _valueType, _addressValue, _uintValue, _bytes32Value, _stringValue, tx.origin, _created);
     solidityEventCount += 1;
     return solidityEventCount;
   }
 
   // READ EVENT
-  function readEvent(uint _eventIndex)
-    public constant
-    returns (
-      uint,    // ID
-      bytes32, // TYPE
-      bytes32, // Version
-      bytes32, // Value Type
-      address, // Address Value
-      uint,    // UInt Value
-      bytes32, // Bytes32 Value
-      string,  // String Value
-      address, // TX Origin
-      uint     // Created
-      ){
+  function readEvent(uint _eventIndex) 
+    returns (uint, bytes32, bytes32, bytes32, address, uint, bytes32, string, address, uint)
+  {
     EsEventStruct memory solidityEvent = solidityEvents[_eventIndex];
-    return (
-      solidityEvent.Id, 
-      solidityEvent.Type, 
-      solidityEvent.Version, 
-      solidityEvent.ValueType, 
-
-      solidityEvent.AddressValue, 
-      solidityEvent.UIntValue, 
-      solidityEvent.Bytes32Value, 
-      solidityEvent.StringValue, 
-
-      solidityEvent.TxOrigin, 
-      solidityEvent.Created
-    );
+    return (solidityEvent.Id, solidityEvent.Type, solidityEvent.Version, solidityEvent.ValueType, solidityEvent.AddressValue, solidityEvent.UIntValue, solidityEvent.Bytes32Value, solidityEvent.StringValue, solidityEvent.TxOrigin, solidityEvent.Created);
   }
+
+
 }
