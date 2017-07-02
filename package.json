@@ -64,6 +64,7 @@
   "dependencies": {
     "@conclurer/local-storage-fallback": "1.0.2",
     "@digix/truffle-lightwallet-provider": "0.0.13",
+    "accesscontrol": "^1.5.1",
     "bluebird": "3.5.0",
     "camelcase-keys": "4.1.0",
     "ethereumjs-testrpc": "3.0.5",

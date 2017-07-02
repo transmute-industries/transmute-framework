@@ -15,21 +15,21 @@ const isTypeError = (e) => {
 
 // https://blog.stakeventures.com/articles/smart-contract-terms
 const hex2ipfshash = (hash) => {
- return bs58.encode(new Buffer("1220" + hash.slice(2), 'hex'))
+    return bs58.encode(new Buffer("1220" + hash.slice(2), 'hex'))
 }
 
 const ipfs2hex = (ipfshash) => {
- return "0x" + new Buffer(bs58.decode(ipfshash).slice(2)).toString('hex');
+    return "0x" + new Buffer(bs58.decode(ipfshash).slice(2)).toString('hex');
 }
 
 const marshalEvent = (_meta, _type, _data) => {
     // 'I' Encodes that this is IPLD, so we know to remove Qm (and add it back)
-    if (_type === 'I'){
+    if (_type === 'I') {
         _data = ipfs2hex(_data)
     }
     // Left padd ints and addresses for bytes32 equivalence of Solidity casting
-    if (_type === 'U' || _type === 'A'){
-        _data = util.bufferToHex(util.setLengthLeft(_data, 32)) 
+    if (_type === 'U' || _type === 'A') {
+        _data = util.bufferToHex(util.setLengthLeft(_data, 32))
     }
     return {
         meta: _meta,
@@ -41,9 +41,9 @@ const marshalEvent = (_meta, _type, _data) => {
 const unMarshalEvent = (_meta, _type, _data) => {
     _meta = toAscii(_meta)
     _type = toAscii(_type)
-    switch(_type){
+    switch (_type) {
         case 'A': _data = '0x' + _data.split('0x000000000000000000000000')[1]; break
-        case 'U': _data =  web3.toBigNumber(_data).toNumber(); break
+        case 'U': _data = web3.toBigNumber(_data).toNumber(); break
         case 'B': _data = _data; break
         case 'I': _data = hex2ipfshash(_data); break
     }
@@ -54,10 +54,45 @@ const unMarshalEvent = (_meta, _type, _data) => {
     }
 }
 
+const grantItemFromEvent = (event) => {
+    return {
+        role: toAscii(event.role),
+        resource: toAscii(event.resource),
+        action: toAscii(event.action),
+        attributes: event.attributes.map(toAscii)
+    }
+}
+
+const grantItemFromValues = (values) => {
+    return {
+        role: toAscii(values[0]),
+        resource: toAscii(values[1]),
+        action: toAscii(values[2]),
+        attributes: values[3].map(toAscii)
+    }
+}
+
+const permissionFromCanRoleActionResourceValues = (values) => {
+    return {
+        granted: values[0],
+        resource: toAscii(values[2]),
+        attributes: values[3].map(toAscii),
+        _: {
+            role: toAscii(values[1]),
+            resource: toAscii(values[2]),
+        }
+    }
+}
+
 module.exports = {
     toAscii,
     marshalEvent,
     unMarshalEvent,
+
+    grantItemFromEvent,
+    grantItemFromValues,
+    permissionFromCanRoleActionResourceValues,
+
     isVmException,
     isTypeError
 }

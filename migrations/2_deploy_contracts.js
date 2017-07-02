@@ -19,6 +19,9 @@ var EventStore = artifacts.require('./TransmuteFramework/EventStore/EventStore.s
 var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/EventStoreFactory.sol')
 
 
+var AccessControl = artifacts.require('./TransmuteFramework/AccessControl.sol')
+
+
 module.exports = function(deployer) {
   deployer.deploy(StringUtils)
 
@@ -41,7 +44,6 @@ module.exports = function(deployer) {
   deployer.link(UIntSetLib, UIntSetSpec)
   deployer.deploy(UIntSetSpec)
 
-  
   deployer.deploy(EventStoreLib)
   
   deployer.link(EventStoreLib, EventStore)
@@ -53,4 +55,9 @@ module.exports = function(deployer) {
   deployer.link(AddressSetLib, EventStoreFactory)
   deployer.link(EventStore, EventStoreFactory)
   deployer.deploy(EventStoreFactory)
+
+  deployer.link(EventStoreLib, AccessControl)
+  deployer.link(AddressSetLib, AccessControl)
+  deployer.link(EventStore, AccessControl)
+  deployer.deploy(AccessControl)
 }

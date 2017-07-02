@@ -4,9 +4,9 @@ var EventStore = artifacts.require('./TransmuteFramework/EventStore/EventStore.s
 
 var _ = require('lodash')
 
-const { marshalEvent, unMarshalEvent } = require('./Common')
+const { marshalEvent, unMarshalEvent } = require('../Common')
 
-describe.only('', () => {
+describe('', () => {
 
   contract('EventStoreFactory', function (accounts) {
 

@@ -4,7 +4,7 @@ const Web3 = require('web3')
 const EventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/EventStoreFactory.sol')
 const EventStore = artifacts.require('./TransmuteFramework/EventStore/EventStore.sol')
 
-const { marshalEvent, unMarshalEvent } = require('./Common')
+const { marshalEvent, unMarshalEvent } = require('../Common')
 
 describe('', () => {
 
