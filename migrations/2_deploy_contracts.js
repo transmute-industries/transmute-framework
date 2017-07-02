@@ -15,8 +15,8 @@ var UIntSetSpec = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSet
 
 
 var EventStoreLib = artifacts.require('./TransmuteFramework/EventStore/EventStoreLib.sol')
-var EventStore = artifacts.require('./TransmuteFramework/EventStore/EventStore.sol')
-var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/EventStoreFactory.sol')
+// var EventStore = artifacts.require('./TransmuteFramework/EventStore/EventStore.sol')
+// var EventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/EventStoreFactory.sol')
 
 
 var AccessControl = artifacts.require('./TransmuteFramework/AccessControl.sol')
@@ -46,18 +46,17 @@ module.exports = function(deployer) {
 
   deployer.deploy(EventStoreLib)
   
-  deployer.link(EventStoreLib, EventStore)
-  deployer.link(AddressSetLib, EventStore)
-  deployer.link(Killable, EventStore)
-  deployer.deploy(EventStore)
+  // deployer.link(EventStoreLib, EventStore)
+  // deployer.link(AddressSetLib, EventStore)
+  // deployer.link(Killable, EventStore)
+  // deployer.deploy(EventStore)
 
-  deployer.link(EventStoreLib, EventStoreFactory)
-  deployer.link(AddressSetLib, EventStoreFactory)
-  deployer.link(EventStore, EventStoreFactory)
-  deployer.deploy(EventStoreFactory)
+  // deployer.link(EventStoreLib, EventStoreFactory)
+  // deployer.link(AddressSetLib, EventStoreFactory)
+  // deployer.link(EventStore, EventStoreFactory)
+  // deployer.deploy(EventStoreFactory)
 
   deployer.link(EventStoreLib, AccessControl)
   deployer.link(AddressSetLib, AccessControl)
-  deployer.link(EventStore, AccessControl)
   deployer.deploy(AccessControl)
 }

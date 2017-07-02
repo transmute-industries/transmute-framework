@@ -6,9 +6,14 @@ library EventStoreLib{
     struct EsEventStruct {
         address TxOrigin;
         uint Created;
-        bytes32 Meta; // Event Type + Version
-        bytes1 Type; // A - Address, U - UInt, B - Bytes32
-        bytes32 Data; // Data 
+
+        bytes32 EventType; // Event Type + Version
+
+        bytes1 KeyType; // A - Address, U - UInt, B - Bytes32
+        bytes1 ValueType; // A - Address, U - UInt, B - Bytes32
+        
+        bytes32 Key; // Key 
+        bytes32 Value; // Value 
     }
 
     struct EsEventStorage {
@@ -18,9 +23,11 @@ library EventStoreLib{
     // WRITE EVENT
     function writeEvent(
         EsEventStorage storage self, 
-        bytes32 _meta,
-        bytes1 _type,
-        bytes32 _data
+        bytes32 _eventType,
+        bytes1 _keyType,
+        bytes1 _valueType,
+        bytes32 _key,
+        bytes32 _value
     ) returns (uint) {
         uint _created = now;
         uint _eventId = self.events.length;
@@ -28,17 +35,24 @@ library EventStoreLib{
         EsEventStruct memory esEvent;
         esEvent.TxOrigin = tx.origin;
         esEvent.Created = _created;
-        esEvent.Meta = _meta;
-        esEvent.Type = _type;
-        esEvent.Data = _data;
+
+        esEvent.EventType = _eventType;
+
+        esEvent.KeyType = _keyType;
+        esEvent.ValueType = _valueType;
+
+        esEvent.Key = _key;
+        esEvent.Value = _value;
 
         EsEvent(
             _eventId,
             esEvent.TxOrigin, 
             esEvent.Created,
-            esEvent.Meta,
-            esEvent.Type,
-            esEvent.Data
+            esEvent.EventType,
+            esEvent.KeyType,
+            esEvent.ValueType,
+            esEvent.Key,
+            esEvent.Value
         );
         self.events.push(esEvent);
         return _eventId;
@@ -46,15 +60,19 @@ library EventStoreLib{
 
     // READ EVENT
     function readEvent(EsEventStorage storage self, uint _eventId) 
-    returns (uint, address, uint, bytes32, bytes1, bytes32) {
+    returns (uint, address, uint, bytes32, bytes1, bytes1, bytes32, bytes32) {
         EsEventStruct memory esEvent = self.events[_eventId];
         return (
             _eventId, 
             esEvent.TxOrigin, 
             esEvent.Created,
-            esEvent.Meta,
-            esEvent.Type,
-            esEvent.Data
+            esEvent.EventType,
+
+            esEvent.KeyType,
+            esEvent.ValueType,
+
+            esEvent.Key,
+            esEvent.Value
         );
     }
 
@@ -62,9 +80,14 @@ library EventStoreLib{
         uint Id,
         address TxOrigin,
         uint Created,
-        bytes32 Meta,
-        bytes1 Type,
-        bytes32 Data
+
+        bytes32 EventType,
+
+        bytes1 KeyType,
+        bytes1 ValueType,
+
+        bytes32 Key,
+        bytes32 Value
     );
 
 }

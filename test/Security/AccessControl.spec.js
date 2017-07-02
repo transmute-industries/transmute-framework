@@ -8,7 +8,13 @@ var AccessControl = require('accesscontrol');
 const {
     grantItemFromEvent,
     grantItemFromValues,
-    permissionFromCanRoleActionResourceValues
+    permissionFromCanRoleActionResourceValues,
+
+    getNiceEsEventFromEventArgs,
+    getFSAFromEventArgs,
+
+    isVmException
+
 } = require('../Common')
 
 const fs = require('fs')
@@ -24,6 +30,7 @@ describe.only('', () => {
             p1.granted == p2.granted,
             p1._.role == p2._.role,
             p1._.resource == p2._.resource,
+            _.isEqual(p1._.attributes, p2._.attributes),
             p1.resource == p2.resource,
             _.isEqual(p1.attributes, p2.attributes),
         ])
@@ -36,247 +43,209 @@ describe.only('', () => {
             tac = await AccessControlContract.deployed()
         })
 
-        describe('canRoleActionResource(role, action, resource) congruity to can(role).action(resource)', () => {
+        describe('setAddressRole', () => {
+            it('onlyOwner', async () => {
+                let tx = await tac.setAddressRole(accounts[2], 'admin', {
+                    from: accounts[0]
+                })
+                let fsa = getFSAFromEventArgs(tx.logs[0].args)
+                assert(fsa.type === 'ES_ROLE_ASSIGNED')
+                try {
+                    tx = await await tac.setAddressRole(accounts[2], 'admin', {
+                        from: accounts[1]
+                    })
+                } catch (e) {
+                    assert.equal(isVmException(e), true, "expected an non owner call to getAddressRole to cause a vm exception")
+                }
+            })
+        })
 
-            it('for defined permissions', async () => {
-                // We start by granting an admin create:any for event store
-                let grantAdminCreateAnyEventStore = { role: 'admin', resource: 'eventstore', action: 'create:any', attributes: ['*'] }
-                let grantRevokeAdminCreateAnyEventStore = { role: 'admin', resource: 'eventstore', action: 'create:any', attributes: [] }
-                ac.setGrants([grantAdminCreateAnyEventStore])
-                // A defined permission in Node
-                let acAdminCreateAnyEventStorePerm = ac.can('admin').createAny('eventstore')
-                assert(acAdminCreateAnyEventStorePerm.granted, "expect admin can create any eventstore")
-                // Now we do the same in Ethereum
-                let tx = await tac.setGrant('admin', 'eventstore', 'create:any', ['*'])
-                let item = grantItemFromEvent(tx.logs[0].args)
-                let grantValues = await tac.getGrant.call(0)
-                let item2 = grantItemFromValues(grantValues)
-                // A defined permission in Ethereum
-                let permissionValues = await tac.canRoleActionResource.call('admin', 'create:any', 'eventstore')
-                let tacAdminCreateAnyEventStorePerm = permissionFromCanRoleActionResourceValues(permissionValues)
-                assert(
-                    relaxedPermsAreEqual(acAdminCreateAnyEventStorePerm, tacAdminCreateAnyEventStorePerm),
-                    'expect ac & tac to agree that admins can create any eventstore'
-                );
+        describe('getAddressRole', () => {
+            it('onlyOwner', async () => {
+                let acc1Role = await tac.getAddressRole.call(accounts[1], {
+                    from: accounts[0]
+                })
+                assert(acc1Role === '0x0000000000000000000000000000000000000000000000000000000000000000')
+                try {
+                    let tx = await await tac.getAddressRole.call(accounts[1], {
+                        from: accounts[1]
+                    })
+                } catch (e) {
+                    assert.equal(isVmException(e), true, "expected an non owner call to getAddressRole to cause a vm exception")
+                }
+            })
+        })
+
+        describe('setGrant', () => {
+            it('owner is allowed to setGrant', async () => {
+                let tx = await tac.setGrant('admin', 'grant', 'create:any', ['*'], {
+                    from: accounts[0]
+                })
+                assert(tx.logs.length > 0, 'expected an event when setGrant called by owner')
             })
 
-            it('for undefined permissions', async () => {
-                // An undefined permission in Node
-                let acAdminDeleteAnyEventStorePerm = ac.can('admin').deleteAny('eventstore')
-                assert(!acAdminDeleteAnyEventStorePerm.granted, "expect admin can not delete any eventstore")
-                // An udefined permission in Ethereum
-                let permissionValues = await tac.canRoleActionResource.call('admin', 'delete:any', 'eventstore')
-                let tacAdminDeleteAnyEventStorePerm = permissionFromCanRoleActionResourceValues(permissionValues)
+            it('non owner is not allowed to setGrant', async () => {
+                try {
+                    let tx = await tac.setGrant('admin', 'grant', 'create:any', ['*'], {
+                        from: accounts[1]
+                    })
+                } catch (e) {
+                    assert.equal(isVmException(e), true, "expected an non owner setGrant to cause a vm exception")
+                }
+            })
+
+            it('grants are resources, and setGrant supports DAC', async () => {
+                ac = new AccessControl()
+                ac.setGrants([
+                    { role: 'admin', resource: 'grant', action: 'create:any', attributes: ['*'] },
+                    { role: 'goblin', resource: 'grunt', action: 'create:any', attributes: ['*'] }
+                ])
+
+                // console.log(permToCreateAnyGrant.granted)
+                let tx = await tac.setGrant('admin', 'grant', 'create:any', ['*'], {
+                    from: accounts[0]
+                })
+
+                tx = await tac.setGrant('admin', 'grunt', 'create:any', ['*'], {
+                    from: accounts[0]
+                })
+
+                tx = await tac.setAddressRole(accounts[2], 'admin', {
+                    from: accounts[0]
+                })
+
+                // account 2 is not responsible and lets goblins create grunts, but is still not allowed to create grants...
+                tx = await tac.setGrant('goblin', 'grunt', 'create:any', ['*'], {
+                    from: accounts[2]
+                })
+
+                try {
+                    tx = await tac.setGrant('goblin', 'grant', 'create:any', ['*'], {
+                        from: accounts[2]
+                    })
+                } catch (e) {
+                    assert.equal(isVmException(e), true, "expected only owner cant setGrants for 'grant' resource.")
+                }
+
+                let acAdminCreateAnyEventStorePerm = ac.can('admin').createAny('grant')
+                let permissionValues = await tac.canRoleActionResource.call('admin', 'create:any', 'grant')
+                let tacAdminCreateAnyGrantPerm = permissionFromCanRoleActionResourceValues(permissionValues)
+                assert(tacAdminCreateAnyGrantPerm.granted === true)
                 assert(
-                    relaxedPermsAreEqual(acAdminDeleteAnyEventStorePerm, tacAdminDeleteAnyEventStorePerm),
-                    'expect ac & tac to agree that admins can not delete any eventstore'
+                    relaxedPermsAreEqual(acAdminCreateAnyEventStorePerm, tacAdminCreateAnyGrantPerm),
+                    'expect ac & tac to agree that admins can create any grant'
+                );
+
+                let acGoblinCreateAnyGrantPerm = ac.can('goblin').createAny('grant')
+                permissionValues = await tac.canRoleActionResource.call('goblin', 'create:any', 'grant')
+                let tacGoblinCreateAnyGrantPerm = permissionFromCanRoleActionResourceValues(permissionValues)
+                assert(tacGoblinCreateAnyGrantPerm.granted === false)
+                assert(
+                    relaxedPermsAreEqual(acGoblinCreateAnyGrantPerm, tacGoblinCreateAnyGrantPerm),
+                    'expect ac & tac to agree that goblin can not create any grant'
+                );
+
+                let acGoblinCreateAnyGruntPerm = ac.can('goblin').createAny('grunt')
+                permissionValues = await tac.canRoleActionResource.call('goblin', 'create:any', 'grunt')
+                let tacGoblinCreateAnyGruntPerm = permissionFromCanRoleActionResourceValues(permissionValues)
+                assert(tacGoblinCreateAnyGruntPerm.granted === true)
+                assert(
+                    relaxedPermsAreEqual(acGoblinCreateAnyGruntPerm, tacGoblinCreateAnyGruntPerm),
+                    'expect ac & tac to agree that goblin can create any grunt'
                 );
             })
         })
 
+        describe('canRoleActionResource(role, action, resource) congruity to can(role).action(resource)', () => {
 
-        // it('ac.setGrants => tac.setGrant + tac.getGrant', async () => {
+            it('for defined permissions', async () => {
+                // We start by granting an admin create:any for event store
+                let grantAdminCreateAnyEventStore = { role: 'admin', resource: 'grant', action: 'create:any', attributes: ['*'] }
+                ac.setGrants([grantAdminCreateAnyEventStore])
+                // A defined permission in Node
+                let acAdminCreateAnyEventStorePerm = ac.can('admin').createAny('grant')
+                assert(acAdminCreateAnyEventStorePerm.granted, "expect admin can create any grant")
+                // Now we do the same in Ethereum
+                let tx = await tac.setGrant('admin', 'grant', 'create:any', ['*'], {
+                    from: accounts[0]
+                })
+                let grantFromTxEvent = grantItemFromEvent(tx.logs[0].args)
+                let lastGrantIndex = (await tac.grantCount.call()).toNumber() - 1
+                let grantValues = await tac.getGrant.call(lastGrantIndex)
+                let grantFromMethodCall = grantItemFromValues(grantValues)
 
-        //     // We start by granting an admin create:any for event store
-        //     let grantAdminCreateAnyEventStore = { role: 'admin', resource: 'eventstore', action: 'create:any', attributes: ['*'] }
-        //     let grantRevokeAdminCreateAnyEventStore = { role: 'admin', resource: 'eventstore', action: 'create:any', attributes: [] }
-        //     ac.setGrants([grantAdminCreateAnyEventStore])
+                assert(_.isEqual(grantAdminCreateAnyEventStore, grantFromTxEvent))
+                assert(_.isEqual(grantFromTxEvent, grantFromMethodCall))
 
-        //     // A defined permission in Node
-        //     let acAdminCreateAnyEventStorePerm = ac.can('admin').createAny('eventstore')
-        //     assert(acAdminCreateAnyEventStorePerm.granted, "expect admin can create any eventstore")
+                // A defined permission in Ethereum
+                let permissionValues = await tac.canRoleActionResource.call('admin', 'create:any', 'grant')
+                let tacAdminCreateAnyGrantPerm = permissionFromCanRoleActionResourceValues(permissionValues)
+                assert(
+                    relaxedPermsAreEqual(acAdminCreateAnyEventStorePerm, tacAdminCreateAnyGrantPerm),
+                    'expect ac & tac to agree that admins can create any grant'
+                );
 
-        //     // An undefined permission in Node
-        //     let acAdminDeleteAnyEventStorePerm = ac.can('admin').deleteAny('eventstore')
-        //     assert(!acAdminDeleteAnyEventStorePerm.granted, "expect admin can not delete any eventstore")
+            })
 
-        //     // Now we do the same in Ethereum
+            it('for undefined permissions', async () => {
+                // An undefined permission in Node
+                let acAdminDeleteAnyEventStorePerm = ac.can('admin').deleteAny('grant')
+                assert(!acAdminDeleteAnyEventStorePerm.granted, "expect admin can not delete any grant")
+                // An udefined permission in Ethereum
+                let permissionValues = await tac.canRoleActionResource.call('admin', 'delete:any', 'grant')
+                let tacAdminDeleteAnyEventStorePerm = permissionFromCanRoleActionResourceValues(permissionValues)
+                assert(
+                    relaxedPermsAreEqual(acAdminDeleteAnyEventStorePerm, tacAdminDeleteAnyEventStorePerm),
+                    'expect ac & tac to agree that admins can not delete any grant'
+                );
+            })
 
-        //     let tx = await tac.setGrant('admin', 'eventstore', 'create:any', ['*'])
-        //     let item = grantItemFromEvent(tx.logs[0].args)
+            it('for updated permissions', async () => {
+                //  AC: Grant access by passing attributes: ['*']
+                let grantAdminCreateAnyEventStore = { role: 'admin', resource: 'grant', action: 'create:any', attributes: ['*'] }
+                ac.setGrants([grantAdminCreateAnyEventStore])
+                let acAdminCreateAnyEventStorePerm = ac.can('admin').createAny('grant')
+                assert(acAdminCreateAnyEventStorePerm.granted, "expect admin can create any grant")
+                //  TAC: Grant access by passing attributes: ['*']
+                let tx = await tac.setGrant('admin', 'grant', 'create:any', ['*'], {
+                    from: accounts[0]
+                })
+                let grantFromTxEvent = grantItemFromEvent(tx.logs[0].args)
+                let lastGrantIndex = (await tac.grantCount.call()).toNumber() - 1
+                let grantValues = await tac.getGrant.call(lastGrantIndex)
+                let grantFromMethodCall = grantItemFromValues(grantValues)
+                assert(_.isEqual(grantAdminCreateAnyEventStore, grantFromTxEvent))
+                assert(_.isEqual(grantFromTxEvent, grantFromMethodCall))
+                let permissionValues = await tac.canRoleActionResource.call('admin', 'create:any', 'grant')
+                let tacAdminCreateAnyGrantPerm = permissionFromCanRoleActionResourceValues(permissionValues)
+                assert(
+                    relaxedPermsAreEqual(acAdminCreateAnyEventStorePerm, tacAdminCreateAnyGrantPerm),
+                    'expect ac & tac to agree that admins can create any grant'
+                );
+                //  AC: Revoke access by passing attributes: []
+                let grantRevokeAdminCreateAnyEventStore = { role: 'admin', resource: 'grant', action: 'create:any', attributes: [] }
+                ac.setGrants([grantRevokeAdminCreateAnyEventStore])
+                let acAdminCreateAnyEventStorePermUpdated = ac.can('admin').createAny('grant')
+                assert(!acAdminCreateAnyEventStorePermUpdated.granted, "expect admin can not create any grant now")
+                //  TAC: Revoke access by passing attributes: []
+                tx = await tac.setGrant('admin', 'grant', 'create:any', [], {
+                    from: accounts[0]
+                })
+                grantFromTxEvent = grantItemFromEvent(tx.logs[0].args)
+                lastGrantIndex = (await tac.grantCount.call()).toNumber() - 1
+                grantValues = await tac.getGrant.call(lastGrantIndex)
+                grantFromMethodCall = grantItemFromValues(grantValues)
 
-        //     let grantValues = await tac.getGrant.call(0)
-        //     let item2 = grantItemFromValues(grantValues)
+                assert(_.isEqual(grantRevokeAdminCreateAnyEventStore, grantFromTxEvent))
+                assert(_.isEqual(grantFromTxEvent, grantFromMethodCall))
 
-        //     // A defined permission in Ethereum
-        //     let permissionValues = await tac.canRoleActionResource.call('admin', 'create:any', 'eventstore')
-        //     let tacAdminCreateAnyEventStorePerm = permissionFromCanRoleActionResourceValues(permissionValues)
-
-        //     assert(
-        //         relaxedPermsAreEqual(acAdminCreateAnyEventStorePerm, tacAdminCreateAnyEventStorePerm),
-        //         'expect ac & tac to agree that admins can create any event store'
-        //     );
-
-        //     // Here we expect grant == item == item2
-        //     // If true, we have should the Tx Event and Struct are equivalent to the grant
-        //     // assert(_.isEqual(grant, item))
-        //     // assert(_.isEqual(item, item2))
-
-        //     // Next we apply a new grant that revokes access
-        //     // let grant2 = { role: 'admin', resource: 'eventstore', action: 'create:any', attributes: [] }
-        //     // ac.setGrants([grant2])
-
-        //     // permission = ac.can('admin').createAny('eventstore')
-        //     // assert(!permission.granted, "expect admin can not create any eventstore now")
-
-
-        //     // // Now we do the same in Ethereum
-
-        //     // tx = await tac.setGrant('admin', 'eventstore', 'create:any', [])
-        //     // item = grantItemFromEvent(tx.logs[0].args)
-
-        //     // grantValues = await tac.getGrant.call(1)
-        //     // item2 = grantItemFromValues(grantValues)
-
-        //     // assert(_.isEqual(grant2, item))
-        //     // assert(_.isEqual(item, item2))
-        // })
-
-
-        // describe('Happy Path', async () => {
-
-        //     it('Admins can do anything users cannot', async () => {
-        //         var ac = new AccessControl()
-
-        //         let grantList = [
-        //             { role: 'admin', resource: 'eventstore', action: 'create:any', attributes: ['*'] },
-        //             { role: 'admin', resource: 'eventstore', action: 'read:any', attributes: ['*'] },
-        //             { role: 'admin', resource: 'eventstore', action: 'update:any', attributes: ['*'] },
-        //             { role: 'admin', resource: 'eventstore', action: 'delete:any', attributes: ['*'] },
-
-        //             { role: 'user', resource: 'eventstore', action: 'create:own', attributes: ['*'] },
-        //             { role: 'user', resource: 'eventstore', action: 'read:any', attributes: ['*'] },
-        //             { role: 'user', resource: 'eventstore', action: 'update:own', attributes: ['*'] },
-        //             { role: 'user', resource: 'eventstore', action: 'delete:own', attributes: ['*'] }
-        //         ]
-
-        //         ac.setGrants(grantList)
-
-        //         let permission = ac.can('admin').createAny('eventstore')
-        //         assert(permission.granted, "expect admin can create any eventstore")
-
-        //         permission = ac.can('user').createOwn('eventstore')
-        //         assert(permission.granted, "expect user can create their own eventstore")
-
-        //         permission = ac.can('user').createAny('eventstore')
-        //         assert(!permission.granted, "expect user can not create any eventstore")
-
-        //         // console.log(await globalACL.creator())
-
-        //     })
-
-        // })
-
-        // describe('TDD', async () => {
-
-        //     it('can save grants to file', async () => {
-        //         var grantsObject = {
-        //             admin: {
-        //                 eventstore: {
-        //                     'create:any': ['*'],
-        //                     'read:any': ['*'],
-        //                     'update:any': ['*'],
-        //                     'delete:any': ['*']
-        //                 }
-        //             },
-        //             user: {
-        //                 eventstore: {
-        //                     'create:own': ['*'],
-        //                     'read:own': ['*'],
-        //                     'update:own': ['*'],
-        //                     'delete:own': ['*']
-        //                 }
-        //             }
-        //         };
-        //         var ac = new AccessControl(grantsObject);
-        //         let grants = ac.getGrants()
-        //         fs.writeFileSync('./test/Security/grants.json', JSON.stringify(grants, null, 4) , 'utf-8'); 
-        //     })
-
-        //     it('can read grants to file', async () => {
-        //         var grantsObject = require('./grants.json')
-        //         var ac = new AccessControl(grantsObject);
-        //         let grants = ac.getGrants()
-        //     })
-
-        //     it('can update grants and save them to file', async () => {
-        //         var grantsObject = require('./grants.json')
-        //         var ac = new AccessControl(grantsObject);
-        //         ac
-        //         .grant('goblin')                    // switch to another role without breaking the chain 
-        //             .extend('user')                 // inherit role capabilities. also takes an array 
-
-        //         let grants = ac.getGrants()
-        //         fs.writeFileSync('./test/Security/grants.json', JSON.stringify(grants, null, 4) , 'utf-8'); 
-        //     })
-
-        //     it('can read updated grants from file', async () => {
-        //         var grantsObject = require('./grants.json')
-        //         var ac = new AccessControl(grantsObject);
-        //         let permission = ac.can('goblin').createAny('eventstore')
-        //         // console.log(grants)
-        //         console.log(permission.granted)
-        //     })
-        // })
-
-        // describe('Middleware supports a grantsObject', async () => {
-
-        //     var grantsObject = {
-        //         admin: {
-        //             eventstore: {
-        //                 'create:any': ['*'],
-        //                 'read:any': ['*'],
-        //                 'update:any': ['*'],
-        //                 'delete:any': ['*']
-        //             }
-        //         },
-        //         user: {
-        //             eventstore: {
-        //                 'create:own': ['*'],
-        //                 'read:own': ['*'],
-        //                 'update:own': ['*'],
-        //                 'delete:own': ['*']
-        //             }
-        //         }
-        //     };
-
-        //     it('should initialize ac in node from object', async () => {
-        //         var ac = new AccessControl(grantsObject);
-        //     })
-        // })
-
-        // it('', async () => {
-
-        //     var ac = new AccessControl();
-
-        //     ac.grant('user')                    // define new or modify existing role. also takes an array. 
-        //         .createOwn('eventstore')             // equivalent to .createOwn('eventstore', ['*']) 
-        //         .deleteOwn('eventstore')
-        //         .readAny('eventstore')
-
-        //         .grant('admin')                   // switch to another role without breaking the chain 
-        //         .extend('user')                 // inherit role capabilities. also takes an array 
-        //         .updateAny('eventstore', ['title'])  // explicitly defined attributes 
-        //         .deleteAny('eventstore');
-
-        //     var permission = ac.can('user').createOwn('eventstore');
-        //     console.log(permission.granted);    // —> true 
-        //     console.log(permission.attributes); // —> ['*'] (all attributes) 
-
-        //     permission = ac.can('admin').updateAny('eventstore');
-        //     console.log(permission.granted);    // —> true 
-        //     console.log(permission.attributes); // —> ['title'] 
-
-        // })
-
-        // describe('Middleware confirms equivalence', async () => {
-
-        //     it('should set/get grants any time', async () => {
-        //         var ac = new AccessControl();
-        //         ac.setGrants(grantsObject);
-        //         console.log(ac.getGrants());
-        //     })
-        // })
-
+                let permissionValuesUpdated = await tac.canRoleActionResource.call('admin', 'create:any', 'grant')
+                let tacAdminCreateAnyEventStorePermUpdated = permissionFromCanRoleActionResourceValues(permissionValuesUpdated)
+                assert(
+                    relaxedPermsAreEqual(acAdminCreateAnyEventStorePermUpdated, tacAdminCreateAnyEventStorePermUpdated),
+                    'expect ac & tac to agree that admins can not create any grant'
+                );
+            })
+        })
     })
 })

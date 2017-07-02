@@ -13,46 +13,6 @@ const isTypeError = (e) => {
     return e.toString().indexOf('TypeError') !== -1
 }
 
-// https://blog.stakeventures.com/articles/smart-contract-terms
-const hex2ipfshash = (hash) => {
-    return bs58.encode(new Buffer("1220" + hash.slice(2), 'hex'))
-}
-
-const ipfs2hex = (ipfshash) => {
-    return "0x" + new Buffer(bs58.decode(ipfshash).slice(2)).toString('hex');
-}
-
-const marshalEvent = (_meta, _type, _data) => {
-    // 'I' Encodes that this is IPLD, so we know to remove Qm (and add it back)
-    if (_type === 'I') {
-        _data = ipfs2hex(_data)
-    }
-    // Left padd ints and addresses for bytes32 equivalence of Solidity casting
-    if (_type === 'U' || _type === 'A') {
-        _data = util.bufferToHex(util.setLengthLeft(_data, 32))
-    }
-    return {
-        meta: _meta,
-        type: _type,
-        data: _data
-    }
-}
-
-const unMarshalEvent = (_meta, _type, _data) => {
-    _meta = toAscii(_meta)
-    _type = toAscii(_type)
-    switch (_type) {
-        case 'A': _data = '0x' + _data.split('0x000000000000000000000000')[1]; break
-        case 'U': _data = web3.toBigNumber(_data).toNumber(); break
-        case 'B': _data = _data; break
-        case 'I': _data = hex2ipfshash(_data); break
-    }
-    return {
-        meta: _meta,
-        type: _type,
-        data: _data
-    }
-}
 
 const grantItemFromEvent = (event) => {
     return {
@@ -80,6 +40,91 @@ const permissionFromCanRoleActionResourceValues = (values) => {
         _: {
             role: toAscii(values[1]),
             resource: toAscii(values[2]),
+            attributes: values[3].map(toAscii)
+        }
+    }
+}
+
+
+
+
+
+// https://blog.stakeventures.com/articles/smart-contract-terms
+const hex2ipfshash = (hash) => {
+    return bs58.encode(new Buffer("1220" + hash.slice(2), 'hex'))
+}
+
+const ipfs2hex = (ipfshash) => {
+    return "0x" + new Buffer(bs58.decode(ipfshash).slice(2)).toString('hex');
+}
+
+const marshalEvent = (_eventType, _valueType, _value) => {
+    // 'I' Encodes that this is IPLD, so we know to remove Qm (and add it back)
+    if (_valueType === 'I') {
+        _value = ipfs2hex(_value)
+    }
+    // Left padd ints and addresses for bytes32 equivalence of Solidity casting
+    if (_valueType === 'U' || _valueType === 'A') {
+        _value = util.bufferToHex(util.setLengthLeft(_value, 32))
+    }
+    return {
+        meta: _eventType,
+        type: _valueType,
+        data: _value
+    }
+}
+
+const getValueFromType = (type, value) => {
+    switch (type) {
+        case 'A': return '0x' + value.split('0x000000000000000000000000')[1]
+        case 'U': return web3.toBigNumber(value).toNumber()
+        case 'B': return value
+        case 'X': return toAscii(value)
+        case 'I': return hex2ipfshash(value)
+    }
+}
+
+const getNiceEsEventFromValues = (_id, _txOrigin, _created, _eventType, _keyType, _valueType, _key, _value) => {
+    _keyType = toAscii(_keyType)
+    _valueType = toAscii(_valueType)
+    _key = getValueFromType(_keyType, _key)
+    _value = getValueFromType(_valueType, _value)
+    return {
+        id: _id.toNumber(),
+        txOrigin: _txOrigin,
+        created: _created.toNumber(),
+        eventType: toAscii(_eventType),
+        keyType: _keyType,
+        valueType: _valueType,
+        key: _key,
+        value: _value
+    }
+}
+
+const getNiceEsEventFromEventArgs = (eventArgs) => {
+    return getNiceEsEventFromValues(
+        eventArgs.Id,
+        eventArgs.TxOrigin,
+        eventArgs.Created,
+        eventArgs.EventType,
+        eventArgs.KeyType,
+        eventArgs.ValueType,
+        eventArgs.Key,
+        eventArgs.Value
+    )
+}
+
+const getFSAFromEventArgs = (eventArgs) => {
+    let flat = getNiceEsEventFromEventArgs(eventArgs)
+    return {
+        type: flat.eventType,
+        payload: {
+            [flat.key]: flat.value
+        },
+        meta: {
+            id: flat.id,
+            created: flat.created,
+            txOrigin: flat.txOrigin
         }
     }
 }
@@ -87,7 +132,9 @@ const permissionFromCanRoleActionResourceValues = (values) => {
 module.exports = {
     toAscii,
     marshalEvent,
-    unMarshalEvent,
+
+    getNiceEsEventFromEventArgs,
+    getFSAFromEventArgs,
 
     grantItemFromEvent,
     grantItemFromValues,
