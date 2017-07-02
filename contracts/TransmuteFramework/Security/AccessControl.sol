@@ -23,6 +23,7 @@ contract AccessControl is Killable {
   Bytes32SetLib.Bytes32Set internalEventTypes;
 
   mapping(address => bytes32) addressRole;
+  mapping(bytes32 => bool) isHashOfRoleActionResourceGranted;
 
   event DEBUG (
     bool test
@@ -33,13 +34,13 @@ contract AccessControl is Killable {
   
   // CONSTRUCTOR  
   function AccessControl() payable {
-    internalEventTypes.add(bytes32('ES_ROLE_ASSIGNED'));
-    internalEventTypes.add(bytes32('ES_GRANT_WRITTEN'));
+    internalEventTypes.add(bytes32('AC_ROLE_ASSIGNED'));
+    internalEventTypes.add(bytes32('AC_GRANT_WRITTEN'));
   }
 
    modifier canSetGrant(bytes32 resource, bytes32 action)
   {
-    // only the owner can setGrants to the grant resource (no write up)
+    // only the owner can setGrants for the grant resource (no write up)
     // just because an account can setGrants does not mean they can give that ability to others...
     if (resource == 'grant') {
       require(tx.origin == owner);
@@ -48,7 +49,7 @@ contract AccessControl is Killable {
       _;
     } else {
       bytes32 role = addressRole[tx.origin];
-      bool granted = canRoleActionResourceGranted(role, action, resource);
+      var (granted, _role, _resource) = canRoleActionResource(role, action, resource);
       // DEBUG(granted);
       if(granted){
         _;
@@ -66,7 +67,7 @@ contract AccessControl is Killable {
   onlyOwner
   {
     addressRole[target] = role;
-    writeEvent('ES_ROLE_ASSIGNED', 'A', 'X', bytes32(target), role);
+    writeInternalEvent('AC_ROLE_ASSIGNED', 'A', 'X', bytes32(target), role);
   }
 
   function getAddressRole(address target)
@@ -95,7 +96,8 @@ contract AccessControl is Killable {
 
     grants.push(grant);
     GrantEvent(role, resource, action, attributes);
-    writeEvent('ES_GRANT_WRITTEN', 'X', 'U', 'index', bytes32(grants.length-1));
+    isHashOfRoleActionResourceGranted[keccak256(role, action, resource)] = attributes.length != 0;
+    writeInternalEvent('AC_GRANT_WRITTEN', 'X', 'U', 'index', bytes32(grants.length-1));
   }
 
   function getGrant(uint index)
@@ -105,47 +107,17 @@ contract AccessControl is Killable {
     return (grant.role, grant.resource, grant.action, grant.attributes);
   }
 
-  // To be optimized later...
+  // The client interprets attributes = granted ? ['*'] : [] 
+  // so no need to return a bytes32 array here...
   function canRoleActionResource(bytes32 role, bytes32 action, bytes32 resource)
-  returns (bool, bytes32, bytes32, bytes32[])
+  returns (bool granted, bytes32 _role, bytes32 _resource)
   {
-    bool isLastAttributesNonEmpty = false;
-    Grant memory grant;
-    // pretty sure a hash map can eliminate this...
-    for (uint index = 0; index < grants.length; index++) {
-      grant = grants[index];
-      if (grant.role == role && grant.action == action && grant.resource == resource){
-        isLastAttributesNonEmpty = grant.attributes.length != 0;
-      }
-    }
-
-    // Make sure we return [] for granted == false
-    bytes32[] memory attrs;
-    if (isLastAttributesNonEmpty){
-      attrs = grant.attributes;
-    }
-    return (isLastAttributesNonEmpty, role, resource, attrs);
+    granted = isHashOfRoleActionResourceGranted[keccak256(role, action, resource)];
+    _role = role;
+    _resource = resource;
   }
 
-  // When we only care about the boolean...
-  function canRoleActionResourceGranted(bytes32 role, bytes32 action, bytes32 resource)
-  internal
-  returns (bool)
-  {
-    bool isLastAttributesNonEmpty = false;
-    Grant memory grant;
-    // pretty sure a hash map can eliminate this...
-    for (uint index = 0; index < grants.length; index++) {
-      grant = grants[index];
-      if (grant.role == role && grant.action == action && grant.resource == resource){
-        isLastAttributesNonEmpty = grant.attributes.length != 0;
-      }
-    }
-
-    return (isLastAttributesNonEmpty);
-  }
-
-  function writeEvent(
+  function writeInternalEvent(
     bytes32 _eventType, 
     bytes1 _keyType,
     bytes1 _valueType,

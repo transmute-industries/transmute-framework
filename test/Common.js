@@ -36,11 +36,11 @@ const permissionFromCanRoleActionResourceValues = (values) => {
     return {
         granted: values[0],
         resource: toAscii(values[2]),
-        attributes: values[3].map(toAscii),
+        attributes: values[0] ? ['*'] : [],
         _: {
             role: toAscii(values[1]),
             resource: toAscii(values[2]),
-            attributes: values[3].map(toAscii)
+            attributes: values[0] ? ['*'] : [] // values[3].map(toAscii)
         }
     }
 }

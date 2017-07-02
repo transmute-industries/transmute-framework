@@ -49,7 +49,7 @@ describe.only('', () => {
                     from: accounts[0]
                 })
                 let fsa = getFSAFromEventArgs(tx.logs[0].args)
-                assert(fsa.type === 'ES_ROLE_ASSIGNED')
+                assert(fsa.type === 'AC_ROLE_ASSIGNED')
                 try {
                     tx = await await tac.setAddressRole(accounts[2], 'admin', {
                         from: accounts[1]

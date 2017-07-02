@@ -14,6 +14,7 @@ We aim for parity to https://www.npmjs.com/package/accesscontrol
 
 We'll start with parity for a limited set of attributes, namely: `['*']` and `[]`
 
-Also, event if an account can write grants, they cannot write grants for the grant resource unless they are the owner.
+Also, even if an account can write grants, they cannot write grants for the grant resource unless they are the owner.
 
 We don't want an editor making super admins...
+
