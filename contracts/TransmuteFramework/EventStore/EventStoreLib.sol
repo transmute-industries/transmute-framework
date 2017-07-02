@@ -9,8 +9,8 @@ library EventStoreLib{
 
         bytes32 EventType; // Event Type + Version
 
-        bytes1 KeyType; // A - Address, U - UInt, B - Bytes32
-        bytes1 ValueType; // A - Address, U - UInt, B - Bytes32
+        bytes1 KeyType; // A - Address, U - UInt, B - Bytes32, X - Bytes32 (ascii)
+        bytes1 ValueType; // A - Address, U - UInt, B - Bytes32, X - Bytes32 (ascii)
         
         bytes32 Key; // Key 
         bytes32 Value; // Value 

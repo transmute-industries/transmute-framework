@@ -82,6 +82,7 @@
     "rimraf": "2.6.1",
     "truffle": "^3.2.2",
     "truffle-contract": "2.0.0",
+    "truffle-expect": "0.0.3",
     "typedoc": "0.7.1",
     "typescript": "2.3.4",
     "vorpal": "1.12.0",
