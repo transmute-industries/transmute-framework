@@ -57,6 +57,6 @@ module.exports = function(deployer) {
   // deployer.deploy(EventStoreFactory)
 
   deployer.link(EventStoreLib, AccessControl)
-  deployer.link(AddressSetLib, AccessControl)
+  deployer.link(Bytes32SetLib, AccessControl)
   deployer.deploy(AccessControl)
 }

@@ -184,7 +184,6 @@ describe.only('', () => {
                     relaxedPermsAreEqual(acAdminCreateAnyEventStorePerm, tacAdminCreateAnyGrantPerm),
                     'expect ac & tac to agree that admins can create any grant'
                 );
-
             })
 
             it('for undefined permissions', async () => {

@@ -20,6 +20,8 @@ contract AccessControl is Killable {
 
   Grant[] grants;
 
+  Bytes32SetLib.Bytes32Set internalEventTypes;
+
   mapping(address => bytes32) addressRole;
 
   event DEBUG (
@@ -31,15 +33,17 @@ contract AccessControl is Killable {
   
   // CONSTRUCTOR  
   function AccessControl() payable {
-
+    internalEventTypes.add(bytes32('ES_ROLE_ASSIGNED'));
+    internalEventTypes.add(bytes32('ES_GRANT_WRITTEN'));
   }
 
    modifier canSetGrant(bytes32 resource, bytes32 action)
   {
-    if (resource == 'grant'){
+    // only the owner can setGrants to the grant resource (no write up)
+    // just because an account can setGrants does not mean they can give that ability to others...
+    if (resource == 'grant') {
       require(tx.origin == owner);
     }
-
     if (tx.origin == owner) {
       _;
     } else {
