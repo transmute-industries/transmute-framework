@@ -20,6 +20,10 @@ var EventStoreLib = artifacts.require('./TransmuteFramework/EventStore/EventStor
 var UnsafeEventStore = artifacts.require('./TransmuteFramework/EventStore/UnsafeEventStore/UnsafeEventStore.sol')
 var UnsafeEventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/UnsafeEventStore/UnsafeEventStoreFactory.sol')
 
+var RBACEventStore = artifacts.require('./TransmuteFramework/EventStore/RBACEventStore/RBACEventStore.sol')
+var RBACEventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/RBACEventStore/RBACEventStoreFactory.sol')
+
+
 
 module.exports = function(deployer) {
   deployer.deploy(StringUtils)
@@ -58,4 +62,17 @@ module.exports = function(deployer) {
   deployer.link(EventStoreLib, AccessControl)
   deployer.link(Bytes32SetLib, AccessControl)
   deployer.deploy(AccessControl)
+
+
+  deployer.link(EventStoreLib, RBACEventStore)
+  deployer.link(Bytes32SetLib, RBACEventStore)
+  deployer.link(AccessControl, RBACEventStore)
+  deployer.deploy(RBACEventStore)
+
+  deployer.link(EventStoreLib, RBACEventStoreFactory)
+  deployer.link(Bytes32SetLib, RBACEventStoreFactory)
+  deployer.link(AccessControl, RBACEventStoreFactory)
+  deployer.link(AddressSetLib, RBACEventStoreFactory)
+  deployer.link(RBACEventStore, RBACEventStoreFactory)
+  deployer.deploy(RBACEventStoreFactory)
 }

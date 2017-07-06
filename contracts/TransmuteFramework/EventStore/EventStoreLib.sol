@@ -1,5 +1,4 @@
 pragma solidity ^0.4.11;
-import '../zeppelin/lifecycle/Killable.sol';
 
 library EventStoreLib{
 

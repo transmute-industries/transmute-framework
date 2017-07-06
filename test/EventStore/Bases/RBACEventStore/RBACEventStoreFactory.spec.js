@@ -1,6 +1,6 @@
 var Web3 = require('web3')
-var UnsafeEventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/Bases/UnsafeEventStore/UnsafeEventStoreFactory.sol')
-var UnsafeEventStore = artifacts.require('./TransmuteFramework/EventStore/Bases/UnsafeEventStore/UnsafeEventStore.sol')
+var RBACEventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/Bases/RBACEventStoreFactory/RBACEventStoreFactory.sol')
+var RBACEventStore = artifacts.require('./TransmuteFramework/EventStore/Bases/RBACEventStoreFactory/RBACEventStore.sol')
 
 var _ = require('lodash')
 
@@ -11,7 +11,7 @@ const {
 
 describe('', () => {
 
-    contract('UnsafeEventStoreFactory', function (accounts) {
+    contract('RBACEventStoreFactory', function (accounts) {
 
         var factory = null
         var account1EventStoreAddresses = []
@@ -19,7 +19,7 @@ describe('', () => {
         var eventStoreAddresses = []
 
         it('deployed', async () => {
-            factory = await UnsafeEventStoreFactory.deployed()
+            factory = await RBACEventStoreFactory.deployed()
             let owner = await factory.owner()
             assert(owner === accounts[0])
         })
@@ -46,7 +46,7 @@ describe('', () => {
             assert.equal(fsa.type, 'ES_CREATED', 'expect first event to be Type ES_CREATED')
             // assert.equal(data, firstEventStoreAddress, 'expected es contract address to match call')
             let escAddresss = fsa.payload.address
-            let esc = await UnsafeEventStore.at(escAddresss)
+            let esc = await RBACEventStore.at(escAddresss)
             let escOwner = await esc.creator()
             assert.equal(escOwner, accounts[0], 'expect factory caller to be es contract owner.')
 
@@ -60,7 +60,7 @@ describe('', () => {
             assert.equal(fsa.type, 'ES_CREATED', 'expect first event to be Type ES_CREATED')
     
             escAddresss = fsa.payload.address
-            esc = await UnsafeEventStore.at(escAddresss)
+            esc = await RBACEventStore.at(escAddresss)
             escOwner = await esc.creator()
             assert.equal(escOwner, accounts[2], 'expect factory caller to be es contract owner.')
 
