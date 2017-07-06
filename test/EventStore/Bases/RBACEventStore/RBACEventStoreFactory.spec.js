@@ -18,8 +18,12 @@ describe('', () => {
         var account2EventStoreAddresses = []
         var eventStoreAddresses = []
 
-        it('deployed', async () => {
+        before(async () => {
             factory = await RBACEventStoreFactory.deployed()
+        })
+
+        it('deployed', async () => {
+
             let owner = await factory.owner()
             assert(owner === accounts[0])
         })
@@ -58,7 +62,7 @@ describe('', () => {
             event = _tx.logs[0].args
             fsa = getFSAFromEventArgs(event)
             assert.equal(fsa.type, 'ES_CREATED', 'expect first event to be Type ES_CREATED')
-    
+
             escAddresss = fsa.payload.address
             esc = await RBACEventStore.at(escAddresss)
             escOwner = await esc.creator()
@@ -70,31 +74,54 @@ describe('', () => {
         })
 
         it('getEventStores', async () => {
-          let _addresses = await factory.getEventStores()
-          assert(_.difference(eventStoreAddresses, _addresses).length === 0, 'Expect eventStoreAddresses to equal _addresses')
+            let _addresses = await factory.getEventStores()
+            assert(_.difference(eventStoreAddresses, _addresses).length === 0, 'Expect eventStoreAddresses to equal _addresses')
         })
 
         it('getEventStoresByCreator', async () => {
-          let _account1EventStoreAddresses = await factory.getEventStoresByCreator.call({ from: accounts[1] })
-          assert(_.difference(_account1EventStoreAddresses, account1EventStoreAddresses).length === 0, 'Expect _account1EventStoreAddresses to equal account1EventStoreAddresses')
+            let _account1EventStoreAddresses = await factory.getEventStoresByCreator.call({ from: accounts[1] })
+            assert(_.difference(_account1EventStoreAddresses, account1EventStoreAddresses).length === 0, 'Expect _account1EventStoreAddresses to equal account1EventStoreAddresses')
 
-          let _account2EventStoreAddresses = await factory.getEventStoresByCreator.call({ from: accounts[2] })
-          assert(_.difference(_account2EventStoreAddresses, account2EventStoreAddresses).length === 0, 'Expect _account2EventStoreAddresses to equal account2EventStoreAddresses')
+            let _account2EventStoreAddresses = await factory.getEventStoresByCreator.call({ from: accounts[2] })
+            assert(_.difference(_account2EventStoreAddresses, account2EventStoreAddresses).length === 0, 'Expect _account2EventStoreAddresses to equal account2EventStoreAddresses')
 
         })
 
         it('killEventStore', async () => {
-          // Address 0 is the deployer of the factory, and the only one who can destroy stores with it.
-          let _tx = await factory.killEventStore(account1EventStoreAddresses[0], { from: accounts[0] })
-          let event = _tx.logs[0].args
-          let fsa = getFSAFromEventArgs(event)
-          assert.equal(fsa.payload.address, account1EventStoreAddresses[0], 'Expect the destroyed address in event to match the method call')
+            // Address 0 is the deployer of the factory, and the only one who can destroy stores with it.
+            let _tx = await factory.killEventStore(account1EventStoreAddresses[0], { from: accounts[0] })
+            let event = _tx.logs[0].args
+            let fsa = getFSAFromEventArgs(event)
+            assert.equal(fsa.payload.address, account1EventStoreAddresses[0], 'Expect the destroyed address in event to match the method call')
         })
 
         it('getEventStores', async () => {
-          let _addresses = await factory.getEventStores()
-          assert(!_.includes(_addresses, account1EventStoreAddresses[0]), 'Expect killed store to not be in factory list')
-          assert(_.includes(_addresses, account1EventStoreAddresses[1]), 'Expect non killed store to be in list')
+            let _addresses = await factory.getEventStores()
+            assert(!_.includes(_addresses, account1EventStoreAddresses[0]), 'Expect killed store to not be in factory list')
+            assert(_.includes(_addresses, account1EventStoreAddresses[1]), 'Expect non killed store to be in list')
+        })
+
+        describe.only('DAC', async () => {
+
+            /*
+                Here we implement discretionary access control flow, for an RBACEventStoreFactory.
+                We must show that: 
+                - the default case is writeable only by the owner.
+                - only an account with eventstore create:any role can create event stores.
+                - accounts can loose roles, and thereby access to contracts
+                - an adversary cannot succeed at data poisoning attacks
+                - an authorized role cannot exceed or grant permissions which exceed their own.
+            */
+            it.only('DAC', async () => {
+
+                let _tx = await factory.createEventStore({ from: accounts[1], gas: 2000000 })
+                let event = _tx.logs[0].args
+                let fsa = getFSAFromEventArgs(event)
+
+                assert.equal(fsa.type, 'ES_CREATED', 'expect first event to be Type ES_CREATED')
+                console.log(fsa)
+
+            })
         })
     })
 })

@@ -13,7 +13,7 @@ const {
 
 // TODO: Write tests for common....
 
-describe.only('', () => {
+describe('', () => {
 
     let factory, eventStore
 
