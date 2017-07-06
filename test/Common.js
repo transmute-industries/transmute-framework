@@ -46,9 +46,6 @@ const permissionFromCanRoleActionResourceValues = (values) => {
 }
 
 
-
-
-
 // https://blog.stakeventures.com/articles/smart-contract-terms
 const hex2ipfshash = (hash) => {
     return bs58.encode(new Buffer("1220" + hash.slice(2), 'hex'))
@@ -58,7 +55,7 @@ const ipfs2hex = (ipfshash) => {
     return "0x" + new Buffer(bs58.decode(ipfshash).slice(2)).toString('hex');
 }
 
-const marshalEvent = (_eventType, _valueType, _value) => {
+const convertValueToType = (_valueType, _value) => {
     // 'I' Encodes that this is IPLD, so we know to remove Qm (and add it back)
     if (_valueType === 'I') {
         _value = ipfs2hex(_value)
@@ -67,11 +64,7 @@ const marshalEvent = (_eventType, _valueType, _value) => {
     if (_valueType === 'U' || _valueType === 'A') {
         _value = util.bufferToHex(util.setLengthLeft(_value, 32))
     }
-    return {
-        meta: _eventType,
-        type: _valueType,
-        data: _value
-    }
+    return _value
 }
 
 const getValueFromType = (type, value) => {
@@ -84,7 +77,18 @@ const getValueFromType = (type, value) => {
     }
 }
 
-const getNiceEsEventFromValues = (_id, _txOrigin, _created, _eventType, _keyType, _valueType, _key, _value) => {
+
+const marshal = (_eventType, _keyType, _valueType, _key, _value) => {
+    return {
+        eventType: _eventType,
+        keyType: _keyType,
+        valueType: _valueType,
+        key: convertValueToType(_keyType, _key),
+        value: convertValueToType(_valueType, _value)
+    }
+}
+
+const getUnmarshalledObjectFromValues = (_id, _txOrigin, _created, _eventType, _keyType, _valueType, _key, _value) => {
     _keyType = toAscii(_keyType)
     _valueType = toAscii(_valueType)
     _key = getValueFromType(_keyType, _key)
@@ -101,8 +105,8 @@ const getNiceEsEventFromValues = (_id, _txOrigin, _created, _eventType, _keyType
     }
 }
 
-const getNiceEsEventFromEventArgs = (eventArgs) => {
-    return getNiceEsEventFromValues(
+const unmarshal = (eventArgs) => {
+    return getUnmarshalledObjectFromValues(
         eventArgs.Id,
         eventArgs.TxOrigin,
         eventArgs.Created,
@@ -114,8 +118,23 @@ const getNiceEsEventFromEventArgs = (eventArgs) => {
     )
 }
 
+const getFSAFromEventValues = (_id, _txOrigin, _created, _eventType, _keyType, _valueType, _key, _value) => {
+    let flat = getUnmarshalledObjectFromValues(_id, _txOrigin, _created, _eventType, _keyType, _valueType, _key, _value)
+    return {
+        type: flat.eventType,
+        payload: {
+            [flat.key]: flat.value
+        },
+        meta: {
+            id: flat.id,
+            created: flat.created,
+            txOrigin: flat.txOrigin
+        }
+    }
+}
+
 const getFSAFromEventArgs = (eventArgs) => {
-    let flat = getNiceEsEventFromEventArgs(eventArgs)
+    let flat = unmarshal(eventArgs)
     return {
         type: flat.eventType,
         payload: {
@@ -131,10 +150,11 @@ const getFSAFromEventArgs = (eventArgs) => {
 
 module.exports = {
     toAscii,
-    marshalEvent,
-
-    getNiceEsEventFromEventArgs,
+    convertValueToType,
+    marshal,
+    unmarshal,
     getFSAFromEventArgs,
+    getFSAFromEventValues,
 
     grantItemFromEvent,
     grantItemFromValues,

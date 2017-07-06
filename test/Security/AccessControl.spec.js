@@ -21,7 +21,7 @@ const fs = require('fs')
 
 const _ = require('lodash')
 
-describe.only('', () => {
+describe('', () => {
 
     let ac, tac
 
