@@ -13,7 +13,7 @@ var UIntSetLib = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSetL
 var UIntSetSpec = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSetSpec.sol")
 
 
-var AccessControl = artifacts.require('./TransmuteFramework/AccessControl.sol')
+var RBAC = artifacts.require('./TransmuteFramework/RBAC.sol')
 
 var EventStoreLib = artifacts.require('./TransmuteFramework/EventStore/EventStoreLib.sol')
 
@@ -59,19 +59,19 @@ module.exports = function(deployer) {
   deployer.link(UnsafeEventStore, UnsafeEventStoreFactory)
   deployer.deploy(UnsafeEventStoreFactory)
 
-  deployer.link(EventStoreLib, AccessControl)
-  deployer.link(Bytes32SetLib, AccessControl)
-  deployer.deploy(AccessControl)
+  deployer.link(EventStoreLib, RBAC)
+  deployer.link(Bytes32SetLib, RBAC)
+  deployer.deploy(RBAC)
 
 
   deployer.link(EventStoreLib, RBACEventStore)
   deployer.link(Bytes32SetLib, RBACEventStore)
-  deployer.link(AccessControl, RBACEventStore)
+  deployer.link(RBAC, RBACEventStore)
   deployer.deploy(RBACEventStore)
 
   deployer.link(EventStoreLib, RBACEventStoreFactory)
   deployer.link(Bytes32SetLib, RBACEventStoreFactory)
-  deployer.link(AccessControl, RBACEventStoreFactory)
+  deployer.link(RBAC, RBACEventStoreFactory)
   deployer.link(AddressSetLib, RBACEventStoreFactory)
   deployer.link(RBACEventStore, RBACEventStoreFactory)
   deployer.deploy(RBACEventStoreFactory)

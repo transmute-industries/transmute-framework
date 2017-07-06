@@ -1,9 +1,9 @@
 
 const Web3 = require('web3')
 
-const AccessControlContract = artifacts.require('./TransmuteFramework/Security/AccessControl.sol')
+const AccessControlContract = artifacts.require('./TransmuteFramework/Security/RBAC.sol')
 
-var AccessControl = require('accesscontrol');
+var RBAC = require('accesscontrol');
 
 const {
     grantItemFromEvent,
@@ -36,10 +36,10 @@ describe('', () => {
         ])
     }
 
-    contract('AccessControl', (accounts) => {
+    contract('RBAC', (accounts) => {
 
         before(async () => {
-            ac = new AccessControl()
+            ac = new RBAC()
             tac = await AccessControlContract.deployed()
         })
 
@@ -95,7 +95,7 @@ describe('', () => {
             })
 
             it('grants are resources, and setGrant supports DAC', async () => {
-                ac = new AccessControl()
+                ac = new RBAC()
                 ac.setGrants([
                     { role: 'admin', resource: 'grant', action: 'create:any', attributes: ['*'] },
                     { role: 'goblin', resource: 'grunt', action: 'create:any', attributes: ['*'] }

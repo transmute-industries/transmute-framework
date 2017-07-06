@@ -1,7 +1,7 @@
  // describe('Happy Path', async () => {
 
         //     it('Admins can do anything users cannot', async () => {
-        //         var ac = new AccessControl()
+        //         var ac = new RBAC()
 
         //         let grantList = [
         //             { role: 'admin', resource: 'grant', action: 'create:any', attributes: ['*'] },
@@ -53,20 +53,20 @@
         //                 }
         //             }
         //         };
-        //         var ac = new AccessControl(grantsObject);
+        //         var ac = new RBAC(grantsObject);
         //         let grants = ac.getGrants()
         //         fs.writeFileSync('./test/Security/grants.json', JSON.stringify(grants, null, 4) , 'utf-8'); 
         //     })
 
         //     it('can read grants to file', async () => {
         //         var grantsObject = require('./grants.json')
-        //         var ac = new AccessControl(grantsObject);
+        //         var ac = new RBAC(grantsObject);
         //         let grants = ac.getGrants()
         //     })
 
         //     it('can update grants and save them to file', async () => {
         //         var grantsObject = require('./grants.json')
-        //         var ac = new AccessControl(grantsObject);
+        //         var ac = new RBAC(grantsObject);
         //         ac
         //         .grant('goblin')                    // switch to another role without breaking the chain 
         //             .extend('user')                 // inherit role capabilities. also takes an array 
@@ -77,7 +77,7 @@
 
         //     it('can read updated grants from file', async () => {
         //         var grantsObject = require('./grants.json')
-        //         var ac = new AccessControl(grantsObject);
+        //         var ac = new RBAC(grantsObject);
         //         let permission = ac.can('goblin').createAny('grant')
         //         // console.log(grants)
         //         console.log(permission.granted)
@@ -106,13 +106,13 @@
         //     };
 
         //     it('should initialize ac in node from object', async () => {
-        //         var ac = new AccessControl(grantsObject);
+        //         var ac = new RBAC(grantsObject);
         //     })
         // })
 
         // it('', async () => {
 
-        //     var ac = new AccessControl();
+        //     var ac = new RBAC();
 
         //     ac.grant('user')                    // define new or modify existing role. also takes an array. 
         //         .createOwn('grant')             // equivalent to .createOwn('grant', ['*']) 
@@ -137,7 +137,7 @@
         // describe('Middleware confirms equivalence', async () => {
 
         //     it('should set/get grants any time', async () => {
-        //         var ac = new AccessControl();
+        //         var ac = new RBAC();
         //         ac.setGrants(grantsObject);
         //         console.log(ac.getGrants());
         //     })

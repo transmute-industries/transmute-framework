@@ -1,9 +1,9 @@
 pragma solidity ^0.4.11;
 
 import '../../../zeppelin/lifecycle/Killable.sol';
-import '../../../Security/AccessControl.sol';
+import '../../../Security/RBAC.sol';
 
-contract RBACEventStore is AccessControl {
+contract RBACEventStore is RBAC {
 
   address public creator;
   

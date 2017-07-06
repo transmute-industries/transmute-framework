@@ -4,7 +4,7 @@ import "../EventStore/EventStoreLib.sol";
 import "../SetLib/Bytes32Set/Bytes32SetLib.sol";
 import '../zeppelin/lifecycle/Killable.sol';
 
-contract AccessControl is Killable {
+contract RBAC is Killable {
 
   using Bytes32SetLib for Bytes32SetLib.Bytes32Set;
   using EventStoreLib for EventStoreLib.EsEventStorage;
@@ -33,7 +33,7 @@ contract AccessControl is Killable {
   function () payable { throw; }
   
   // CONSTRUCTOR  
-  function AccessControl() payable {
+  function RBAC() payable {
     internalEventTypes.add(bytes32('AC_ROLE_ASSIGNED'));
     internalEventTypes.add(bytes32('AC_GRANT_WRITTEN'));
   }
