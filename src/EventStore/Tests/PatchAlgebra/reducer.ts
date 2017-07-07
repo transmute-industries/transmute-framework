@@ -1,4 +1,4 @@
-import TransmuteFramework from '../../TransmuteFramework'
+import TransmuteFramework from '../../../TransmuteFramework'
 
 
 export const readModel = {
@@ -15,9 +15,7 @@ const updatesFromMeta = (meta: any) => {
     }
 }
 
-
 const handlers = {
-
     ['HERO_STATS_CHANGED']: (state, action) => {
         // console.log(action)
         let updatesToModel = {
@@ -26,8 +24,6 @@ const handlers = {
         let updatesToMeta = updatesFromMeta(action.meta)
         return Object.assign({}, state, updatesToModel, updatesToMeta)
     },
-
-
 }
 
 export const reducer = (state = readModel, action) => {

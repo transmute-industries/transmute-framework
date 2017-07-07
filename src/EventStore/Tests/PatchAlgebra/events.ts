@@ -55,7 +55,6 @@ export default [
             created: 1496024532
         }
     },
-
     {
         type: "HERO_STATS_CHANGED",
         payload: {

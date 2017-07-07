@@ -14,8 +14,8 @@ let web3
 
 declare var window: any
 
-const eventStoreArtifacts = require('../build/contracts/EventStore')
-const eventStoreFactoryArtifacts = require('../build/contracts/EventStoreFactory')
+const eventStoreArtifacts = require('../build/contracts/RBACEventStore')
+const eventStoreFactoryArtifacts = require('../build/contracts/RBACEventStoreFactory')
 
 export interface ITransmuteFrameworkConfig {
   env: string
