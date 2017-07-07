@@ -148,6 +148,7 @@ const getFSAFromEventArgs = (eventArgs) => {
     }
 }
 
+
 module.exports = {
     toAscii,
     convertValueToType,

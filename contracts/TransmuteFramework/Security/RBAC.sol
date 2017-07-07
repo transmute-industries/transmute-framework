@@ -72,9 +72,12 @@ contract RBAC is Killable {
 
   function getAddressRole(address target)
   public
-  onlyOwner
   returns (bytes32)
   {
+    // if not the owner or the requesting address, do not return the role for the given address
+    if (tx.origin != owner && tx.origin != target){
+      throw;
+    }
     return addressRole[target];
   }
   

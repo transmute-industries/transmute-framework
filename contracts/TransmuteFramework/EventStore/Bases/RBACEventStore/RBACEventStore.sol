@@ -5,14 +5,12 @@ import '../../../Security/RBAC.sol';
 
 contract RBACEventStore is RBAC {
 
-  address public creator;
-  
   // FALLBACK
   function () payable { throw; }
   
   // CONSTRUCTOR  
   function RBACEventStore() payable {
-    creator = tx.origin;
+    owner = tx.origin;
   }
 
   function eventCount() 
@@ -32,6 +30,11 @@ contract RBACEventStore is RBAC {
     returns (uint)
   {
     // Check access control here before writing events...
+    bytes32 txOriginRole = getAddressRole(tx.origin);
+    var (granted,,) = canRoleActionResource(txOriginRole, bytes32("create:any"), bytes32("event"));
+    if (tx.origin != owner && !granted){
+      throw;
+    }
     return EventStoreLib.writeEvent(
       store, 
       _eventType, 
