@@ -20,9 +20,9 @@ describe('EventStore EsEvents', () => {
     eventStore = await EventStoreContract.deployed()
   })
 
-  describe('.writeEsEvent', () => {
+  describe('.writeUnmarshalledEsCommand', () => {
     it('should return a tx containing an EsEvent in logs', async () => {
-      let tx = await TransmuteFramework.EventStore.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
+      let tx = await TransmuteFramework.EventStore.writeUnmarshalledEsCommand(eventStore, web3.eth.accounts[0], addressValueEsEvent)
       assert.lengthOf(tx.logs, 1)
       assert.equal(tx.logs[0].event, 'EsEvent')
     })
@@ -32,7 +32,7 @@ describe('EventStore EsEvents', () => {
 
   describe('.readEsEventValues', () => {
     before(async () => {
-      let tx = await TransmuteFramework.EventStore.writeEsEvent(eventStore, web3.eth.accounts[0], addressValueEsEvent)
+      let tx = await TransmuteFramework.EventStore.writeUnmarshalledEsCommand(eventStore, web3.eth.accounts[0], addressValueEsEvent)
       assert.lengthOf(tx.logs, 1)
       assert.equal(tx.logs[0].event, 'EsEvent')
     })

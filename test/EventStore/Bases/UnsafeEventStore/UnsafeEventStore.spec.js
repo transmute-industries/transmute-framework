@@ -13,6 +13,8 @@ const {
 
 // TODO: Write tests for common....
 
+const { unMarshalledExpectedEvents } = require('../mock')
+
 describe('', () => {
 
     let factory, eventStore
@@ -22,59 +24,6 @@ describe('', () => {
     })
 
     contract('UnsafeEventStore', (accounts) => {
-
-        let unMarshalledExpectedEvents = [
-            {
-                id: 0,
-                txOrigin: accounts[0],
-                created: 0, // we don't know this yet...
-                eventType: 'MUTEX_LOCK',
-                keyType: 'X',
-                valueType: 'A',
-                key: 'address',
-                value: accounts[0]
-            },
-            {
-                id: 1,
-                txOrigin: accounts[0],
-                created: 0,
-                eventType: 'MUTEX_LOCK',
-                keyType: 'X',
-                valueType: 'U',
-                key: 'code',
-                value: 1337
-            },
-            {
-                id: 2,
-                txOrigin: accounts[0],
-                created: 0,
-                eventType: 'MUTEX_LOCK',
-                keyType: 'X',
-                valueType: 'B',
-                key: 'bytes32',
-                value: '0x0000000000000000000000000000000000000000000000000000000000000003'
-            },
-            {
-                id: 3,
-                txOrigin: accounts[0],
-                created: 0,
-                eventType: 'MUTEX_LOCK',
-                keyType: 'X',
-                valueType: 'X',
-                key: 'welcomeMessage',
-                value: 'Hello world'
-            },
-            {
-                id: 3,
-                txOrigin: accounts[0],
-                created: 0,
-                eventType: 'MUTEX_LOCK',
-                keyType: 'X',
-                valueType: 'I',
-                key: 'multihash',
-                value: 'QmRrehjkb86JvJcNJwdRBmnBL7a6Etkaooc98hvrXSCpn7'
-            }
-        ]
 
         it('the factory caller is the event store contract creator', async () => {
             let _tx = await factory.createEventStore({ from: accounts[0], gas: 2000000 })

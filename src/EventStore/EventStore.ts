@@ -13,49 +13,85 @@ let DEBUG = true; //should be only for dev envs for performance reasons...
 
 import { ITransmuteFramework } from '../TransmuteFramework'
 
+
+import {
+    IUnmarshalledEsCommand,
+    marshal,
+    getFSAFromEventValues
+} from './Utils/Common'
+
+import * as Common from './Utils/Common'
+
 export class EventStore {
 
     // Add modules here for convenience
     EventTypes = EventTypes
     EventStoreFactory = EventStoreFactory
     Persistence = Persistence
+    Common = Common
 
     constructor(
         public framework: ITransmuteFramework,
     ) {
     }
 
-    writeEsEvent = async (
+    writeUnmarshalledEsCommand = async (
         eventStore: any,
         fromAddress: string,
-        esEvent: EventTypes.IEsEvent
+        esEvent: IUnmarshalledEsCommand
     ): Promise<EventTypes.ITransaction> => {
-        let {
-            Type,
-            Version,
-            ValueType,
-            IsAuthorized,
-            PermissionDomain,
-            AddressValue,
-            UIntValue,
-            Bytes32Value,
-            StringValue
-        } = esEvent
+
+        let marshalledEvent = marshal(
+            esEvent.eventType,
+            esEvent.keyType,
+            esEvent.valueType,
+            esEvent.key,
+            esEvent.value
+        )
+
         return await eventStore.writeEvent(
-            Type, Version, ValueType, IsAuthorized, PermissionDomain, AddressValue, UIntValue, Bytes32Value, StringValue,
-            {
-                from: fromAddress,
-                gas: 2000000
-            })
+            marshalledEvent.eventType,
+            marshalledEvent.keyType,
+            marshalledEvent.valueType,
+            marshalledEvent.key,
+            marshalledEvent.value,
+            { from: fromAddress, gas: 2000000 }
+        )
+
     }
 
+    readFSA = async (eventStore: any, fromAddress: string, eventId: number) => {
+        let esEventValues = await this.readEsEventValues(eventStore, fromAddress, eventId)
+        let fsa = getFSAFromEventValues(
+            esEventValues[0],
+            esEventValues[1],
+            esEventValues[2],
+            esEventValues[3],
+            esEventValues[4],
+            esEventValues[5],
+            esEventValues[6],
+            esEventValues[7]
+        )
+        return fsa;
+    }
+
+
     readEsEventValues = async (eventStore: any, fromAddress: string, eventId: number) => {
-        // must be a .call constant modifier incompatible with _isAuthorized
         return await eventStore.readEvent.call(eventId, {
             from: fromAddress,
             gas: 2000000
         })
     }
+
+    // Start here
+    // write fsa should infer keyType and valueType from payload
+    // convert and use writeUnmarshalledEsCommand
+    // process the tx and return the resulting fsa
+    writeFSA = async (eventStore: any, fromAddress: string, eventId: number) => {
+        // let tx = 
+        // return fsa
+    }
+
 
     /**
    * @param {TruffleContract} eventStore - a contract instance which is an Event Store
@@ -116,33 +152,33 @@ export class EventStore {
     * @param {ITransmuteCommand} transmuteCommand - an FSA object to be written to the chain
     * @return {Promise<EventTypes.ITransmuteCommandResponse>} - an ITransmuteCommandResponse object
     */
-    writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
-        let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
-        let isIpfsObject = typeof transmuteCommand.payload === 'object'
-        let hash
-        // NOTE: We are only supporting IPFS for object storage from now on.
-        // IPLD and TransmuteIPFS can be better integrated now that we are focusing on supporting them.
-        if (isIpfsObject) {
-            hash = await this.framework.TransmuteIpfs.writeObject(transmuteCommand.payload)
-            esEvent.ValueType = 'String'
-            esEvent.StringValue = '/ipfs/' + hash
-        }
-        let tx = await this.writeEsEvent(eventStore, fromAddress, esEvent)
-        let eventsFromWriteEsEvent = await EventTypes.eventsFromTransaction(tx)
-        let esEventWithIndex = eventsFromWriteEsEvent[0]
-        let allTxs = [tx]
-        allTxs = _.flatten(allTxs)
-        let transmuteEvents = await Promise.all(EventTypes.reconstructTransmuteEventsFromTxs(allTxs))
+    // writeTransmuteCommand = async (eventStore: any, fromAddress: string, transmuteCommand: EventTypes.ITransmuteCommand): Promise<EventTypes.ITransmuteCommandResponse> => {
+    //     let esEvent = EventTypes.convertCommandToEsEvent(transmuteCommand)
+    //     let isIpfsObject = typeof transmuteCommand.payload === 'object'
+    //     let hash
+    //     // NOTE: We are only supporting IPFS for object storage from now on.
+    //     // IPLD and TransmuteIPFS can be better integrated now that we are focusing on supporting them.
+    //     if (isIpfsObject) {
+    //         hash = await this.framework.TransmuteIpfs.writeObject(transmuteCommand.payload)
+    //         esEvent.ValueType = 'String'
+    //         esEvent.StringValue = '/ipfs/' + hash
+    //     }
+    //     let tx = await this.writeUnmarshalledEsCommand(eventStore, fromAddress, esEvent)
+    //     let eventsFromWriteEsEvent = await EventTypes.eventsFromTransaction(tx)
+    //     let esEventWithIndex = eventsFromWriteEsEvent[0]
+    //     let allTxs = [tx]
+    //     allTxs = _.flatten(allTxs)
+    //     let transmuteEvents = await Promise.all(EventTypes.reconstructTransmuteEventsFromTxs(allTxs))
 
-        if (isIpfsObject) {
-            transmuteEvents[0].payload = transmuteCommand.payload
-            transmuteEvents[0].meta.path = '/ipfs/' + hash
-        }
-        return <EventTypes.ITransmuteCommandResponse>{
-            events: transmuteEvents,
-            transactions: allTxs
-        }
-    }
+    //     if (isIpfsObject) {
+    //         transmuteEvents[0].payload = transmuteCommand.payload
+    //         transmuteEvents[0].meta.path = '/ipfs/' + hash
+    //     }
+    //     return <EventTypes.ITransmuteCommandResponse>{
+    //         events: transmuteEvents,
+    //         transactions: allTxs
+    //     }
+    // }
 
     /**
      * @param {TruffleContract} eventStore - a contract instance which is an Event Store
@@ -150,12 +186,12 @@ export class EventStore {
      * @param {Array<ITransmuteCommand>} transmuteCommands - an array of FSA objects to be written to the chain
      * @return {Array<EventTypes.ITransmuteCommandResponse>} - an array of transmute command responses
      */
-    writeTransmuteCommands = async (eventStore: any, fromAddress: string, transmuteCommands: Array<EventTypes.ITransmuteCommand>): Promise<Array<EventTypes.ITransmuteCommandResponse>> => {
-        let promises = transmuteCommands.map(async (cmd) => {
-            return await this.writeTransmuteCommand(eventStore, fromAddress, cmd)
-        })
-        return await Promise.all(promises)
-    }
+    // writeTransmuteCommands = async (eventStore: any, fromAddress: string, transmuteCommands: Array<EventTypes.ITransmuteCommand>): Promise<Array<EventTypes.ITransmuteCommandResponse>> => {
+    //     let promises = transmuteCommands.map(async (cmd) => {
+    //         return await this.writeTransmuteCommand(eventStore, fromAddress, cmd)
+    //     })
+    //     return await Promise.all(promises)
+    // }
 
     /**
     * @type {Function} readModelGenerator - transform an event stream into a json object

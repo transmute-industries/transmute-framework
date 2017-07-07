@@ -1,6 +1,31 @@
 const bs58 = require('bs58');
 const util = require('ethereumjs-util');
 
+const Web3 = require('web3');
+const web3 = new Web3();
+
+export interface IRawEsCommand {
+    EventType: string;
+    KeyType: string;
+    ValueType: string;
+    Key: string;
+    Value: string;
+}
+
+export interface IRawEsEvent extends IRawEsCommand {
+    Id: any;
+    TxOrigin: string;
+    Created: any;
+}
+
+export interface IUnmarshalledEsCommand{
+    eventType: string;
+    keyType: string;
+    valueType: string;
+    key: any;
+    value: any;
+}
+
 export const toAscii = (value) => {
     return util.toAscii(value).replace(/\u0000/g, '')
 }
@@ -61,7 +86,7 @@ export const convertValueToType = (_valueType, _value) => {
 export const getValueFromType = (type, value) => {
     switch (type) {
         case 'A': return '0x' + value.split('0x000000000000000000000000')[1]
-        case 'U': return util.fromSigned(value).toNumber()
+        case 'U': return web3.toBigNumber(value).toNumber()
         case 'B': return value
         case 'X': return toAscii(value)
         case 'I': return hex2ipfshash(value)
