@@ -1,6 +1,6 @@
 'use strict'
 
-import { EventTypes } from '../EventTypes/EventTypes'
+import { getFSAFromEventArgs } from '../Utils/Common'
 
 export module EventStoreFactory {
 
@@ -9,9 +9,10 @@ export module EventStoreFactory {
             from: fromAddress,
             gas: 2000000
         })
-        let events = EventTypes.eventsFromTransaction(tx)
+
+        let fsa = getFSAFromEventArgs(tx.logs[0].args)
         return {
-            events: events,
+            events: [fsa],
             tx: tx
         }
     }

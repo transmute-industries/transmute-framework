@@ -8,7 +8,7 @@ import { expect } from 'chai'
 
 import { EventStoreFactory } from './EventStoreFactory'
 
-describe('EventStoreFactory', () => {
+describe.only('EventStoreFactory', () => {
 
     let factory
     let fromAddress = web3.eth.accounts[0];
@@ -20,13 +20,13 @@ describe('EventStoreFactory', () => {
     describe('.createEventStore...', () => {
         it('returns a transaction', async () => {
             let { tx, events } = await EventStoreFactory.createEventStore(factory, fromAddress)
-            // console.log(txWithEvents)
+            // console.log(events)
             expect(tx.tx !== undefined)
         })
 
-        it('returns a FACTORY_EVENT_STORE_CREATED event', async () => {
+        it('returns a ES_CREATED event', async () => {
             let { tx, events } = await EventStoreFactory.createEventStore(factory, fromAddress)
-            expect(events[0].Type === 'FACTORY_EVENT_STORE_CREATED')
+            expect(events[0].type === 'ES_CREATED')
         })
     })
     describe('.getAllEventStoreContractAddresses...', () => {
