@@ -6,7 +6,7 @@ const { web3, EventStoreContract } = TransmuteFramework.init()
 
 import { assert, expect, should } from 'chai'
 
-import { unMarshalledExpectedEvents, fsaCommands } from './EventStore.mock'
+import { fsaCommands } from './EventStore.mock'
 
 describe('EventStore', () => {
 
