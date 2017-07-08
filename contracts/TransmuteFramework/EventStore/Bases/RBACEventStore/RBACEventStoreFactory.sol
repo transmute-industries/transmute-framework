@@ -18,6 +18,21 @@ contract RBACEventStoreFactory is RBAC {
 
   }
 
+  function eventCount() 
+  public
+  returns (uint)
+  {
+    return store.events.length;
+  }
+
+  function debug() 
+  public
+    returns (uint)
+  {
+    return 0;
+  }
+  
+
   // Modifiers
   modifier checkExistence(address _EventStoreAddress)
   {
@@ -64,6 +79,7 @@ contract RBACEventStoreFactory is RBAC {
     return address(_newEventStore);
     
 	}
+
 
   function killEventStore(address _address)
     public

@@ -11,7 +11,7 @@ const {
     grantItemFromEvent
 } = require('../../../Common')
 
-describe('', () => {
+describe.only('', () => {
 
     contract('RBACEventStoreFactory', function (accounts) {
 
@@ -21,10 +21,12 @@ describe('', () => {
 
         before(async () => {
             factory = await RBACEventStoreFactory.deployed()
+            // console.log('factory.address: ', factory.address)
         })
 
         it('deployed', async () => {
             let owner = await factory.owner()
+            // console.log('factory.owner: ', owner)
             assert(owner === accounts[0])
         })
 
@@ -108,6 +110,19 @@ describe('', () => {
 
             describe('owner can authorize other accounts to createEventStore', async () => {
 
+                it('owner can make account 1 an admin', async () => {
+                    // console.log(factory.setAddressRole)
+                    // let owner1 = await factory.owner()
+                    // console.log(owner1, accounts[0])
+                    tx = await factory.setAddressRole(accounts[1], 'admin', {
+                        from: accounts[0]
+                    })
+                    fsa = getFSAFromEventArgs(tx.logs[0].args)
+                    assert.equal(fsa.type, 'AC_ROLE_ASSIGNED', 'expect AC_ROLE_ASSIGNED event')
+                    assert.equal(fsa.payload[accounts[1]], 'admin', 'expect account1 to be assigned admin')
+                    // TODO: add more tests here...
+                })
+
                 it('owner can grant admin role create:any eventstore', async () => {
                     tx = await factory.setGrant('admin', 'eventstore', 'create:any', ['*'], {
                         from: accounts[0]
@@ -117,16 +132,6 @@ describe('', () => {
                     // TODO: add more tests here...
                     fsa = getFSAFromEventArgs(tx.logs[1].args)
                     assert(fsa.type, 'AC_GRANT_WRITTEN', 'expected event.type to be AC_GRANT_WRITTEN')
-                })
-
-                it('owner can make account 1 an admin', async () => {
-                    tx = await factory.setAddressRole(accounts[1], 'admin', {
-                        from: accounts[0]
-                    })
-                    fsa = getFSAFromEventArgs(tx.logs[0].args)
-                    assert.equal(fsa.type, 'AC_ROLE_ASSIGNED', 'expect AC_ROLE_ASSIGNED event')
-                    assert.equal(fsa.payload[accounts[1]], 'admin', 'expect account1 to be assigned admin')
-                    // TODO: add more tests here...
                 })
 
                 it('account1 can createEventStore', async () => {

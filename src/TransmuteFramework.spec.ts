@@ -20,10 +20,12 @@ describe('TransmuteFramework', () => {
             assert(TransmuteFramework.web3._requestManager.provider.host === 'http://localhost:8545')
         })
         it('should support infura ropsten', async () => {
+            const accessControlArtifacts = require('../build/contracts/RBAC')
             const eventStoreArtifacts = require('../build/contracts/RBACEventStore')
             const eventStoreFactoryArtifacts = require('../build/contracts/RBACEventStoreFactory')
             TransmuteFramework.init({
                 env: 'infura',
+                aca: accessControlArtifacts,
                 esa: eventStoreArtifacts,
                 esfa: eventStoreFactoryArtifacts
             })

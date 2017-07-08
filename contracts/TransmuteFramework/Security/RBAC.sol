@@ -38,6 +38,12 @@ contract RBAC is Killable {
     internalEventTypes.add(bytes32('AC_GRANT_WRITTEN'));
   }
 
+  function eventCount() 
+  returns (uint)
+  {
+    return store.events.length;
+  }
+
    modifier canSetGrant(bytes32 resource, bytes32 action)
   {
     // only the owner can setGrants for the grant resource (no write up)
@@ -75,9 +81,7 @@ contract RBAC is Killable {
   returns (bytes32)
   {
     // if not the owner or the requesting address, do not return the role for the given address
-    if (tx.origin != owner && tx.origin != target){
-      throw;
-    }
+    require(tx.origin == owner || tx.origin == target);
     return addressRole[target];
   }
   

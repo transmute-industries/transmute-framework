@@ -1,9 +1,6 @@
 
 const { keys, pick, omit, flatten, difference, extend } = require('lodash')
 
-import { EventStoreFactory } from './Factory/EventStoreFactory'
-import { Persistence } from './Persistence/Persistence'
-
 import * as _ from 'lodash'
 
 import { isFSA } from 'flux-standard-action'
@@ -23,13 +20,9 @@ import {
 
 import * as Common from './Utils/Common'
 
-
-
 export class EventStore {
 
     // Add modules here for convenience
-    EventStoreFactory = EventStoreFactory
-    Persistence = Persistence
     Common = Common
 
     constructor(
@@ -64,6 +57,7 @@ export class EventStore {
 
     readFSA = async (eventStore: any, fromAddress: string, eventId: number) => {
         let esEventValues = await this.readEsEventValues(eventStore, fromAddress, eventId)
+        // console.log('read value: ', esEventValues)
         let fsa = getFSAFromEventValues(
             esEventValues[0],
             esEventValues[1],
@@ -140,10 +134,11 @@ export class EventStore {
     * @return {Promise<EsEvent[], Error>} json objects representing SOLIDITY_EVENTs
     */
     readFSAs = async (eventStore: any, fromAddress: string, eventId: number = 0) => {
-        let currentEvent = (await eventStore.solidityEventCount()).toNumber()
+        let currentEvent = (await eventStore.eventCount.call({ from: fromAddress })).toNumber()
         let eventPromises = []
         while (eventId < currentEvent) {
-            eventPromises.push(await this.readFSA(eventStore, fromAddress, eventId))
+            let fsa = await this.readFSA(eventStore, fromAddress, eventId)
+            eventPromises.push(fsa)
             eventId++
         }
         return await Promise.all(eventPromises)
@@ -163,59 +158,6 @@ export class EventStore {
         return await Promise.all(promises)
     }
 
-    /**
-    * @type {Function} readModelGenerator - transform an event stream into a json object
-    * @param {Object} readModel - a json object representing the state of a given model
-    * @param {Function} reducer - a function which reduces events into a read model state object
-    * @param {Object[]} events - events from an eventStore contract
-    */
-    readModelGenerator = (readModel: Common.IReadModel, reducer: any, events: Array<Common.IFSAEvent>): Common.IReadModel => {
-        events.forEach((event) => {
-            readModel = reducer(readModel, event)
-        })
-        return <Common.IReadModel>readModel
-    }
 
-    /**
-    * @type {Function} maybeSyncReadModel - maybe update a json read model if it has new events
-    * @param {Contract} eventStore - a contract instance which is an Event Store
-    * @param {Object} readModel - a json object representing the state of a given model
-    * @param {Function} reducer - a function which reduces events into a read model state object
-    * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
-    */
-    maybeSyncReadModel = async (eventStore: any, fromAddress: string, readModel: Common.IReadModel, reducer: any): Promise<Common.IReadModel> => {
-        // console.log('called: ')
-        let solidityEventCount = (await eventStore.solidityEventCount()).toNumber()
-        // console.log('solidityEventCount: ', solidityEventCount)
-        return this.framework.Persistence.LocalStore.getItem(readModel.readModelStoreKey)
-            .then(async (_readModel: Common.IReadModel) => {
-                if (!_readModel) {
-                    _readModel = readModel
-                }
-                if (_readModel.lastEvent === solidityEventCount) {
-                    return readModel
-                }
-                // console.log('_readModel: ', _readModel)
-                let startIndex = _readModel.lastEvent !== null ? _readModel.lastEvent + 1 : 0
-                let events = await this.readFSAs(eventStore, fromAddress, startIndex)
-                // console.log('events: ', events)
-                let updatedReadModel = this.readModelGenerator(_readModel, reducer, events)
-                return <any>this.framework.Persistence.LocalStore.setItem(updatedReadModel.readModelStoreKey, updatedReadModel)
-            })
-    }
-
-
-    getCachedReadModel = async (
-        contractAddress: string,
-        eventStore: any,
-        fromAddress: string,
-        readModel: Common.IReadModel,
-        reducer: any
-    ) => {
-        readModel.readModelStoreKey = `${readModel.readModelType}:${contractAddress}`
-        readModel.contractAddress = contractAddress
-        readModel = await this.maybeSyncReadModel(eventStore, fromAddress, readModel, reducer)
-        return readModel
-    }
 
 }
