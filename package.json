@@ -56,10 +56,9 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.3.0",
     "nyc": "^10.3.2",
-    "ts-node": "^2.1.2",
+    "ts-node": "^3.2.0",
     "typedoc": "^0.5.3",
-    "typescript": "^2.1.4",
-    "zombie": "^5.0.5"
+    "typescript": "^2.1.4"
   },
   "dependencies": {
     "@conclurer/local-storage-fallback": "1.0.2",

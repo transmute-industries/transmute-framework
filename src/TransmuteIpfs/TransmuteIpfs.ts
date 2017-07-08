@@ -24,12 +24,12 @@ export interface ITransmuteIpfs {
     config: IIpfsConfig
     init: (config: IIpfsConfig) => ITransmuteIpfs
     addFromFs: (path: string) => Promise<any>
-    addFromURL: (url: string) => Promise<any>
-    writeObject: (obj: any) => Promise<string>
+    addFromURL: (url: string) => Promise<any>   
+    writeObject: (obj: any) => Promise<any>
     readObject: (hash: string) => Promise<any>
-    statesToPatches: (states: any[]) => Promise<any[]>
-    patchesToHashes: (patches: any[]) => Promise<string[]>
-    hashesToPatches: (hashes: string[]) => Promise<any[]>
+    statesToPatches: (states: any[]) => Promise<any>
+    patchesToHashes: (patches: any[]) => Promise<any>
+    hashesToPatches: (hashes: string[]) => Promise<any>
     applyPatches: (obj: any, patches: any[]) => any
     applyIPLDHashes: (obj: any, hashes: string[]) => Promise<any>
     diff: (start: any, end: any) => any
