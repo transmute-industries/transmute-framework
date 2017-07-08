@@ -81,6 +81,8 @@ contract RBAC is Killable {
   returns (bytes32)
   {
     // if not the owner or the requesting address, do not return the role for the given address
+    // EVENT SOURCING DESTOYS THIS PRIVACY
+    // IS IT OK THAT ANY ADDRESS ROLE CAN BE KNOWN?
     require(tx.origin == owner || tx.origin == target);
     return addressRole[target];
   }

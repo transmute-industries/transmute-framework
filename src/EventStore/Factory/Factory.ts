@@ -43,7 +43,7 @@ export class Factory extends Permissions {
         return addresses
     }
 
-    getFactoryState = async (factory: any, fromAddress: string) => {
+    getFactoryReadModel = async (factory: any, fromAddress: string) => {
         return this.framework.ReadModel.getCachedReadModel(
             factory,
             fromAddress,

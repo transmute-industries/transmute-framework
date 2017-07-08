@@ -15,6 +15,7 @@ const updatesFromMeta = (meta: any) => {
 }
 
 const handlers = {
+    // For now we are not tracking this is read model...
     ['AC_ROLE_ASSIGNED']: (state, action) => {
         let updatesToModel = {
             model: {}
@@ -23,9 +24,29 @@ const handlers = {
         return Object.assign({}, state, updatesToModel, updatesToMeta)
     },
     ['AC_GRANT_WRITTEN']: (state, action) => {
-        let updatesToModel = {
-            model: {}
+        if (!state.model[action.payload.grant.role]){
+            state.model[action.payload.grant.role] = {}
         }
+        if (!state.model[action.payload.grant.role][action.payload.grant.resource]){
+            state.model[action.payload.grant.role][action.payload.grant.resource] = {}
+        }
+        if (!state.model[action.payload.grant.role][action.payload.grant.resource][action.payload.grant.action]){
+            state.model[action.payload.grant.role][action.payload.grant.resource][action.payload.grant.action] = action.payload.grant.attributes
+        }
+        // console.log(action.payload.grant.attributes)
+        let updatesToModel = {
+            model: {
+                [action.payload.grant.role]: {
+                    [action.payload.grant.resource]: {
+                        [action.payload.grant.action]: action.payload.grant.attributes,
+                        ...state.model[action.payload.grant.role][action.payload.grant.resource][action.payload.grant.action]
+                    },
+                    ...state.model[action.payload.grant.role][action.payload.grant.resource]
+                },
+                ...state.model
+            }
+        }
+        // console.log(action.payload.grant)
         let updatesToMeta = updatesFromMeta(action.meta)
         return Object.assign({}, state, updatesToModel, updatesToMeta)
     },

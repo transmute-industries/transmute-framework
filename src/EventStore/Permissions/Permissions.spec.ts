@@ -33,6 +33,14 @@ describe('Permissions', () => {
         })
     })
 
+    describe('.getGrant', () => {
+        it('anyone can get a grant', async () => {
+            let grant = await Permissions.getGrant(acc, fromAddress, 0)
+            // console.log(grant)
+            // TODO: add more tests here...
+        })
+    })
+
     describe('.canRoleActionResource', () => {
         it('owner can check if role is granted action on resource', async () => {
             let granted = await Permissions.canRoleActionResource(acc, fromAddress, 'admin', 'create:any', 'eventstore')
@@ -42,13 +50,12 @@ describe('Permissions', () => {
         })
     })
 
-    describe('.getGrants', () => {
-
+    describe('.getPermissionsReadModel', () => {
         it('return grants as object', async () => {
-            let grantsObject = await TransmuteFramework.Permissions.getGrants(acc, fromAddress)
-            // console.log(grantsObject)
+            let readModel = await TransmuteFramework.Permissions.getPermissionsReadModel(acc, fromAddress)
+            // console.log(readModel.model)
+            // Todo: add tests here...
         })
-
     })
 
 })

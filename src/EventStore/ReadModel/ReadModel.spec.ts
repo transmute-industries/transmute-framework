@@ -62,16 +62,15 @@ describe('ReadModel', () => {
             let updatedReadModel1 = await TransmuteFramework.ReadModel.maybeSyncReadModel(factory, fromAddress, factoryReadModel, factoryReducer)
             let updatedReadModel2 = await TransmuteFramework.ReadModel.maybeSyncReadModel(factory, fromAddress, factoryReadModel, factoryReducer)
             assert(_.isEqual(updatedReadModel1, updatedReadModel2), 'expected no changes when no new events have been saved')
-            lastEvent = updatedReadModel2.lastEvent
         })
 
         it("should return an updated read model when new events have been saved", async () => {
+            let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(factory, fromAddress, factoryReadModel, factoryReducer)
             let { tx, events } = await TransmuteFramework.Factory.createEventStore(factory, fromAddress)
             updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(factory, fromAddress, factoryReadModel, factoryReducer)
-            assert.equal(updatedReadModel.lastEvent, lastEvent + 1, 'expected 1 more event to have been applied')
+            assert.equal(updatedReadModel.lastEvent, events[0].meta.id, 'expected 1 more event to have been applied')
         })
     })
-
 
     describe('getCachedReadModel', () => {
         it('return returns an update to date read model and reset the cache', async () => {

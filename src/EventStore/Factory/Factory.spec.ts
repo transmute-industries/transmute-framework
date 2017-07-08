@@ -8,7 +8,7 @@ import { expect, assert } from 'chai'
 
 import * as _ from 'lodash'
 
-describe.only('Factory', () => {
+describe('Factory', () => {
 
     let factory
     let fromAddress = web3.eth.accounts[0];
@@ -17,9 +17,9 @@ describe.only('Factory', () => {
         factory = await EventStoreFactoryContract.deployed()
     })
 
-    describe('.getFactoryState', () => {
+    describe('.getFactoryReadModel', () => {
         it('return the current state of a factory', async () => {
-            let state = await Factory.getFactoryState(factory, fromAddress)
+            let state = await Factory.getFactoryReadModel(factory, fromAddress)
             // console.log(state)
             // Add tests here...
         })

@@ -27,6 +27,12 @@ export interface IPermissions {
         attributes: string[]
     ) => Promise<any>
 
+    getGrant: (
+        acc: any,
+        fromAddress: string,
+        index: number
+    ) => Promise<any>
+
     canRoleActionResource: (
         acc: any,
         fromAddress: string,
@@ -35,7 +41,7 @@ export interface IPermissions {
         resource: string
     ) => Promise<boolean>
 
-    getGrants: (acc: any, fromAddress: string) => Promise<any>
+    getPermissionsReadModel: (acc: any, fromAddress: string) => Promise<Common.IReadModel>
 }
 
 export class Permissions implements IPermissions {
@@ -70,6 +76,15 @@ export class Permissions implements IPermissions {
         }
     }
 
+    getGrant = async (acc, fromAddress, index: number) => {
+        let grantVals = await acc.getGrant.call(index, {
+            from: fromAddress,
+            gas: 2000000
+        })
+        let grant = Common.grantItemFromValues(grantVals)
+        return grant
+    }
+
     canRoleActionResource = async (acc: any, fromAddress: string, role: string, action: string, resource: string): Promise<boolean> => {
         let vals = await acc.canRoleActionResource.call(role, action, resource, {
             from: fromAddress,
@@ -78,15 +93,23 @@ export class Permissions implements IPermissions {
         return vals[0]
     }
 
-    async getGrants(tac: any, fromAddress: string): Promise<any> {
+    // NOT OPTIMIZED - WILL BE SLOW
+    // NEED TO IMPLEMENT CACHIN...
+    async getPermissionsReadModel(acc: any, fromAddress: string): Promise<any> {
         // console.log('getGrants...')
-        let updatedReadModel = await this.framework.ReadModel.getCachedReadModel(
-            tac,
-            fromAddress,
-            permissionsReadModel,
-            permissionsReducer
-        )
-        return updatedReadModel
+        let events = await this.framework.EventStore.readFSAs(acc, fromAddress, 0)
+        // console.log(events)
+        events = _.filter(events, (event: Common.IFSAEvent) => {
+            return event.type === 'AC_GRANT_WRITTEN'
+        })
+        events = events.map(async (event) =>{
+            event.payload.grant = await this.getGrant(acc, fromAddress, event.payload.index)
+            event.meta.extended = ['grant']
+            return event
+        })
+        events = await Promise.all(events)
+        let readModel = this.framework.ReadModel.readModelGenerator(permissionsReadModel, permissionsReducer, events)
+        return readModel
     }
 
 }
