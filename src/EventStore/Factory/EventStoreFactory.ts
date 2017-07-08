@@ -1,6 +1,6 @@
 'use strict'
 
-import { getFSAFromEventArgs } from '../Utils/Common'
+import { getFSAFromEventArgs, IFSAEvent } from '../Utils/Common'
 
 export module EventStoreFactory {
 

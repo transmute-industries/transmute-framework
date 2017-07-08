@@ -61,7 +61,7 @@ describe('', () => {
         })
 
         describe('getAddressRole', () => {
-            it('onlyOwner', async () => {
+            it('onlyOwner or target address', async () => {
                 let acc1Role = await tac.getAddressRole.call(accounts[1], {
                     from: accounts[0]
                 })

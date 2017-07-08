@@ -47,7 +47,7 @@ export const unMarshalledExpectedEvents = [
         keyType: 'X',
         valueType: 'I',
         key: 'multihash',
-        value: 'QmRrehjkb86JvJcNJwdRBmnBL7a6Etkaooc98hvrXSCpn7'
+        value: 'QmctP7wsBfPXgqBAHQow94Gr22Sqe3krDbJmJBXiY4GLBr'
     }
 ]
 
@@ -68,12 +68,6 @@ export const fsaCommands = [
         type: 'BYTES32_KEY_VALUE',
         payload: {
             bytes32: '0x0000000000000000000000000000000000000000000000000000000000000003'
-        }
-    },
-    {
-        type: 'IPLD_KEY_VALUE',
-        payload: {
-            multihash: 'QmRrehjkb86JvJcNJwdRBmnBL7a6Etkaooc98hvrXSCpn7'
         }
     },
     {

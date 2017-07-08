@@ -1,8 +1,6 @@
 
 import { EventStore } from './EventStore/EventStore'
 
-import { EventTypes } from './EventStore/EventTypes/EventTypes'
-
 import { Persistence } from './EventStore/Persistence/Persistence'
 
 import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
@@ -49,7 +47,6 @@ export class TransmuteFramework implements ITransmuteFramework {
   web3 = null
 
   TransmuteIpfs: ITransmuteIpfs = TransmuteIpfs
-  EventTypes = EventTypes
   Persistence = Persistence
 
   public init = (confObj = config) => {

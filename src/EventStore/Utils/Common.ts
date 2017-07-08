@@ -18,12 +18,41 @@ export interface IRawEsEvent extends IRawEsCommand {
     Created: any;
 }
 
-export interface IUnmarshalledEsCommand{
+export interface IUnmarshalledEsCommand {
     eventType: string;
     keyType: string;
     valueType: string;
     key: any;
     value: any;
+}
+
+export interface IFSACommand {
+    type: string;
+    payload: any;
+    meta?: any;
+}
+
+export interface IFSAEvent extends IFSACommand {
+    meta: any;
+}
+
+export interface ITransaction {
+        tx: string;
+        receipt: any;
+        logs: any[]
+    }
+
+export interface ITransmuteCommandResponse {
+    events: Array<IFSAEvent>,
+    transactions: Array<ITransaction>
+}
+
+export interface IReadModel {
+    lastEvent: number;
+    readModelType: string;
+    readModelStoreKey: string;
+    contractAddress: string;
+    model: any;
 }
 
 export const toAscii = (value) => {
@@ -93,6 +122,21 @@ export const getValueFromType = (type, value) => {
     }
 }
 
+export const guessTypeFromValue = (value) => {
+    if (typeof value === 'number') {
+        return 'U'
+    }
+    if (typeof value === 'object') {
+        return 'I'
+    }
+    if (typeof value === 'string') {
+        if (util.isValidAddress(value)) {
+            return 'A'
+        }
+        return 'X'
+    }
+    throw Error('unable to guess type of value: ' + value)
+}
 
 export const marshal = (_eventType, _keyType, _valueType, _key, _value) => {
     return {
@@ -134,8 +178,7 @@ export const unmarshal = (eventArgs) => {
     )
 }
 
-export const getFSAFromEventValues = (_id, _txOrigin, _created, _eventType, _keyType, _valueType, _key, _value) => {
-    let flat = getUnmarshalledObjectFromValues(_id, _txOrigin, _created, _eventType, _keyType, _valueType, _key, _value)
+export const getFSAFromFlat = (flat) =>{
     return {
         type: flat.eventType,
         payload: {
@@ -144,24 +187,83 @@ export const getFSAFromEventValues = (_id, _txOrigin, _created, _eventType, _key
         meta: {
             id: flat.id,
             created: flat.created,
-            txOrigin: flat.txOrigin
+            txOrigin: flat.txOrigin,
+            keyType: flat.keyType,
+            valueType: flat.valueType
         }
     }
 }
 
-export const getFSAFromEventArgs = (eventArgs) => {
+export const getFSAFromEventValues = (
+    _id,
+    _txOrigin,
+    _created,
+    _eventType,
+    _keyType,
+    _valueType,
+    _key,
+    _value
+): IFSAEvent => {
+    let flat = getUnmarshalledObjectFromValues(
+        _id,
+        _txOrigin,
+        _created,
+        _eventType,
+        _keyType,
+        _valueType,
+        _key,
+        _value
+    )
+    return getFSAFromFlat(flat)
+}
+
+export const getFSAFromEventArgs = (eventArgs): IFSAEvent => {
     let flat = unmarshal(eventArgs)
-    return {
-        type: flat.eventType,
-        payload: {
-            [flat.key]: flat.value
-        },
-        meta: {
-            id: flat.id,
-            created: flat.created,
-            txOrigin: flat.txOrigin
-        }
-    }
+    return getFSAFromFlat(flat)
 }
 
+
+
+ // http://stackoverflow.com/questions/19098797/fastest-way-to-flatten-un-flatten-nested-json-objects
+    export const flatten = (data) => {
+        var result = {};
+        function recurse(cur, prop) {
+            if (Object(cur) !== cur) {
+                result[prop] = cur;
+            } else if (Array.isArray(cur)) {
+                for (var i = 0, l = cur.length; i < l; i++)
+                    recurse(cur[i], prop + "[" + i + "]");
+                if (l == 0)
+                    result[prop] = [];
+            } else {
+                var isEmpty = true;
+                for (var p in cur) {
+                    isEmpty = false;
+                    recurse(cur[p], prop ? prop + "." + p : p);
+                }
+                if (isEmpty && prop)
+                    result[prop] = {};
+            }
+        }
+        recurse(data, "");
+        return result;
+    }
+
+    export const unflatten = (data: Object): Object => {
+        if (Object(data) !== data || Array.isArray(data))
+            return data;
+        var regex = /\.?([^.\[\]]+)|\[(\d+)\]/g,
+            resultholder = {};
+        for (var p in data) {
+            var cur = resultholder,
+                prop = "",
+                m;
+            while (m = regex.exec(p)) {
+                cur = cur[prop] || (cur[prop] = (m[2] ? [] : {}));
+                prop = m[2] || m[1];
+            }
+            cur[prop] = data[p];
+        }
+        return resultholder[""] || resultholder;
+    }
 
