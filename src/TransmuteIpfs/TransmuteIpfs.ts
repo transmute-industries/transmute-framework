@@ -154,7 +154,7 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
     }
 
     applyPatches = (obj, patches) => {
-        let patched = _.clone(obj)
+        let patched = _.cloneDeep(obj)
         patches.forEach((patch) => {
             patched = jiff.patchInPlace(patch, patched)
         })

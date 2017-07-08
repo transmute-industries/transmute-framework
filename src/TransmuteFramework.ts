@@ -3,7 +3,7 @@ import { EventStore } from './EventStore/EventStore'
 import { ReadModel } from './EventStore/ReadModel/ReadModel'
 import { Factory} from './EventStore/Factory/Factory'
 import { Persistence } from './EventStore/Persistence/Persistence'
-
+import { PatchLogic } from './EventStore/ReadModel/PatchLogic/PatchLogic'
 import { Permissions, IPermissions } from './EventStore/Permissions/Permissions'
 import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
 
@@ -61,8 +61,10 @@ export class TransmuteFramework implements ITransmuteFramework {
   Persistence = Persistence
   Permissions: IPermissions
 
+  // need to make interfaces for these for type safety...
   ReadModel: any
   Factory: any
+  PatchLogic: any
 
   public init = (confObj = config) => {
     this.config = confObj
@@ -102,6 +104,7 @@ export class TransmuteFramework implements ITransmuteFramework {
     this.Factory = new Factory(this)
     this.EventStore = new EventStore(this)
     this.ReadModel = new ReadModel(this)
+    this.PatchLogic = new PatchLogic(this)
     this.Permissions = new Permissions(this)
     return this
   }

@@ -1,9 +1,8 @@
 import TransmuteFramework from '../../../TransmuteFramework'
 
-
 export const readModel = {
     readModelStoreKey: '', // readModelType:contractAddress
-    readModelType: 'HeroStats',
+    readModelType: 'PatchLogic',
     contractAddress: '0x0000000000000000000000000000000000000000',
     lastEvent: null, // Last Event Index Processed
     model: {} // where all the updates from events will be made
@@ -16,10 +15,10 @@ const updatesFromMeta = (meta: any) => {
 }
 
 const handlers = {
-    ['HERO_STATS_CHANGED']: (state, action) => {
-        // console.log(action)
+    ['IPLD_PATCH']: (state, action) => {
+        // console.log('!!!! ' , action.payload.patch)
         let updatesToModel = {
-            model: TransmuteFramework.TransmuteIpfs.patch(state.model, action.payload)
+            model: TransmuteFramework.TransmuteIpfs.patch(state.model, action.payload.patch)
         }
         let updatesToMeta = updatesFromMeta(action.meta)
         return Object.assign({}, state, updatesToModel, updatesToMeta)

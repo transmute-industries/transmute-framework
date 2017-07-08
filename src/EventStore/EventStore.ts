@@ -98,8 +98,12 @@ export class EventStore {
             gas: 2000000
         })
     }
-
+    // probably should return TX here tooo
     writeFSA = async (eventStore: any, fromAddress: string, fsa: IFSACommand): Promise<IFSAEvent> => {
+
+        if (fsa.payload.length) {
+            throw ('fsa payload cannot be an array')
+        }
         let payloadKeys = Object.keys(fsa.payload)
         // need to check size here and throw errors for very long strings
         let valueType, keyType, key, value
