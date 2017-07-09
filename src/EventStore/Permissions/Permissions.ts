@@ -63,7 +63,7 @@ export class Permissions implements IPermissions {
         }
     }
 
-    setGrant = async (acc, fromAddress, role: string, resource: string, action: string, attributes: string[]) => {
+    setGrant = async (acc: any, fromAddress: string, role: string, resource: string, action: string, attributes: string[]) => {
         let tx = await acc.setGrant(role, resource, action, attributes, {
             from: fromAddress,
             gas: 2000000
@@ -109,6 +109,8 @@ export class Permissions implements IPermissions {
         })
         events = await Promise.all(events)
         let readModel = this.framework.ReadModel.readModelGenerator(permissionsReadModel, permissionsReducer, events)
+        readModel.contractAddress = acc.address
+        readModel.readModelStoreKey = `${readModel.readModelType}:${readModel.contractAddress}`
         return readModel
     }
 
