@@ -1,10 +1,10 @@
 
 import { EventStore } from './EventStore/EventStore'
-
-import { EventTypes } from './EventStore/EventTypes/EventTypes'
-
+import { ReadModel } from './EventStore/ReadModel/ReadModel'
+import { Factory} from './EventStore/Factory/Factory'
 import { Persistence } from './EventStore/Persistence/Persistence'
-
+import { PatchLogic } from './EventStore/ReadModel/PatchLogic/PatchLogic'
+import { Permissions, IPermissions } from './EventStore/Permissions/Permissions'
 import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
 
 const Web3 = require('web3')
@@ -14,22 +14,28 @@ let web3
 
 declare var window: any
 
-const eventStoreArtifacts = require('../build/contracts/EventStore')
-const eventStoreFactoryArtifacts = require('../build/contracts/EventStoreFactory')
+const accessControlArtifacts = require('../build/contracts/RBAC')
+const eventStoreArtifacts = require('../build/contracts/RBACEventStore')
+const eventStoreFactoryArtifacts = require('../build/contracts/RBACEventStoreFactory')
+
+
 
 export interface ITransmuteFrameworkConfig {
   env: string
+  aca: any,
   esa: any,
   esfa: any,
   ipfsConfig?: any
 }
 const config = <any>{
   env: 'testrpc',
+  aca: accessControlArtifacts,
   esa: eventStoreArtifacts,
   esfa: eventStoreFactoryArtifacts,
 }
 
 export interface ITransmuteFramework {
+  AccessControlContract: any,
   EventStoreFactoryContract: any,
   EventStoreContract: any,
   EventStore: any,
@@ -37,20 +43,28 @@ export interface ITransmuteFramework {
   config: any,
   web3: any,
   TransmuteIpfs: any,
-  Persistence: any
+  Persistence: any,
+  ReadModel: any,
+  Factory: any
 }
 
 export class TransmuteFramework implements ITransmuteFramework {
 
+  AccessControlContract = null
   EventStoreFactoryContract = null
   EventStoreContract = null
   EventStore: any = null
   config = config
   web3 = null
-
+  
   TransmuteIpfs: ITransmuteIpfs = TransmuteIpfs
-  EventTypes = EventTypes
   Persistence = Persistence
+  Permissions: IPermissions
+
+  // need to make interfaces for these for type safety...
+  ReadModel: any
+  Factory: any
+  PatchLogic: any
 
   public init = (confObj = config) => {
     this.config = confObj
@@ -62,10 +76,17 @@ export class TransmuteFramework implements ITransmuteFramework {
     }
     this.web3 = web3
     if (this.web3) {
+
+      this.AccessControlContract = contract(this.config.aca)
+      this.AccessControlContract.setProvider(this.web3.currentProvider)
+
       this.EventStoreFactoryContract = contract(this.config.esfa)
       this.EventStoreFactoryContract.setProvider(this.web3.currentProvider)
+
       this.EventStoreContract = contract(this.config.esa)
       this.EventStoreContract.setProvider(this.web3.currentProvider)
+
+
     } else {
       console.warn('web3 is not available, install metamask.')
     }
@@ -79,7 +100,12 @@ export class TransmuteFramework implements ITransmuteFramework {
     }
     // This is initialized like so because it can be useful outside framework...
     this.TransmuteIpfs = TransmuteIpfs.init(ipfsConfig)
+
+    this.Factory = new Factory(this)
     this.EventStore = new EventStore(this)
+    this.ReadModel = new ReadModel(this)
+    this.PatchLogic = new PatchLogic(this)
+    this.Permissions = new Permissions(this)
     return this
   }
 
