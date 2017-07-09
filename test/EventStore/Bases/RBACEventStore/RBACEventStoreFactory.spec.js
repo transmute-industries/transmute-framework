@@ -11,7 +11,7 @@ const {
     grantItemFromEvent
 } = require('../../../Common')
 
-describe.only('', () => {
+describe('', () => {
 
     contract('RBACEventStoreFactory', function (accounts) {
 
