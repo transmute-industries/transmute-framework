@@ -58,7 +58,7 @@ We apologize for the terminology, there is a lot of room for improvement, feel f
 
 You write a command, you read an event.
 
-The semantix of commands and events is WIP, probably not correct w.r.t. CQRS, and something we want help fixing.
+The semantics of commands and events is WIP, probably not correct w.r.t. CQRS, and something we want help fixing.
 
 #### Events
 
