@@ -1,5 +1,5 @@
 const ipfsAPI = require('ipfs-api')
-const ipld = require('ipld')
+const ipld = require('ipld-dag-cbor')
 const jiff = require('jiff')
 
 import { expect, assert, should } from 'chai'
@@ -149,7 +149,7 @@ describe('TransmuteIpfs', () => {
                 }
             }
             let patch = jiff.diff(start, end)
-            let patched = TransmuteIpfs.applyPatches(start, [ patch ])
+            let patched = TransmuteIpfs.applyPatches(start, [patch])
             // console.log(patched)
             assert(_.isEqual(patched, end))
         })
@@ -178,12 +178,18 @@ describe('TransmuteIpfs', () => {
                 probablyError: undefined
             }
             let test = async () => {
-                let buffer = ipld.marshal(rawJsonObject)
-                // console.log(buffer)
+     
+                let buffer = await new Promise((resolve, reject) => {
+                    ipld.util.serialize(rawJsonObject, (err, serialized) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        resolve(serialized);
+                    })
+                })
+
                 let data = await TransmuteIpfs.ipfs.add(buffer)
                 let { hash } = data[0]
-                // console.log(hash)
-                // var newBuffer = Buffer.concat([buffer1, buffer2]);
                 TransmuteIpfs.ipfs.cat(hash, function (err, stream) {
                     var res = new Buffer('')
                     stream.on('data', function (chunk) {
@@ -192,18 +198,21 @@ describe('TransmuteIpfs', () => {
                     stream.on('error', function (err) {
                         // console.error('Oh nooo', err)
                     })
-                    stream.on('end', function () {
-                        // console.log('Got:', res)
-                        let unm = ipld.unmarshal(res)
-                        // console.log(unm)
+                    stream.on('end', async () => {
+                        let unm: any = await new Promise((resolve, reject) => {
+                            ipld.util.deserialize(res, (err, data) => {
+                                if (err) {
+                                    reject(err);
+                                }
+                                resolve(data);
+                            })
+                        })
                         assert.equal(unm.probablyError, undefined)
                         done()
                     })
                 })
             }
             test()
-            // console.log(rawJsonObject)
-            // console.log(bufFromIpfs)
         })
     })
 
