@@ -32,7 +32,7 @@ library EventStoreLib{
         uint _eventId = self.events.length;
 
         EsEventStruct memory esEvent;
-        esEvent.TxOrigin = tx.origin;
+        esEvent.TxOrigin = msg.sender;
         esEvent.Created = _created;
 
         esEvent.EventType = _eventType;

@@ -60,11 +60,11 @@ contract RBACEventStoreFactory is RBAC {
     public
     returns (address)
   {
-    bytes32 txOriginRole = getAddressRole(tx.origin);
+    bytes32 txOriginRole = getAddressRole(msg.sender);
 
     var (granted,,) = canRoleActionResource(txOriginRole, bytes32("create:any"), bytes32("eventstore"));
 
-    if (tx.origin != owner && !granted){
+    if (msg.sender != owner && !granted){
       throw;
     }
     // Interact With Other Contracts
