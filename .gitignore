@@ -12,3 +12,10 @@ temp
 sigmate-v3-ti.json
 src/creds.js
 .nyc_output
+
+*~
+*#
+.#*
+.node*
+
+package-lock.json
