@@ -92,7 +92,7 @@ export class EventStore {
     }
 
 
-    readEsEventValues = async (eventStore: any, fromAddress: string, eventId: number) => {
+    readEsEventValues = async (eventStore: any, fromAddress: string, eventId: number) => {  // @Orie, should this be a constant since it is a call fn? Also, don't need gas, etc.
         return await eventStore.readEvent.call(eventId, {
             from: fromAddress,
             gas: 2000000
@@ -120,6 +120,42 @@ export class EventStore {
             key = payloadKeys[0]
             value = fsa.payload[payloadKeys[0]]
         }
+
+        // ----------------------------------------------
+        // expect().to.throw('Property does not exist in model schema.');
+
+        function isHex(h) {
+            var a = parseInt(h,16).toString(16)
+            var b = ('0x' == h.substring(0,2)) 
+                    ? h.toLowerCase().substring(2)  
+                    : h.toLowerCase() 
+            return a === b.replace(/^0+/, '');
+        }
+        
+        if (key == 'bytes32') {
+            if (valueType == 'X') {
+                // check proper length
+                if (value.length > 66) {
+                    throw ('solidity bytes32 type exceeded 32 bytes: ' + value.length + ' nybbles')
+                }
+                // check hex chars only 0-F
+                if (!isHex(value)) {
+                    throw('solidity bytes32 received invalid hex string: ' + value)
+                }
+            } else if (valueType == 'S') {
+                // check length of string
+                if (value.length > 32) {
+                    throw ('solidity bytes32 type exceeded 32 bytes: ' + value.length + ' chars')
+                }
+            }
+            else throw ('Wrong type!' )
+        }
+        console.log('k ' + key)
+        console.log('kt ' + keyType)
+        console.log('v ' + value)
+        console.log('vt ' + valueType)
+        // ----------------------------------------------
+
         let unmarshalledEsCommand: IUnmarshalledEsCommand = {
             eventType: fsa.type,
             keyType: 'X',

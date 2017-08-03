@@ -13,6 +13,7 @@ import {
     reducer as permissionsReducer
 } from './Permissions/Reducer'
 
+
 describe('EventStore', () => {
 
     let factory, eventStore

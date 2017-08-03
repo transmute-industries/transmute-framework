@@ -15,8 +15,21 @@ export const fsaCommands = [
     {
         type: 'BYTES32_KEY_VALUE',
         payload: {
-            bytes32: '0x0000000000000000000000000000000000000000000000000000000000000003'
+            bytes32: 'dog'
         }
+    },
+    {
+        type: 'BYTES32_KEY_VALUE',
+        payload: {
+            bytes32: '0x0fa2389'
+        }
+    },
+    {
+        type: 'BYTES32_KEY_VALUE',
+        payload: {
+            bytes32: '0xdog'
+        },
+        error: true
     },
     {
         type: 'IPLD_OBJECT',
