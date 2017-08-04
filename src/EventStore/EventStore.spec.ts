@@ -25,22 +25,30 @@ describe('EventStore', () => {
 
     describe('can write IFSACommand and read IFSAEvent', () => {
         fsaCommands.forEach((fsac) => {
-            describe(fsac.type, () => {
-                let eventId
-                it('.writeFSA', async () => {
-                    // console.log(fsac)
-                    let fsaEvent = await TransmuteFramework.EventStore.writeFSA(eventStore, web3.eth.accounts[0], fsac)
-                    // console.log(fsaEvent)
-                    assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
-                    eventId = fsaEvent.meta.id
-                })
+            describe(fsac.type, async () => {
+                let fn = async () => {
+                    let eventId
+                    it('.writeFSA', async () => {
+                        console.log(fsac)
+                        let fsaEvent = await TransmuteFramework.EventStore.writeFSA(eventStore, web3.eth.accounts[0], fsac)
+                        // console.log(fsaEvent)
+                        assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
+                        eventId = fsaEvent.meta.id
+                    })
 
-                it('.readFSA', async () => {
-                    // console.log(fsac)
-                    let fsaEvent = await TransmuteFramework.EventStore.readFSA(eventStore, web3.eth.accounts[0], eventId)
-                    assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
-                    // console.log(fsaEvent)
-                })
+                    it('.readFSA', async () => {
+                        // console.log(fsac)
+                        let fsaEvent = await TransmuteFramework.EventStore.readFSA(eventStore, web3.eth.accounts[0], eventId)
+                        assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
+                        // console.log(fsaEvent)
+                    })
+                }
+
+                if (fsac.hasOwnProperty('error')) {
+                    await assert.throws(fn)
+                } else {
+                    await fn()
+                }
             })
         })
     })

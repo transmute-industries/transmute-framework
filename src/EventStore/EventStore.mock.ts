@@ -22,7 +22,21 @@ export const fsaCommands = [
         type: 'BYTES32_KEY_VALUE',
         payload: {
             bytes32: '0x0fa2389'
-        }
+        },
+    },
+    {
+        type: 'BYTES32_KEY_VALUE',
+        payload: {   // 64 byte
+            bytes32: '0x8100000000000000000000000000000000000000000000000000000000000001'
+        },
+    },
+// ------------------------
+    {
+        type: 'BYTES32_KEY_VALUE',
+        payload: {
+            bytes32: '0x80000000000000000000000000000000000000000000000000000000000000001'
+        },
+        error: true
     },
     {
         type: 'BYTES32_KEY_VALUE',

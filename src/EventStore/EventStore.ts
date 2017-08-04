@@ -134,19 +134,15 @@ export class EventStore {
         
         if (key == 'bytes32') {
             if (valueType == 'X') {
-                // check proper length
-                if (value.length > 66) {
+                console.log(value.length)
+                console.log(value.length > 66)
+                if (value.length > 66) // check length
                     throw ('solidity bytes32 type exceeded 32 bytes: ' + value.length + ' nybbles')
-                }
-                // check hex chars only 0-F
-                if (!isHex(value)) {
+                if (!isHex(value))     // check hex chars only 0-F
                     throw('solidity bytes32 received invalid hex string: ' + value)
-                }
             } else if (valueType == 'S') {
-                // check length of string
-                if (value.length > 32) {
+                if (value.length > 32)  // check length of string
                     throw ('solidity bytes32 type exceeded 32 bytes: ' + value.length + ' chars')
-                }
             }
             else throw ('Wrong type!' )
         }
