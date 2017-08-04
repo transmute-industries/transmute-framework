@@ -30,9 +30,9 @@ contract RBACEventStore is RBAC {
     returns (uint)
   {
     // Check access control here before writing events...
-    bytes32 txOriginRole = getAddressRole(tx.origin);
+    bytes32 txOriginRole = getAddressRole(msg.sender);
     var (granted,,) = canRoleActionResource(txOriginRole, bytes32("create:any"), bytes32("event"));
-    if (tx.origin != owner && !granted){
+    if (msg.sender != owner && !granted){
       throw;
     }
     return EventStoreLib.writeEvent(

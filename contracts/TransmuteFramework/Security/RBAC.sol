@@ -49,12 +49,12 @@ contract RBAC is Killable {
     // only the owner can setGrants for the grant resource (no write up)
     // just because an account can setGrants does not mean they can give that ability to others...
     if (resource == 'grant') {
-      require(tx.origin == owner);
+      require(msg.sender == owner);
     }
-    if (tx.origin == owner) {
+    if (msg.sender == owner) {
       _;
     } else {
-      bytes32 role = addressRole[tx.origin];
+      bytes32 role = addressRole[msg.sender];
       var (granted, _role, _resource) = canRoleActionResource(role, action, resource);
       // DEBUG(granted);
       if(granted){
@@ -64,7 +64,7 @@ contract RBAC is Killable {
       }
     }
     // throw;
-    // require(tx.origin == owner);
+    // require(msg.sender == owner);
     // _;
   }
 
@@ -83,7 +83,7 @@ contract RBAC is Killable {
     // if not the owner or the requesting address, do not return the role for the given address
     // EVENT SOURCING DESTOYS THIS PRIVACY
     // IS IT OK THAT ANY ADDRESS ROLE CAN BE KNOWN?
-    require(tx.origin == owner || tx.origin == target);
+    require(msg.sender == owner || msg.sender == target);
     return addressRole[target];
   }
   

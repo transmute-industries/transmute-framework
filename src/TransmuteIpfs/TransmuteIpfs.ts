@@ -1,6 +1,6 @@
 const ipfsAPI = require('ipfs-api')
 
-var ipld = require('ipld')
+const ipld = require('ipld-dag-cbor')
 var jiff = require('jiff')
 
 import * as _ from 'lodash'
@@ -24,7 +24,7 @@ export interface ITransmuteIpfs {
     config: IIpfsConfig
     init: (config: IIpfsConfig) => ITransmuteIpfs
     addFromFs: (path: string) => Promise<any>
-    addFromURL: (url: string) => Promise<any>   
+    addFromURL: (url: string) => Promise<any>
     writeObject: (obj: any) => Promise<any>
     readObject: (hash: string) => Promise<any>
     statesToPatches: (states: any[]) => Promise<any>
@@ -89,8 +89,14 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
     }
 
     writeObject(obj) {
-        let buffer = ipld.marshal(obj)
-        return this.writeBuffer(buffer)
+        return new Promise((resolve, reject) => {
+            ipld.util.serialize(obj, (err, serialized) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(this.writeBuffer(serialized))
+            })
+        })
     }
 
     readBuffer(hash) {
@@ -115,10 +121,16 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
             path = path.split('ipfs/')[1]
         }
         return this.readBuffer(path)
-            .then((data: any) => {
-                return ipld.unmarshal(data)
+            .then((serialized: any) => {
+                return new Promise((resolve, reject) => {
+                    ipld.util.deserialize(serialized, (err, data) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        resolve(data)
+                    })
+                })
             })
-
     }
 
     // See https://github.com/cujojs/jiff
@@ -133,11 +145,20 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
     }
 
     patchesToHashes(patches) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             let marshalledPatches = patches.map((patch) => {
-                return ipld.marshal(patch)
+                // return ipld.marshal(patch)
+                return new Promise((resolve, reject) => {
+                    ipld.util.serialize(patch, (err, serialized) => {
+                        if (err) {
+                            reject(err);
+                        }
+                        resolve(serialized);
+                    })
+                })
             })
-            let promises = marshalledPatches.map((mp) => {
+            let buffers = await Promise.all(marshalledPatches);
+            let promises = buffers.map((mp) => {
                 return this.writeBuffer(mp)
             })
             resolve(Promise.all(promises))
@@ -148,9 +169,18 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
         let marshalledPatches = await Promise.all(hashes.map((hash) => {
             return this.readBuffer(hash)
         }))
-        return marshalledPatches.map((marshalled: string) => {
-            return ipld.unmarshal(new Buffer(marshalled))
+        let promises = await marshalledPatches.map((marshalled: string) => {
+            return new Promise((resolve, reject) => {
+                ipld.util.deserialize(new Buffer(marshalled), (err, data) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve(data);
+                })
+            })
         })
+
+        return Promise.all(promises);
     }
 
     applyPatches = (obj, patches) => {
