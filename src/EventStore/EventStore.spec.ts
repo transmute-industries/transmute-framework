@@ -45,9 +45,9 @@ describe('EventStore', () => {
                 }
 
                 if (fsac.hasOwnProperty('error')) {
-                    await assert.throws(fn)
+                    await assert.throws(fn);
                 } else {
-                    await fn()
+                    await fn();
                 }
             })
         })
