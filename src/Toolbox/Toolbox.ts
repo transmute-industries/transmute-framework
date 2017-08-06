@@ -14,30 +14,39 @@ export class Toolbox {
 
   }
 
-  public sign = (address: string, message_hash: string): Promise<string> => {
+  public sign = (address, message) => {
     return new Promise((resolve, reject) => {
-      this.framework.web3.eth.sign(address, message_hash, (err, signature) => {
-        if (err) {
-          throw err;
-        }
-        resolve(signature)
-      })
+        // console.log(message.length)
+        // THIS IS LAME... testrpc... I hate you....
+        this.framework.web3.eth.sign(address, message, (err, signature) => {
+            if (err) {
+                this.framework.web3.eth.sign(address, this.framework.web3.sha3(message), (err, signature) => {
+                    if (err) {
+                        throw err;
+                    }
+                    resolve(signature)
+                })
+            } else {
+                resolve(signature)
+            }
+        })
     })
-  }
+}
 
-  public recover = (address: string, message_hash: string, signature: string): Promise<string> => {
+public recover = (address, message, signature) => {
     return new Promise((resolve, reject) => {
-      var r = util.toBuffer(signature.slice(0, 66))
-      var s = util.toBuffer('0x' + signature.slice(66, 130))
-      var v = parseInt(signature.slice(130, 132), 16) + 27
-      // console.log(v)
-      var m = util.toBuffer(message_hash)
-      var pub = util.ecrecover(m, v, r, s)
-      var recovered_address = '0x' + util.pubToAddress(pub).toString('hex')
-      // console.log(address, recovered_address)
-      resolve(recovered_address)
+        let r = util.toBuffer(signature.slice(0, 66))
+        let s = util.toBuffer('0x' + signature.slice(66, 130))
+        let v = parseInt(signature.slice(130, 132), 16)
+        if ([0, 1].indexOf(v) !== -1) {
+            v += 27
+        }
+        let m = util.toBuffer(this.framework.web3.sha3(message));
+        let pub = util.ecrecover(m, v, r, s)
+        let recovered_address = '0x' + util.pubToAddress(pub).toString('hex')
+        resolve(recovered_address)
     })
-  }
+}
 
   public generateMnemonic = () => {
     return bip39.generateMnemonic()

@@ -63,6 +63,7 @@ export class TransmuteFramework implements ITransmuteFramework {
   EventStore: any = null
   config = config
   web3 = null
+  engine = null;
 
   TransmuteIpfs: ITransmuteIpfs = TransmuteIpfs
   Persistence = Persistence
@@ -84,14 +85,14 @@ export class TransmuteFramework implements ITransmuteFramework {
       providerUrl = 'https://ropsten.infura.io'
     }
 
-    var engine = new ProviderEngine();
+    this.engine = new ProviderEngine();
     // Not sure about the security of this... seems dangerous...
     if (this.config.wallet) {
-      engine.addProvider(new WalletSubprovider(this.config.wallet, {}));
+      this.engine.addProvider(new WalletSubprovider(this.config.wallet, {}));
     }
-    engine.addProvider(new Web3Subprovider(new Web3.providers.HttpProvider(providerUrl)));
-    engine.start(); // Required by the provider engine.
-    var web3 = new Web3(engine)
+    this.engine.addProvider(new Web3Subprovider(new Web3.providers.HttpProvider(providerUrl)));
+    this.engine.start(); // Required by the provider engine.
+    var web3 = new Web3(this.engine)
 
     this.web3 = web3
 
@@ -110,12 +111,16 @@ export class TransmuteFramework implements ITransmuteFramework {
       this.EventStoreContract = contract(this.config.esa)
       this.EventStoreContract.setProvider(this.web3.currentProvider)
 
-
     } else {
       console.warn('web3 is not available, install metamask.')
     }
+    this.initAll();
+    return this
+  }
 
-    let ipfsConfig = confObj.ipfsConfig || {
+  initAll = () => {
+
+    let ipfsConfig = this.config.ipfsConfig || {
       host: 'localhost',
       port: '5001',
       options: {
@@ -124,14 +129,12 @@ export class TransmuteFramework implements ITransmuteFramework {
     }
     // This is initialized like so because it can be useful outside framework...
     this.TransmuteIpfs = TransmuteIpfs.init(ipfsConfig)
-
     this.Factory = new Factory(this)
     this.EventStore = new EventStore(this)
     this.ReadModel = new ReadModel(this)
     this.PatchLogic = new PatchLogic(this)
     this.Permissions = new Permissions(this)
-    this.Toolbox = new Toolbox(this);
-    return this
+    this.Toolbox = new Toolbox(this)
   }
 
   getAccounts = () => {
@@ -147,9 +150,6 @@ export class TransmuteFramework implements ITransmuteFramework {
     })
 
   }
-
-
-
 
 }
 
