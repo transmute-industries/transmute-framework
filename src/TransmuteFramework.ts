@@ -6,10 +6,9 @@ import { Persistence } from './EventStore/Persistence/Persistence'
 import { PatchLogic } from './EventStore/ReadModel/PatchLogic/PatchLogic'
 import { Permissions, IPermissions } from './EventStore/Permissions/Permissions'
 import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
-
+import { Toolbox } from './Toolbox/Toolbox'
 const Web3 = require('web3')
 const contract = require('truffle-contract')
-import * as util from 'ethereumjs-util'
 
 let web3
 
@@ -20,13 +19,19 @@ const eventStoreArtifacts = require('../build/contracts/RBACEventStore')
 const eventStoreFactoryArtifacts = require('../build/contracts/RBACEventStoreFactory')
 
 
+var ProviderEngine = require("web3-provider-engine");
+var WalletSubprovider = require('web3-provider-engine/subproviders/wallet.js');
+var Web3Subprovider = require("web3-provider-engine/subproviders/web3.js");
+
+
 
 export interface ITransmuteFrameworkConfig {
   env: string
   aca: any,
   esa: any,
   esfa: any,
-  ipfsConfig?: any
+  ipfsConfig?: any,
+  wallet?: any
 }
 const config = <any>{
   env: 'testrpc',
@@ -40,6 +45,7 @@ export interface ITransmuteFramework {
   EventStoreFactoryContract: any,
   EventStoreContract: any,
   EventStore: any,
+  Toolbox: any,
   init: (confObj?: any) => any,
   config: any,
   web3: any,
@@ -57,10 +63,12 @@ export class TransmuteFramework implements ITransmuteFramework {
   EventStore: any = null
   config = config
   web3 = null
+  engine = null;
 
   TransmuteIpfs: ITransmuteIpfs = TransmuteIpfs
   Persistence = Persistence
   Permissions: IPermissions
+  Toolbox = null
 
   // need to make interfaces for these for type safety...
   ReadModel: any
@@ -69,13 +77,29 @@ export class TransmuteFramework implements ITransmuteFramework {
 
   public init = (confObj = config) => {
     this.config = confObj
-    switch (this.config.env) {
-      case 'testrpc': web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); break
-      case 'parity': web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); break
-      case 'infura': web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io')); break
-      case 'metamask': web3 = window.web3; break
+
+    // testrpc parity infura metamask
+    let providerUrl = 'http://localhost:8545'
+
+    if (this.config.env === 'infura') {
+      providerUrl = 'https://ropsten.infura.io'
     }
+
+    this.engine = new ProviderEngine();
+    // Not sure about the security of this... seems dangerous...
+    if (this.config.wallet) {
+      this.engine.addProvider(new WalletSubprovider(this.config.wallet, {}));
+    }
+    this.engine.addProvider(new Web3Subprovider(new Web3.providers.HttpProvider(providerUrl)));
+    this.engine.start(); // Required by the provider engine.
+    var web3 = new Web3(this.engine)
+
     this.web3 = web3
+
+    if (this.config.env === 'metamask') {
+      this.web3 = window.web3;
+    }
+
     if (this.web3) {
 
       this.AccessControlContract = contract(this.config.aca)
@@ -87,12 +111,16 @@ export class TransmuteFramework implements ITransmuteFramework {
       this.EventStoreContract = contract(this.config.esa)
       this.EventStoreContract.setProvider(this.web3.currentProvider)
 
-
     } else {
       console.warn('web3 is not available, install metamask.')
     }
+    this.initAll();
+    return this
+  }
 
-    let ipfsConfig = confObj.ipfsConfig || {
+  initAll = () => {
+
+    let ipfsConfig = this.config.ipfsConfig || {
       host: 'localhost',
       port: '5001',
       options: {
@@ -101,48 +129,26 @@ export class TransmuteFramework implements ITransmuteFramework {
     }
     // This is initialized like so because it can be useful outside framework...
     this.TransmuteIpfs = TransmuteIpfs.init(ipfsConfig)
-
     this.Factory = new Factory(this)
     this.EventStore = new EventStore(this)
     this.ReadModel = new ReadModel(this)
     this.PatchLogic = new PatchLogic(this)
     this.Permissions = new Permissions(this)
-    return this
+    this.Toolbox = new Toolbox(this)
   }
 
-  public sign = (address: string, message_hash: string): Promise<string> => {
-  
+  getAccounts = () => {
     return new Promise((resolve, reject) => {
-      this.web3.eth.sign(address, message_hash, (err, signature) => {
+      this.web3.eth.getAccounts((err, addresses) => {
         if (err) {
-          throw err;
+          reject(err);
+        } else {
+          // console.log('addresses: ', addresses)
+          resolve(addresses);
         }
-        resolve(signature)
-        // var r = util.toBuffer(signature.slice(0, 66))
-        // var s = util.toBuffer('0x' + signature.slice(66, 130))
-        // var v = parseInt(signature.slice(130, 132), 16) + 27
-        // // console.log(v)
-        // var m = util.toBuffer(message_hash)
-        // var pub = util.ecrecover(m, v, r, s)
-        // var recovered_address = '0x' + util.pubToAddress(pub).toString('hex')
-        // console.log(address, recovered_address)
-        // resolve(recovered_address)
       })
     })
-  }
 
-  public recover = (address: string, message_hash: string, signature: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      var r = util.toBuffer(signature.slice(0, 66))
-      var s = util.toBuffer('0x' + signature.slice(66, 130))
-      var v = parseInt(signature.slice(130, 132), 16) + 27
-      // console.log(v)
-      var m = util.toBuffer(message_hash)
-      var pub = util.ecrecover(m, v, r, s)
-      var recovered_address = '0x' + util.pubToAddress(pub).toString('hex')
-      // console.log(address, recovered_address)
-      resolve(recovered_address)
-    })
   }
 
 }

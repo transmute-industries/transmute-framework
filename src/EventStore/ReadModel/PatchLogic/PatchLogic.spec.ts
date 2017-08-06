@@ -23,9 +23,14 @@ import * as Common from '../../Utils/Common'
 describe('PatchLogic', () => {
 
     let factory, eventStore
-    let fromAddress = web3.eth.accounts[0];
+    let account_addresses, account, fromAddress
 
     before(async () => {
+
+        account_addresses = await TransmuteFramework.getAccounts();
+        account = account_addresses[0];
+        fromAddress = account;
+
         factory = await EventStoreFactoryContract.deployed()
         let tx = await factory.createEventStore({
             from: fromAddress,
@@ -35,7 +40,6 @@ describe('PatchLogic', () => {
         let fsa = Common.getFSAFromEventArgs(tx.logs[0].args)
         // console.log(fsa.payload.address)
         eventStore = await EventStoreContract.at(fsa.payload.address)
-
     })
 
     describe(".applyJsonLogic", () => {
