@@ -70,9 +70,3 @@ public recover = (address, message, signature) => {
 
 
 }
-
-
-
-
-
-

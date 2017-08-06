@@ -24,14 +24,12 @@ describe('Toolbox', () => {
 
     describe('.sign', () => {
         it('returns a signature', async () => {
-            let { web3 } = TransmuteFramework;
             let signature = await Toolbox.sign(account, 'hello');
         })
     })
 
     describe('.recover', () => {
         it('returns the address used for a hashed_message + signature', async () => {
-            let { web3 } = TransmuteFramework;
             let signature = await Toolbox.sign(account, 'hello');
             let addr = await Toolbox.recover(account, 'hello', signature);
             assert(addr === account)
@@ -74,21 +72,23 @@ describe('Toolbox', () => {
             })
             let addr = Toolbox.getDefaultAddressFromWallet(wallet);
             let signature = await Toolbox.sign(addr, 'hello');
-            let recoverd_addr = await Toolbox.recover(addr, 'hello', signature);
-            assert(recoverd_addr === addr)
+            let recovered_addr = await Toolbox.recover(addr, 'hello', signature);
+            assert(recovered_addr === addr)
         })
 
         it('when wallet added later...', async () => {
+
+            TransmuteFramework.init()
+
             var mnemonic = Toolbox.generateMnemonic();
             let wallet = Toolbox.getWalletFromMnemonic(mnemonic);
-            TransmuteFramework.init()
-            let confg = TransmuteFramework.config;
-            confg.wallet = wallet
-            TransmuteFramework.init(confg)
+            let config = TransmuteFramework.config;
+            config.wallet = wallet
+            TransmuteFramework.init(config)
             let addr = TransmuteFramework.Toolbox.getDefaultAddressFromWallet(wallet);
             let signature = await TransmuteFramework.Toolbox.sign(addr, 'hello');
-            let recoverd_addr = await TransmuteFramework.Toolbox.recover(addr, 'hello', signature);
-            assert(recoverd_addr === addr)
+            let recovered_addr = await TransmuteFramework.Toolbox.recover(addr, 'hello', signature);
+            assert(recovered_addr === addr)
         })
     })
 })
