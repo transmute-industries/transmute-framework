@@ -6,10 +6,9 @@ import { Persistence } from './EventStore/Persistence/Persistence'
 import { PatchLogic } from './EventStore/ReadModel/PatchLogic/PatchLogic'
 import { Permissions, IPermissions } from './EventStore/Permissions/Permissions'
 import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
-
+import { Toolbox } from './Toolbox/Toolbox'
 const Web3 = require('web3')
 const contract = require('truffle-contract')
-import * as util from 'ethereumjs-util'
 
 let web3
 
@@ -40,6 +39,7 @@ export interface ITransmuteFramework {
   EventStoreFactoryContract: any,
   EventStoreContract: any,
   EventStore: any,
+  Toolbox: any,
   init: (confObj?: any) => any,
   config: any,
   web3: any,
@@ -61,6 +61,7 @@ export class TransmuteFramework implements ITransmuteFramework {
   TransmuteIpfs: ITransmuteIpfs = TransmuteIpfs
   Persistence = Persistence
   Permissions: IPermissions
+  Toolbox = null
 
   // need to make interfaces for these for type safety...
   ReadModel: any
@@ -107,43 +108,11 @@ export class TransmuteFramework implements ITransmuteFramework {
     this.ReadModel = new ReadModel(this)
     this.PatchLogic = new PatchLogic(this)
     this.Permissions = new Permissions(this)
+    this.Toolbox = new Toolbox(this);
     return this
   }
 
-  public sign = (address: string, message_hash: string): Promise<string> => {
   
-    return new Promise((resolve, reject) => {
-      this.web3.eth.sign(address, message_hash, (err, signature) => {
-        if (err) {
-          throw err;
-        }
-        resolve(signature)
-        // var r = util.toBuffer(signature.slice(0, 66))
-        // var s = util.toBuffer('0x' + signature.slice(66, 130))
-        // var v = parseInt(signature.slice(130, 132), 16) + 27
-        // // console.log(v)
-        // var m = util.toBuffer(message_hash)
-        // var pub = util.ecrecover(m, v, r, s)
-        // var recovered_address = '0x' + util.pubToAddress(pub).toString('hex')
-        // console.log(address, recovered_address)
-        // resolve(recovered_address)
-      })
-    })
-  }
-
-  public recover = (address: string, message_hash: string, signature: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      var r = util.toBuffer(signature.slice(0, 66))
-      var s = util.toBuffer('0x' + signature.slice(66, 130))
-      var v = parseInt(signature.slice(130, 132), 16) + 27
-      // console.log(v)
-      var m = util.toBuffer(message_hash)
-      var pub = util.ecrecover(m, v, r, s)
-      var recovered_address = '0x' + util.pubToAddress(pub).toString('hex')
-      // console.log(address, recovered_address)
-      resolve(recovered_address)
-    })
-  }
 
 }
 
