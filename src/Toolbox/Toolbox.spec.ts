@@ -2,19 +2,26 @@
 
 import TransmuteFramework from '../TransmuteFramework'
 
-const { Toolbox } = TransmuteFramework.init()
+const { web3, Toolbox, } = TransmuteFramework.init()
 
 import { expect, assert } from 'chai'
 
 import * as _ from 'lodash'
 
-describe.only('Toolbox', () => {
+describe('Toolbox', () => {
+
+    let account_addresses, account;
+
+    before(async () => {
+        account_addresses = await TransmuteFramework.getAccounts();
+        account = account_addresses[0];
+    })
 
     describe('.sign', () => {
         it('returns a signature', async () => {
             let { web3 } = TransmuteFramework;
             let message_hash = web3.sha3('hello');
-            let signature = await Toolbox.sign(web3.eth.accounts[0], message_hash);
+            let signature = await Toolbox.sign(account, message_hash);
             // console.log(signature);
         })
     })
@@ -23,10 +30,16 @@ describe.only('Toolbox', () => {
         it('returns the address used for a hashed_message + signature', async () => {
             let { web3 } = TransmuteFramework;
             let message_hash = web3.sha3('hello');
-            let signature = await Toolbox.sign(web3.eth.accounts[0], message_hash);
-            let addr = await Toolbox.recover(web3.eth.accounts[0], message_hash, signature);
+            let signature = await Toolbox.sign(account, message_hash);
+            let addr = await Toolbox.recover(account, message_hash, signature);
             // console.log(addr);
-            assert(addr === web3.eth.accounts[0])
+            assert(addr === account)
+        })
+    })
+
+    describe('.generateMnemonic', () => {
+        it('returns bip39 mnemonic', async () => {
+            // console.log(Toolbox.generateMnemonic())
         })
     })
 

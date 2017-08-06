@@ -10,11 +10,13 @@ import * as _ from 'lodash'
 
 describe('Factory', () => {
 
-    let factory
-    let fromAddress = web3.eth.accounts[0];
+    let factory, account_addresses, account, fromAddress
 
     before(async () => {
         factory = await EventStoreFactoryContract.deployed()
+        account_addresses = await TransmuteFramework.getAccounts();
+        account = account_addresses[0];
+        fromAddress = account;
     })
 
     describe('.getFactoryReadModel', () => {
@@ -46,9 +48,9 @@ describe('Factory', () => {
     describe('.setAddressRole', () => {
         it('owner can make account 1 an admin', async () => {
             // console.log(factory.setAddressRole)
-            let { tx, events } = await Factory.setAddressRole(factory, fromAddress, web3.eth.accounts[1], 'admin')
+            let { tx, events } = await Factory.setAddressRole(factory, fromAddress, account_addresses[1], 'admin')
             assert.equal(events[0].type, 'AC_ROLE_ASSIGNED', 'expect AC_ROLE_ASSIGNED event')
-            assert.equal(events[0].payload[web3.eth.accounts[1]], 'admin', 'expect account1 to be assigned admin')
+            assert.equal(events[0].payload[account_addresses[1]], 'admin', 'expect account1 to be assigned admin')
             // TODO: add more tests here...
         })
     })

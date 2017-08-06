@@ -21,18 +21,19 @@ import * as _ from 'lodash'
 
 describe('ReadModel', () => {
 
-    let factory, factoryAddress
-    let fromAddress = web3.eth.accounts[0];
+    let factory, account_addresses, account, fromAddress
 
     before(async () => {
+        account_addresses = await TransmuteFramework.getAccounts();
+        account = account_addresses[0];
+        fromAddress = account;
         factory = await EventStoreFactoryContract.deployed()
-        factoryAddress = factory.address
     })
 
     describe(".readModelGenerator", () => {
         it("should return the initial read model when passed an empty array", () => {
             // This will usually be overidden by the consumer
-            factoryReadModel.contractAddress = factoryAddress
+            factoryReadModel.contractAddress = factory.address
             let updatedReadModel = TransmuteFramework.ReadModel.readModelGenerator(factoryReadModel, factoryReducer, [])
             assert(_.isEqual(factoryReadModel, updatedReadModel), 'expected no changes from application of empty event array')
         })
@@ -56,8 +57,6 @@ describe('ReadModel', () => {
         let eventStore
         let updatedReadModel
         let lastEvent
-        let fromAddress = web3.eth.accounts[0]
-
         it("should return the same read model if it is up to date", async () => {
             let updatedReadModel1 = await TransmuteFramework.ReadModel.maybeSyncReadModel(factory, fromAddress, factoryReadModel, factoryReducer)
             let updatedReadModel2 = await TransmuteFramework.ReadModel.maybeSyncReadModel(factory, fromAddress, factoryReadModel, factoryReducer)

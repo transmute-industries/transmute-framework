@@ -15,9 +15,12 @@ import {
 
 describe('EventStore', () => {
 
-    let factory, eventStore
+    let factory, eventStore, account_addresses, account, fromAddress
 
     before(async () => {
+        account_addresses = await TransmuteFramework.getAccounts();
+        account = account_addresses[0];
+        fromAddress = account;
         eventStore = await EventStoreContract.deployed()
         factory = await EventStoreFactoryContract.deployed()
     })
@@ -28,7 +31,7 @@ describe('EventStore', () => {
                 let eventId
                 it('.writeFSA', async () => {
                     // console.log(fsac)
-                    let fsaEvent = await TransmuteFramework.EventStore.writeFSA(eventStore, web3.eth.accounts[0], fsac)
+                    let fsaEvent = await TransmuteFramework.EventStore.writeFSA(eventStore, account_addresses[0], fsac)
                     // console.log(fsaEvent)
                     assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
                     eventId = fsaEvent.meta.id
@@ -36,7 +39,7 @@ describe('EventStore', () => {
 
                 it('.readFSA', async () => {
                     // console.log(fsac)
-                    let fsaEvent = await TransmuteFramework.EventStore.readFSA(eventStore, web3.eth.accounts[0], eventId)
+                    let fsaEvent = await TransmuteFramework.EventStore.readFSA(eventStore, account_addresses[0], eventId)
                     assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
                     // console.log(fsaEvent)
                 })
@@ -50,11 +53,11 @@ describe('EventStore', () => {
     //     before(async () => {
     //         initialEventId = (await eventStore.eventCount()).toNumber()
     //         commands = [addressCommand, numberCommand, stringCommand, objectCommand]
-    //         cmdResponses = await TransmuteFramework.EventStore.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
+    //         cmdResponses = await TransmuteFramework.EventStore.writeTransmuteCommands(eventStore, account_addresses[0], commands)
     //         assert.lengthOf(cmdResponses, commands.length)
     //     })
     //     it('should return all transmute events after and including the given eventId', async () => {
-    //         let transmuteEvents = await TransmuteFramework.EventStore.readTransmuteEvents(eventStore, web3.eth.accounts[0], initialEventId)
+    //         let transmuteEvents = await TransmuteFramework.EventStore.readTransmuteEvents(eventStore, account_addresses[0], initialEventId)
     //         assert.lengthOf(transmuteEvents, commands.length)
     //         // Add more tests here...
     //     })
@@ -63,7 +66,7 @@ describe('EventStore', () => {
     // describe('.writeTransmuteCommands', () => {
     //     it('should write an array of ITransmuteCommands and return and array of ITransmuteCommandResponse', async () => {
     //         let commands = [addressCommand, numberCommand, stringCommand, objectCommand]
-    //         let cmdResponses = await TransmuteFramework.EventStore.writeTransmuteCommands(eventStore, web3.eth.accounts[0], commands)
+    //         let cmdResponses = await TransmuteFramework.EventStore.writeTransmuteCommands(eventStore, account_addresses[0], commands)
     //         assert.lengthOf(cmdResponses, commands.length)
     //         // add more tests here...
     //     })

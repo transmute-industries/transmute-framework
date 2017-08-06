@@ -19,13 +19,19 @@ const eventStoreArtifacts = require('../build/contracts/RBACEventStore')
 const eventStoreFactoryArtifacts = require('../build/contracts/RBACEventStoreFactory')
 
 
+var ProviderEngine = require("web3-provider-engine");
+var WalletSubprovider = require('web3-provider-engine/subproviders/wallet.js');
+var Web3Subprovider = require("web3-provider-engine/subproviders/web3.js");
+
+
 
 export interface ITransmuteFrameworkConfig {
   env: string
   aca: any,
   esa: any,
   esfa: any,
-  ipfsConfig?: any
+  ipfsConfig?: any,
+  wallet?: any
 }
 const config = <any>{
   env: 'testrpc',
@@ -70,13 +76,29 @@ export class TransmuteFramework implements ITransmuteFramework {
 
   public init = (confObj = config) => {
     this.config = confObj
-    switch (this.config.env) {
-      case 'testrpc': web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); break
-      case 'parity': web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); break
-      case 'infura': web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io')); break
-      case 'metamask': web3 = window.web3; break
+
+    // testrpc parity infura metamask
+    let providerUrl = 'http://localhost:8545'
+
+    if (this.config.env === 'infura') {
+      providerUrl = 'https://ropsten.infura.io'
     }
+
+    var engine = new ProviderEngine();
+    // Not sure about the security of this... seems dangerous...
+    if (this.config.wallet) {
+      engine.addProvider(new WalletSubprovider(this.config.wallet, {}));
+    }
+    engine.addProvider(new Web3Subprovider(new Web3.providers.HttpProvider(providerUrl)));
+    engine.start(); // Required by the provider engine.
+    var web3 = new Web3(engine)
+
     this.web3 = web3
+
+    if (this.config.env === 'metamask') {
+      this.web3 = window.web3;
+    }
+
     if (this.web3) {
 
       this.AccessControlContract = contract(this.config.aca)
@@ -112,7 +134,22 @@ export class TransmuteFramework implements ITransmuteFramework {
     return this
   }
 
-  
+  getAccounts = () => {
+    return new Promise((resolve, reject) => {
+      this.web3.eth.getAccounts((err, addresses) => {
+        if (err) {
+          reject(err);
+        } else {
+          // console.log('addresses: ', addresses)
+          resolve(addresses);
+        }
+      })
+    })
+
+  }
+
+
+
 
 }
 
