@@ -39,7 +39,8 @@ describe('Toolbox', () => {
     describe('.generateMnemonic', () => {
         it('returns bip39 mnemonic', async () => {
             let mnemonic = Toolbox.generateMnemonic()
-            console.log(mnemonic)
+            // console.log(mnemonic)
+            // TODO: Add tests here...
         })
     })
 
