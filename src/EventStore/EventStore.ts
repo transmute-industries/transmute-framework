@@ -121,37 +121,39 @@ export class EventStore {
             value = fsa.payload[payloadKeys[0]]
         }
 
-        // ----------------------------------------------
-        // expect().to.throw('Property does not exist in model schema.');
-
+        // Error type checking
         let isHex = h =>    h.replace(/^0x/i, '').match(/[0-9A-Fa-f]+$/) 
                           ? h.replace(/^0x/i, '').match(/[0-9A-Fa-f]+$/)['index']  == 0 
                           : false 
+        let formatHex = h => '0x' + h.replace(/^0x/i, '')  // assumes valid hex input .. 0x33/33 -> 0x33
 
         if (key == 'bytes32') {
+            // 32-Byte hex - '0x32fa'
             if (valueType == 'X') {
-                if (value.length > 66) { // check length
+                if (value.length > 66)  // check length
                     throw ('solidity bytes32 type exceeded 32 bytes: ' + value.length + ' nybbles');
-                }
-                console.log('blah blah ' + isHex(value));
-                if (!isHex(value)) {    // check hex chars only 0-F
+                if (!isHex(value))     // check hex chars only 0-f/F
                     throw('solidity bytes32 received invalid hex string: ' + value);
-                }
+            // 32-Byte hex - 'the dog jumped'
             } else if (valueType == 'S') {
-                if (value.length > 32) { // check length of string
+                if (value.length > 32)  // check length of string
                     throw ('solidity bytes32 type exceeded 32 bytes: ' + value.length + ' chars');
-                }
             }
-            else {
-                throw ('Wrong type!' );
+            else 
+                throw ('Invalid value type - ' + valueType);
+        } else if (key == 'address') {
+            // address - 20 bytes
+            if (valueType == 'A') {
+                if (!isHex(value))     // check hex chars only 0-f/F
+                    throw('solidity address received invalid hex string: ' + value);
+                if (formatHex(value).length != 42) 
+                    throw('solidity address received invalid length: ' + value);
             }
+            else 
+                throw ('Invalid value type - ' + valueType);
         }
-        console.log('k ' + key);
-        console.log('kt ' + keyType);
-        console.log('v ' + value);
-        console.log('vt ' + valueType);
-        // ----------------------------------------------
 
+        // Marshlling
         let unmarshalledEsCommand: IUnmarshalledEsCommand = {
             eventType: fsa.type,
             keyType: 'X',
