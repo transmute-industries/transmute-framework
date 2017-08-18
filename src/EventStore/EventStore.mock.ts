@@ -12,6 +12,7 @@ export const fsaCommands = [
         payload: {
             address: '1a63f28550ae27e0a192d91d073ea4e97dd089b0'
         },
+        error: true
     },
     {   // invalid hex
         type: 'ADDRESS_KEY_VALUE',
@@ -25,6 +26,7 @@ export const fsaCommands = [
         payload: {
             address: '0x1a63f28550ae27e0a192d91d073ea4e97dd089b'
         },
+	error: true
     },
     {   // 41 hex chars
         type: 'ADDRESS_KEY_VALUE',

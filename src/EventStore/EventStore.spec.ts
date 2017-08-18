@@ -27,21 +27,40 @@ describe('EventStore', () => {
         fsaCommands.forEach((fsac) => {
             describe(fsac.type, async () => {
                 let fn = async () => {
-                    let eventId
-                    it('.writeFSA', async () => {
-                        console.log(fsac)
-                        let fsaEvent = await TransmuteFramework.EventStore.writeFSA(eventStore, web3.eth.accounts[0], fsac)
-                        // console.log(fsaEvent)
-                        assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
-                        eventId = fsaEvent.meta.id
-                    })
+                    let eventId, continueFlag
+                    
+                    let shouldThrow
+                    before(() => shouldThrow = ('error' in fsac) ? true : false);
+                    
+                    it('.writeFSA', () => 
+                        TransmuteFramework.EventStore.writeFSA(eventStore, web3.eth.accounts[0], fsac)
+                       .then((fsaEvent) => {
+                           assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
+                           eventId = fsaEvent.meta.id
+                       })
+                       .catch((error) => {
+                            if (!shouldThrow) {
+                                throw(error);
+                            }
+                       })
 
-                    it('.readFSA', async () => {
-                        // console.log(fsac)
-                        let fsaEvent = await TransmuteFramework.EventStore.readFSA(eventStore, web3.eth.accounts[0], eventId)
-                        assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
-                        // console.log(fsaEvent)
-                    })
+                       
+                      )
+                   
+                    it('.readFSA', () =>
+                        TransmuteFramework.EventStore.readFSA(eventStore, web3.eth.accounts[0], eventId)
+                       .then((fsaEvent) => {
+                           assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
+                           eventId = fsaEvent.meta.id
+                       })
+                       .catch((error) => {
+                            if (!shouldThrow) {
+                                throw(error);
+                            }
+                       })
+
+                       
+                      )
                 }
 
                 if (fsac.hasOwnProperty('error')) {
@@ -49,7 +68,7 @@ describe('EventStore', () => {
                 } else {
                     await fn();
                 }
-            })
+            })                            
         })
     })
 

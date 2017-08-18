@@ -48,9 +48,9 @@ describe('Common', () => {
             assert(t === 'A')
         })
 
-        it("should return X for a string", () => {
+        it("should return S for a string", () => {
             let t = Common.guessTypeFromValue('hello')
-            assert(t === 'X')
+            assert(t === 'S')
         })
 
         it("should return I for an object", () => {
