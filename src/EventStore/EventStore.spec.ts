@@ -13,6 +13,7 @@ import {
     reducer as permissionsReducer
 } from './Permissions/Reducer'
 
+
 describe('EventStore', () => {
 
     let factory, eventStore, account_addresses, account, fromAddress
@@ -27,23 +28,50 @@ describe('EventStore', () => {
 
     describe('can write IFSACommand and read IFSAEvent', () => {
         fsaCommands.forEach((fsac) => {
-            describe(fsac.type, () => {
-                let eventId
-                it('.writeFSA', async () => {
-                    // console.log(fsac)
-                    let fsaEvent = await TransmuteFramework.EventStore.writeFSA(eventStore, account_addresses[0], fsac)
-                    // console.log(fsaEvent)
-                    assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
-                    eventId = fsaEvent.meta.id
-                })
+            describe(fsac.type, async () => {
+                let fn = async () => {
+                    let eventId, continueFlag
+                    
+                    let shouldThrow
+                    before(() => shouldThrow = ('error' in fsac) ? true : false);
+                    
+                    it('.writeFSA', () => 
+                        TransmuteFramework.EventStore.writeFSA(eventStore, account, fsac)
+                       .then((fsaEvent) => {
+                           assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
+                           eventId = fsaEvent.meta.id
+                       })
+                       .catch((error) => {
+                            if (!shouldThrow) {
+                                throw(error);
+                            }
+                       })
 
-                it('.readFSA', async () => {
-                    // console.log(fsac)
-                    let fsaEvent = await TransmuteFramework.EventStore.readFSA(eventStore, account_addresses[0], eventId)
-                    assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
-                    // console.log(fsaEvent)
-                })
-            })
+                       
+                      )
+                   
+                    it('.readFSA', () =>
+                        TransmuteFramework.EventStore.readFSA(eventStore, account, eventId)
+                       .then((fsaEvent) => {
+                           assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
+                           eventId = fsaEvent.meta.id
+                       })
+                       .catch((error) => {
+                            if (!shouldThrow) {
+                                throw(error);
+                            }
+                       })
+
+                       
+                      )
+                }
+
+                if (fsac.hasOwnProperty('error')) {
+                    await assert.throws(fn);
+                } else {
+                    await fn();
+                }
+            })                            
         })
     })
 

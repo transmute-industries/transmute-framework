@@ -59,14 +59,14 @@ export class EventStore {
         let esEventValues = await this.readEsEventValues(eventStore, fromAddress, eventId)
         // console.log('read value: ', esEventValues)
         let fsa = getFSAFromEventValues(
-            esEventValues[0],
-            esEventValues[1],
-            esEventValues[2],
-            esEventValues[3],
-            esEventValues[4],
-            esEventValues[5],
-            esEventValues[6],
-            esEventValues[7]
+            esEventValues[0],  // uint    - eventId
+            esEventValues[1],  // address - tx origin
+            esEventValues[2],  // uint    - created
+            esEventValues[3],  // bytes32 - event type
+            esEventValues[4],  // bytes1  - key type
+            esEventValues[5],  // bytes1  - value type
+            esEventValues[6],  // bytes32 - key
+            esEventValues[7]   // bytes32 - value
         )
         // console.log("fsa.meta.keyType", fsa.meta.keyType)
         // console.log("fsa.meta.valueType", fsa.meta.valueType)
@@ -83,6 +83,11 @@ export class EventStore {
             }
             //  console.log('path: ', path)
             let path = fsa.payload.multihash
+
+            // readBuffer(hash)  readObject(path)
+            // Check if object is on IPFS
+            //const objectIsOnIPFS = ;
+            //if (!objectIsOnIPFS) throw('Object is not on IPFS!');
             fsa.payload = await this.framework.TransmuteIpfs.readObject(path)
             // remove circular refernce from IPLD
             fsa.payload = JSON.parse(JSON.stringify(fsa.payload))
@@ -92,7 +97,7 @@ export class EventStore {
     }
 
 
-    readEsEventValues = async (eventStore: any, fromAddress: string, eventId: number) => {
+    readEsEventValues = async (eventStore: any, fromAddress: string, eventId: number) => {  // @Orie, should this be a constant since it is a call fn? Also, don't need gas, etc.
         return await eventStore.readEvent.call(eventId, {
             from: fromAddress,
             gas: 2000000
@@ -111,7 +116,7 @@ export class EventStore {
             // CONVERT TO IPLD 
             valueType = 'I'
             let hash = await this.framework.TransmuteIpfs.writeObject(fsa.payload)
-            // console.log(hash)
+            //console.log("Ipfs hash: " + hash)
             key = 'multihash'
             value = hash
         } else {
@@ -120,6 +125,45 @@ export class EventStore {
             key = payloadKeys[0]
             value = fsa.payload[payloadKeys[0]]
         }
+
+        // Error type checking
+        let isHex = h =>    h.replace(/^0x/i, '').match(/[0-9A-Fa-f]+$/) 
+                          ? h.replace(/^0x/i, '').match(/[0-9A-Fa-f]+$/)['index']  == 0 
+                          : false 
+        let formatHex = h => '0x' + h.replace(/^0x/i, '')  // assumes valid hex input .. 0x33/33 -> 0x33
+
+        console.log(valueType);
+        console.log(value);
+        console.log(keyType);
+        console.log(key);
+
+        if (key == 'bytes32') {
+            // 32-Byte hex - '0x32fa'
+            if (valueType == 'X') {
+                if (value.length > 66)  // check length
+                    throw ('solidity bytes32 type exceeded 32 bytes: ' + value.length + ' nybbles');
+                if (!isHex(value))     // check hex chars only 0-f/F
+                    throw('solidity bytes32 received invalid hex string: ' + value);
+            // 32-Byte hex - 'the dog jumped'
+            } else if (valueType == 'S') {
+                if (value.length > 32)  // check length of string
+                    throw ('solidity bytes32 type exceeded 32 bytes: ' + value.length + ' chars');
+            }
+            else 
+                throw ('Invalid value type - ' + valueType);
+        } else if (key == 'address') {
+            // address - 20 bytes
+            if (valueType == 'A') {
+                if (!isHex(value))     // check hex chars only 0-f/F
+                    throw('solidity address received invalid hex string: ' + value);
+                if (formatHex(value).length != 42) 
+                    throw('solidity address received invalid length: ' + value);
+            }
+            else 
+                throw ('Invalid value type - ' + valueType);
+        }
+
+        // Marshlling
         let unmarshalledEsCommand: IUnmarshalledEsCommand = {
             eventType: fsa.type,
             keyType: 'X',

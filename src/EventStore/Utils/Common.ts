@@ -133,7 +133,11 @@ export const guessTypeFromValue = (value) => {
         if (util.isValidAddress(value)) {
             return 'A'
         }
-        return 'X'
+        if ((value.length > 1) && (value.substr(0,2) == "0x")) {
+            return 'X'
+        } else {
+            return 'S'
+        }
     }
     throw Error('unable to guess type of value: ' + value)
 }
