@@ -26,7 +26,7 @@ export class Factory extends Permissions {
     createEventStore = async (factory, fromAddress) => {
         let tx = await factory.createEventStore({
             from: fromAddress,
-            gas: 2000000
+            gas: 4000000
         })
 
         let fsa = getFSAFromEventArgs(tx.logs[0].args)

@@ -50,7 +50,7 @@ export class EventStore {
             marshalledEvent.valueType,
             marshalledEvent.key,
             marshalledEvent.value,
-            { from: fromAddress, gas: 2000000 }
+            { from: fromAddress, gas: 4000000 }
         )
 
     }
@@ -99,8 +99,7 @@ export class EventStore {
 
     readEsEventValues = async (eventStore: any, fromAddress: string, eventId: number) => {  // @Orie, should this be a constant since it is a call fn? Also, don't need gas, etc.
         return await eventStore.readEvent.call(eventId, {
-            from: fromAddress,
-            gas: 2000000
+            from: fromAddress
         })
     }
     // probably should return TX here tooo
@@ -132,10 +131,10 @@ export class EventStore {
                           : false 
         let formatHex = h => '0x' + h.replace(/^0x/i, '')  // assumes valid hex input .. 0x33/33 -> 0x33
 
-        console.log(valueType);
-        console.log(value);
-        console.log(keyType);
-        console.log(key);
+        // console.log(valueType);
+        // console.log(value);
+        // console.log(keyType);
+        // console.log(key);
 
         if (key == 'bytes32') {
             // 32-Byte hex - '0x32fa'

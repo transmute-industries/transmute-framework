@@ -54,7 +54,7 @@ export class Permissions implements IPermissions {
     setAddressRole = async (acc, fromAddress, targetAddress: string, targetRole: string) => {
         let tx = await acc.setAddressRole(targetAddress, targetRole, {
             from: fromAddress,
-            gas: 2000000
+            gas: 4000000
         })
         let fsa = Common.getFSAFromEventArgs(tx.logs[0].args)
         return {
@@ -66,7 +66,7 @@ export class Permissions implements IPermissions {
     setGrant = async (acc: any, fromAddress: string, role: string, resource: string, action: string, attributes: string[]) => {
         let tx = await acc.setGrant(role, resource, action, attributes, {
             from: fromAddress,
-            gas: 2000000
+            gas: 4000000
         })
         // second event is EsEvent...
         let fsa = Common.getFSAFromEventArgs(tx.logs[1].args)
@@ -78,8 +78,7 @@ export class Permissions implements IPermissions {
 
     getGrant = async (acc, fromAddress, index: number) => {
         let grantVals = await acc.getGrant.call(index, {
-            from: fromAddress,
-            gas: 2000000
+            from: fromAddress
         })
         let grant = Common.grantItemFromValues(grantVals)
         return grant
@@ -87,8 +86,7 @@ export class Permissions implements IPermissions {
 
     canRoleActionResource = async (acc: any, fromAddress: string, role: string, action: string, resource: string): Promise<boolean> => {
         let vals = await acc.canRoleActionResource.call(role, action, resource, {
-            from: fromAddress,
-            gas: 2000000
+            from: fromAddress
         })
         return vals[0]
     }

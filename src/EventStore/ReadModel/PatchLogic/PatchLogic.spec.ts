@@ -34,7 +34,7 @@ describe('PatchLogic', () => {
         factory = await EventStoreFactoryContract.deployed()
         let tx = await factory.createEventStore({
             from: fromAddress,
-            gas: 2000000
+            gas: 4000000
         })
 
         let fsa = Common.getFSAFromEventArgs(tx.logs[0].args)
