@@ -7,7 +7,7 @@
     "clean": "rm -rf temp build docs coverage .nyc_output .node-xmlhttprequest-sync-*",
     "transmute": "node build/cli/index.js",
     "start": "ts-node src/TransmuteFramework.ts",
-    "build": "truffle migrate && node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/ &&  cp -r migrations build/migrations && cp -r test build/test",
+    "build": "node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/ &&  cp -r migrations build/migrations && cp -r test build/test",
     "watch": "node node_modules/typescript/bin/tsc --w --p tsconfig.json",
     "production": "npm run build && node bin/index.js",
     "pretest": "npm run build",
