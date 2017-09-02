@@ -14,7 +14,7 @@ import {
 } from './Permissions/Reducer'
 
 
-describe.only('EventStore', () => {
+describe('EventStore', () => {
 
     let factory, eventStore, account_addresses, account, fromAddress
 
