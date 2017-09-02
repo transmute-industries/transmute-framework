@@ -1,6 +1,6 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.42",
+  "version": "0.1.43",
   "description": "An ethereum smart contract & dapp framework.",
   "main": "build/TransmuteFramework.js",
   "scripts": {
