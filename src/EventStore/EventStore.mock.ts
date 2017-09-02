@@ -1,6 +1,6 @@
 
 export const fsaCommands = [
-// address
+    // address
     {
         type: 'ADDRESS_KEY_VALUE',
         payload: {
@@ -26,7 +26,7 @@ export const fsaCommands = [
         payload: {
             address: '0x1a63f28550ae27e0a192d91d073ea4e97dd089b'
         },
-	error: true
+        error: true
     },
     {   // 41 hex chars
         type: 'ADDRESS_KEY_VALUE',
@@ -35,7 +35,7 @@ export const fsaCommands = [
         },
         error: true
     },
-// uint
+    // uint
     {
         type: 'UINT_KEY_VALUE',
         payload: {

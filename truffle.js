@@ -19,12 +19,16 @@ module.exports = {
         pollingInterval: 2000 // optional, polling interval for the provider (reduce for faster deploy with testRPC or kovan)
       }),
       network_id: '*',
-
     },
     "parity": {
       network_id: "*",
       host: "localhost",
       port: 8545
+    },
+    "azure": {
+      host: "testrpc.azurewebsites.net",
+      port: 80,
+      network_id: "*" // Match any network id
     }
   }
 };

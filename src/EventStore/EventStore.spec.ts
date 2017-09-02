@@ -30,24 +30,22 @@ describe('EventStore', () => {
         fsaCommands.forEach((fsac) => {
             describe(fsac.type, async () => {
                 let fn = async () => {
-                    let eventId, continueFlag
-                    
+                    let eventId
                     let shouldThrow
-                    before(() => shouldThrow = ('error' in fsac) ? true : false);
+                    beforeEach(() => shouldThrow = ('error' in fsac) ? true : false);
                     
-                    it('.writeFSA', () => 
+                    it('.writeFSA ' + (fsac['error'] === undefined ? 'expected error': ''), () => 
                         TransmuteFramework.EventStore.writeFSA(eventStore, account, fsac)
                        .then((fsaEvent) => {
                            assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
                            eventId = fsaEvent.meta.id
                        })
                        .catch((error) => {
+                        //    console.log(error)
                             if (!shouldThrow) {
                                 throw(error);
                             }
                        })
-
-                       
                       )
                    
                     it('.readFSA', () =>
@@ -61,16 +59,20 @@ describe('EventStore', () => {
                                 throw(error);
                             }
                        })
-
-                       
                       )
                 }
 
-                if (fsac.hasOwnProperty('error')) {
-                    await assert.throws(fn);
-                } else {
-                    await fn();
+                // This should be refactored to catch the specific errors thrown in seperate it's
+                try {
+                    if (fsac.hasOwnProperty('error')) {
+                        await assert.throws(fn);
+                    } else {
+                        await fn();
+                    }
+                } catch(e) {
+                    console.log
                 }
+                
             })                            
         })
     })

@@ -12,8 +12,6 @@ const contract = require('truffle-contract')
 
 let web3
 
-declare var window: any
-
 const accessControlArtifacts = require('../build/contracts/RBAC')
 const eventStoreArtifacts = require('../build/contracts/RBACEventStore')
 const eventStoreFactoryArtifacts = require('../build/contracts/RBACEventStoreFactory')
@@ -26,7 +24,7 @@ var Web3Subprovider = require("web3-provider-engine/subproviders/web3.js");
 
 
 export interface ITransmuteFrameworkConfig {
-  env: string
+  providerUrl: string
   aca: any,
   esa: any,
   esfa: any,
@@ -34,7 +32,7 @@ export interface ITransmuteFrameworkConfig {
   wallet?: any
 }
 const config = <any>{
-  env: 'testrpc',
+  providerUrl: 'http://localhost:8545',
   aca: accessControlArtifacts,
   esa: eventStoreArtifacts,
   esfa: eventStoreFactoryArtifacts,
@@ -54,6 +52,8 @@ export interface ITransmuteFramework {
   ReadModel: any,
   Factory: any
 }
+
+declare var window: any;
 
 export class TransmuteFramework implements ITransmuteFramework {
 
@@ -75,16 +75,7 @@ export class TransmuteFramework implements ITransmuteFramework {
   Factory: any
   PatchLogic: any
 
-  public init = (confObj = config) => {
-    this.config = confObj
-
-    // testrpc parity infura metamask
-    let providerUrl = 'http://localhost:8545'
-
-    if (this.config.env === 'infura') {
-      providerUrl = 'https://ropsten.infura.io'
-    }
-
+  public initWeb3 = (providerUrl) => {
     this.engine = new ProviderEngine();
     // Not sure about the security of this... seems dangerous...
     if (this.config.wallet) {
@@ -93,12 +84,22 @@ export class TransmuteFramework implements ITransmuteFramework {
     this.engine.addProvider(new Web3Subprovider(new Web3.providers.HttpProvider(providerUrl)));
     this.engine.start(); // Required by the provider engine.
     var web3 = new Web3(this.engine)
-
     this.web3 = web3
+  }
 
-    if (this.config.env === 'metamask') {
-      this.web3 = window.web3;
+  public init = (confObj = config) => {
+    this.config = confObj
+    this.initWeb3(this.config.providerUrl);
+
+    try {
+      if (window.web3) {
+        console.info('Transmute Framework has detected MetaMask!')
+        this.web3 = window.web3;
+      }
+    } catch (e){
+      // probably not in browser... ignore..
     }
+   
 
     if (this.web3) {
 

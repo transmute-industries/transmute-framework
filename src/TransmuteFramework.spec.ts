@@ -29,7 +29,7 @@ describe('TransmuteFramework', () => {
         it('should support infura ropsten', async () => {
 
             TransmuteFramework.init({
-                env: 'infura',
+                providerUrl: 'https://ropsten.infura.io',
                 aca: accessControlArtifacts,
                 esa: eventStoreArtifacts,
                 esfa: eventStoreFactoryArtifacts
@@ -47,7 +47,7 @@ describe('TransmuteFramework', () => {
             var wallet = hdwallet.derivePath(wallet_hdpath + "0").getWallet();
 
             TransmuteFramework.init({
-                env: 'infura',
+                providerUrl: 'https://ropsten.infura.io',
                 wallet: wallet,
                 aca: accessControlArtifacts,
                 esa: eventStoreArtifacts,
