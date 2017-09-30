@@ -1,0 +1,2560 @@
+{
+  "contractName": "AddressSetSpec",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "address"
+        }
+      ],
+      "name": "add",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getValues",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "address"
+        }
+      ],
+      "name": "remove",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        },
+        {
+          "name": "value",
+          "type": "address"
+        }
+      ],
+      "name": "set",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "first",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "kill",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "last",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "address"
+        }
+      ],
+      "name": "contains",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "pop",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "lastRemove",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "lastPop",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "size",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "get",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "address"
+        }
+      ],
+      "name": "indexOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "lastAdd",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": true,
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    }
+  ],
+  "bytecode": "0x60606040525b5b60008054600160a060020a03191633600160a060020a03161790555b5b5b610b5a806100336000396000f300606060405236156100d55763ffffffff60e060020a6000350416630a3b0a4f81146100d957806319eb4a901461010c57806329092d0e146101735780632f30c6f6146101a65780633df4ddf4146101dc57806341c0e1b51461020b57806347799da8146102205780635dbe47e81461024f5780635dcfb4fa14610282578063866797b3146102b45780638da5cb5b146102db5780638fbcd7751461030a578063949d225d146103395780639507d39a1461035e578063f2fde38b14610390578063fd6aad25146103b1578063fedab70d146103e2575b5b5b005b34156100e457600080fd5b6100f8600160a060020a0360043516610409565b604051901515815260200160405180910390f35b341561011757600080fd5b61011f6104d6565b60405160208082528190810183818151815260200191508051906020019060200280838360005b8381101561015f5780820151818401525b602001610146565b505050509050019250505060405180910390f35b341561017e57600080fd5b6100f8600160a060020a036004351661053e565b604051901515815260200160405180910390f35b34156101b157600080fd5b6100f8600435600160a060020a036024351661060d565b604051901515815260200160405180910390f35b34156101e757600080fd5b6101ef6106a2565b604051600160a060020a03909116815260200160405180910390f35b341561021657600080fd5b6100d561071c565b005b341561022b57600080fd5b6101ef61072c565b604051600160a060020a03909116815260200160405180910390f35b341561025a57600080fd5b6100f8600160a060020a03600435166107a6565b604051901515815260200160405180910390f35b341561028d57600080fd5b6101ef600435610831565b604051600160a060020a03909116815260200160405180910390f35b34156102bf57600080fd5b6100f86108df565b604051901515815260200160405180910390f35b34156102e657600080fd5b6101ef610901565b604051600160a060020a03909116815260200160405180910390f35b341561031557600080fd5b6101ef610910565b604051600160a060020a03909116815260200160405180910390f35b341561034457600080fd5b61034c61091f565b60405190815260200160405180910390f35b341561036957600080fd5b6101ef600435610999565b604051600160a060020a03909116815260200160405180910390f35b341561039b57600080fd5b6100d5600160a060020a0360043516610a1b565b005b34156103bc57600080fd5b61034c600160a060020a0360043516610a70565b60405190815260200160405180910390f35b34156103ed57600080fd5b6100f8610afb565b604051901515815260200160405180910390f35b600073__AddressSetLib_________________________631e401616600184846040516020015260405160e060020a63ffffffff85160281526004810192909252600160a060020a0316602482015260440160206040518083038186803b151561047257600080fd5b6102c65a03f4151561048357600080fd5b50505060405180516004805474ff00000000000000000000000000000000000000001916740100000000000000000000000000000000000000009215158302179081905560ff919004169150505b919050565b6104de610b1c565b6001805460208082020160405190810160405280929190818152602001828054801561053357602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610515575b505050505090505b90565b600073__AddressSetLib_________________________63499b67d9600184846040516020015260405160e060020a63ffffffff85160281526004810192909252600160a060020a0316602482015260440160206040518083038186803b15156105a757600080fd5b6102c65a03f415156105b857600080fd5b50505060405180516004805475ff000000000000000000000000000000000000000000191675010000000000000000000000000000000000000000009215158302179081905560ff919004169150505b919050565b600073__AddressSetLib_________________________63840d4d3760018585856040516020015260405160e060020a63ffffffff861602815260048101939093526024830191909152600160a060020a0316604482015260640160206040518083038186803b151561067f57600080fd5b6102c65a03f4151561069057600080fd5b50505060405180519150505b92915050565b600073__AddressSetLib_________________________63eae549676001836040516020015260405160e060020a63ffffffff8416028152600481019190915260240160206040518083038186803b15156106fc57600080fd5b6102c65a03f4151561070d57600080fd5b50505060405180519150505b90565b600054600160a060020a0316ff5b565b600073__AddressSetLib_________________________63ba39f4a56001836040516020015260405160e060020a63ffffffff8416028152600481019190915260240160206040518083038186803b15156106fc57600080fd5b6102c65a03f4151561070d57600080fd5b50505060405180519150505b90565b600073__AddressSetLib_________________________63dc02e70d600184846040516020015260405160e060020a63ffffffff85160281526004810192909252600160a060020a0316602482015260440160206040518083038186803b151561080f57600080fd5b6102c65a03f4151561082057600080fd5b50505060405180519150505b919050565b600073__AddressSetLib_________________________63efc33f1e600184846040516020015260405160e060020a63ffffffff85160281526004810192909252602482015260440160206040518083038186803b151561089157600080fd5b6102c65a03f415156108a257600080fd5b50505060405180516004805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039283161790819055169150505b919050565b6004547501000000000000000000000000000000000000000000900460ff1681565b600054600160a060020a031681565b600454600160a060020a031681565b600073__AddressSetLib_________________________631d4cf6c46001836040516020015260405160e060020a63ffffffff8416028152600481019190915260240160206040518083038186803b15156106fc57600080fd5b6102c65a03f4151561070d57600080fd5b50505060405180519150505b90565b600073__AddressSetLib_________________________63da5d2348600184846040516020015260405160e060020a63ffffffff85160281526004810192909252602482015260440160206040518083038186803b151561080f57600080fd5b6102c65a03f4151561082057600080fd5b50505060405180519150505b919050565b60005433600160a060020a0390811691161415610a6a57600160a060020a03811615610a6a576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b50565b600073__AddressSetLib_________________________63af026a90600184846040516020015260405160e060020a63ffffffff85160281526004810192909252600160a060020a0316602482015260440160206040518083038186803b151561080f57600080fd5b6102c65a03f4151561082057600080fd5b50505060405180519150505b919050565b60045474010000000000000000000000000000000000000000900460ff1681565b602060405190810160405260008152905600a165627a7a7230582062173e05eba7db7784f293a2f3deb1065f3aaebd4c73ba260ee77741a55ec1e10029",
+  "deployedBytecode": "0x606060405236156100d55763ffffffff60e060020a6000350416630a3b0a4f81146100d957806319eb4a901461010c57806329092d0e146101735780632f30c6f6146101a65780633df4ddf4146101dc57806341c0e1b51461020b57806347799da8146102205780635dbe47e81461024f5780635dcfb4fa14610282578063866797b3146102b45780638da5cb5b146102db5780638fbcd7751461030a578063949d225d146103395780639507d39a1461035e578063f2fde38b14610390578063fd6aad25146103b1578063fedab70d146103e2575b5b5b005b34156100e457600080fd5b6100f8600160a060020a0360043516610409565b604051901515815260200160405180910390f35b341561011757600080fd5b61011f6104d6565b60405160208082528190810183818151815260200191508051906020019060200280838360005b8381101561015f5780820151818401525b602001610146565b505050509050019250505060405180910390f35b341561017e57600080fd5b6100f8600160a060020a036004351661053e565b604051901515815260200160405180910390f35b34156101b157600080fd5b6100f8600435600160a060020a036024351661060d565b604051901515815260200160405180910390f35b34156101e757600080fd5b6101ef6106a2565b604051600160a060020a03909116815260200160405180910390f35b341561021657600080fd5b6100d561071c565b005b341561022b57600080fd5b6101ef61072c565b604051600160a060020a03909116815260200160405180910390f35b341561025a57600080fd5b6100f8600160a060020a03600435166107a6565b604051901515815260200160405180910390f35b341561028d57600080fd5b6101ef600435610831565b604051600160a060020a03909116815260200160405180910390f35b34156102bf57600080fd5b6100f86108df565b604051901515815260200160405180910390f35b34156102e657600080fd5b6101ef610901565b604051600160a060020a03909116815260200160405180910390f35b341561031557600080fd5b6101ef610910565b604051600160a060020a03909116815260200160405180910390f35b341561034457600080fd5b61034c61091f565b60405190815260200160405180910390f35b341561036957600080fd5b6101ef600435610999565b604051600160a060020a03909116815260200160405180910390f35b341561039b57600080fd5b6100d5600160a060020a0360043516610a1b565b005b34156103bc57600080fd5b61034c600160a060020a0360043516610a70565b60405190815260200160405180910390f35b34156103ed57600080fd5b6100f8610afb565b604051901515815260200160405180910390f35b600073__AddressSetLib_________________________631e401616600184846040516020015260405160e060020a63ffffffff85160281526004810192909252600160a060020a0316602482015260440160206040518083038186803b151561047257600080fd5b6102c65a03f4151561048357600080fd5b50505060405180516004805474ff00000000000000000000000000000000000000001916740100000000000000000000000000000000000000009215158302179081905560ff919004169150505b919050565b6104de610b1c565b6001805460208082020160405190810160405280929190818152602001828054801561053357602002820191906000526020600020905b8154600160a060020a03168152600190910190602001808311610515575b505050505090505b90565b600073__AddressSetLib_________________________63499b67d9600184846040516020015260405160e060020a63ffffffff85160281526004810192909252600160a060020a0316602482015260440160206040518083038186803b15156105a757600080fd5b6102c65a03f415156105b857600080fd5b50505060405180516004805475ff000000000000000000000000000000000000000000191675010000000000000000000000000000000000000000009215158302179081905560ff919004169150505b919050565b600073__AddressSetLib_________________________63840d4d3760018585856040516020015260405160e060020a63ffffffff861602815260048101939093526024830191909152600160a060020a0316604482015260640160206040518083038186803b151561067f57600080fd5b6102c65a03f4151561069057600080fd5b50505060405180519150505b92915050565b600073__AddressSetLib_________________________63eae549676001836040516020015260405160e060020a63ffffffff8416028152600481019190915260240160206040518083038186803b15156106fc57600080fd5b6102c65a03f4151561070d57600080fd5b50505060405180519150505b90565b600054600160a060020a0316ff5b565b600073__AddressSetLib_________________________63ba39f4a56001836040516020015260405160e060020a63ffffffff8416028152600481019190915260240160206040518083038186803b15156106fc57600080fd5b6102c65a03f4151561070d57600080fd5b50505060405180519150505b90565b600073__AddressSetLib_________________________63dc02e70d600184846040516020015260405160e060020a63ffffffff85160281526004810192909252600160a060020a0316602482015260440160206040518083038186803b151561080f57600080fd5b6102c65a03f4151561082057600080fd5b50505060405180519150505b919050565b600073__AddressSetLib_________________________63efc33f1e600184846040516020015260405160e060020a63ffffffff85160281526004810192909252602482015260440160206040518083038186803b151561089157600080fd5b6102c65a03f415156108a257600080fd5b50505060405180516004805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039283161790819055169150505b919050565b6004547501000000000000000000000000000000000000000000900460ff1681565b600054600160a060020a031681565b600454600160a060020a031681565b600073__AddressSetLib_________________________631d4cf6c46001836040516020015260405160e060020a63ffffffff8416028152600481019190915260240160206040518083038186803b15156106fc57600080fd5b6102c65a03f4151561070d57600080fd5b50505060405180519150505b90565b600073__AddressSetLib_________________________63da5d2348600184846040516020015260405160e060020a63ffffffff85160281526004810192909252602482015260440160206040518083038186803b151561080f57600080fd5b6102c65a03f4151561082057600080fd5b50505060405180519150505b919050565b60005433600160a060020a0390811691161415610a6a57600160a060020a03811615610a6a576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b50565b600073__AddressSetLib_________________________63af026a90600184846040516020015260405160e060020a63ffffffff85160281526004810192909252600160a060020a0316602482015260440160206040518083038186803b151561080f57600080fd5b6102c65a03f4151561082057600080fd5b50505060405180519150505b919050565b60045474010000000000000000000000000000000000000000900460ff1681565b602060405190810160405260008152905600a165627a7a7230582062173e05eba7db7784f293a2f3deb1065f3aaebd4c73ba260ee77741a55ec1e10029",
+  "sourceMap": "105:1460:8:-;;;336:36;243:48:15;268:5;:18;;-1:-1:-1;;;;;;268:18:15;276:10;-1:-1:-1;;;;;268:18:15;;;;243:48;336:36:8;105:1460;;;;;;;",
+  "deployedSourceMap": "105:1460:8:-;;;;;;;;-1:-1:-1;;;105:1460:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;311:22;;105:1460;695:115;;;;;;;;;;-1:-1:-1;;;;;695:115:8;;;;;;;;;;;;;;;;;;;;;;481:95;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:2;8:100;;;99:1;94:3;90;84:5;80:1;75:3;71;64:6;8:100;52:2;45:3;8:100;;;12:14;3:109;;;;;;;;;;;;;;;;;814:127:8;;;;;;;;;;-1:-1:-1;;;;;814:127:8;;;;;;;;;;;;;;;;;;;;;;580:111;;;;;;;;;;;;-1:-1:-1;;;;;580:111:8;;;;;;;;;;;;;;;;;;;;;;1064:90;;;;;;;;;;;;;;;-1:-1:-1;;;;;1064:90:8;;;;;;;;;;;;;;209:46:14;;;;;;;;;;;;;;1158:88:8;;;;;;;;;;;;;;;-1:-1:-1;;;;;1158:88:8;;;;;;;;;;;;;;1363:111;;;;;;;;;;-1:-1:-1;;;;;1363:111:8;;;;;;;;;;;;;;;;;;;;;;945:115;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;945:115:8;;;;;;;;;;;;;;284:22;;;;;;;;;;;;;;;;;;;;;;;;;;;;;218:20:15;;;;;;;;;;;;;;;-1:-1:-1;;;;;218:20:15;;;;;;;;;;;;;;235:22:8;;;;;;;;;;;;;;;-1:-1:-1;;;;;235:22:8;;;;;;;;;;;;;;1478:85;;;;;;;;;;;;;;;;;;;;;;;;;;;376:101;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;376:101:8;;;;;;;;;;;;;;363:110:15;;;;;;;;;;-1:-1:-1;;;;;363:110:15;;;;;;;1250:109:8;;;;;;;;;;-1:-1:-1;;;;;1250:109:8;;;;;;;;;;;;;;;;;;;;261:19;;;;;;;;;;;;;;;;;;;;;;;;;;;;;695:115;743:4;767:11;;:7;779:5;743:4;767:18;;;;;;;-1:-1:-1;;;767:18:8;;;;;;;;;;;;;-1:-1:-1;;;;;767:18:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;757:7;:28;;-1:-1:-1;;757:28:8;;;;;;;;;;;;;798:7;;;;;-1:-1:-1;;695:115:8;;;;:::o;481:95::-;531:9;;:::i;:::-;557:7;550:21;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;550:21:8;;;;;;;;;;;;;;;;;;;;;;;481:95;;:::o;814:127::-;865:4;892:14;;:7;907:5;865:4;892:21;;;;;;;-1:-1:-1;;;892:21:8;;;;;;;;;;;;;-1:-1:-1;;;;;892:21:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;879:10;:34;;-1:-1:-1;;879:34:8;;;;;;;;;;;;;926:10;;;;;-1:-1:-1;;814:127:8;;;;:::o;580:111::-;640:4;661:11;;:7;673:5;680;640:4;661:25;;;;;;;-1:-1:-1;;;661:25:8;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;661:25:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;580:111:8;;;;;:::o;1064:90::-;1110:7;1134:13;;:7;1110;1134:15;;;;;;;-1:-1:-1;;;1134:15:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;1064:90:8;;:::o;209:46:14:-;244:5;;-1:-1:-1;;;;;244:5:14;231:19;209:46;:::o;1158:88:8:-;1203:7;1227:12;;:7;1203;1227:14;;;;;;;-1:-1:-1;;;1227:14:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;1158:88:8;;:::o;1363:111::-;1425:4;1446:16;;:7;1463:5;1425:4;1446:23;;;;;;;-1:-1:-1;;;1446:23:8;;;;;;;;;;;;;-1:-1:-1;;;;;1446:23:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;1363:111:8;;;;:::o;945:115::-;990:7;1017:11;;:7;1029:5;990:7;1017:18;;;;;;;-1:-1:-1;;;1017:18:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1007:7;:28;;-1:-1:-1;;1007:28:8;-1:-1:-1;;;;;1007:28:8;;;;;;;;1048:7;;-1:-1:-1;;945:115:8;;;;:::o;284:22::-;;;;;;;;;:::o;218:20:15:-;;;-1:-1:-1;;;;;218:20:15;;:::o;235:22:8:-;;;-1:-1:-1;;;;;235:22:8;;:::o;1478:85::-;1523:4;1544:12;;:7;1523:4;1544:14;;;;;;;-1:-1:-1;;;1544:14:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;1478:85:8;;:::o;376:101::-;430:7;454:11;;:7;466:5;430:7;454:18;;;;;;;-1:-1:-1;;;454:18:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;376:101:8;;;;:::o;363:110:15:-;340:5;;326:10;-1:-1:-1;;;;;326:19:15;;;340:5;;326:19;322:32;;;-1:-1:-1;;;;;428:22:15;;;424:44;;452:5;:16;;-1:-1:-1;;452:16:15;-1:-1:-1;;;;;452:16:15;;;;;424:44;353:1;322:32;363:110;;:::o;1250:109:8:-;1311:4;1332:15;;:7;1348:5;1311:4;1332:22;;;;;;;-1:-1:-1;;;1332:22:8;;;;;;;;;;;;;-1:-1:-1;;;;;1332:22:8;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;1250:109:8;;;;:::o;261:19::-;;;;;;;;;:::o;105:1460::-;;;;;;;;;;;;;:::o",
+  "source": "pragma solidity ^0.4.11;\n\nimport './AddressSetLib.sol';\nimport '../../zeppelin/lifecycle/Killable.sol';\n\ncontract AddressSetSpec is Killable {\n  using AddressSetLib for AddressSetLib.AddressSet;\n\n  AddressSetLib.AddressSet testSet;\n\n  address public lastPop;\n  bool public lastAdd;\n  bool public lastRemove;\n\n  function () payable {}\n  function AddressSetSpec() payable {}\n\n  function get(uint index) public constant\n    returns (address)\n  {\n    return testSet.get(index);\n  }\n\n  function getValues() public constant\n    returns (address[])\n  {\n    return testSet.values;\n  }\n\n  function set(uint index, address value) public\n    returns (bool)\n  {\n    return testSet.set(index, value);\n  }\n\n  function add(address value) public\n    returns (bool)\n  {\n    lastAdd = testSet.add(value);\n    return lastAdd;\n  }\n\n  function remove(address value) public\n    returns (bool)\n  {\n    lastRemove = testSet.remove(value);\n    return lastRemove;\n  }\n\n  function pop(uint index) public\n    returns (address)\n  {\n    lastPop = testSet.pop(index);\n    return lastPop;\n  }\n\n  function first() public constant\n    returns (address)\n  {\n    return testSet.first();\n  }\n\n  function last() public constant\n    returns (address)\n  {\n    return testSet.last();\n  }\n\n  function indexOf(address value) public constant\n    returns (uint)\n  {\n    return testSet.indexOf(value);\n  }\n\n  function contains(address value) public constant\n    returns (bool)\n  {\n    return testSet.contains(value);\n  }\n\n  function size() public constant\n    returns (uint)\n  {\n    return testSet.size();\n  }\n}\n",
+  "sourcePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/SetLib/AddressSet/AddressSetSpec.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/SetLib/AddressSet/AddressSetSpec.sol",
+      "exportedSymbols": {
+        "AddressSetSpec": [
+          1826
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".11"
+          ]
+        },
+        "id": 1656,
+        "name": "PragmaDirective",
+        "src": "0:24:8"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 1655,
+          "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/SetLib/AddressSet/AddressSetLib.sol",
+          "file": "./AddressSetLib.sol",
+          "scope": 1827,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 1657,
+        "name": "ImportDirective",
+        "src": "26:29:8"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 3091,
+          "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/lifecycle/Killable.sol",
+          "file": "../../zeppelin/lifecycle/Killable.sol",
+          "scope": 1827,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 1658,
+        "name": "ImportDirective",
+        "src": "56:47:8"
+      },
+      {
+        "attributes": {
+          "contractDependencies": [
+            3090,
+            3131
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            1826,
+            3090,
+            3131
+          ],
+          "name": "AddressSetSpec",
+          "scope": 1827
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": [
+                null
+              ]
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "Killable",
+                  "referencedDeclaration": 3090,
+                  "type": "contract Killable"
+                },
+                "id": 1659,
+                "name": "UserDefinedTypeName",
+                "src": "132:8:8"
+              }
+            ],
+            "id": 1660,
+            "name": "InheritanceSpecifier",
+            "src": "132:8:8"
+          },
+          {
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "AddressSetLib",
+                  "referencedDeclaration": 1654,
+                  "type": "library AddressSetLib"
+                },
+                "id": 1661,
+                "name": "UserDefinedTypeName",
+                "src": "151:13:8"
+              },
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "AddressSetLib.AddressSet",
+                  "referencedDeclaration": 1287,
+                  "type": "struct AddressSetLib.AddressSet storage pointer"
+                },
+                "id": 1662,
+                "name": "UserDefinedTypeName",
+                "src": "169:24:8"
+              }
+            ],
+            "id": 1663,
+            "name": "UsingForDirective",
+            "src": "145:49:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "testSet",
+              "scope": 1826,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "struct AddressSetLib.AddressSet storage ref",
+              "value": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "AddressSetLib.AddressSet",
+                  "referencedDeclaration": 1287,
+                  "type": "struct AddressSetLib.AddressSet storage pointer"
+                },
+                "id": 1664,
+                "name": "UserDefinedTypeName",
+                "src": "198:24:8"
+              }
+            ],
+            "id": 1665,
+            "name": "VariableDeclaration",
+            "src": "198:32:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "lastPop",
+              "scope": 1826,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "address",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "address",
+                  "type": "address"
+                },
+                "id": 1666,
+                "name": "ElementaryTypeName",
+                "src": "235:7:8"
+              }
+            ],
+            "id": 1667,
+            "name": "VariableDeclaration",
+            "src": "235:22:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "lastAdd",
+              "scope": 1826,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "bool",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "bool",
+                  "type": "bool"
+                },
+                "id": 1668,
+                "name": "ElementaryTypeName",
+                "src": "261:4:8"
+              }
+            ],
+            "id": 1669,
+            "name": "VariableDeclaration",
+            "src": "261:19:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "lastRemove",
+              "scope": 1826,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "bool",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "bool",
+                  "type": "bool"
+                },
+                "id": 1670,
+                "name": "ElementaryTypeName",
+                "src": "284:4:8"
+              }
+            ],
+            "id": 1671,
+            "name": "VariableDeclaration",
+            "src": "284:22:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "",
+              "payable": true,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1672,
+                "name": "ParameterList",
+                "src": "320:2:8"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1673,
+                "name": "ParameterList",
+                "src": "331:0:8"
+              },
+              {
+                "attributes": {
+                  "statements": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1674,
+                "name": "Block",
+                "src": "331:2:8"
+              }
+            ],
+            "id": 1675,
+            "name": "FunctionDefinition",
+            "src": "311:22:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": true,
+              "modifiers": [
+                null
+              ],
+              "name": "AddressSetSpec",
+              "payable": true,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1676,
+                "name": "ParameterList",
+                "src": "359:2:8"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1677,
+                "name": "ParameterList",
+                "src": "370:0:8"
+              },
+              {
+                "attributes": {
+                  "statements": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1678,
+                "name": "Block",
+                "src": "370:2:8"
+              }
+            ],
+            "id": 1679,
+            "name": "FunctionDefinition",
+            "src": "336:36:8"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "get",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "index",
+                      "scope": 1692,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1680,
+                        "name": "ElementaryTypeName",
+                        "src": "389:4:8"
+                      }
+                    ],
+                    "id": 1681,
+                    "name": "VariableDeclaration",
+                    "src": "389:10:8"
+                  }
+                ],
+                "id": 1682,
+                "name": "ParameterList",
+                "src": "388:12:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1692,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1683,
+                        "name": "ElementaryTypeName",
+                        "src": "430:7:8"
+                      }
+                    ],
+                    "id": 1684,
+                    "name": "VariableDeclaration",
+                    "src": "430:7:8"
+                  }
+                ],
+                "id": 1685,
+                "name": "ParameterList",
+                "src": "429:9:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1685
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "address",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_uint256",
+                                  "typeString": "uint256"
+                                }
+                              ],
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "get",
+                              "referencedDeclaration": 1336,
+                              "type": "function (struct AddressSetLib.AddressSet storage pointer,uint256) constant returns (address)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1665,
+                                  "type": "struct AddressSetLib.AddressSet storage ref",
+                                  "value": "testSet"
+                                },
+                                "id": 1686,
+                                "name": "Identifier",
+                                "src": "454:7:8"
+                              }
+                            ],
+                            "id": 1687,
+                            "name": "MemberAccess",
+                            "src": "454:11:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1681,
+                              "type": "uint256",
+                              "value": "index"
+                            },
+                            "id": 1688,
+                            "name": "Identifier",
+                            "src": "466:5:8"
+                          }
+                        ],
+                        "id": 1689,
+                        "name": "FunctionCall",
+                        "src": "454:18:8"
+                      }
+                    ],
+                    "id": 1690,
+                    "name": "Return",
+                    "src": "447:25:8"
+                  }
+                ],
+                "id": 1691,
+                "name": "Block",
+                "src": "441:36:8"
+              }
+            ],
+            "id": 1692,
+            "name": "FunctionDefinition",
+            "src": "376:101:8"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "getValues",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1693,
+                "name": "ParameterList",
+                "src": "499:2:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1702,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address[] memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "length": null,
+                          "type": "address[] storage pointer"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "address",
+                              "type": "address"
+                            },
+                            "id": 1694,
+                            "name": "ElementaryTypeName",
+                            "src": "531:7:8"
+                          }
+                        ],
+                        "id": 1695,
+                        "name": "ArrayTypeName",
+                        "src": "531:9:8"
+                      }
+                    ],
+                    "id": 1696,
+                    "name": "VariableDeclaration",
+                    "src": "531:9:8"
+                  }
+                ],
+                "id": 1697,
+                "name": "ParameterList",
+                "src": "530:11:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1697
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "member_name": "values",
+                          "referencedDeclaration": 1278,
+                          "type": "address[] storage ref"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1665,
+                              "type": "struct AddressSetLib.AddressSet storage ref",
+                              "value": "testSet"
+                            },
+                            "id": 1698,
+                            "name": "Identifier",
+                            "src": "557:7:8"
+                          }
+                        ],
+                        "id": 1699,
+                        "name": "MemberAccess",
+                        "src": "557:14:8"
+                      }
+                    ],
+                    "id": 1700,
+                    "name": "Return",
+                    "src": "550:21:8"
+                  }
+                ],
+                "id": 1701,
+                "name": "Block",
+                "src": "544:32:8"
+              }
+            ],
+            "id": 1702,
+            "name": "FunctionDefinition",
+            "src": "481:95:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "set",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "index",
+                      "scope": 1718,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1703,
+                        "name": "ElementaryTypeName",
+                        "src": "593:4:8"
+                      }
+                    ],
+                    "id": 1704,
+                    "name": "VariableDeclaration",
+                    "src": "593:10:8"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "value",
+                      "scope": 1718,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1705,
+                        "name": "ElementaryTypeName",
+                        "src": "605:7:8"
+                      }
+                    ],
+                    "id": 1706,
+                    "name": "VariableDeclaration",
+                    "src": "605:13:8"
+                  }
+                ],
+                "id": 1707,
+                "name": "ParameterList",
+                "src": "592:27:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1718,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 1708,
+                        "name": "ElementaryTypeName",
+                        "src": "640:4:8"
+                      }
+                    ],
+                    "id": 1709,
+                    "name": "VariableDeclaration",
+                    "src": "640:4:8"
+                  }
+                ],
+                "id": 1710,
+                "name": "ParameterList",
+                "src": "639:6:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1710
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "bool",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_uint256",
+                                  "typeString": "uint256"
+                                },
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "set",
+                              "referencedDeclaration": 1385,
+                              "type": "function (struct AddressSetLib.AddressSet storage pointer,uint256,address) returns (bool)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1665,
+                                  "type": "struct AddressSetLib.AddressSet storage ref",
+                                  "value": "testSet"
+                                },
+                                "id": 1711,
+                                "name": "Identifier",
+                                "src": "661:7:8"
+                              }
+                            ],
+                            "id": 1712,
+                            "name": "MemberAccess",
+                            "src": "661:11:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1704,
+                              "type": "uint256",
+                              "value": "index"
+                            },
+                            "id": 1713,
+                            "name": "Identifier",
+                            "src": "673:5:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1706,
+                              "type": "address",
+                              "value": "value"
+                            },
+                            "id": 1714,
+                            "name": "Identifier",
+                            "src": "680:5:8"
+                          }
+                        ],
+                        "id": 1715,
+                        "name": "FunctionCall",
+                        "src": "661:25:8"
+                      }
+                    ],
+                    "id": 1716,
+                    "name": "Return",
+                    "src": "654:32:8"
+                  }
+                ],
+                "id": 1717,
+                "name": "Block",
+                "src": "648:43:8"
+              }
+            ],
+            "id": 1718,
+            "name": "FunctionDefinition",
+            "src": "580:111:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "add",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "value",
+                      "scope": 1735,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1719,
+                        "name": "ElementaryTypeName",
+                        "src": "708:7:8"
+                      }
+                    ],
+                    "id": 1720,
+                    "name": "VariableDeclaration",
+                    "src": "708:13:8"
+                  }
+                ],
+                "id": 1721,
+                "name": "ParameterList",
+                "src": "707:15:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1735,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 1722,
+                        "name": "ElementaryTypeName",
+                        "src": "743:4:8"
+                      }
+                    ],
+                    "id": 1723,
+                    "name": "VariableDeclaration",
+                    "src": "743:4:8"
+                  }
+                ],
+                "id": 1724,
+                "name": "ParameterList",
+                "src": "742:6:8"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1669,
+                              "type": "bool",
+                              "value": "lastAdd"
+                            },
+                            "id": 1725,
+                            "name": "Identifier",
+                            "src": "757:7:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "bool",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "add",
+                                  "referencedDeclaration": 1430,
+                                  "type": "function (struct AddressSetLib.AddressSet storage pointer,address) returns (bool)"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 1665,
+                                      "type": "struct AddressSetLib.AddressSet storage ref",
+                                      "value": "testSet"
+                                    },
+                                    "id": 1726,
+                                    "name": "Identifier",
+                                    "src": "767:7:8"
+                                  }
+                                ],
+                                "id": 1727,
+                                "name": "MemberAccess",
+                                "src": "767:11:8"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1720,
+                                  "type": "address",
+                                  "value": "value"
+                                },
+                                "id": 1728,
+                                "name": "Identifier",
+                                "src": "779:5:8"
+                              }
+                            ],
+                            "id": 1729,
+                            "name": "FunctionCall",
+                            "src": "767:18:8"
+                          }
+                        ],
+                        "id": 1730,
+                        "name": "Assignment",
+                        "src": "757:28:8"
+                      }
+                    ],
+                    "id": 1731,
+                    "name": "ExpressionStatement",
+                    "src": "757:28:8"
+                  },
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1724
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "overloadedDeclarations": [
+                            null
+                          ],
+                          "referencedDeclaration": 1669,
+                          "type": "bool",
+                          "value": "lastAdd"
+                        },
+                        "id": 1732,
+                        "name": "Identifier",
+                        "src": "798:7:8"
+                      }
+                    ],
+                    "id": 1733,
+                    "name": "Return",
+                    "src": "791:14:8"
+                  }
+                ],
+                "id": 1734,
+                "name": "Block",
+                "src": "751:59:8"
+              }
+            ],
+            "id": 1735,
+            "name": "FunctionDefinition",
+            "src": "695:115:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "remove",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "value",
+                      "scope": 1752,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1736,
+                        "name": "ElementaryTypeName",
+                        "src": "830:7:8"
+                      }
+                    ],
+                    "id": 1737,
+                    "name": "VariableDeclaration",
+                    "src": "830:13:8"
+                  }
+                ],
+                "id": 1738,
+                "name": "ParameterList",
+                "src": "829:15:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1752,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 1739,
+                        "name": "ElementaryTypeName",
+                        "src": "865:4:8"
+                      }
+                    ],
+                    "id": 1740,
+                    "name": "VariableDeclaration",
+                    "src": "865:4:8"
+                  }
+                ],
+                "id": 1741,
+                "name": "ParameterList",
+                "src": "864:6:8"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1671,
+                              "type": "bool",
+                              "value": "lastRemove"
+                            },
+                            "id": 1742,
+                            "name": "Identifier",
+                            "src": "879:10:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "bool",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "remove",
+                                  "referencedDeclaration": 1462,
+                                  "type": "function (struct AddressSetLib.AddressSet storage pointer,address) returns (bool)"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 1665,
+                                      "type": "struct AddressSetLib.AddressSet storage ref",
+                                      "value": "testSet"
+                                    },
+                                    "id": 1743,
+                                    "name": "Identifier",
+                                    "src": "892:7:8"
+                                  }
+                                ],
+                                "id": 1744,
+                                "name": "MemberAccess",
+                                "src": "892:14:8"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1737,
+                                  "type": "address",
+                                  "value": "value"
+                                },
+                                "id": 1745,
+                                "name": "Identifier",
+                                "src": "907:5:8"
+                              }
+                            ],
+                            "id": 1746,
+                            "name": "FunctionCall",
+                            "src": "892:21:8"
+                          }
+                        ],
+                        "id": 1747,
+                        "name": "Assignment",
+                        "src": "879:34:8"
+                      }
+                    ],
+                    "id": 1748,
+                    "name": "ExpressionStatement",
+                    "src": "879:34:8"
+                  },
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1741
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "overloadedDeclarations": [
+                            null
+                          ],
+                          "referencedDeclaration": 1671,
+                          "type": "bool",
+                          "value": "lastRemove"
+                        },
+                        "id": 1749,
+                        "name": "Identifier",
+                        "src": "926:10:8"
+                      }
+                    ],
+                    "id": 1750,
+                    "name": "Return",
+                    "src": "919:17:8"
+                  }
+                ],
+                "id": 1751,
+                "name": "Block",
+                "src": "873:68:8"
+              }
+            ],
+            "id": 1752,
+            "name": "FunctionDefinition",
+            "src": "814:127:8"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "pop",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "index",
+                      "scope": 1769,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1753,
+                        "name": "ElementaryTypeName",
+                        "src": "958:4:8"
+                      }
+                    ],
+                    "id": 1754,
+                    "name": "VariableDeclaration",
+                    "src": "958:10:8"
+                  }
+                ],
+                "id": 1755,
+                "name": "ParameterList",
+                "src": "957:12:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1769,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1756,
+                        "name": "ElementaryTypeName",
+                        "src": "990:7:8"
+                      }
+                    ],
+                    "id": 1757,
+                    "name": "VariableDeclaration",
+                    "src": "990:7:8"
+                  }
+                ],
+                "id": 1758,
+                "name": "ParameterList",
+                "src": "989:9:8"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "address"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1667,
+                              "type": "address",
+                              "value": "lastPop"
+                            },
+                            "id": 1759,
+                            "name": "Identifier",
+                            "src": "1007:7:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "address",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_uint256",
+                                      "typeString": "uint256"
+                                    }
+                                  ],
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "pop",
+                                  "referencedDeclaration": 1542,
+                                  "type": "function (struct AddressSetLib.AddressSet storage pointer,uint256) returns (address)"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 1665,
+                                      "type": "struct AddressSetLib.AddressSet storage ref",
+                                      "value": "testSet"
+                                    },
+                                    "id": 1760,
+                                    "name": "Identifier",
+                                    "src": "1017:7:8"
+                                  }
+                                ],
+                                "id": 1761,
+                                "name": "MemberAccess",
+                                "src": "1017:11:8"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1754,
+                                  "type": "uint256",
+                                  "value": "index"
+                                },
+                                "id": 1762,
+                                "name": "Identifier",
+                                "src": "1029:5:8"
+                              }
+                            ],
+                            "id": 1763,
+                            "name": "FunctionCall",
+                            "src": "1017:18:8"
+                          }
+                        ],
+                        "id": 1764,
+                        "name": "Assignment",
+                        "src": "1007:28:8"
+                      }
+                    ],
+                    "id": 1765,
+                    "name": "ExpressionStatement",
+                    "src": "1007:28:8"
+                  },
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1758
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "overloadedDeclarations": [
+                            null
+                          ],
+                          "referencedDeclaration": 1667,
+                          "type": "address",
+                          "value": "lastPop"
+                        },
+                        "id": 1766,
+                        "name": "Identifier",
+                        "src": "1048:7:8"
+                      }
+                    ],
+                    "id": 1767,
+                    "name": "Return",
+                    "src": "1041:14:8"
+                  }
+                ],
+                "id": 1768,
+                "name": "Block",
+                "src": "1001:59:8"
+              }
+            ],
+            "id": 1769,
+            "name": "FunctionDefinition",
+            "src": "945:115:8"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "first",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1770,
+                "name": "ParameterList",
+                "src": "1078:2:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1779,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1771,
+                        "name": "ElementaryTypeName",
+                        "src": "1110:7:8"
+                      }
+                    ],
+                    "id": 1772,
+                    "name": "VariableDeclaration",
+                    "src": "1110:7:8"
+                  }
+                ],
+                "id": 1773,
+                "name": "ParameterList",
+                "src": "1109:9:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1773
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            null
+                          ],
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "address",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                null
+                              ],
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "first",
+                              "referencedDeclaration": 1580,
+                              "type": "function (struct AddressSetLib.AddressSet storage pointer) constant returns (address)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1665,
+                                  "type": "struct AddressSetLib.AddressSet storage ref",
+                                  "value": "testSet"
+                                },
+                                "id": 1774,
+                                "name": "Identifier",
+                                "src": "1134:7:8"
+                              }
+                            ],
+                            "id": 1775,
+                            "name": "MemberAccess",
+                            "src": "1134:13:8"
+                          }
+                        ],
+                        "id": 1776,
+                        "name": "FunctionCall",
+                        "src": "1134:15:8"
+                      }
+                    ],
+                    "id": 1777,
+                    "name": "Return",
+                    "src": "1127:22:8"
+                  }
+                ],
+                "id": 1778,
+                "name": "Block",
+                "src": "1121:33:8"
+              }
+            ],
+            "id": 1779,
+            "name": "FunctionDefinition",
+            "src": "1064:90:8"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "last",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1780,
+                "name": "ParameterList",
+                "src": "1171:2:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1789,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1781,
+                        "name": "ElementaryTypeName",
+                        "src": "1203:7:8"
+                      }
+                    ],
+                    "id": 1782,
+                    "name": "VariableDeclaration",
+                    "src": "1203:7:8"
+                  }
+                ],
+                "id": 1783,
+                "name": "ParameterList",
+                "src": "1202:9:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1783
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            null
+                          ],
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "address",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                null
+                              ],
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "last",
+                              "referencedDeclaration": 1600,
+                              "type": "function (struct AddressSetLib.AddressSet storage pointer) constant returns (address)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1665,
+                                  "type": "struct AddressSetLib.AddressSet storage ref",
+                                  "value": "testSet"
+                                },
+                                "id": 1784,
+                                "name": "Identifier",
+                                "src": "1227:7:8"
+                              }
+                            ],
+                            "id": 1785,
+                            "name": "MemberAccess",
+                            "src": "1227:12:8"
+                          }
+                        ],
+                        "id": 1786,
+                        "name": "FunctionCall",
+                        "src": "1227:14:8"
+                      }
+                    ],
+                    "id": 1787,
+                    "name": "Return",
+                    "src": "1220:21:8"
+                  }
+                ],
+                "id": 1788,
+                "name": "Block",
+                "src": "1214:32:8"
+              }
+            ],
+            "id": 1789,
+            "name": "FunctionDefinition",
+            "src": "1158:88:8"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "indexOf",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "value",
+                      "scope": 1802,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1790,
+                        "name": "ElementaryTypeName",
+                        "src": "1267:7:8"
+                      }
+                    ],
+                    "id": 1791,
+                    "name": "VariableDeclaration",
+                    "src": "1267:13:8"
+                  }
+                ],
+                "id": 1792,
+                "name": "ParameterList",
+                "src": "1266:15:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1802,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1793,
+                        "name": "ElementaryTypeName",
+                        "src": "1311:4:8"
+                      }
+                    ],
+                    "id": 1794,
+                    "name": "VariableDeclaration",
+                    "src": "1311:4:8"
+                  }
+                ],
+                "id": 1795,
+                "name": "ParameterList",
+                "src": "1310:6:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1795
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "uint256",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "indexOf",
+                              "referencedDeclaration": 1626,
+                              "type": "function (struct AddressSetLib.AddressSet storage pointer,address) constant returns (uint256)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1665,
+                                  "type": "struct AddressSetLib.AddressSet storage ref",
+                                  "value": "testSet"
+                                },
+                                "id": 1796,
+                                "name": "Identifier",
+                                "src": "1332:7:8"
+                              }
+                            ],
+                            "id": 1797,
+                            "name": "MemberAccess",
+                            "src": "1332:15:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1791,
+                              "type": "address",
+                              "value": "value"
+                            },
+                            "id": 1798,
+                            "name": "Identifier",
+                            "src": "1348:5:8"
+                          }
+                        ],
+                        "id": 1799,
+                        "name": "FunctionCall",
+                        "src": "1332:22:8"
+                      }
+                    ],
+                    "id": 1800,
+                    "name": "Return",
+                    "src": "1325:29:8"
+                  }
+                ],
+                "id": 1801,
+                "name": "Block",
+                "src": "1319:40:8"
+              }
+            ],
+            "id": 1802,
+            "name": "FunctionDefinition",
+            "src": "1250:109:8"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "contains",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "value",
+                      "scope": 1815,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 1803,
+                        "name": "ElementaryTypeName",
+                        "src": "1381:7:8"
+                      }
+                    ],
+                    "id": 1804,
+                    "name": "VariableDeclaration",
+                    "src": "1381:13:8"
+                  }
+                ],
+                "id": 1805,
+                "name": "ParameterList",
+                "src": "1380:15:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1815,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 1806,
+                        "name": "ElementaryTypeName",
+                        "src": "1425:4:8"
+                      }
+                    ],
+                    "id": 1807,
+                    "name": "VariableDeclaration",
+                    "src": "1425:4:8"
+                  }
+                ],
+                "id": 1808,
+                "name": "ParameterList",
+                "src": "1424:6:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1808
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "bool",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "contains",
+                              "referencedDeclaration": 1641,
+                              "type": "function (struct AddressSetLib.AddressSet storage pointer,address) constant returns (bool)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1665,
+                                  "type": "struct AddressSetLib.AddressSet storage ref",
+                                  "value": "testSet"
+                                },
+                                "id": 1809,
+                                "name": "Identifier",
+                                "src": "1446:7:8"
+                              }
+                            ],
+                            "id": 1810,
+                            "name": "MemberAccess",
+                            "src": "1446:16:8"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1804,
+                              "type": "address",
+                              "value": "value"
+                            },
+                            "id": 1811,
+                            "name": "Identifier",
+                            "src": "1463:5:8"
+                          }
+                        ],
+                        "id": 1812,
+                        "name": "FunctionCall",
+                        "src": "1446:23:8"
+                      }
+                    ],
+                    "id": 1813,
+                    "name": "Return",
+                    "src": "1439:30:8"
+                  }
+                ],
+                "id": 1814,
+                "name": "Block",
+                "src": "1433:41:8"
+              }
+            ],
+            "id": 1815,
+            "name": "FunctionDefinition",
+            "src": "1363:111:8"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "size",
+              "payable": false,
+              "scope": 1826,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 1816,
+                "name": "ParameterList",
+                "src": "1491:2:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 1825,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 1817,
+                        "name": "ElementaryTypeName",
+                        "src": "1523:4:8"
+                      }
+                    ],
+                    "id": 1818,
+                    "name": "VariableDeclaration",
+                    "src": "1523:4:8"
+                  }
+                ],
+                "id": 1819,
+                "name": "ParameterList",
+                "src": "1522:6:8"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 1819
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "arguments": [
+                            null
+                          ],
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "uint256",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                null
+                              ],
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "size",
+                              "referencedDeclaration": 1653,
+                              "type": "function (struct AddressSetLib.AddressSet storage pointer) constant returns (uint256)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1665,
+                                  "type": "struct AddressSetLib.AddressSet storage ref",
+                                  "value": "testSet"
+                                },
+                                "id": 1820,
+                                "name": "Identifier",
+                                "src": "1544:7:8"
+                              }
+                            ],
+                            "id": 1821,
+                            "name": "MemberAccess",
+                            "src": "1544:12:8"
+                          }
+                        ],
+                        "id": 1822,
+                        "name": "FunctionCall",
+                        "src": "1544:14:8"
+                      }
+                    ],
+                    "id": 1823,
+                    "name": "Return",
+                    "src": "1537:21:8"
+                  }
+                ],
+                "id": 1824,
+                "name": "Block",
+                "src": "1531:32:8"
+              }
+            ],
+            "id": 1825,
+            "name": "FunctionDefinition",
+            "src": "1478:85:8"
+          }
+        ],
+        "id": 1826,
+        "name": "ContractDefinition",
+        "src": "105:1460:8"
+      }
+    ],
+    "id": 1827,
+    "name": "SourceUnit",
+    "src": "0:1566:8"
+  },
+  "networks": {
+    "1234": {
+      "events": {},
+      "links": {
+        "AddressSetLib": "0x75ed624ada7c9c810b10ec633e60c715f3c723fb"
+      },
+      "address": "0xffb177f059b3a641ee8f485ee578b98644415ba8"
+    }
+  },
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2017-09-30T20:09:44.755Z"
+}

@@ -32,7 +32,8 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit": "lint-staged",
-    "truffle:test": "truffle test"
+    "truffle:test": "truffle test",
+    "truffle:migrate": "truffle migrate --network development --verbose-rpc"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
@@ -57,7 +58,9 @@
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
+      "js",
+      "json",
+      "node"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
@@ -73,8 +76,10 @@
     }
   },
   "devDependencies": {
+    "@types/chai": "^4.0.4",
     "@types/jest": "^21.1.0",
     "@types/node": "^8.0.0",
+    "chai": "^4.1.2",
     "colors": "^1.1.2",
     "commitizen": "^2.9.6",
     "coveralls": "^2.13.1",
@@ -103,11 +108,21 @@
     "validate-commit-msg": "^2.12.2"
   },
   "dependencies": {
+    "@conclurer/local-storage-fallback": "^1.0.2",
     "accesscontrol": "^1.5.4",
+    "bip39": "^2.4.0",
     "bs58": "^4.0.1",
     "ethereumjs-util": "^5.1.2",
+    "ethereumjs-wallet": "^0.6.0",
+    "ipfs-api": "^14.3.5",
+    "ipld-dag-cbor": "^0.11.1",
+    "jiff": "^0.7.3",
+    "json-logic-js": "^1.2.0",
+    "moment": "^2.18.1",
     "truffle": "beta",
-    "web3": "^1.0.0-beta.22",
+    "truffle-contract": "^3.0.0",
+    "web3": "beta",
+    "web3-provider-engine": "^13.3.0",
     "yarn": "^1.1.0"
   }
 }

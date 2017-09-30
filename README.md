@@ -3,8 +3,8 @@
 ### Installation
 
 ```
-$ npm install -g truffle@beta
-$ npm install
+$ yarn add --global truffle@beta
+$ yarn install
 ```
 
 ### References

@@ -1,0 +1,1723 @@
+{
+  "contractName": "UnsafeEventStore",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "creator",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_eventType",
+          "type": "bytes32"
+        },
+        {
+          "name": "_keyType",
+          "type": "bytes1"
+        },
+        {
+          "name": "_valueType",
+          "type": "bytes1"
+        },
+        {
+          "name": "_key",
+          "type": "bytes32"
+        },
+        {
+          "name": "_value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "writeEvent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "kill",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "eventCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_eventId",
+          "type": "uint256"
+        }
+      ],
+      "name": "readEvent",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "bytes1"
+        },
+        {
+          "name": "",
+          "type": "bytes1"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        },
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": true,
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "Id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "TxOrigin",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "Created",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "EventType",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "KeyType",
+          "type": "bytes1"
+        },
+        {
+          "indexed": false,
+          "name": "ValueType",
+          "type": "bytes1"
+        },
+        {
+          "indexed": false,
+          "name": "Key",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "Value",
+          "type": "bytes32"
+        }
+      ],
+      "name": "EsEvent",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x60606040525b5b60008054600160a060020a03191633600160a060020a03161790555b60028054600160a060020a03191632600160a060020a03161790555b5b6104548061004e6000396000f300606060405236156100675763ffffffff60e060020a60003504166302d05d3f811461006f57806335628b381461009e57806341c0e1b5146100f757806371be2e4a1461010c5780638da5cb5b14610131578063e1ba30a914610160578063f2fde38b146101e7575b5b600080fd5b005b341561007a57600080fd5b610082610208565b604051600160a060020a03909116815260200160405180910390f35b34156100a957600080fd5b6100e56004357fff0000000000000000000000000000000000000000000000000000000000000060243581169060443516606435608435610217565b60405190815260200160405180910390f35b341561010257600080fd5b61006d6102df565b005b341561011757600080fd5b6100e56102ef565b60405190815260200160405180910390f35b341561013c57600080fd5b6100826102f6565b604051600160a060020a03909116815260200160405180910390f35b341561016b57600080fd5b610176600435610305565b604051978852600160a060020a03909616602088015260408088019590955260608701939093527fff0000000000000000000000000000000000000000000000000000000000000091821660808701521660a085015260c084015260e0830191909152610100909101905180910390f35b34156101f257600080fd5b61006d600160a060020a03600435166103d3565b005b600254600160a060020a031681565b600073__EventStoreLib_________________________633bb642036001888888888860006040516020015260405160e060020a63ffffffff8916028152600481019690965260248601949094527fff00000000000000000000000000000000000000000000000000000000000000928316604486015291166064840152608483015260a482015260c40160206040518083038186803b15156102b957600080fd5b6102c65a03f415156102ca57600080fd5b50505060405180519150505b95945050505050565b600054600160a060020a0316ff5b565b6001545b90565b600054600160a060020a031681565b60008060008060008060008073__EventStoreLib_________________________63a057fd5e60018b6000604051610100015260405160e060020a63ffffffff8516028152600481019290925260248201526044016101006040518083038186803b151561037257600080fd5b6102c65a03f4151561038357600080fd5b50505060405180519060200180519060200180519060200180519060200180519060200180519060200180519060200180519050975097509750975097509750975097505b919395975091939597565b60005433600160a060020a039081169116141561042257600160a060020a03811615610422576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a723058201567917be2097e224557db162bf2d3caf8232fe2b2e1862f87eee4dcdeb5b54c0029",
+  "deployedBytecode": "0x606060405236156100675763ffffffff60e060020a60003504166302d05d3f811461006f57806335628b381461009e57806341c0e1b5146100f757806371be2e4a1461010c5780638da5cb5b14610131578063e1ba30a914610160578063f2fde38b146101e7575b5b600080fd5b005b341561007a57600080fd5b610082610208565b604051600160a060020a03909116815260200160405180910390f35b34156100a957600080fd5b6100e56004357fff0000000000000000000000000000000000000000000000000000000000000060243581169060443516606435608435610217565b60405190815260200160405180910390f35b341561010257600080fd5b61006d6102df565b005b341561011757600080fd5b6100e56102ef565b60405190815260200160405180910390f35b341561013c57600080fd5b6100826102f6565b604051600160a060020a03909116815260200160405180910390f35b341561016b57600080fd5b610176600435610305565b604051978852600160a060020a03909616602088015260408088019590955260608701939093527fff0000000000000000000000000000000000000000000000000000000000000091821660808701521660a085015260c084015260e0830191909152610100909101905180910390f35b34156101f257600080fd5b61006d600160a060020a03600435166103d3565b005b600254600160a060020a031681565b600073__EventStoreLib_________________________633bb642036001888888888860006040516020015260405160e060020a63ffffffff8916028152600481019690965260248601949094527fff00000000000000000000000000000000000000000000000000000000000000928316604486015291166064840152608483015260a482015260c40160206040518083038186803b15156102b957600080fd5b6102c65a03f415156102ca57600080fd5b50505060405180519150505b95945050505050565b600054600160a060020a0316ff5b565b6001545b90565b600054600160a060020a031681565b60008060008060008060008073__EventStoreLib_________________________63a057fd5e60018b6000604051610100015260405160e060020a63ffffffff8516028152600481019290925260248201526044016101006040518083038186803b151561037257600080fd5b6102c65a03f4151561038357600080fd5b50505060405180519060200180519060200180519060200180519060200180519060200180519060200180519060200180519050975097509750975097509750975097505b919395975091939597565b60005433600160a060020a039081169116141561042257600160a060020a03811615610422576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a723058201567917be2097e224557db162bf2d3caf8232fe2b2e1862f87eee4dcdeb5b54c0029",
+  "sourceMap": "113:1193:3:-;;;346:66;243:48:15;268:5;:18;;-1:-1:-1;;;;;;268:18:15;276:10;-1:-1:-1;;;;;268:18:15;;;;243:48;388:7:3;:19;;-1:-1:-1;;;;;;388:19:3;398:9;-1:-1:-1;;;;;388:19:3;;;;346:66;113:1193;;;;;;;",
+  "deployedSourceMap": "113:1193:3:-;;;;;;;-1:-1:-1;;;113:1193:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;291:30;313:5;;;291:30;113:1193;250:22;;;;;;;;;;;;;;;-1:-1:-1;;;;;250:22:3;;;;;;;;;;;;;;;499:364;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;209:46:14;;;;;;;;;;;;;;416:79:3;;;;;;;;;;;;;;;;;;;;;;;;;;;218:20:15;;;;;;;;;;;;;;;-1:-1:-1;;;;;218:20:15;;;;;;;;;;;;;;;883:242:3;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;883:242:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;883:242:3;;;;;;;;;;;;;;;;;;;;;;;;;363:110:15;;;;;;;;;;;;-1:-1:-1;;;;;363:110:15;;;;;250:22:3;;;-1:-1:-1;;;;;250:22:3;;:::o;499:364::-;656:4;735:13;:24;767:5;781:10;800:8;816:10;834:4;846:6;735:123;;;;;;;;;;;-1:-1:-1;;;735:123:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;499:364:3;;;;;;;;:::o;209:46:14:-;244:5;;-1:-1:-1;;;;;244:5:14;231:19;209:46;:::o;416:79:3:-;471:5;:19;416:79;;:::o;218:20:15:-;;;-1:-1:-1;;;;;218:20:15;;:::o;883:242:3:-;950:4;963:7;979:4;992:7;1008:6;1022;1036:7;1051;1080:13;:23;1104:5;1111:8;1080:40;;;;;;;;;;;-1:-1:-1;;;1080:40:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1073:47;;;;;;;;;;;;;;;;883:242;;;;;;;;;;:::o;363:110:15:-;340:5;;326:10;-1:-1:-1;;;;;326:19:15;;;340:5;;326:19;322:32;;;-1:-1:-1;;;;;428:22:15;;;424:44;;452:5;:16;;-1:-1:-1;;452:16:15;-1:-1:-1;;;;;452:16:15;;;;;424:44;353:1;322:32;363:110;;:::o",
+  "source": "pragma solidity ^0.4.11;\n\n\nimport \"../../EventStoreLib.sol\";\nimport '../../../zeppelin/lifecycle/Killable.sol';\n\ncontract UnsafeEventStore is Killable {\n  using EventStoreLib for EventStoreLib.EsEventStorage;\n\n  EventStoreLib.EsEventStorage store;\n  address public creator;\n\n  // FALLBACK\n  function () payable { throw; }\n  \n  // CONSTRUCTOR  \n  function UnsafeEventStore() payable {\n    creator = tx.origin;\n  }\n\n  function eventCount() \n  returns (uint)\n  {\n    return store.events.length;\n  }\n\n  function writeEvent(\n    bytes32 _eventType, \n    bytes1 _keyType,\n    bytes1 _valueType,\n    bytes32 _key,\n    bytes32 _value\n  ) \n    public \n    returns (uint)\n  {\n    // Check access control here before writing events...\n    return EventStoreLib.writeEvent(\n      store, \n      _eventType, \n      _keyType,\n      _valueType,\n      _key,\n      _value\n    );\n  }\n\n  // READ EVENT\n  function readEvent(uint _eventId) \n    public \n    returns (\n      uint, \n      address, \n      uint, \n      bytes32, \n      bytes1,\n      bytes1,\n      bytes32,\n      bytes32\n    )\n  {\n    return EventStoreLib.readEvent(store, _eventId);\n  }\n\n  event EsEvent(\n    uint Id,\n    address TxOrigin,\n    uint Created,\n\n    bytes32 EventType,\n\n    bytes1 KeyType,\n    bytes1 ValueType,\n\n    bytes32 Key,\n    bytes32 Value\n  );\n}",
+  "sourcePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/Bases/UnsafeEventStore/UnsafeEventStore.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/Bases/UnsafeEventStore/UnsafeEventStore.sol",
+      "exportedSymbols": {
+        "UnsafeEventStore": [
+          505
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".11"
+          ]
+        },
+        "id": 397,
+        "name": "PragmaDirective",
+        "src": "0:24:3"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 857,
+          "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/EventStoreLib.sol",
+          "file": "../../EventStoreLib.sol",
+          "scope": 506,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 398,
+        "name": "ImportDirective",
+        "src": "27:33:3"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 3091,
+          "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/lifecycle/Killable.sol",
+          "file": "../../../zeppelin/lifecycle/Killable.sol",
+          "scope": 506,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 399,
+        "name": "ImportDirective",
+        "src": "61:50:3"
+      },
+      {
+        "attributes": {
+          "contractDependencies": [
+            3090,
+            3131
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            505,
+            3090,
+            3131
+          ],
+          "name": "UnsafeEventStore",
+          "scope": 506
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": [
+                null
+              ]
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "Killable",
+                  "referencedDeclaration": 3090,
+                  "type": "contract Killable"
+                },
+                "id": 400,
+                "name": "UserDefinedTypeName",
+                "src": "142:8:3"
+              }
+            ],
+            "id": 401,
+            "name": "InheritanceSpecifier",
+            "src": "142:8:3"
+          },
+          {
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "EventStoreLib",
+                  "referencedDeclaration": 856,
+                  "type": "library EventStoreLib"
+                },
+                "id": 402,
+                "name": "UserDefinedTypeName",
+                "src": "161:13:3"
+              },
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "EventStoreLib.EsEventStorage",
+                  "referencedDeclaration": 687,
+                  "type": "struct EventStoreLib.EsEventStorage storage pointer"
+                },
+                "id": 403,
+                "name": "UserDefinedTypeName",
+                "src": "179:28:3"
+              }
+            ],
+            "id": 404,
+            "name": "UsingForDirective",
+            "src": "155:53:3"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "store",
+              "scope": 505,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "struct EventStoreLib.EsEventStorage storage ref",
+              "value": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "EventStoreLib.EsEventStorage",
+                  "referencedDeclaration": 687,
+                  "type": "struct EventStoreLib.EsEventStorage storage pointer"
+                },
+                "id": 405,
+                "name": "UserDefinedTypeName",
+                "src": "212:28:3"
+              }
+            ],
+            "id": 406,
+            "name": "VariableDeclaration",
+            "src": "212:34:3"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "creator",
+              "scope": 505,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "address",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "address",
+                  "type": "address"
+                },
+                "id": 407,
+                "name": "ElementaryTypeName",
+                "src": "250:7:3"
+              }
+            ],
+            "id": 408,
+            "name": "VariableDeclaration",
+            "src": "250:22:3"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "",
+              "payable": true,
+              "scope": 505,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 409,
+                "name": "ParameterList",
+                "src": "300:2:3"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 410,
+                "name": "ParameterList",
+                "src": "311:0:3"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "id": 411,
+                    "name": "Throw",
+                    "src": "313:5:3"
+                  }
+                ],
+                "id": 412,
+                "name": "Block",
+                "src": "311:10:3"
+              }
+            ],
+            "id": 413,
+            "name": "FunctionDefinition",
+            "src": "291:30:3"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": true,
+              "modifiers": [
+                null
+              ],
+              "name": "UnsafeEventStore",
+              "payable": true,
+              "scope": 505,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 414,
+                "name": "ParameterList",
+                "src": "371:2:3"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 415,
+                "name": "ParameterList",
+                "src": "382:0:3"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "address"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 408,
+                              "type": "address",
+                              "value": "creator"
+                            },
+                            "id": 416,
+                            "name": "Identifier",
+                            "src": "388:7:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "origin",
+                              "referencedDeclaration": null,
+                              "type": "address"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 3135,
+                                  "type": "tx",
+                                  "value": "tx"
+                                },
+                                "id": 417,
+                                "name": "Identifier",
+                                "src": "398:2:3"
+                              }
+                            ],
+                            "id": 418,
+                            "name": "MemberAccess",
+                            "src": "398:9:3"
+                          }
+                        ],
+                        "id": 419,
+                        "name": "Assignment",
+                        "src": "388:19:3"
+                      }
+                    ],
+                    "id": 420,
+                    "name": "ExpressionStatement",
+                    "src": "388:19:3"
+                  }
+                ],
+                "id": 421,
+                "name": "Block",
+                "src": "382:30:3"
+              }
+            ],
+            "id": 422,
+            "name": "FunctionDefinition",
+            "src": "346:66:3"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "eventCount",
+              "payable": false,
+              "scope": 505,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 423,
+                "name": "ParameterList",
+                "src": "435:2:3"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 432,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 424,
+                        "name": "ElementaryTypeName",
+                        "src": "450:4:3"
+                      }
+                    ],
+                    "id": 425,
+                    "name": "VariableDeclaration",
+                    "src": "450:4:3"
+                  }
+                ],
+                "id": 426,
+                "name": "ParameterList",
+                "src": "449:6:3"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 426
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "member_name": "length",
+                          "referencedDeclaration": null,
+                          "type": "uint256"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "events",
+                              "referencedDeclaration": 686,
+                              "type": "struct EventStoreLib.EsEventStruct storage ref[] storage ref"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 406,
+                                  "type": "struct EventStoreLib.EsEventStorage storage ref",
+                                  "value": "store"
+                                },
+                                "id": 427,
+                                "name": "Identifier",
+                                "src": "471:5:3"
+                              }
+                            ],
+                            "id": 428,
+                            "name": "MemberAccess",
+                            "src": "471:12:3"
+                          }
+                        ],
+                        "id": 429,
+                        "name": "MemberAccess",
+                        "src": "471:19:3"
+                      }
+                    ],
+                    "id": 430,
+                    "name": "Return",
+                    "src": "464:26:3"
+                  }
+                ],
+                "id": 431,
+                "name": "Block",
+                "src": "458:37:3"
+              }
+            ],
+            "id": 432,
+            "name": "FunctionDefinition",
+            "src": "416:79:3"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "writeEvent",
+              "payable": false,
+              "scope": 505,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_eventType",
+                      "scope": 458,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 433,
+                        "name": "ElementaryTypeName",
+                        "src": "524:7:3"
+                      }
+                    ],
+                    "id": 434,
+                    "name": "VariableDeclaration",
+                    "src": "524:18:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_keyType",
+                      "scope": 458,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes1",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes1",
+                          "type": "bytes1"
+                        },
+                        "id": 435,
+                        "name": "ElementaryTypeName",
+                        "src": "549:6:3"
+                      }
+                    ],
+                    "id": 436,
+                    "name": "VariableDeclaration",
+                    "src": "549:15:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_valueType",
+                      "scope": 458,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes1",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes1",
+                          "type": "bytes1"
+                        },
+                        "id": 437,
+                        "name": "ElementaryTypeName",
+                        "src": "570:6:3"
+                      }
+                    ],
+                    "id": 438,
+                    "name": "VariableDeclaration",
+                    "src": "570:17:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_key",
+                      "scope": 458,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 439,
+                        "name": "ElementaryTypeName",
+                        "src": "593:7:3"
+                      }
+                    ],
+                    "id": 440,
+                    "name": "VariableDeclaration",
+                    "src": "593:12:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_value",
+                      "scope": 458,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 441,
+                        "name": "ElementaryTypeName",
+                        "src": "611:7:3"
+                      }
+                    ],
+                    "id": 442,
+                    "name": "VariableDeclaration",
+                    "src": "611:14:3"
+                  }
+                ],
+                "id": 443,
+                "name": "ParameterList",
+                "src": "518:111:3"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 458,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 444,
+                        "name": "ElementaryTypeName",
+                        "src": "656:4:3"
+                      }
+                    ],
+                    "id": 445,
+                    "name": "VariableDeclaration",
+                    "src": "656:4:3"
+                  }
+                ],
+                "id": 446,
+                "name": "ParameterList",
+                "src": "655:6:3"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 446
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "uint256",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_struct$_EsEventStorage_$687_storage",
+                                  "typeString": "struct EventStoreLib.EsEventStorage storage ref"
+                                },
+                                {
+                                  "typeIdentifier": "t_bytes32",
+                                  "typeString": "bytes32"
+                                },
+                                {
+                                  "typeIdentifier": "t_bytes1",
+                                  "typeString": "bytes1"
+                                },
+                                {
+                                  "typeIdentifier": "t_bytes1",
+                                  "typeString": "bytes1"
+                                },
+                                {
+                                  "typeIdentifier": "t_bytes32",
+                                  "typeString": "bytes32"
+                                },
+                                {
+                                  "typeIdentifier": "t_bytes32",
+                                  "typeString": "bytes32"
+                                }
+                              ],
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "writeEvent",
+                              "referencedDeclaration": 789,
+                              "type": "function (struct EventStoreLib.EsEventStorage storage pointer,bytes32,bytes1,bytes1,bytes32,bytes32) returns (uint256)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 856,
+                                  "type": "type(library EventStoreLib)",
+                                  "value": "EventStoreLib"
+                                },
+                                "id": 447,
+                                "name": "Identifier",
+                                "src": "735:13:3"
+                              }
+                            ],
+                            "id": 448,
+                            "name": "MemberAccess",
+                            "src": "735:24:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 406,
+                              "type": "struct EventStoreLib.EsEventStorage storage ref",
+                              "value": "store"
+                            },
+                            "id": 449,
+                            "name": "Identifier",
+                            "src": "767:5:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 434,
+                              "type": "bytes32",
+                              "value": "_eventType"
+                            },
+                            "id": 450,
+                            "name": "Identifier",
+                            "src": "781:10:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 436,
+                              "type": "bytes1",
+                              "value": "_keyType"
+                            },
+                            "id": 451,
+                            "name": "Identifier",
+                            "src": "800:8:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 438,
+                              "type": "bytes1",
+                              "value": "_valueType"
+                            },
+                            "id": 452,
+                            "name": "Identifier",
+                            "src": "816:10:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 440,
+                              "type": "bytes32",
+                              "value": "_key"
+                            },
+                            "id": 453,
+                            "name": "Identifier",
+                            "src": "834:4:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 442,
+                              "type": "bytes32",
+                              "value": "_value"
+                            },
+                            "id": 454,
+                            "name": "Identifier",
+                            "src": "846:6:3"
+                          }
+                        ],
+                        "id": 455,
+                        "name": "FunctionCall",
+                        "src": "735:123:3"
+                      }
+                    ],
+                    "id": 456,
+                    "name": "Return",
+                    "src": "728:130:3"
+                  }
+                ],
+                "id": 457,
+                "name": "Block",
+                "src": "664:199:3"
+              }
+            ],
+            "id": 458,
+            "name": "FunctionDefinition",
+            "src": "499:364:3"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "readEvent",
+              "payable": false,
+              "scope": 505,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_eventId",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 459,
+                        "name": "ElementaryTypeName",
+                        "src": "902:4:3"
+                      }
+                    ],
+                    "id": 460,
+                    "name": "VariableDeclaration",
+                    "src": "902:13:3"
+                  }
+                ],
+                "id": 461,
+                "name": "ParameterList",
+                "src": "901:15:3"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 462,
+                        "name": "ElementaryTypeName",
+                        "src": "950:4:3"
+                      }
+                    ],
+                    "id": 463,
+                    "name": "VariableDeclaration",
+                    "src": "950:4:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 464,
+                        "name": "ElementaryTypeName",
+                        "src": "963:7:3"
+                      }
+                    ],
+                    "id": 465,
+                    "name": "VariableDeclaration",
+                    "src": "963:7:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 466,
+                        "name": "ElementaryTypeName",
+                        "src": "979:4:3"
+                      }
+                    ],
+                    "id": 467,
+                    "name": "VariableDeclaration",
+                    "src": "979:4:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 468,
+                        "name": "ElementaryTypeName",
+                        "src": "992:7:3"
+                      }
+                    ],
+                    "id": 469,
+                    "name": "VariableDeclaration",
+                    "src": "992:7:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes1",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes1",
+                          "type": "bytes1"
+                        },
+                        "id": 470,
+                        "name": "ElementaryTypeName",
+                        "src": "1008:6:3"
+                      }
+                    ],
+                    "id": 471,
+                    "name": "VariableDeclaration",
+                    "src": "1008:6:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes1",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes1",
+                          "type": "bytes1"
+                        },
+                        "id": 472,
+                        "name": "ElementaryTypeName",
+                        "src": "1022:6:3"
+                      }
+                    ],
+                    "id": 473,
+                    "name": "VariableDeclaration",
+                    "src": "1022:6:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 474,
+                        "name": "ElementaryTypeName",
+                        "src": "1036:7:3"
+                      }
+                    ],
+                    "id": 475,
+                    "name": "VariableDeclaration",
+                    "src": "1036:7:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 486,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 476,
+                        "name": "ElementaryTypeName",
+                        "src": "1051:7:3"
+                      }
+                    ],
+                    "id": 477,
+                    "name": "VariableDeclaration",
+                    "src": "1051:7:3"
+                  }
+                ],
+                "id": 478,
+                "name": "ParameterList",
+                "src": "942:122:3"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 478
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple(uint256,address,uint256,bytes32,bytes1,bytes1,bytes32,bytes32)",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_struct$_EsEventStorage_$687_storage",
+                                  "typeString": "struct EventStoreLib.EsEventStorage storage ref"
+                                },
+                                {
+                                  "typeIdentifier": "t_uint256",
+                                  "typeString": "uint256"
+                                }
+                              ],
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "readEvent",
+                              "referencedDeclaration": 837,
+                              "type": "function (struct EventStoreLib.EsEventStorage storage pointer,uint256) returns (uint256,address,uint256,bytes32,bytes1,bytes1,bytes32,bytes32)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 856,
+                                  "type": "type(library EventStoreLib)",
+                                  "value": "EventStoreLib"
+                                },
+                                "id": 479,
+                                "name": "Identifier",
+                                "src": "1080:13:3"
+                              }
+                            ],
+                            "id": 480,
+                            "name": "MemberAccess",
+                            "src": "1080:23:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 406,
+                              "type": "struct EventStoreLib.EsEventStorage storage ref",
+                              "value": "store"
+                            },
+                            "id": 481,
+                            "name": "Identifier",
+                            "src": "1104:5:3"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 460,
+                              "type": "uint256",
+                              "value": "_eventId"
+                            },
+                            "id": 482,
+                            "name": "Identifier",
+                            "src": "1111:8:3"
+                          }
+                        ],
+                        "id": 483,
+                        "name": "FunctionCall",
+                        "src": "1080:40:3"
+                      }
+                    ],
+                    "id": 484,
+                    "name": "Return",
+                    "src": "1073:47:3"
+                  }
+                ],
+                "id": 485,
+                "name": "Block",
+                "src": "1067:58:3"
+              }
+            ],
+            "id": 486,
+            "name": "FunctionDefinition",
+            "src": "883:242:3"
+          },
+          {
+            "attributes": {
+              "anonymous": false,
+              "name": "EsEvent"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "Id",
+                      "scope": 504,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 487,
+                        "name": "ElementaryTypeName",
+                        "src": "1148:4:3"
+                      }
+                    ],
+                    "id": 488,
+                    "name": "VariableDeclaration",
+                    "src": "1148:7:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "TxOrigin",
+                      "scope": 504,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 489,
+                        "name": "ElementaryTypeName",
+                        "src": "1161:7:3"
+                      }
+                    ],
+                    "id": 490,
+                    "name": "VariableDeclaration",
+                    "src": "1161:16:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "Created",
+                      "scope": 504,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 491,
+                        "name": "ElementaryTypeName",
+                        "src": "1183:4:3"
+                      }
+                    ],
+                    "id": 492,
+                    "name": "VariableDeclaration",
+                    "src": "1183:12:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "EventType",
+                      "scope": 504,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 493,
+                        "name": "ElementaryTypeName",
+                        "src": "1202:7:3"
+                      }
+                    ],
+                    "id": 494,
+                    "name": "VariableDeclaration",
+                    "src": "1202:17:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "KeyType",
+                      "scope": 504,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes1",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes1",
+                          "type": "bytes1"
+                        },
+                        "id": 495,
+                        "name": "ElementaryTypeName",
+                        "src": "1226:6:3"
+                      }
+                    ],
+                    "id": 496,
+                    "name": "VariableDeclaration",
+                    "src": "1226:14:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "ValueType",
+                      "scope": 504,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes1",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes1",
+                          "type": "bytes1"
+                        },
+                        "id": 497,
+                        "name": "ElementaryTypeName",
+                        "src": "1246:6:3"
+                      }
+                    ],
+                    "id": 498,
+                    "name": "VariableDeclaration",
+                    "src": "1246:16:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "Key",
+                      "scope": 504,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 499,
+                        "name": "ElementaryTypeName",
+                        "src": "1269:7:3"
+                      }
+                    ],
+                    "id": 500,
+                    "name": "VariableDeclaration",
+                    "src": "1269:11:3"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "Value",
+                      "scope": 504,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bytes32",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bytes32",
+                          "type": "bytes32"
+                        },
+                        "id": 501,
+                        "name": "ElementaryTypeName",
+                        "src": "1286:7:3"
+                      }
+                    ],
+                    "id": 502,
+                    "name": "VariableDeclaration",
+                    "src": "1286:13:3"
+                  }
+                ],
+                "id": 503,
+                "name": "ParameterList",
+                "src": "1142:161:3"
+              }
+            ],
+            "id": 504,
+            "name": "EventDefinition",
+            "src": "1129:175:3"
+          }
+        ],
+        "id": 505,
+        "name": "ContractDefinition",
+        "src": "113:1193:3"
+      }
+    ],
+    "id": 506,
+    "name": "SourceUnit",
+    "src": "0:1306:3"
+  },
+  "networks": {
+    "1234": {
+      "events": {
+        "0x34fda208d95da3b89ce2ca6e488201282198f339ef139dd80138a430c8d03a24": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "Id",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "TxOrigin",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "Created",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "EventType",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "KeyType",
+              "type": "bytes1"
+            },
+            {
+              "indexed": false,
+              "name": "ValueType",
+              "type": "bytes1"
+            },
+            {
+              "indexed": false,
+              "name": "Key",
+              "type": "bytes32"
+            },
+            {
+              "indexed": false,
+              "name": "Value",
+              "type": "bytes32"
+            }
+          ],
+          "name": "EsEvent",
+          "type": "event"
+        }
+      },
+      "links": {
+        "EventStoreLib": "0xfcbca4a78f057c10efae89389ed0dbd5209d8924"
+      },
+      "address": "0x2a338d355a7bb818630494206826f968ac261ab9"
+    }
+  },
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2017-09-30T20:09:44.778Z"
+}

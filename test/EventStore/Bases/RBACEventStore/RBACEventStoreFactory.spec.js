@@ -89,7 +89,7 @@ describe('', () => {
             let tx, fsa, grant;
             /*
                 Here we implement discretionary access control flow, for an RBACEventStoreFactory.
-                We must show that: 
+                We must show that:
                 - the default case is writeable only by the owner.
                 - only an account with eventstore create:any role can create event stores.
                 - accounts can loose roles, and thereby access to contracts
