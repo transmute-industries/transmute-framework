@@ -31,7 +31,8 @@
     "commit": "git-cz",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "truffle:test": "truffle test"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
@@ -100,5 +101,13 @@
     "typedoc": "^0.8.0",
     "typescript": "^2.3.4",
     "validate-commit-msg": "^2.12.2"
+  },
+  "dependencies": {
+    "accesscontrol": "^1.5.4",
+    "bs58": "^4.0.1",
+    "ethereumjs-util": "^5.1.2",
+    "truffle": "beta",
+    "web3": "^1.0.0-beta.22",
+    "yarn": "^1.1.0"
   }
 }
