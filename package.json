@@ -1,106 +1,104 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.43",
-  "description": "An ethereum smart contract & dapp framework.",
-  "main": "build/TransmuteFramework.js",
-  "scripts": {
-    "clean": "rm -rf temp build docs coverage .nyc_output .node-xmlhttprequest-sync-*",
-    "transmute": "node build/cli/index.js",
-    "start": "ts-node src/TransmuteFramework.ts",
-    "build": "node node_modules/typescript/bin/tsc --p tsconfig.json && cp -r contracts/TransmuteFramework build/contracts/ &&  cp -r migrations build/migrations && cp -r test build/test",
-    "watch": "node node_modules/typescript/bin/tsc --w --p tsconfig.json",
-    "production": "npm run build && node bin/index.js",
-    "pretest": "npm run build",
-    "testrpc": "pm2 start testrpc",
-    "truffle-test": "truffle migrate && truffle test",
-    "test": "nyc mocha ",
-    "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'",
-    "ipfs": "npm run ipfs:allow && ipfs daemon",
-    "test:all": "npm run clean && npm run truffle-test && npm run test ",
-    "test:react": "cd ./examples/react-webpack-babel && pm2 start npm -- run start",
-    "test:browser": "nyc mocha --compilers ts-node/register --require source-map-support/register --full-trace --bail --timeout 30000 src/**/*.browser.spec.ts",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "docs": "typedoc --gaID UA-99768185-1 --out docs src && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html ",
-    "docs:deploy": "firebase deploy",
-    "patch": "npm version patch"
-  },
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "main": "dist/transmute-framework.umd.js",
+  "module": "dist/transmute-framework.es5.js",
+  "typings": "dist/types/transmute-framework.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "Orie Steele <orie@ohs.io>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/transmute-industries/transmute-framework.git"
+    "url": ""
   },
-  "keywords": [
-    "solidity",
-    "ethereum",
-    "smart",
-    "contracts",
-    "security",
-    "javascript",
-    "typescript",
-    "truffle",
-    "transmute"
-  ],
-  "contributors": [
-    "Eric Olszewski <eric@transmute.industries>",
-    "Orie Steele <orie@transmute.industries>"
-  ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/transmute-industries/transmute-framework/issues"
+  "engines": {
+    "node": ">=6.0.0"
   },
-  "homepage": "https://github.com/transmute-industries/transmute-framework#readme",
+  "scripts": {
+    "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+    "prebuild": "rimraf dist",
+    "build": "tsc && rollup -c && rimraf compiled && typedoc --out dist/docs --target es6 --theme minimal src",
+    "start": "tsc -w & rollup -c -w",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
+    "deploy-docs": "ts-node tools/gh-pages-publish",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "{src,test}/**/*.ts": [
+      "prettier --write --no-semi",
+      "git add"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    },
+    "validate-commit-msg": {
+      "types": "conventional-commit-types",
+      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+    }
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    }
+  },
   "devDependencies": {
-    "@types/chai": "^3.5.2",
-    "@types/mocha": "^2.2.41",
-    "chai": "^3.5.0",
-    "coveralls": "^2.11.15",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.3.0",
-    "nyc": "^10.3.2",
-    "ts-node": "^3.2.0",
-    "typedoc": "^0.5.3",
-    "typescript": "^2.1.4"
-  },
-  "dependencies": {
-    "@conclurer/local-storage-fallback": "1.0.2",
-    "@digix/truffle-lightwallet-provider": "0.0.13",
-    "accesscontrol": "^1.5.1",
-    "bluebird": "3.5.0",
-    "ethereumjs-testrpc": "3.0.5",
-    "ethereumjs-util": "5.1.2",
-    "firebase": "3.9.0",
-    "flux-standard-action": "1.2.0",
-    "ipfs-api": "14.0.3",
-    "ipld-dag-cbor": "^0.11.1",
-    "jiff": "^0.7.3",
-    "json-logic-js": "1.1.1",
-    "moment": "2.18.1",
-    "ncp": "2.0.0",
-    "pm2": "2.4.6",
-    "rimraf": "2.6.1",
-    "truffle": "^3.3.2",
-    "truffle-config": "^1.0.0",
-    "truffle-contract": "2.0.0",
-    "truffle-expect": "0.0.3",
-    "vorpal": "1.12.0",
-    "web3": "0.19.0",
-    "web3-provider-engine": "^13.2.9"
-  },
-  "nyc": {
-    "include": [
-      "src/**/*.ts"
-    ],
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "require": [
-      "ts-node/register"
-    ],
-    "reporter": [
-      "text-summary",
-      "html"
-    ],
-    "sourceMap": true,
-    "instrument": true
+    "@types/jest": "^21.1.0",
+    "@types/node": "^8.0.0",
+    "colors": "^1.1.2",
+    "commitizen": "^2.9.6",
+    "coveralls": "^2.13.1",
+    "cross-env": "^5.0.1",
+    "cz-conventional-changelog": "^2.0.0",
+    "husky": "^0.14.0",
+    "jest": "^21.0.0",
+    "lint-staged": "^4.0.0",
+    "lodash.camelcase": "^4.3.0",
+    "prettier": "^1.4.4",
+    "prompt": "^1.0.0",
+    "replace-in-file": "^3.0.0-beta.2",
+    "rimraf": "^2.6.1",
+    "rollup": "^0.50.0",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "semantic-release": "^8.0.0",
+    "ts-jest": "^21.0.0",
+    "ts-node": "^3.0.6",
+    "tslint": "^5.4.3",
+    "tslint-config-prettier": "^1.1.0",
+    "tslint-config-standard": "^6.0.0",
+    "typedoc": "^0.8.0",
+    "typescript": "^2.3.4",
+    "validate-commit-msg": "^2.12.2"
   }
 }

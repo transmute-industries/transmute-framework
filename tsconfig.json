@@ -1,29 +1,22 @@
 {
-  "ref": "master",
-  "path": "typings",
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
-    "moduleResolution": "node",
-    "sourceMap": false,
-    "importHelpers": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "diagnostics": false,
-    "removeComments": true,
-    "noImplicitAny": false,
-    "declaration": true,
-    "noResolve": false,
-    "noEmitHelpers": true,
-    "outDir": "build"
-  },
-  "exclude": [
-    "node_modules",
-    "typings/global",
-    "typings/index.d.ts"
-  ],
-  "files": [
-    "./src/TransmuteFramework.ts",
-    "./src/CLI/index.ts"
-  ]
+    "compilerOptions": {
+        "moduleResolution": "node",
+        "target": "es5",
+        "module":"es2015",
+        "lib": ["es2015", "es2016", "es2017", "dom"],
+        "strict": true,
+        "sourceMap": true,
+        "declaration": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declarationDir": "dist/types",
+        "outDir": "compiled",
+        "typeRoots": [
+          "node_modules/@types"
+        ]
+    },
+    "include": [
+        "src"
+    ]
 }

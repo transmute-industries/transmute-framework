@@ -1,106 +1,132 @@
-# Transmute Framework
+# TypeScript library starter
 
-An ethereum + ipfs dApp framework.
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Greenkeeper badge](https://badges.greenkeeper.io/alexjoverm/typescript-library-starter.svg)](https://greenkeeper.io/)
+[![Travis](https://img.shields.io/travis/alexjoverm/typescript-library-starter.svg)](https://travis-ci.org/alexjoverm/typescript-library-starter)
+[![Coveralls](https://img.shields.io/coveralls/alexjoverm/typescript-library-starter.svg)](https://coveralls.io/github/alexjoverm/typescript-library-starter)
+[![Dev Dependencies](https://david-dm.org/alexjoverm/typescript-library-starter/dev-status.svg)](https://david-dm.org/alexjoverm/typescript-library-starter?type=dev)
+[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg)](https://paypal.me/AJoverMorales)
 
-```
-$ npm install transmute-framework@latest --save
-```
-
-[![NPM version](https://img.shields.io/npm/v/transmute-framework.svg)](https://www.npmjs.com/package/transmute-framework)
-[![Build Status](https://travis-ci.org/transmute-industries/transmute-framework.svg?branch=master)](https://travis-ci.org/transmute-industries/transmute-framework)
-[![Coverage Status](https://coveralls.io/repos/github/transmute-industries/transmute-framework/badge.svg?branch=master)](https://coveralls.io/github/transmute-industries/transmute-framework?branch=master)
-[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
-
-EventStore provides a simple javascript event based interface to the ethereum blockchain.
-Smart contract developers can annotate their contracts with "is EventStore" and instantly 
-unlock awesome state mangement capabilities powered by redux.
-
-ReadModels represent views of the state of your smart contract. For example, a PLC for a 
-nuclear facility might have an event stream containg firmware updates, commands, readings, etc...
-These events are reduced into a model which represents state of the controller over time.
-As actions are taken, events are processed and the state of the controller updates.
-
-Persistence provides a caching (and later encryption) layer for storing read models off the chain.
-Reading from the chain is expensive, and unnecessary, because all that is needed to maintain state 
-is the read model and any new events.
-
-By storing our read models in a realtime database, such as firebase, we provide a realtime view of
-smart contract state.
-
-Transactions are the result of calling truffle contracts. Events are received in transactions, and
-applied to read models by a model reducer.
-
-The end result is a familiar action, reducer, redux interface for your smart contracts, letting you focus on the business logic and security, and not on state management or data transfer objects.
+A starter project that makes creating a TypeScript library extremely easy.
 
 ### Usage
-```
-npm install            - install the package and its dependencies
-npm run clean          - clean the project of all build and debug data
-npm run testrpc        - run testrpc
-pm2 logs testrpc       - review testrpc logs
-npm run transmute      - transmute cli
-truffle migrate        - migrate truffle contracts
-truffle test           - test framework truffle contracts
-npm run test           - test framework module (web and nodejs)
-npm run test:cli       - test framework nodejs cli
-npm run build          - build the library
-npm run docs           - build the docs
-npm run docs:deploy    - deploy the docs to 
-npm run patch          - increment the package version and create a tag
-npm publish            - deploy the package to npm
-pm2 kill               - kill testrpc and any other pm2 processes
+
+```bash
+git clone https://github.com/alexjoverm/typescript-library-starter.git YOURFOLDERNAME
+cd YOURFOLDERNAME
+
+# Run npm install and write your library name when asked. That's all!
+npm install
 ```
 
+**Start coding!** `package.json` and entry files are already set up for you, so don't worry about linking to your main file, typings, etc. Just keep those files with the same names.
 
-### Events + Commands
+### Features
 
-We apologize for the terminology, there is a lot of room for improvement, feel free to open an issue to make a suggestion.
+ - Zero-setup. After running `npm install` things will be setup for you :wink:
+ - **[RollupJS](https://rollupjs.org/)** for multiple optimized bundles following the [standard convention](http://2ality.com/2017/04/setting-up-multi-platform-packages.html) and [Tree-shaking](https://alexjoverm.github.io/2017/03/06/Tree-shaking-with-Webpack-2-TypeScript-and-Babel/).
+ - Tests, coverage and interactive watch mode using **[Jest](http://facebook.github.io/jest/)**
+ - **[Prettier](https://github.com/prettier/prettier)** and **[TSLint](https://palantir.github.io/tslint/)** for code formatting and consistency.
+ - **Docs automatic generation and deployment** to `gh-pages`, using **[TypeDoc](http://typedoc.org/)**
+ - Automatic types `(*.d.ts)` file generation
+ - **[Travis](https://travis-ci.org)** integration and **[Coveralls](https://coveralls.io/)** report
+ - (Optional) **Automatic releases and changelog**, using [Semantic release](https://github.com/semantic-release/semantic-release), [Commitizen](https://github.com/commitizen/cz-cli), [Conventional changelog](https://github.com/conventional-changelog/conventional-changelog) and [Husky](https://github.com/typicode/husky) (for the git hooks)
 
-You write a command, you read an event.
+### Excluding peerDependencies
 
-The semantics of commands and events is WIP, probably not correct w.r.t. CQRS, and something we want help fixing.
+On library development, one might want to set some peer dependencies, and thus remove those from the final bundle. You can see in [Rollup docs](https://rollupjs.org/#peer-dependencies) how to do that.
 
-#### Events
+The good news is here is setup for you, you only must include the dependency name in `external` property within `rollup.config.js`. For example, if you wanna exclude `lodash`, just write there `external: ['lodash']`.
 
-Events have happened, they are an object that represents a state transition. If you are reading an event, then that transition has already happened. You can see when it happened, who made it happen, what details were important to describe what happened, etc.
+### NPM scripts
 
-###### type
+ - `npm t`: Run test suite
+ - `npm start`: Runs `npm run build` in watch mode
+ - `npm run test:watch`: Run test suite in [interactive watch mode](http://facebook.github.io/jest/docs/cli.html#watch)
+ - `npm run test:prod`: Run linting and generate coverage
+ - `npm run build`: Generage bundles and typings, create docs
+ - `npm run lint`: Lints code
+ - `npm run commit`: Commit using conventional commit style ([husky](https://github.com/typicode/husky) will tell you to use it if you haven't :wink:)
 
-Events have a `type` that is past tense, 'SESSION_STARTED', 'INVOICE_PAID', 'USER_SUBSCRIBED'.
+### Automatic releases
 
-A point of confustion in our framework is that often times, we are saving an event that has already happened, so the commands often represent the intention _save this event which already happened_ and thus share the same type as the event, namely a past tense string and not a present tense directive, such as 'START_USER_SESSION'.
+If you'd like to have automatic releases with Semantic Versioning, follow these simple steps.
 
-###### payload
-Events have a `payload` that represents what changed, or new information about a domain.
-Our framework supports 3 kinds of payloads: `uint`, `address`, `string`. In addition, `object` payloads are mapped to IPLD and dehydrated and rehydrated from IPFS, but their format on the block chain is their hash as a string.
+_**Prerequisites**: you need to create/login accounts and add your project to:_
+ - npm
+ - Travis
+ - Coveralls
 
+Run the following command to prepare hooks and stuff:
 
-#### Commands
+```bash
+npm run semantic-release-prepare
+```
 
-For now, commands look like events, but have different meta data which indicated persistence extensions.
-A typical command from a transmute client will be to save an event which has happened.
+Follow the console instructions to install semantic release run it (answer NO to "Generate travis.yml").
 
-## IPLD 
+_Note: make sure you've setup `repository.url` in your `package.json` file_
 
-What is IPLD? - https://ipld.io/
+```bash
+npm install -g semantic-release-cli
+semantic-release setup
+# IMPORTANT!! Answer NO to "Generate travis.yml" question. Is already prepared for you :P
+```
 
-### How does the framework use IPLD?
+From now on, you'll need to use `npm run commit`, which is a convenient way to create conventional commits.
 
-We use IPLD for object payloads. This means that by default any object payload will be converted to IPLD and persisted.
-This data conversion is transparent to the user.
+Automatic releases are possible thanks to [semantic release](https://github.com/semantic-release/semantic-release), which publishes your code automatically on github and npm, plus generates automatically a changelog. This setup is highly influenced by [Kent C. Dodds course on egghead.io](https://egghead.io/courses/how-to-write-an-open-source-javascript-library)
 
-### Contributing 
+### Git Hooks
 
-Please fork and submit PRs. There are integration tests for truffle and javascript libraries that run in travis.
-If these fail, expect your PR to be rejected ; )
+There is already set a `precommit` hook for formatting your code with Prettier :nail_care:
 
-### References
+By default, there are 2 disabled git hooks. They're set up when you run the `npm run semantic-release-prepare` script. They make sure:
+ - You follow a [conventional commit message](https://github.com/conventional-changelog/conventional-changelog)
+ - Your build is not gonna fail in [Travis](https://travis-ci.org) (or your CI server), since it's runned locally before `git push`
 
-- https://github.com/Upchain/truffle-template
-- https://github.com/transmute-industries/eth-faucet
-- https://github.com/AugurProject/augur/blob/master/src/modules/auth/actions/register.js
-- https://airbitz.co/developer-api-library/
+This makes more sense in combination with [automatic releases](#automatic-releases)
 
+### FAQ
 
+#### `Array.prototype.from`, `Promise`, `Map`... is undefined?
 
+TypeScript or Babel only provides down-emits on syntactical features (`class`, `let`, `async/await`...), but not on functional features (`Array.prototype.find`, `Set`, `Promise`...), . For that, you need Polyfills, such as [`core-js`](https://github.com/zloirock/core-js) or [`babel-polyfill`](https://babeljs.io/docs/usage/polyfill/) (which extends `core-js`).
 
+For a library, `core-js` plays very nicely, since you can import just the polyfills you need:
+
+```javascript
+import "core-js/fn/array/find"
+import "core-js/fn/string/includes"
+import "core-js/fn/promise"
+...
+```
+
+#### What is `npm install` doing the first time runned?
+
+It runs the script `tools/init` which sets up everything for you. In short, it:
+ - Configures RollupJS for the build, which creates the bundles.
+ - Configures `package.json` (typings file, main file, etc)
+ - Renames main src and test files
+
+#### What if I don't want git-hooks, automatic releases or semantic-release?
+
+Then you may want to:
+ - Remove `commitmsg`, `postinstall` scripts from `package.json`. That will not use those git hooks to make sure you make a conventional commit
+ - Remove `npm run semantic-release` from `.travis.yml`
+
+#### What if I don't want to use coveralls or report my coverage?
+
+Remove `npm run report-coverage` from `.travis.yml`
+
+## Credits
+
+Made with :heart: by [@alexjoverm](https://twitter.com/alexjoverm) and all these wonderful contributors ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars.githubusercontent.com/u/6052309?v=3" width="100px;"/><br /><sub>Ciro</sub>](https://www.linkedin.com/in/ciro-ivan-agulló-guarinos-42109376)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=k1r0s "Code") [🔧](#tool-k1r0s "Tools") | [<img src="https://avatars.githubusercontent.com/u/947523?v=3" width="100px;"/><br /><sub>Marius Schulz</sub>](https://blog.mariusschulz.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=mariusschulz "Documentation") | [<img src="https://avatars.githubusercontent.com/u/4152819?v=3" width="100px;"/><br /><sub>Alexander Odell</sub>](https://github.com/alextrastero)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=alextrastero "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/8728882?v=3" width="100px;"/><br /><sub>Ryan Ham</sub>](https://github.com/superamadeus)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=superamadeus "Code") | [<img src="https://avatars1.githubusercontent.com/u/8458838?v=3" width="100px;"/><br /><sub>Chi</sub>](https://consiiii.me)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=ChinW "Code") [🔧](#tool-ChinW "Tools") [📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=ChinW "Documentation") | [<img src="https://avatars2.githubusercontent.com/u/2856501?v=3" width="100px;"/><br /><sub>Matt Mazzola</sub>](https://github.com/mattmazzola)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=mattmazzola "Code") [🔧](#tool-mattmazzola "Tools") | [<img src="https://avatars0.githubusercontent.com/u/2664047?v=3" width="100px;"/><br /><sub>Sergii Lischuk</sub>](http://leefrost.github.io)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=Leefrost "Code") |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| [<img src="https://avatars1.githubusercontent.com/u/618922?v=3" width="100px;"/><br /><sub>Steve Lee</sub>](http;//opendirective.com)<br />[🔧](#tool-SteveALee "Tools") | [<img src="https://avatars0.githubusercontent.com/u/5127501?v=3" width="100px;"/><br /><sub>Flavio Corpa</sub>](http://flaviocorpa.com)<br />[💻](https://github.com/alexjoverm/typescript-library-starter/commits?author=kutyel "Code") | [<img src="https://avatars2.githubusercontent.com/u/22561997?v=3" width="100px;"/><br /><sub>Dom</sub>](https://github.com/foreggs)<br />[🔧](#tool-foreggs "Tools") | [<img src="https://avatars1.githubusercontent.com/u/755?v=4" width="100px;"/><br /><sub>Alex Coles</sub>](http://alexbcoles.com)<br />[📖](https://github.com/alexjoverm/typescript-library-starter/commits?author=myabc "Documentation") |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
