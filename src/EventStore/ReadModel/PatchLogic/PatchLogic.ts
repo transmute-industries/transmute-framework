@@ -1,22 +1,22 @@
-import { ITransmuteFramework } from "../../../TransmuteFramework"
+import { ITransmuteFramework } from "../../../transmute-framework";
 
-import * as Common from "../../Utils/Common"
-import { ReadModel } from "../ReadModel"
+import * as Common from "../../Utils/Common";
+import { ReadModel } from "../ReadModel";
 
-const jsonLogic = require("json-logic-js")
+const jsonLogic = require("json-logic-js");
 
 export class PatchLogic extends ReadModel {
   constructor(public framework: ITransmuteFramework) {
-    super(framework)
+    super(framework);
   }
 
   applyJsonLogic = (rule, data) => {
-    return jsonLogic.apply(rule, data)
-  }
+    return jsonLogic.apply(rule, data);
+  };
 
   applyJsonLogicProjection = (jsonLogicRule, objectStates) => {
     return objectStates.map(objState => {
-      return this.applyJsonLogic(jsonLogicRule, objState)
-    })
-  }
+      return this.applyJsonLogic(jsonLogicRule, objState);
+    });
+  };
 }

@@ -1,42 +1,42 @@
-"use strict"
+"use strict";
 
-import { getFSAFromEventArgs, IFSAEvent } from "../Utils/Common"
+import { getFSAFromEventArgs, IFSAEvent } from "../Utils/Common";
 
 import {
   readModel as factoryReadModel,
   reducer as factoryReducer
-} from "./Reducer"
+} from "./Reducer";
 
-import { ITransmuteFramework } from "../../TransmuteFramework"
+import { ITransmuteFramework } from "../../transmute-framework";
 
-import * as Common from "../Utils/Common"
+import * as Common from "../Utils/Common";
 
-import { Permissions } from "../Permissions/Permissions"
+import { Permissions } from "../Permissions/Permissions";
 
 export class Factory extends Permissions {
   constructor(public framework: ITransmuteFramework) {
-    super(framework)
+    super(framework);
   }
 
   createEventStore = async (factory, fromAddress) => {
     let tx = await factory.createEventStore({
       from: fromAddress,
       gas: 4000000
-    })
+    });
 
-    let fsa = getFSAFromEventArgs(tx.logs[0].args)
+    let fsa = getFSAFromEventArgs(tx.logs[0].args);
     return {
       events: [fsa],
       tx: tx
-    }
-  }
+    };
+  };
 
   getAllEventStoreContractAddresses = async (factory, fromAddress) => {
     let addresses = await factory.getEventStores({
       from: fromAddress
-    })
-    return addresses
-  }
+    });
+    return addresses;
+  };
 
   getFactoryReadModel = async (factory: any, fromAddress: string) => {
     return this.framework.ReadModel.getCachedReadModel(
@@ -44,6 +44,6 @@ export class Factory extends Permissions {
       fromAddress,
       factoryReadModel,
       factoryReducer
-    )
-  }
+    );
+  };
 }

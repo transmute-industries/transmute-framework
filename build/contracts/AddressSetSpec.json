@@ -2553,8 +2553,15 @@
         "AddressSetLib": "0x75ed624ada7c9c810b10ec633e60c715f3c723fb"
       },
       "address": "0xffb177f059b3a641ee8f485ee578b98644415ba8"
+    },
+    "1506902567943": {
+      "events": {},
+      "links": {
+        "AddressSetLib": "0xd05e219abfcc7c70971830634ddeaf62b6e00621"
+      },
+      "address": "0xcee26a269dcd4e220d5c3fada79c48a39eddc886"
     }
   },
   "schemaVersion": "1.0.0",
-  "updatedAt": "2017-09-30T20:09:44.755Z"
+  "updatedAt": "2017-10-02T22:04:58.958Z"
 }

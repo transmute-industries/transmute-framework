@@ -1,13 +1,13 @@
-import * as _ from "lodash"
+import * as _ from "lodash";
 
-import { ITransmuteFramework } from "../../TransmuteFramework"
+import { ITransmuteFramework } from "../../transmute-framework";
 
-import * as Common from "../Utils/Common"
+import * as Common from "../Utils/Common";
 
 import {
   readModel as permissionsReadModel,
   reducer as permissionsReducer
-} from "./Reducer"
+} from "./Reducer";
 
 export interface IPermissions {
   setAddressRole: (
@@ -15,7 +15,7 @@ export interface IPermissions {
     fromAddress: string,
     targetAddress: string,
     targetRole: string
-  ) => Promise<any>
+  ) => Promise<any>;
 
   setGrant: (
     acc: any,
@@ -24,9 +24,9 @@ export interface IPermissions {
     resource: string,
     action: string,
     attributes: string[]
-  ) => Promise<any>
+  ) => Promise<any>;
 
-  getGrant: (acc: any, fromAddress: string, index: number) => Promise<any>
+  getGrant: (acc: any, fromAddress: string, index: number) => Promise<any>;
 
   canRoleActionResource: (
     acc: any,
@@ -34,12 +34,12 @@ export interface IPermissions {
     role: string,
     action: string,
     resource: string
-  ) => Promise<boolean>
+  ) => Promise<boolean>;
 
   getPermissionsReadModel: (
     acc: any,
     fromAddress: string
-  ) => Promise<Common.IReadModel>
+  ) => Promise<Common.IReadModel>;
 }
 
 export class Permissions implements IPermissions {
@@ -54,13 +54,13 @@ export class Permissions implements IPermissions {
     let tx = await acc.setAddressRole(targetAddress, targetRole, {
       from: fromAddress,
       gas: 4000000
-    })
-    let fsa = Common.getFSAFromEventArgs(tx.logs[0].args)
+    });
+    let fsa = Common.getFSAFromEventArgs(tx.logs[0].args);
     return {
       events: [fsa],
       tx: tx
-    }
-  }
+    };
+  };
 
   setGrant = async (
     acc: any,
@@ -73,22 +73,22 @@ export class Permissions implements IPermissions {
     let tx = await acc.setGrant(role, resource, action, attributes, {
       from: fromAddress,
       gas: 4000000
-    })
+    });
     // second event is EsEvent...
-    let fsa = Common.getFSAFromEventArgs(tx.logs[1].args)
+    let fsa = Common.getFSAFromEventArgs(tx.logs[1].args);
     return {
       events: [fsa],
       tx: tx
-    }
-  }
+    };
+  };
 
   getGrant = async (acc, fromAddress, index: number) => {
     let grantVals = await acc.getGrant.call(index, {
       from: fromAddress
-    })
-    let grant = Common.grantItemFromValues(grantVals)
-    return grant
-  }
+    });
+    let grant = Common.grantItemFromValues(grantVals);
+    return grant;
+  };
 
   canRoleActionResource = async (
     acc: any,
@@ -99,36 +99,36 @@ export class Permissions implements IPermissions {
   ): Promise<boolean> => {
     let vals = await acc.canRoleActionResource.call(role, action, resource, {
       from: fromAddress
-    })
-    return vals[0]
-  }
+    });
+    return vals[0];
+  };
 
   // NOT OPTIMIZED - WILL BE SLOW
   // NEED TO IMPLEMENT CACHIN...
   async getPermissionsReadModel(acc: any, fromAddress: string): Promise<any> {
     // console.log('getGrants...')
-    let events = await this.framework.EventStore.readFSAs(acc, fromAddress, 0)
+    let events = await this.framework.EventStore.readFSAs(acc, fromAddress, 0);
     // console.log(events)
     events = _.filter(events, (event: Common.IFSAEvent) => {
-      return event.type === "AC_GRANT_WRITTEN"
-    })
+      return event.type === "AC_GRANT_WRITTEN";
+    });
     events = events.map(async event => {
       event.payload.grant = await this.getGrant(
         acc,
         fromAddress,
         event.payload.index
-      )
-      event.meta.extended = ["grant"]
-      return event
-    })
-    events = await Promise.all(events)
+      );
+      event.meta.extended = ["grant"];
+      return event;
+    });
+    events = await Promise.all(events);
     let readModel = this.framework.ReadModel.readModelGenerator(
       permissionsReadModel,
       permissionsReducer,
       events
-    )
-    readModel.contractAddress = acc.address
-    readModel.readModelStoreKey = `${readModel.readModelType}:${readModel.contractAddress}`
-    return readModel
+    );
+    readModel.contractAddress = acc.address;
+    readModel.readModelStoreKey = `${readModel.readModelType}:${readModel.contractAddress}`;
+    return readModel;
   }
 }

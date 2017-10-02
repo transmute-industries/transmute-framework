@@ -6,9 +6,7 @@
   "main": "dist/transmute-framework.umd.js",
   "module": "dist/transmute-framework.es5.js",
   "typings": "dist/types/transmute-framework.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "author": "Orie Steele <orie@ohs.io>",
   "repository": {
     "type": "git",
@@ -21,7 +19,8 @@
   "scripts": {
     "lint": "tslint -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
-    "build": "tsc && rollup -c && rimraf compiled && typedoc --out dist/docs --target es6 --theme minimal src",
+    "build":
+      "tsc && rollup -c && rimraf compiled && typedoc --out dist/docs --target es6 --theme minimal src",
     "start": "tsc -w & rollup -c -w",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -29,19 +28,18 @@
     "deploy-docs": "ts-node tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release":
+      "semantic-release pre && npm publish && semantic-release post",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit": "lint-staged",
     "truffle:test": "truffle test",
     "truffle:migrate": "truffle migrate --network development --verbose-rpc",
     "ipfs": "npm run ipfs:allow && ipfs daemon",
-    "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'"
+    "ipfs:allow":
+      "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'"
   },
   "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "prettier --write --no-semi",
-      "git add"
-    ]
+    "{src,test}/**/*.ts": ["prettier --write --no-semi", "git add"]
   },
   "config": {
     "commitizen": {
@@ -49,25 +47,17 @@
     },
     "validate-commit-msg": {
       "types": "conventional-commit-types",
-      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+      "helpMessage":
+        "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
     }
   },
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/test/"
-    ],
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx)$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "json", "node"],
+    "coveragePathIgnorePatterns": ["/node_modules/", "/test/"],
     "coverageThreshold": {
       "global": {
         "branches": 90,
