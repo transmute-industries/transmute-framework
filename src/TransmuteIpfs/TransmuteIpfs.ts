@@ -144,8 +144,8 @@ export class TransmuteIpfsSingleton implements ITransmuteIpfs {
   // See https://github.com/cujojs/jiff
   statesToPatches(states) {
     return new Promise((resolve, reject) => {
-      let patches = [];
-      for (var i = 0; i <= states.length - 2; i++) {
+      let patches: any[] = [];
+      for (let i = 0; i <= states.length - 2; i++) {
         patches.push(jiff.diff(states[i], states[i + 1]));
       }
       resolve(patches);

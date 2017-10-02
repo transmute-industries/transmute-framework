@@ -200,7 +200,7 @@ export class EventStore {
     let currentEvent = (await eventStore.eventCount.call({
       from: fromAddress
     })).toNumber();
-    let eventPromises = [];
+    let eventPromises: any[] = [];
     while (eventId < currentEvent) {
       let fsa = await this.readFSA(eventStore, fromAddress, eventId);
       eventPromises.push(fsa);

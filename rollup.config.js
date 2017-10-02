@@ -1,10 +1,12 @@
-import resolve from "rollup-plugin-node-resolve"
-import commonjs from "rollup-plugin-commonjs"
-import sourceMaps from "rollup-plugin-sourcemaps"
-const pkg = require("./package.json")
-const camelCase = require("lodash.camelcase")
+import resolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
+import sourceMaps from "rollup-plugin-sourcemaps";
+import json from "rollup-plugin-json";
 
-const libraryName = "transmute-framework"
+const pkg = require("./package.json");
+const camelCase = require("lodash.camelcase");
+
+const libraryName = "transmute-framework";
 
 export default {
   input: `compiled/${libraryName}.js`,
@@ -19,6 +21,7 @@ export default {
     include: "compiled/**"
   },
   plugins: [
+    json({}),
     // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
     commonjs(),
     // Allow node_modules resolution, so you can use 'external' to control
@@ -29,4 +32,4 @@ export default {
     // Resolve source maps to the original source
     sourceMaps()
   ]
-}
+};
