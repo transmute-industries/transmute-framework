@@ -9,6 +9,7 @@ import * as Com from "./ECRecover/Common";
 
 export interface ISignatureWithMeta {
   messageBuffer: Buffer;
+  messageBufferHex: string;
   messageHex: string;
   signature: string;
   address: string;
@@ -30,9 +31,10 @@ export class Toolbox {
 
   public recover = async (
     address: string,
-    messageBuffer: Buffer,
+    messageBufferHex: string,
     signature: string
   ): Promise<string> => {
+    const messageBuffer = Buffer.from(messageBufferHex.substring(2), "hex");
     return await Com.recoverAddressFromSig(messageBuffer, signature);
   };
 

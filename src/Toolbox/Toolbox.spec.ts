@@ -32,7 +32,7 @@ describe("Toolbox", () => {
       let signatureWithMeta = await Toolbox.sign(account, message);
       let recoveredAddress = await Toolbox.recover(
         account,
-        signatureWithMeta.messageBuffer,
+        signatureWithMeta.messageBufferHex,
         signatureWithMeta.signature
       );
       expect(signatureWithMeta.address === recoveredAddress);
@@ -76,7 +76,7 @@ describe("Toolbox", () => {
       let signatureWithMeta = await Toolbox.sign(addr, "hello");
       let recoveredAddress = await Toolbox.recover(
         addr,
-        signatureWithMeta.messageBuffer,
+        signatureWithMeta.messageBufferHex,
         signatureWithMeta.signature
       );
       assert(recoveredAddress === addr);
@@ -97,7 +97,7 @@ describe("Toolbox", () => {
       );
       let recoveredAddress = await TransmuteFramework.Toolbox.recover(
         addr,
-        signatureWithMeta.messageBuffer,
+        signatureWithMeta.messageBufferHex,
         signatureWithMeta.signature
       );
       assert(recoveredAddress === addr);

@@ -93,8 +93,11 @@ export const getMessageSignatureWithMeta = async (
     isPrefixed = false;
   }
 
+  const finalMessageBuffer = isPrefixed ? prefixedMessageBuffer : messageBuffer;
+
   return {
-    messageBuffer: isPrefixed ? prefixedMessageBuffer : messageBuffer,
+    messageBuffer: finalMessageBuffer,
+    messageBufferHex: util.bufferToHex(finalMessageBuffer),
     messageHex: msgObj.msgHex,
     signature: sig,
     address,
