@@ -13,6 +13,8 @@ const accessControlArtifacts = require("../../build/contracts/RBAC");
 const eventStoreArtifacts = require("../../build/contracts/RBACEventStore");
 const eventStoreFactoryArtifacts = require("../../build/contracts/RBACEventStoreFactory");
 
+import * as Com from "./ECRecover/Common";
+
 describe("Toolbox", () => {
   let accountAddresses;
   let account: string;
@@ -24,53 +26,16 @@ describe("Toolbox", () => {
     account = accountAddresses[0];
   });
 
-  describe.only("sanity", () => {
-    it("raw operations succeed", async () => {
+  describe(".sign + .recover work", () => {
+    it("work as expected", async () => {
       let message = "hello";
-      let signature = (await new Promise((resolve, reject) => {
-        web3.eth.sign(
-          account,
-          "0x" + util.sha3(message),
-          (err: any, signature: string) => {
-            if (err) {
-              throw err;
-            }
-            resolve(signature);
-          }
-        );
-      })) as string;
-
-      let address = (await new Promise((resolve, reject) => {
-        let r = util.toBuffer(signature.slice(0, 66));
-        let s = util.toBuffer("0x" + signature.slice(66, 130));
-        let v = parseInt(signature.slice(130, 132), 16);
-        if ([0, 1].indexOf(v) !== -1) {
-          v += 27;
-        }
-        console.log(v);
-        let m = util.toBuffer(util.sha3(message));
-        let pub = util.ecrecover(m, v, r, s);
-        let recoveredAddress = "0x" + util.pubToAddress(pub).toString("hex");
-        resolve(recoveredAddress);
-      })) as string;
-
-      assert(address === account);
-    });
-  });
-
-  describe(".sign", () => {
-    it("returns a signature", async () => {
-      let signature = await Toolbox.sign(account, "hello");
-    });
-  });
-
-  describe(".recover", () => {
-    it("returns the address used for a hashed_message + signature", async () => {
-      let signature = await Toolbox.sign(account, "hello");
-      let addr = await Toolbox.recover(account, "hello", signature);
-
-      console.log(addr, account);
-      assert(addr === account);
+      let signatureWithMeta = await Toolbox.sign(account, message);
+      let recoveredAddress = await Toolbox.recover(
+        account,
+        signatureWithMeta.messageBuffer,
+        signatureWithMeta.signature
+      );
+      expect(signatureWithMeta.address === recoveredAddress);
     });
   });
 
@@ -108,8 +73,12 @@ describe("Toolbox", () => {
         esfa: eventStoreFactoryArtifacts
       });
       let addr = Toolbox.getDefaultAddressFromWallet(wallet);
-      let signature = await Toolbox.sign(addr, "hello");
-      let recoveredAddress = await Toolbox.recover(addr, "hello", signature);
+      let signatureWithMeta = await Toolbox.sign(addr, "hello");
+      let recoveredAddress = await Toolbox.recover(
+        addr,
+        signatureWithMeta.messageBuffer,
+        signatureWithMeta.signature
+      );
       assert(recoveredAddress === addr);
     });
 
@@ -122,11 +91,14 @@ describe("Toolbox", () => {
       config.wallet = wallet;
       TransmuteFramework.init(config);
       let addr = TransmuteFramework.Toolbox.getDefaultAddressFromWallet(wallet);
-      let signature = await TransmuteFramework.Toolbox.sign(addr, "hello");
+      let signatureWithMeta = await TransmuteFramework.Toolbox.sign(
+        addr,
+        "hello"
+      );
       let recoveredAddress = await TransmuteFramework.Toolbox.recover(
         addr,
-        "hello",
-        signature
+        signatureWithMeta.messageBuffer,
+        signatureWithMeta.signature
       );
       assert(recoveredAddress === addr);
     });

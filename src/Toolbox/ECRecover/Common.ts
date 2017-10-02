@@ -1,5 +1,6 @@
 import * as util from "ethereumjs-util";
 import * as _ from "lodash";
+
 export const getAddress = (web3: any) => {
   return new Promise((resolve, reject) => {
     web3.eth.getAccounts((err: any, addresses: string[]) => {
@@ -34,13 +35,13 @@ export const signMessage = (
     });
 };
 
-export const testRecover = (address: string, data: string, sig: string) => {
+export const recoverAddressFromSig = (messageBuffer: Buffer, sig: string) => {
   const { v, r, s } = util.fromRpcSig(sig);
-  const pubKey = util.ecrecover(data, v, r, s);
+  const pubKey = util.ecrecover(messageBuffer, v, r, s);
   const addrBuf = util.pubToAddress(pubKey);
   const addr = util.bufferToHex(addrBuf);
   // console.log(address, addr);
-  return address === addr;
+  return addr;
 };
 
 export const prepareStringForSigning = (value: string) => {
@@ -68,7 +69,7 @@ export const getMessageSignatureWithMeta = async (
   web3: string,
   address: string,
   message: string
-) => {
+): Promise<any> => {
   const msgObj = prepareStringForSigning(message);
 
   const sig = await signMessage(web3, address, msgObj.msgHex);
@@ -84,11 +85,11 @@ export const getMessageSignatureWithMeta = async (
 
   let isPrefixed;
 
-  if (testRecover(address, prefixedMessageBuffer, sig)) {
+  if (recoverAddressFromSig(prefixedMessageBuffer, sig) === address) {
     isPrefixed = true;
   }
 
-  if (testRecover(address, messageBuffer, sig)) {
+  if (recoverAddressFromSig(messageBuffer, sig) === address) {
     isPrefixed = false;
   }
 
