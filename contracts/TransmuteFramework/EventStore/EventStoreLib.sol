@@ -1,6 +1,33 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
 
-library EventStoreLib{
+/**
+ * @title Event Store Library
+ * @author Transmute Industries
+ *
+ * version 1.0.0
+ * Copyright (c) 2017 Transmute Industries, LLC
+ * The MIT License (MIT)
+ * https://github.com/transmute-industries/transmute-framework/blob/master/LICENSE
+ *
+ * The Event Store Library is inspired by event sourced applications and architecture.
+ *
+ * Transmute Industries works on open source projects in the Ethereum community with
+ * the purpose of testing, documenting, and deploying reusable code onto the
+ * blockchain to improve security, usability, and scalability of smart contracts.
+ * Transmute Industries also provides custom dApp development for enterprise built
+ * atop these open source projects.
+ * For further information: transmute.industries
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+library EventStoreLib {
 
     struct EsEventStruct {
         address TxOrigin;

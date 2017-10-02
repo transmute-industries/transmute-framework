@@ -1,9 +1,8 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
 
 import './UIntSetLib.sol';
-import '../../zeppelin/lifecycle/Killable.sol';
 
-contract UIntSetSpec is Killable {
+contract UIntSetSpec {
   using UIntSetLib for UIntSetLib.UIntSet;
 
   UIntSetLib.UIntSet testSet;

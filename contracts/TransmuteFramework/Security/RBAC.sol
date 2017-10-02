@@ -1,10 +1,38 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
+
+/**
+ * @title Role Based Access Controls Contract
+ * @author Transmute Industries
+ *
+ * version 1.0.0
+ * Copyright (c) 2017 Transmute Industries, LLC
+ * The MIT License (MIT)
+ * https://github.com/transmute-industries/transmute-framework/blob/master/LICENSE
+ *
+ * Role Based Access Controls is inspired by a need for a permissioning device for 
+ * smart contracts.
+ *
+ * Transmute Industries works on open source projects in the Ethereum community with
+ * the purpose of testing, documenting, and deploying reusable code onto the
+ * blockchain to improve security, usability, and scalability of smart contracts.
+ * Transmute Industries also provides custom dApp development for enterprise built
+ * atop these open source projects.
+ * For further information: transmute.industries
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
 import "../EventStore/EventStoreLib.sol";
 import "../SetLib/Bytes32Set/Bytes32SetLib.sol";
-import '../zeppelin/lifecycle/Killable.sol';
+import '../zeppelin/lifecycle/Destructible.sol';
 
-contract RBAC is Killable {
+contract RBAC is Destructible {
 
   using Bytes32SetLib for Bytes32SetLib.Bytes32Set;
   using EventStoreLib for EventStoreLib.EsEventStorage;
@@ -30,12 +58,12 @@ contract RBAC is Killable {
   );
 
   // FALLBACK
-  function () payable { throw; }
+  function () payable { revert(); }
   
   // CONSTRUCTOR  
   function RBAC() payable {
-    internalEventTypes.add(bytes32('AC_ROLE_ASSIGNED'));
-    internalEventTypes.add(bytes32('AC_GRANT_WRITTEN'));
+    internalEventTypes.add(bytes32("AC_ROLE_ASSIGNED"));
+    internalEventTypes.add(bytes32("AC_GRANT_WRITTEN"));
   }
 
   function eventCount() 
@@ -48,8 +76,8 @@ contract RBAC is Killable {
   {
     // only the owner can setGrants for the grant resource (no write up)
     // just because an account can setGrants does not mean they can give that ability to others...
-    if (resource == 'grant') {
-      require(msg.sender == owner);
+    if (resource == "grant") {
+      assert(msg.sender == owner);
     }
     if (msg.sender == owner) {
       _;
@@ -57,15 +85,8 @@ contract RBAC is Killable {
       bytes32 role = addressRole[msg.sender];
       var (granted, _role, _resource) = canRoleActionResource(role, action, resource);
       // DEBUG(granted);
-      if(granted){
-        _;
-      } else {
-        throw;
-      }
+      assert(granted);
     }
-    // throw;
-    // require(msg.sender == owner);
-    // _;
   }
 
   function setAddressRole(address target, bytes32 role)
@@ -73,7 +94,7 @@ contract RBAC is Killable {
   onlyOwner
   {
     addressRole[target] = role;
-    writeInternalEvent('AC_ROLE_ASSIGNED', 'A', 'X', bytes32(target), role);
+    writeInternalEvent("AC_ROLE_ASSIGNED", "A", "X", bytes32(target), role);
   }
 
   function getAddressRole(address target)
@@ -83,7 +104,7 @@ contract RBAC is Killable {
     // if not the owner or the requesting address, do not return the role for the given address
     // EVENT SOURCING DESTOYS THIS PRIVACY
     // IS IT OK THAT ANY ADDRESS ROLE CAN BE KNOWN?
-    require(msg.sender == owner || msg.sender == target);
+    assert(msg.sender == owner || msg.sender == target);
     return addressRole[target];
   }
   
@@ -106,7 +127,7 @@ contract RBAC is Killable {
     grants.push(grant);
     GrantEvent(role, resource, action, attributes);
     isHashOfRoleActionResourceGranted[keccak256(role, action, resource)] = attributes.length != 0;
-    writeInternalEvent('AC_GRANT_WRITTEN', 'X', 'U', 'index', bytes32(grants.length-1));
+    writeInternalEvent("AC_GRANT_WRITTEN", "X", "U", "index", bytes32(grants.length-1));
   }
 
   function getGrant(uint index)
@@ -183,5 +204,4 @@ contract RBAC is Killable {
     bytes32 action, 
     bytes32[] attributes
   );
-
 }

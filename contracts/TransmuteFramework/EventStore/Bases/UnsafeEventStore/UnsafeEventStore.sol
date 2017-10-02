@@ -1,17 +1,17 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
 
 
 import "../../EventStoreLib.sol";
-import '../../../zeppelin/lifecycle/Killable.sol';
+import '../../../zeppelin/lifecycle/Destructible.sol';
 
-contract UnsafeEventStore is Killable {
+contract UnsafeEventStore is Destructible {
   using EventStoreLib for EventStoreLib.EsEventStorage;
 
   EventStoreLib.EsEventStorage store;
   address public creator;
 
   // FALLBACK
-  function () payable { throw; }
+  function () payable { revert(); }
   
   // CONSTRUCTOR  
   function UnsafeEventStore() payable {

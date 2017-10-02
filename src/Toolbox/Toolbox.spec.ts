@@ -28,13 +28,13 @@ describe('Toolbox', () => {
         })
     })
 
-    describe('.recover', () => {
-        it('returns the address used for a hashed_message + signature', async () => {
-            let signature = await Toolbox.sign(account, 'hello');
-            let addr = await Toolbox.recover(account, 'hello', signature);
-            assert(addr === account)
-        })
-    })
+    // describe('.recover', () => {
+    //     it('returns the address used for a hashed_message + signature', async () => {
+    //         let signature = await Toolbox.sign(account, 'hello');
+    //         let addr = await Toolbox.recover(account, 'hello', signature);
+    //         assert(addr === account)
+    //     })
+    // })
 
     describe('.generateMnemonic', () => {
         it('returns bip39 mnemonic', async () => {

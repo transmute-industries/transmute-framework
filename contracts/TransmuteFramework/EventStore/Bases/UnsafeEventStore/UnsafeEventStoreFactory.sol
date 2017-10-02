@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
 
 import "./UnsafeEventStore.sol";
 import "../../../SetLib/AddressSet/AddressSetLib.sol";
@@ -11,19 +11,15 @@ contract UnsafeEventStoreFactory is UnsafeEventStore {
   AddressSetLib.AddressSet EventStoreAddresses;
 
   // Fallback Function
-  function () payable { throw; }
+  function () payable { revert(); }
 
   // Constructor
-  function UnsafeEventStoreFactory()
-  payable
-  {
-
-  }
+  function UnsafeEventStoreFactory() payable {}
 
   // Modifiers
-  modifier checkExistence(address _EventStoreAddress)
+  modifier checkExistence(address _eventStoreAddress)
   {
-    require(EventStoreAddresses.contains(_EventStoreAddress));
+    require(EventStoreAddresses.contains(_eventStoreAddress));
     _;
   }
 
@@ -54,7 +50,7 @@ contract UnsafeEventStoreFactory is UnsafeEventStore {
     EventStoreAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
-    writeEvent('ES_CREATED', 'X', 'A', 'address', bytes32(address(_newEventStore)));
+    writeEvent("ES_CREATED", "X", "A", "address", bytes32(address(_newEventStore)));
 
     return address(_newEventStore);
 	}
@@ -62,18 +58,16 @@ contract UnsafeEventStoreFactory is UnsafeEventStore {
   function killEventStore(address _address)
     public
     checkExistence(_address)
+    onlyOwner()
   {
-    // Validate Local State - Only the Factory owner can destroy stores with this method
-    require(this.owner() == msg.sender);
-
     UnsafeEventStore _eventStore = UnsafeEventStore(_address);
 
     // Update Local State
     creatorEventStoreMapping[_eventStore.owner()].remove(_address);
     EventStoreAddresses.remove(_address);
 
-    _eventStore.kill();
+    _eventStore.destroy();
 
-    writeEvent('ES_DESTROYED', 'X', 'A', 'address', bytes32(_address));
+    writeEvent("ES_DESTROYED", "X", "A", "address", bytes32(_address));
   }
 }

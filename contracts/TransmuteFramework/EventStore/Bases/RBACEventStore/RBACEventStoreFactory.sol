@@ -9,10 +9,11 @@ contract RBACEventStoreFactory is RBAC {
   AddressSetLib.AddressSet storeAddresses;
 
   // Fallback Function
-  function () payable { throw; }
+  function () public payable { revert(); }
 
   // Constructor
   function RBACEventStoreFactory()
+  public
   payable
   {
 
@@ -34,9 +35,9 @@ contract RBACEventStoreFactory is RBAC {
   
 
   // Modifiers
-  modifier checkExistence(address _EventStoreAddress)
+  modifier checkExistence(address _eventStoreAddress)
   {
-    require(storeAddresses.contains(_EventStoreAddress));
+    require(storeAddresses.contains(_eventStoreAddress));
     _;
   }
 
@@ -64,8 +65,8 @@ contract RBACEventStoreFactory is RBAC {
 
     var (granted,,) = canRoleActionResource(txOriginRole, bytes32("create:any"), bytes32("eventstore"));
 
-    if (msg.sender != owner && !granted){
-      throw;
+    if (msg.sender != owner && !granted) {
+      revert();
     }
     // Interact With Other Contracts
     RBACEventStore _newEventStore = new RBACEventStore();
@@ -74,7 +75,7 @@ contract RBACEventStoreFactory is RBAC {
     storeAddresses.add(address(_newEventStore));
     creatorEventStoreMapping[msg.sender].add(address(_newEventStore));
 
-    writeInternalEvent('ES_CREATED', 'X', 'A', 'address', bytes32(address(_newEventStore)));
+    writeInternalEvent("ES_CREATED", "X", "A", "address", bytes32(address(_newEventStore)));
 
     return address(_newEventStore);
     
@@ -84,18 +85,16 @@ contract RBACEventStoreFactory is RBAC {
   function killEventStore(address _address)
     public
     checkExistence(_address)
+    onlyOwner()
   {
-    // Validate Local State - Only the Factory owner can destroy stores with this method
-    require(this.owner() == msg.sender);
-
     RBACEventStore _eventStore = RBACEventStore(_address);
 
     // Update Local State
     creatorEventStoreMapping[_eventStore.owner()].remove(_address);
     storeAddresses.remove(_address);
 
-    _eventStore.kill();
+    _eventStore.destroy();
 
-    writeInternalEvent('ES_DESTROYED', 'X', 'A', 'address', bytes32(_address));
+    writeInternalEvent("ES_DESTROYED", "X", "A", "address", bytes32(_address));
   }
 }

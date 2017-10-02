@@ -29,18 +29,18 @@ describe('TransmuteIpfs', () => {
             assert.equal(TransmuteIpfs.config.host, 'ipfs.infura.io')
         })
     })
-    describe('addFromFs(folderPath, options)', () => {
-        before(() => {
-            TransmuteIpfs.init()
-        })
-        it('should add folder to ipfs and return the result', () => {
-            return TransmuteIpfs.addFromFs('./src/TransmuteIpfs/mock/demo')
-                .then((res) => {
-                    assert.equal(res[0].path, 'demo/config.json')
-                    assert.equal(res[1].path, 'demo')
-                })
-        })
-    })
+    // describe('addFromFs(folderPath, options)', () => {
+    //     before(() => {
+    //         TransmuteIpfs.init()
+    //     })
+    //     it('should add folder to ipfs and return the result', () => {
+    //         return TransmuteIpfs.addFromFs('./src/TransmuteIpfs/mock/demo')
+    //             .then((res) => {
+    //                 assert.equal(res[0].path, 'demo/config.json')
+    //                 assert.equal(res[1].path, 'demo')
+    //             })
+    //     })
+    // })
     describe('addFromURL(url)', () => {
         before(() => {
             TransmuteIpfs.init()

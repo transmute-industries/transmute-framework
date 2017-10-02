@@ -1,12 +1,11 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
 
-import '../../../zeppelin/lifecycle/Killable.sol';
 import '../../../Security/RBAC.sol';
 
 contract RBACEventStore is RBAC {
 
   // FALLBACK
-  function () payable { throw; }
+  function () payable { revert(); }
   
   // CONSTRUCTOR  
   function RBACEventStore() payable {
@@ -32,8 +31,8 @@ contract RBACEventStore is RBAC {
     // Check access control here before writing events...
     bytes32 txOriginRole = getAddressRole(msg.sender);
     var (granted,,) = canRoleActionResource(txOriginRole, bytes32("create:any"), bytes32("event"));
-    if (msg.sender != owner && !granted){
-      throw;
+    if (msg.sender != owner && !granted) {
+      revert();
     }
     return EventStoreLib.writeEvent(
       store, 

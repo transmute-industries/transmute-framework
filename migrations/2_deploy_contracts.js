@@ -1,7 +1,5 @@
 var Ownable = artifacts.require('./TransmuteFramework/zeppelin/ownership/Ownable.sol')
-var Killable = artifacts.require('./TransmuteFramework/zeppelin/lifecycle/Killable.sol')
-
-var StringUtils = artifacts.require("./TransmuteFramework/Utils/StringUtils.sol")
+var Destructible = artifacts.require('./TransmuteFramework/zeppelin/lifecycle/Destructible.sol')
 
 var AddressSetLib = artifacts.require("./TransmuteFramework/SetLib/AddressSet/AddressSetLib.sol")
 var AddressSetSpec = artifacts.require("./TransmuteFramework/SetLib/AddressSet/AddressSetSpec.sol")
@@ -11,7 +9,6 @@ var Bytes32SetSpec = artifacts.require("./TransmuteFramework/SetLib/Bytes32Set/B
 
 var UIntSetLib = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSetLib.sol")
 var UIntSetSpec = artifacts.require("./TransmuteFramework/SetLib/UIntSet/UIntSetSpec.sol")
-
 
 var RBAC = artifacts.require('./TransmuteFramework/RBAC.sol')
 
@@ -23,27 +20,20 @@ var UnsafeEventStoreFactory = artifacts.require('./TransmuteFramework/EventStore
 var RBACEventStore = artifacts.require('./TransmuteFramework/EventStore/RBACEventStore/RBACEventStore.sol')
 var RBACEventStoreFactory = artifacts.require('./TransmuteFramework/EventStore/RBACEventStore/RBACEventStoreFactory.sol')
 
-
-
 module.exports = function(deployer) {
-  deployer.deploy(StringUtils)
-
   deployer.deploy(Ownable)
-  deployer.link(Ownable, Killable)
-  deployer.deploy(Killable)
+  deployer.link(Ownable, Destructible)
+  deployer.deploy(Destructible)
 
   deployer.deploy(AddressSetLib)
-  deployer.link(Killable, AddressSetSpec)
   deployer.link(AddressSetLib, AddressSetSpec)
   deployer.deploy(AddressSetSpec)
 
   deployer.deploy(Bytes32SetLib)
-  deployer.link(Killable, Bytes32SetSpec)
   deployer.link(Bytes32SetLib, Bytes32SetSpec)
   deployer.deploy(Bytes32SetSpec)
 
   deployer.deploy(UIntSetLib)
-  deployer.link(Killable, UIntSetLib)
   deployer.link(UIntSetLib, UIntSetSpec)
   deployer.deploy(UIntSetSpec)
 
@@ -51,7 +41,7 @@ module.exports = function(deployer) {
   
   deployer.link(EventStoreLib, UnsafeEventStore)
   deployer.link(AddressSetLib, UnsafeEventStore)
-  deployer.link(Killable, UnsafeEventStore)
+  deployer.link(Destructible, UnsafeEventStore)
   deployer.deploy(UnsafeEventStore)
 
   deployer.link(EventStoreLib, UnsafeEventStoreFactory)
@@ -62,7 +52,6 @@ module.exports = function(deployer) {
   deployer.link(EventStoreLib, RBAC)
   deployer.link(Bytes32SetLib, RBAC)
   deployer.deploy(RBAC)
-
 
   deployer.link(EventStoreLib, RBACEventStore)
   deployer.link(Bytes32SetLib, RBACEventStore)

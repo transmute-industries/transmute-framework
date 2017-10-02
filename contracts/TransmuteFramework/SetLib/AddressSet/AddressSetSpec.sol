@@ -1,9 +1,8 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
 
 import './AddressSetLib.sol';
-import '../../zeppelin/lifecycle/Killable.sol';
 
-contract AddressSetSpec is Killable {
+contract AddressSetSpec {
   using AddressSetLib for AddressSetLib.AddressSet;
 
   AddressSetLib.AddressSet testSet;

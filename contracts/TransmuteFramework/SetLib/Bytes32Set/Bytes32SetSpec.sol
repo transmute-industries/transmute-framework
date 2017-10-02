@@ -1,9 +1,8 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.4.13;
 
 import './Bytes32SetLib.sol';
-import '../../zeppelin/lifecycle/Killable.sol';
 
-contract Bytes32SetSpec is Killable {
+contract Bytes32SetSpec {
   using Bytes32SetLib for Bytes32SetLib.Bytes32Set;
 
   Bytes32SetLib.Bytes32Set testSet;
