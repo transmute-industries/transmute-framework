@@ -4,7 +4,7 @@ import TransmuteFramework from '../../transmute-framework'
 
 const { web3, EventStoreFactoryContract, ReadModel } = TransmuteFramework.init()
 
-import { expect } from 'chai'
+import { expect, assert } from 'chai'
 
 // import { EventStoreFactory } from './EventStoreFactory'
 
