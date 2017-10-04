@@ -22,16 +22,13 @@
     "truffle",
     "transmute"
   ],
-  "contributors": [
-    "Eric Olszewski <eric@transmute.industries>",
-    "Orie Steele <orie@transmute.industries>"
-  ],
+  "contributors": ["Eric Olszewski <eric@transmute.industries>", "Orie Steele <orie@transmute.industries>"],
   "license": "MIT",
   "engines": {
     "node": ">=6.9"
   },
   "scripts": {
-    "cleanup": "shx rm -rf umd lib lib-esm lib-fesm typings coverage docs",
+    "cleanup": "shx rm -rf umd lib lib-esm lib-fesm typings coverage docs build",
     "prebuild": "npm run cleanup && npm run verify",
     "build": " tsc && tsc --target es2017 --outDir lib-esm && webpack && webpack --env.prod",
     "build:fesm:min": "uglifyjs lib-fesm/index.js --compress --mangle --source-map --output lib-fesm/index.min.js",
@@ -68,26 +65,15 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "npm run prettier:ts -- --write",
-      "git add"
-    ]
+    "src/**/*.{ts,tsx}": ["npm run prettier:ts -- --write", "git add"]
   },
   "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
+    "roots": ["<rootDir>/src"],
     "transform": {
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "json", "node"],
     "mapCoverage": true,
     "coveragePathIgnorePatterns": [
       "<rootDir>/node_modules/",
