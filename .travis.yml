@@ -19,9 +19,9 @@ before_install:
   - ipfs init
   - ipfs daemon &
   - sleep 5
+  - npm install -g yarn
 
 install:
-  - npm install -g yarn
   - yarn install
   - yarn testrpc:start
   - sleep 2
