@@ -2553,8 +2553,15 @@
         "Bytes32SetLib": "0xdef9e692e8e94fe12757a6cea4e81fa057bde09f"
       },
       "address": "0x0f0a5a7f83d1c38013ba3c9dd2122a5326e80d4d"
+    },
+    "1507082538212": {
+      "events": {},
+      "links": {
+        "Bytes32SetLib": "0xc478457d000c1ea1b53d98a10301cdb860670f29"
+      },
+      "address": "0xbaf78e0c2cf685c1a9c94978e28464b0a5de7523"
     }
   },
   "schemaVersion": "1.0.0",
-  "updatedAt": "2017-10-04T01:36:49.867Z"
+  "updatedAt": "2017-10-04T02:03:51.493Z"
 }
