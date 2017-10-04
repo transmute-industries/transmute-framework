@@ -22,7 +22,10 @@
     "truffle",
     "transmute"
   ],
-  "contributors": ["Eric Olszewski <eric@transmute.industries>", "Orie Steele <orie@transmute.industries>"],
+  "contributors": [
+    "Eric Olszewski <eric@transmute.industries>",
+    "Orie Steele <orie@transmute.industries>"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=6.9"
@@ -32,8 +35,7 @@
     "prebuild": "npm run cleanup && npm run verify",
     "build": " tsc && tsc --target es2017 --outDir lib-esm && webpack && webpack --env.prod",
     "build:fesm:min": "uglifyjs lib-fesm/index.js --compress --mangle --source-map --output lib-fesm/index.min.js",
-    "docs":
-      "typedoc -p . --gaID UA-99768185-1  --theme minimal --target 'es6' --excludeNotExported --excludePrivate --ignoreCompilerErrors --exclude \"**/src/**/*.spec.*\" --out docs src/ && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html",
+    "docs": "typedoc -p . --gaID UA-99768185-1  --theme minimal --target 'es6' --excludeNotExported --excludePrivate --ignoreCompilerErrors --exclude \"**/src/**/*.spec.*\" --out docs src/ && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html",
     "docs:deploy": "firebase deploy",
     "ipfs": "npm run ipfs:allow && ipfs daemon",
     "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'",
@@ -42,6 +44,8 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "test:coverage": "npm test -- --coverage",
+    "testrpc:start": "pm2 start testrpc",
+    "testrpc:stop": "pm2 stop testrpc",
     "verify": "npm run test:coverage",
     "cz": "git-cz",
     "prettier:ts": "prettier --single-quote --print-width 120 --trailing-comma es5 --no-semi --parser typescript",
@@ -67,15 +71,27 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": ["npm run prettier:ts -- --write", "ts:lint:fix", "git add"]
+    "src/**/*.{ts,tsx}": [
+      "npm run prettier:ts -- --write",
+      "ts:lint:fix",
+      "git add"
+    ]
   },
   "jest": {
-    "roots": ["<rootDir>/src"],
+    "roots": [
+      "<rootDir>/src"
+    ],
     "transform": {
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "json", "node"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
     "mapCoverage": true,
     "coveragePathIgnorePatterns": [
       "<rootDir>/node_modules/",
@@ -123,6 +139,7 @@
     "irish-pub": "0.2.0",
     "jest": "^21.2.1",
     "lint-staged": "4.0.0",
+    "pm2": "2.7.1",
     "prettier": "1.5.2",
     "shx": "0.2.2",
     "standard-version": "4.2.0",
