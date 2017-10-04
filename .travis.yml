@@ -21,10 +21,12 @@ before_install:
   - sleep 5
 
 install:
-  - npm install
-  - npm run testrpc:start
+  - npm install -g yarn
+  - yarn install
+  - yarn testrpc:start
+  - sleep 2
 
 script:
-  - npm run truffle:migrate
-  - npm run test:coverage
-  - npm run test:coverage:report
+  - yarn truffle:migrate
+  - yarn test:coverage
+  - yarn test:coverage:report
