@@ -25,5 +25,6 @@ install:
   - npm run testrpc:start
 
 script:
+  - npm run truffle:migrate
   - npm run build
   - npm run test:coverage:report
