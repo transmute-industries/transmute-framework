@@ -22,7 +22,7 @@ before_install:
 
 install:
   - npm install
-  - npm run testrpc
+  - npm run testrpc:start
 
 script:
   - npm run build
