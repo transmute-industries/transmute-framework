@@ -15,7 +15,7 @@
 // describe("Persistence.FireStore", () => {
 
 //     describe(".init", () => {
-//         it("should use transmute-framework firebase by default", () => {
+//         it("should use TransmuteFramework firebase by default", () => {
 //             let db = Persistence.FireStore.init()
 //             firebase.app('[DEFAULT]').delete();
 //         })

@@ -1,8 +1,8 @@
-const FallbackStorage = require("@conclurer/local-storage-fallback");
+import storage from "local-storage-fallback";
 
 export namespace LocalStorage {
   // Auto detect supported storage adapter (default behavior)
-  let store = new FallbackStorage();
+  let store = storage;
 
   /**
      * @param {String} key - a key for a stored object

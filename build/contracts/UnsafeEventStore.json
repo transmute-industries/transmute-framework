@@ -198,30 +198,30 @@
       "type": "event"
     }
   ],
-  "bytecode": "0x60606040525b5b60008054600160a060020a03191633600160a060020a03161790555b60028054600160a060020a03191632600160a060020a03161790555b5b6104548061004e6000396000f300606060405236156100675763ffffffff60e060020a60003504166302d05d3f811461006f57806335628b381461009e57806341c0e1b5146100f757806371be2e4a1461010c5780638da5cb5b14610131578063e1ba30a914610160578063f2fde38b146101e7575b5b600080fd5b005b341561007a57600080fd5b610082610208565b604051600160a060020a03909116815260200160405180910390f35b34156100a957600080fd5b6100e56004357fff0000000000000000000000000000000000000000000000000000000000000060243581169060443516606435608435610217565b60405190815260200160405180910390f35b341561010257600080fd5b61006d6102df565b005b341561011757600080fd5b6100e56102ef565b60405190815260200160405180910390f35b341561013c57600080fd5b6100826102f6565b604051600160a060020a03909116815260200160405180910390f35b341561016b57600080fd5b610176600435610305565b604051978852600160a060020a03909616602088015260408088019590955260608701939093527fff0000000000000000000000000000000000000000000000000000000000000091821660808701521660a085015260c084015260e0830191909152610100909101905180910390f35b34156101f257600080fd5b61006d600160a060020a03600435166103d3565b005b600254600160a060020a031681565b600073__EventStoreLib_________________________633bb642036001888888888860006040516020015260405160e060020a63ffffffff8916028152600481019690965260248601949094527fff00000000000000000000000000000000000000000000000000000000000000928316604486015291166064840152608483015260a482015260c40160206040518083038186803b15156102b957600080fd5b6102c65a03f415156102ca57600080fd5b50505060405180519150505b95945050505050565b600054600160a060020a0316ff5b565b6001545b90565b600054600160a060020a031681565b60008060008060008060008073__EventStoreLib_________________________63a057fd5e60018b6000604051610100015260405160e060020a63ffffffff8516028152600481019290925260248201526044016101006040518083038186803b151561037257600080fd5b6102c65a03f4151561038357600080fd5b50505060405180519060200180519060200180519060200180519060200180519060200180519060200180519060200180519050975097509750975097509750975097505b919395975091939597565b60005433600160a060020a039081169116141561042257600160a060020a03811615610422576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a723058201567917be2097e224557db162bf2d3caf8232fe2b2e1862f87eee4dcdeb5b54c0029",
-  "deployedBytecode": "0x606060405236156100675763ffffffff60e060020a60003504166302d05d3f811461006f57806335628b381461009e57806341c0e1b5146100f757806371be2e4a1461010c5780638da5cb5b14610131578063e1ba30a914610160578063f2fde38b146101e7575b5b600080fd5b005b341561007a57600080fd5b610082610208565b604051600160a060020a03909116815260200160405180910390f35b34156100a957600080fd5b6100e56004357fff0000000000000000000000000000000000000000000000000000000000000060243581169060443516606435608435610217565b60405190815260200160405180910390f35b341561010257600080fd5b61006d6102df565b005b341561011757600080fd5b6100e56102ef565b60405190815260200160405180910390f35b341561013c57600080fd5b6100826102f6565b604051600160a060020a03909116815260200160405180910390f35b341561016b57600080fd5b610176600435610305565b604051978852600160a060020a03909616602088015260408088019590955260608701939093527fff0000000000000000000000000000000000000000000000000000000000000091821660808701521660a085015260c084015260e0830191909152610100909101905180910390f35b34156101f257600080fd5b61006d600160a060020a03600435166103d3565b005b600254600160a060020a031681565b600073__EventStoreLib_________________________633bb642036001888888888860006040516020015260405160e060020a63ffffffff8916028152600481019690965260248601949094527fff00000000000000000000000000000000000000000000000000000000000000928316604486015291166064840152608483015260a482015260c40160206040518083038186803b15156102b957600080fd5b6102c65a03f415156102ca57600080fd5b50505060405180519150505b95945050505050565b600054600160a060020a0316ff5b565b6001545b90565b600054600160a060020a031681565b60008060008060008060008073__EventStoreLib_________________________63a057fd5e60018b6000604051610100015260405160e060020a63ffffffff8516028152600481019290925260248201526044016101006040518083038186803b151561037257600080fd5b6102c65a03f4151561038357600080fd5b50505060405180519060200180519060200180519060200180519060200180519060200180519060200180519060200180519050975097509750975097509750975097505b919395975091939597565b60005433600160a060020a039081169116141561042257600160a060020a03811615610422576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a723058201567917be2097e224557db162bf2d3caf8232fe2b2e1862f87eee4dcdeb5b54c0029",
-  "sourceMap": "113:1193:3:-;;;346:66;243:48:15;268:5;:18;;-1:-1:-1;;;;;;268:18:15;276:10;-1:-1:-1;;;;;268:18:15;;;;243:48;388:7:3;:19;;-1:-1:-1;;;;;;388:19:3;398:9;-1:-1:-1;;;;;388:19:3;;;;346:66;113:1193;;;;;;;",
-  "deployedSourceMap": "113:1193:3:-;;;;;;;-1:-1:-1;;;113:1193:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;291:30;313:5;;;291:30;113:1193;250:22;;;;;;;;;;;;;;;-1:-1:-1;;;;;250:22:3;;;;;;;;;;;;;;;499:364;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;209:46:14;;;;;;;;;;;;;;416:79:3;;;;;;;;;;;;;;;;;;;;;;;;;;;218:20:15;;;;;;;;;;;;;;;-1:-1:-1;;;;;218:20:15;;;;;;;;;;;;;;;883:242:3;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;883:242:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;883:242:3;;;;;;;;;;;;;;;;;;;;;;;;;363:110:15;;;;;;;;;;;;-1:-1:-1;;;;;363:110:15;;;;;250:22:3;;;-1:-1:-1;;;;;250:22:3;;:::o;499:364::-;656:4;735:13;:24;767:5;781:10;800:8;816:10;834:4;846:6;735:123;;;;;;;;;;;-1:-1:-1;;;735:123:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;499:364:3;;;;;;;;:::o;209:46:14:-;244:5;;-1:-1:-1;;;;;244:5:14;231:19;209:46;:::o;416:79:3:-;471:5;:19;416:79;;:::o;218:20:15:-;;;-1:-1:-1;;;;;218:20:15;;:::o;883:242:3:-;950:4;963:7;979:4;992:7;1008:6;1022;1036:7;1051;1080:13;:23;1104:5;1111:8;1080:40;;;;;;;;;;;-1:-1:-1;;;1080:40:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1073:47;;;;;;;;;;;;;;;;883:242;;;;;;;;;;:::o;363:110:15:-;340:5;;326:10;-1:-1:-1;;;;;326:19:15;;;340:5;;326:19;322:32;;;-1:-1:-1;;;;;428:22:15;;;424:44;;452:5;:16;;-1:-1:-1;;452:16:15;-1:-1:-1;;;;;452:16:15;;;;;424:44;353:1;322:32;363:110;;:::o",
-  "source": "pragma solidity ^0.4.11;\n\n\nimport \"../../EventStoreLib.sol\";\nimport '../../../zeppelin/lifecycle/Killable.sol';\n\ncontract UnsafeEventStore is Killable {\n  using EventStoreLib for EventStoreLib.EsEventStorage;\n\n  EventStoreLib.EsEventStorage store;\n  address public creator;\n\n  // FALLBACK\n  function () payable { throw; }\n  \n  // CONSTRUCTOR  \n  function UnsafeEventStore() payable {\n    creator = tx.origin;\n  }\n\n  function eventCount() \n  returns (uint)\n  {\n    return store.events.length;\n  }\n\n  function writeEvent(\n    bytes32 _eventType, \n    bytes1 _keyType,\n    bytes1 _valueType,\n    bytes32 _key,\n    bytes32 _value\n  ) \n    public \n    returns (uint)\n  {\n    // Check access control here before writing events...\n    return EventStoreLib.writeEvent(\n      store, \n      _eventType, \n      _keyType,\n      _valueType,\n      _key,\n      _value\n    );\n  }\n\n  // READ EVENT\n  function readEvent(uint _eventId) \n    public \n    returns (\n      uint, \n      address, \n      uint, \n      bytes32, \n      bytes1,\n      bytes1,\n      bytes32,\n      bytes32\n    )\n  {\n    return EventStoreLib.readEvent(store, _eventId);\n  }\n\n  event EsEvent(\n    uint Id,\n    address TxOrigin,\n    uint Created,\n\n    bytes32 EventType,\n\n    bytes1 KeyType,\n    bytes1 ValueType,\n\n    bytes32 Key,\n    bytes32 Value\n  );\n}",
-  "sourcePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/Bases/UnsafeEventStore/UnsafeEventStore.sol",
+  "bytecode":
+    "0x60606040525b5b60008054600160a060020a03191633600160a060020a03161790555b60028054600160a060020a03191632600160a060020a03161790555b5b6104548061004e6000396000f300606060405236156100675763ffffffff60e060020a60003504166302d05d3f811461006f57806335628b381461009e57806341c0e1b5146100f757806371be2e4a1461010c5780638da5cb5b14610131578063e1ba30a914610160578063f2fde38b146101e7575b5b600080fd5b005b341561007a57600080fd5b610082610208565b604051600160a060020a03909116815260200160405180910390f35b34156100a957600080fd5b6100e56004357fff0000000000000000000000000000000000000000000000000000000000000060243581169060443516606435608435610217565b60405190815260200160405180910390f35b341561010257600080fd5b61006d6102df565b005b341561011757600080fd5b6100e56102ef565b60405190815260200160405180910390f35b341561013c57600080fd5b6100826102f6565b604051600160a060020a03909116815260200160405180910390f35b341561016b57600080fd5b610176600435610305565b604051978852600160a060020a03909616602088015260408088019590955260608701939093527fff0000000000000000000000000000000000000000000000000000000000000091821660808701521660a085015260c084015260e0830191909152610100909101905180910390f35b34156101f257600080fd5b61006d600160a060020a03600435166103d3565b005b600254600160a060020a031681565b600073__EventStoreLib_________________________633bb642036001888888888860006040516020015260405160e060020a63ffffffff8916028152600481019690965260248601949094527fff00000000000000000000000000000000000000000000000000000000000000928316604486015291166064840152608483015260a482015260c40160206040518083038186803b15156102b957600080fd5b6102c65a03f415156102ca57600080fd5b50505060405180519150505b95945050505050565b600054600160a060020a0316ff5b565b6001545b90565b600054600160a060020a031681565b60008060008060008060008073__EventStoreLib_________________________63a057fd5e60018b6000604051610100015260405160e060020a63ffffffff8516028152600481019290925260248201526044016101006040518083038186803b151561037257600080fd5b6102c65a03f4151561038357600080fd5b50505060405180519060200180519060200180519060200180519060200180519060200180519060200180519060200180519050975097509750975097509750975097505b919395975091939597565b60005433600160a060020a039081169116141561042257600160a060020a03811615610422576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a72305820aac0e9601f39f3e767d7cfb6da84d926fda7cd8741b567c075204776f0fe2dd30029",
+  "deployedBytecode":
+    "0x606060405236156100675763ffffffff60e060020a60003504166302d05d3f811461006f57806335628b381461009e57806341c0e1b5146100f757806371be2e4a1461010c5780638da5cb5b14610131578063e1ba30a914610160578063f2fde38b146101e7575b5b600080fd5b005b341561007a57600080fd5b610082610208565b604051600160a060020a03909116815260200160405180910390f35b34156100a957600080fd5b6100e56004357fff0000000000000000000000000000000000000000000000000000000000000060243581169060443516606435608435610217565b60405190815260200160405180910390f35b341561010257600080fd5b61006d6102df565b005b341561011757600080fd5b6100e56102ef565b60405190815260200160405180910390f35b341561013c57600080fd5b6100826102f6565b604051600160a060020a03909116815260200160405180910390f35b341561016b57600080fd5b610176600435610305565b604051978852600160a060020a03909616602088015260408088019590955260608701939093527fff0000000000000000000000000000000000000000000000000000000000000091821660808701521660a085015260c084015260e0830191909152610100909101905180910390f35b34156101f257600080fd5b61006d600160a060020a03600435166103d3565b005b600254600160a060020a031681565b600073__EventStoreLib_________________________633bb642036001888888888860006040516020015260405160e060020a63ffffffff8916028152600481019690965260248601949094527fff00000000000000000000000000000000000000000000000000000000000000928316604486015291166064840152608483015260a482015260c40160206040518083038186803b15156102b957600080fd5b6102c65a03f415156102ca57600080fd5b50505060405180519150505b95945050505050565b600054600160a060020a0316ff5b565b6001545b90565b600054600160a060020a031681565b60008060008060008060008073__EventStoreLib_________________________63a057fd5e60018b6000604051610100015260405160e060020a63ffffffff8516028152600481019290925260248201526044016101006040518083038186803b151561037257600080fd5b6102c65a03f4151561038357600080fd5b50505060405180519060200180519060200180519060200180519060200180519060200180519060200180519060200180519050975097509750975097509750975097505b919395975091939597565b60005433600160a060020a039081169116141561042257600160a060020a03811615610422576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a72305820aac0e9601f39f3e767d7cfb6da84d926fda7cd8741b567c075204776f0fe2dd30029",
+  "sourceMap":
+    "113:1193:3:-;;;346:66;243:48:15;268:5;:18;;-1:-1:-1;;;;;;268:18:15;276:10;-1:-1:-1;;;;;268:18:15;;;;243:48;388:7:3;:19;;-1:-1:-1;;;;;;388:19:3;398:9;-1:-1:-1;;;;;388:19:3;;;;346:66;113:1193;;;;;;;",
+  "deployedSourceMap":
+    "113:1193:3:-;;;;;;;-1:-1:-1;;;113:1193:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;291:30;313:5;;;291:30;113:1193;250:22;;;;;;;;;;;;;;;-1:-1:-1;;;;;250:22:3;;;;;;;;;;;;;;;499:364;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;209:46:14;;;;;;;;;;;;;;416:79:3;;;;;;;;;;;;;;;;;;;;;;;;;;;218:20:15;;;;;;;;;;;;;;;-1:-1:-1;;;;;218:20:15;;;;;;;;;;;;;;;883:242:3;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;;;;883:242:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;883:242:3;;;;;;;;;;;;;;;;;;;;;;;;;363:110:15;;;;;;;;;;;;-1:-1:-1;;;;;363:110:15;;;;;250:22:3;;;-1:-1:-1;;;;;250:22:3;;:::o;499:364::-;656:4;735:13;:24;767:5;781:10;800:8;816:10;834:4;846:6;735:123;;;;;;;;;;;-1:-1:-1;;;735:123:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;499:364:3;;;;;;;;:::o;209:46:14:-;244:5;;-1:-1:-1;;;;;244:5:14;231:19;209:46;:::o;416:79:3:-;471:5;:19;416:79;;:::o;218:20:15:-;;;-1:-1:-1;;;;;218:20:15;;:::o;883:242:3:-;950:4;963:7;979:4;992:7;1008:6;1022;1036:7;1051;1080:13;:23;1104:5;1111:8;1080:40;;;;;;;;;;;-1:-1:-1;;;1080:40:3;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1073:47;;;;;;;;;;;;;;;;883:242;;;;;;;;;;:::o;363:110:15:-;340:5;;326:10;-1:-1:-1;;;;;326:19:15;;;340:5;;326:19;322:32;;;-1:-1:-1;;;;;428:22:15;;;424:44;;452:5;:16;;-1:-1:-1;;452:16:15;-1:-1:-1;;;;;452:16:15;;;;;424:44;353:1;322:32;363:110;;:::o",
+  "source":
+    "pragma solidity ^0.4.11;\n\n\nimport \"../../EventStoreLib.sol\";\nimport '../../../zeppelin/lifecycle/Killable.sol';\n\ncontract UnsafeEventStore is Killable {\n  using EventStoreLib for EventStoreLib.EsEventStorage;\n\n  EventStoreLib.EsEventStorage store;\n  address public creator;\n\n  // FALLBACK\n  function () payable { throw; }\n  \n  // CONSTRUCTOR  \n  function UnsafeEventStore() payable {\n    creator = tx.origin;\n  }\n\n  function eventCount() \n  returns (uint)\n  {\n    return store.events.length;\n  }\n\n  function writeEvent(\n    bytes32 _eventType, \n    bytes1 _keyType,\n    bytes1 _valueType,\n    bytes32 _key,\n    bytes32 _value\n  ) \n    public \n    returns (uint)\n  {\n    // Check access control here before writing events...\n    return EventStoreLib.writeEvent(\n      store, \n      _eventType, \n      _keyType,\n      _valueType,\n      _key,\n      _value\n    );\n  }\n\n  // READ EVENT\n  function readEvent(uint _eventId) \n    public \n    returns (\n      uint, \n      address, \n      uint, \n      bytes32, \n      bytes1,\n      bytes1,\n      bytes32,\n      bytes32\n    )\n  {\n    return EventStoreLib.readEvent(store, _eventId);\n  }\n\n  event EsEvent(\n    uint Id,\n    address TxOrigin,\n    uint Created,\n\n    bytes32 EventType,\n\n    bytes1 KeyType,\n    bytes1 ValueType,\n\n    bytes32 Key,\n    bytes32 Value\n  );\n}",
+  "sourcePath":
+    "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/Bases/UnsafeEventStore/UnsafeEventStore.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/Bases/UnsafeEventStore/UnsafeEventStore.sol",
+      "absolutePath":
+        "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/Bases/UnsafeEventStore/UnsafeEventStore.sol",
       "exportedSymbols": {
-        "UnsafeEventStore": [
-          505
-        ]
+        "UnsafeEventStore": [505]
       }
     },
     "children": [
       {
         "attributes": {
-          "literals": [
-            "solidity",
-            "^",
-            "0.4",
-            ".11"
-          ]
+          "literals": ["solidity", "^", "0.4", ".11"]
         },
         "id": 397,
         "name": "PragmaDirective",
@@ -230,12 +230,11 @@
       {
         "attributes": {
           "SourceUnit": 857,
-          "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/EventStoreLib.sol",
+          "absolutePath":
+            "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/EventStore/EventStoreLib.sol",
           "file": "../../EventStoreLib.sol",
           "scope": 506,
-          "symbolAliases": [
-            null
-          ],
+          "symbolAliases": [null],
           "unitAlias": ""
         },
         "id": 398,
@@ -245,12 +244,11 @@
       {
         "attributes": {
           "SourceUnit": 3091,
-          "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/lifecycle/Killable.sol",
+          "absolutePath":
+            "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/lifecycle/Killable.sol",
           "file": "../../../zeppelin/lifecycle/Killable.sol",
           "scope": 506,
-          "symbolAliases": [
-            null
-          ],
+          "symbolAliases": [null],
           "unitAlias": ""
         },
         "id": 399,
@@ -259,27 +257,18 @@
       },
       {
         "attributes": {
-          "contractDependencies": [
-            3090,
-            3131
-          ],
+          "contractDependencies": [3090, 3131],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
-          "linearizedBaseContracts": [
-            505,
-            3090,
-            3131
-          ],
+          "linearizedBaseContracts": [505, 3090, 3131],
           "name": "UnsafeEventStore",
           "scope": 506
         },
         "children": [
           {
             "attributes": {
-              "arguments": [
-                null
-              ]
+              "arguments": [null]
             },
             "children": [
               {
@@ -386,9 +375,7 @@
               "constant": false,
               "implemented": true,
               "isConstructor": false,
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "",
               "payable": true,
               "scope": 505,
@@ -397,9 +384,7 @@
             "children": [
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 409,
@@ -408,9 +393,7 @@
               },
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 410,
@@ -440,9 +423,7 @@
               "constant": false,
               "implemented": true,
               "isConstructor": true,
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "UnsafeEventStore",
               "payable": true,
               "scope": 505,
@@ -451,9 +432,7 @@
             "children": [
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 414,
@@ -462,9 +441,7 @@
               },
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 415,
@@ -489,9 +466,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 408,
                               "type": "address",
                               "value": "creator"
@@ -515,9 +490,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 3135,
                                   "type": "tx",
                                   "value": "tx"
@@ -556,9 +529,7 @@
               "constant": false,
               "implemented": true,
               "isConstructor": false,
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "eventCount",
               "payable": false,
               "scope": 505,
@@ -567,9 +538,7 @@
             "children": [
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 423,
@@ -643,9 +612,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 406,
                                   "type": "struct EventStoreLib.EsEventStorage storage ref",
                                   "value": "store"
@@ -684,9 +651,7 @@
               "constant": false,
               "implemented": true,
               "isConstructor": false,
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "writeEvent",
               "payable": false,
               "scope": 505,
@@ -878,9 +843,7 @@
                           "isPure": false,
                           "isStructConstructorCall": false,
                           "lValueRequested": false,
-                          "names": [
-                            null
-                          ],
+                          "names": [null],
                           "type": "uint256",
                           "type_conversion": false
                         },
@@ -919,15 +882,14 @@
                               "lValueRequested": false,
                               "member_name": "writeEvent",
                               "referencedDeclaration": 789,
-                              "type": "function (struct EventStoreLib.EsEventStorage storage pointer,bytes32,bytes1,bytes1,bytes32,bytes32) returns (uint256)"
+                              "type":
+                                "function (struct EventStoreLib.EsEventStorage storage pointer,bytes32,bytes1,bytes1,bytes32,bytes32) returns (uint256)"
                             },
                             "children": [
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 856,
                                   "type": "type(library EventStoreLib)",
                                   "value": "EventStoreLib"
@@ -944,9 +906,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 406,
                               "type": "struct EventStoreLib.EsEventStorage storage ref",
                               "value": "store"
@@ -958,9 +918,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 434,
                               "type": "bytes32",
                               "value": "_eventType"
@@ -972,9 +930,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 436,
                               "type": "bytes1",
                               "value": "_keyType"
@@ -986,9 +942,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 438,
                               "type": "bytes1",
                               "value": "_valueType"
@@ -1000,9 +954,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 440,
                               "type": "bytes32",
                               "value": "_key"
@@ -1014,9 +966,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 442,
                               "type": "bytes32",
                               "value": "_value"
@@ -1050,9 +1000,7 @@
               "constant": false,
               "implemented": true,
               "isConstructor": false,
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "readEvent",
               "payable": false,
               "scope": 505,
@@ -1322,9 +1270,7 @@
                           "isPure": false,
                           "isStructConstructorCall": false,
                           "lValueRequested": false,
-                          "names": [
-                            null
-                          ],
+                          "names": [null],
                           "type": "tuple(uint256,address,uint256,bytes32,bytes1,bytes1,bytes32,bytes32)",
                           "type_conversion": false
                         },
@@ -1347,15 +1293,14 @@
                               "lValueRequested": false,
                               "member_name": "readEvent",
                               "referencedDeclaration": 837,
-                              "type": "function (struct EventStoreLib.EsEventStorage storage pointer,uint256) returns (uint256,address,uint256,bytes32,bytes1,bytes1,bytes32,bytes32)"
+                              "type":
+                                "function (struct EventStoreLib.EsEventStorage storage pointer,uint256) returns (uint256,address,uint256,bytes32,bytes1,bytes1,bytes32,bytes32)"
                             },
                             "children": [
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 856,
                                   "type": "type(library EventStoreLib)",
                                   "value": "EventStoreLib"
@@ -1372,9 +1317,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 406,
                               "type": "struct EventStoreLib.EsEventStorage storage ref",
                               "value": "store"
@@ -1386,9 +1329,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 460,
                               "type": "uint256",
                               "value": "_eventId"
@@ -1662,61 +1603,6 @@
     "src": "0:1306:3"
   },
   "networks": {
-    "1234": {
-      "events": {
-        "0x34fda208d95da3b89ce2ca6e488201282198f339ef139dd80138a430c8d03a24": {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": false,
-              "name": "Id",
-              "type": "uint256"
-            },
-            {
-              "indexed": false,
-              "name": "TxOrigin",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "name": "Created",
-              "type": "uint256"
-            },
-            {
-              "indexed": false,
-              "name": "EventType",
-              "type": "bytes32"
-            },
-            {
-              "indexed": false,
-              "name": "KeyType",
-              "type": "bytes1"
-            },
-            {
-              "indexed": false,
-              "name": "ValueType",
-              "type": "bytes1"
-            },
-            {
-              "indexed": false,
-              "name": "Key",
-              "type": "bytes32"
-            },
-            {
-              "indexed": false,
-              "name": "Value",
-              "type": "bytes32"
-            }
-          ],
-          "name": "EsEvent",
-          "type": "event"
-        }
-      },
-      "links": {
-        "EventStoreLib": "0xfcbca4a78f057c10efae89389ed0dbd5209d8924"
-      },
-      "address": "0x2a338d355a7bb818630494206826f968ac261ab9"
-    },
     "1506902567943": {
       "events": {
         "0x34fda208d95da3b89ce2ca6e488201282198f339ef139dd80138a430c8d03a24": {
@@ -1768,11 +1654,11 @@
         }
       },
       "links": {
-        "EventStoreLib": "0x2d39b35b950402a0da358ac3bb36badb7ff96f00"
+        "EventStoreLib": "0x9ad8b20e104fdcfcdaac2f7b8f7714ddb74006f2"
       },
-      "address": "0x3ce8ee62a268140114f1538cb16af8d09963d7bb"
+      "address": "0xafc410c437de7ce26a80d44a2e8e80b36bf6e1f7"
     }
   },
   "schemaVersion": "1.0.0",
-  "updatedAt": "2017-10-02T22:04:58.966Z"
+  "updatedAt": "2017-10-04T01:36:49.895Z"
 }

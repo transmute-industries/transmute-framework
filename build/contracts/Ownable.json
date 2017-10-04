@@ -33,30 +33,30 @@
       "type": "constructor"
     }
   ],
-  "bytecode": "0x6060604052341561000f57600080fd5b5b60008054600160a060020a03191633600160a060020a03161790555b5b61011e8061003c6000396000f300606060405263ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b81146046578063f2fde38b146072575b600080fd5b3415605057600080fd5b60566090565b604051600160a060020a03909116815260200160405180910390f35b3415607c57600080fd5b608e600160a060020a0360043516609f565b005b600054600160a060020a031681565b60005433600160a060020a039081169116141560ec57600160a060020a0381161560ec576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a72305820ed938d26a58eda213dfb967544187f594951305565a57e55d3c0e3f1d646b7240029",
-  "deployedBytecode": "0x606060405263ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b81146046578063f2fde38b146072575b600080fd5b3415605057600080fd5b60566090565b604051600160a060020a03909116815260200160405180910390f35b3415607c57600080fd5b608e600160a060020a0360043516609f565b005b600054600160a060020a031681565b60005433600160a060020a039081169116141560ec57600160a060020a0381161560ec576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a72305820ed938d26a58eda213dfb967544187f594951305565a57e55d3c0e3f1d646b7240029",
-  "sourceMap": "197:279:15:-;;;243:48;;;;;;;;;268:5;:18;;-1:-1:-1;;;;;;268:18:15;276:10;-1:-1:-1;;;;;268:18:15;;;;243:48;197:279;;;;;;;",
-  "deployedSourceMap": "197:279:15:-;;;;;;;;;;;;;;;;;;;;;;;218:20;;;;;;;;;;;;;;;-1:-1:-1;;;;;218:20:15;;;;;;;;;;;;;;363:110;;;;;;;;;;-1:-1:-1;;;;;363:110:15;;;;;;;218:20;;;-1:-1:-1;;;;;218:20:15;;:::o;363:110::-;340:5;;326:10;-1:-1:-1;;;;;326:19:15;;;340:5;;326:19;322:32;;;-1:-1:-1;;;;;428:22:15;;;424:44;;452:5;:16;;-1:-1:-1;;452:16:15;-1:-1:-1;;;;;452:16:15;;;;;424:44;353:1;322:32;363:110;;:::o",
-  "source": "pragma solidity ^0.4.11;\n\n\n/*\n * Ownable\n *\n * Base contract with an owner.\n * Provides onlyOwner modifier, which prevents function from running if it is called by anyone other than the owner.\n */\ncontract Ownable {\n  address public owner;\n\n  function Ownable() {\n    owner = msg.sender;\n  }\n\n  modifier onlyOwner() {\n    if (msg.sender == owner)\n      _;\n  }\n\n  function transferOwnership(address newOwner) onlyOwner {\n    if (newOwner != address(0)) owner = newOwner;\n  }\n\n}\n",
-  "sourcePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/ownership/Ownable.sol",
+  "bytecode":
+    "0x6060604052341561000f57600080fd5b5b60008054600160a060020a03191633600160a060020a03161790555b5b61011e8061003c6000396000f300606060405263ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b81146046578063f2fde38b146072575b600080fd5b3415605057600080fd5b60566090565b604051600160a060020a03909116815260200160405180910390f35b3415607c57600080fd5b608e600160a060020a0360043516609f565b005b600054600160a060020a031681565b60005433600160a060020a039081169116141560ec57600160a060020a0381161560ec576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a7230582062cc0f2b925de93a0354d9fa2d308cc55e1d0946163863e331d22d9bdce012310029",
+  "deployedBytecode":
+    "0x606060405263ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416638da5cb5b81146046578063f2fde38b146072575b600080fd5b3415605057600080fd5b60566090565b604051600160a060020a03909116815260200160405180910390f35b3415607c57600080fd5b608e600160a060020a0360043516609f565b005b600054600160a060020a031681565b60005433600160a060020a039081169116141560ec57600160a060020a0381161560ec576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a7230582062cc0f2b925de93a0354d9fa2d308cc55e1d0946163863e331d22d9bdce012310029",
+  "sourceMap":
+    "197:279:15:-;;;243:48;;;;;;;;;268:5;:18;;-1:-1:-1;;;;;;268:18:15;276:10;-1:-1:-1;;;;;268:18:15;;;;243:48;197:279;;;;;;;",
+  "deployedSourceMap":
+    "197:279:15:-;;;;;;;;;;;;;;;;;;;;;;;218:20;;;;;;;;;;;;;;;-1:-1:-1;;;;;218:20:15;;;;;;;;;;;;;;363:110;;;;;;;;;;-1:-1:-1;;;;;363:110:15;;;;;;;218:20;;;-1:-1:-1;;;;;218:20:15;;:::o;363:110::-;340:5;;326:10;-1:-1:-1;;;;;326:19:15;;;340:5;;326:19;322:32;;;-1:-1:-1;;;;;428:22:15;;;424:44;;452:5;:16;;-1:-1:-1;;452:16:15;-1:-1:-1;;;;;452:16:15;;;;;424:44;353:1;322:32;363:110;;:::o",
+  "source":
+    "pragma solidity ^0.4.11;\n\n\n/*\n * Ownable\n *\n * Base contract with an owner.\n * Provides onlyOwner modifier, which prevents function from running if it is called by anyone other than the owner.\n */\ncontract Ownable {\n  address public owner;\n\n  function Ownable() {\n    owner = msg.sender;\n  }\n\n  modifier onlyOwner() {\n    if (msg.sender == owner)\n      _;\n  }\n\n  function transferOwnership(address newOwner) onlyOwner {\n    if (newOwner != address(0)) owner = newOwner;\n  }\n\n}\n",
+  "sourcePath":
+    "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/ownership/Ownable.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/ownership/Ownable.sol",
+      "absolutePath":
+        "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/ownership/Ownable.sol",
       "exportedSymbols": {
-        "Ownable": [
-          3131
-        ]
+        "Ownable": [3131]
       }
     },
     "children": [
       {
         "attributes": {
-          "literals": [
-            "solidity",
-            "^",
-            "0.4",
-            ".11"
-          ]
+          "literals": ["solidity", "^", "0.4", ".11"]
         },
         "id": 3092,
         "name": "PragmaDirective",
@@ -64,18 +64,12 @@
       },
       {
         "attributes": {
-          "baseContracts": [
-            null
-          ],
-          "contractDependencies": [
-            null
-          ],
+          "baseContracts": [null],
+          "contractDependencies": [null],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
-          "linearizedBaseContracts": [
-            3131
-          ],
+          "linearizedBaseContracts": [3131],
           "name": "Ownable",
           "scope": 3132
         },
@@ -111,9 +105,7 @@
               "constant": false,
               "implemented": true,
               "isConstructor": true,
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "Ownable",
               "payable": false,
               "scope": 3131,
@@ -122,9 +114,7 @@
             "children": [
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 3095,
@@ -133,9 +123,7 @@
               },
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 3096,
@@ -160,9 +148,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 3094,
                               "type": "address",
                               "value": "owner"
@@ -186,9 +172,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 3134,
                                   "type": "msg",
                                   "value": "msg"
@@ -230,9 +214,7 @@
             "children": [
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 3104,
@@ -276,9 +258,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 3134,
                                   "type": "msg",
                                   "value": "msg"
@@ -295,9 +275,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 3094,
                               "type": "address",
                               "value": "owner"
@@ -377,9 +355,7 @@
               },
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 3118,
@@ -388,17 +364,13 @@
               },
               {
                 "attributes": {
-                  "arguments": [
-                    null
-                  ]
+                  "arguments": [null]
                 },
                 "children": [
                   {
                     "attributes": {
                       "argumentTypes": null,
-                      "overloadedDeclarations": [
-                        null
-                      ],
+                      "overloadedDeclarations": [null],
                       "referencedDeclaration": 3112,
                       "type": "modifier ()",
                       "value": "onlyOwner"
@@ -437,9 +409,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 3114,
                               "type": "address",
                               "value": "newOwner"
@@ -456,9 +426,7 @@
                               "isPure": true,
                               "isStructConstructorCall": false,
                               "lValueRequested": false,
-                              "names": [
-                                null
-                              ],
+                              "names": [null],
                               "type": "address",
                               "type_conversion": true
                             },
@@ -525,9 +493,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 3094,
                                   "type": "address",
                                   "value": "owner"
@@ -539,9 +505,7 @@
                               {
                                 "attributes": {
                                   "argumentTypes": null,
-                                  "overloadedDeclarations": [
-                                    null
-                                  ],
+                                  "overloadedDeclarations": [null],
                                   "referencedDeclaration": 3114,
                                   "type": "address",
                                   "value": "newOwner"
@@ -586,17 +550,12 @@
     "src": "0:477:15"
   },
   "networks": {
-    "1234": {
-      "events": {},
-      "links": {},
-      "address": "0x10bc6f5d82241ae98b41fd0a7f67f09b86d242e3"
-    },
     "1506902567943": {
       "events": {},
       "links": {},
-      "address": "0x0cdcf59ade0b17567ea979c393735cc484c9d867"
+      "address": "0x68a5164c54b80cb72733a6da150ffbd885fe88a9"
     }
   },
   "schemaVersion": "1.0.0",
-  "updatedAt": "2017-10-02T22:04:58.935Z"
+  "updatedAt": "2017-10-04T01:36:49.857Z"
 }

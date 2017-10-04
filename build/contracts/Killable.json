@@ -36,30 +36,30 @@
       "type": "function"
     }
   ],
-  "bytecode": "0x60606040525b60008054600160a060020a03191633600160a060020a03161790555b5b610158806100316000396000f300606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b581146100535780638da5cb5b14610068578063f2fde38b14610097575b600080fd5b341561005e57600080fd5b6100666100b8565b005b341561007357600080fd5b61007b6100c8565b604051600160a060020a03909116815260200160405180910390f35b34156100a257600080fd5b610066600160a060020a03600435166100d7565b005b600054600160a060020a0316ff5b565b600054600160a060020a031681565b60005433600160a060020a039081169116141561012657600160a060020a03811615610126576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a723058209fa81255b96339522d7bbbe814c51d686ec489a91c407f8efd6bacf7aee56a6d0029",
-  "deployedBytecode": "0x606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b581146100535780638da5cb5b14610068578063f2fde38b14610097575b600080fd5b341561005e57600080fd5b6100666100b8565b005b341561007357600080fd5b61007b6100c8565b604051600160a060020a03909116815260200160405180910390f35b34156100a257600080fd5b610066600160a060020a03600435166100d7565b005b600054600160a060020a0316ff5b565b600054600160a060020a031681565b60005433600160a060020a039081169116141561012657600160a060020a03811615610126576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a723058209fa81255b96339522d7bbbe814c51d686ec489a91c407f8efd6bacf7aee56a6d0029",
-  "sourceMap": "176:81:14:-;;;243:48:15;268:5;:18;;-1:-1:-1;;;;;;268:18:15;276:10;-1:-1:-1;;;;;268:18:15;;;;243:48;176:81:14;;;;;;;",
-  "deployedSourceMap": "176:81:14:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;209:46;;;;;;;;;;;;;;218:20:15;;;;;;;;;;;;;;;-1:-1:-1;;;;;218:20:15;;;;;;;;;;;;;;363:110;;;;;;;;;;-1:-1:-1;;;;;363:110:15;;;;;;;209:46:14;244:5;;-1:-1:-1;;;;;244:5:14;231:19;209:46;:::o;218:20:15:-;;;-1:-1:-1;;;;;218:20:15;;:::o;363:110::-;340:5;;326:10;-1:-1:-1;;;;;326:19:15;;;340:5;;326:19;322:32;;;-1:-1:-1;;;;;428:22:15;;;424:44;;452:5;:16;;-1:-1:-1;;452:16:15;-1:-1:-1;;;;;452:16:15;;;;;424:44;353:1;322:32;363:110;;:::o",
-  "source": "pragma solidity ^0.4.11;\n\nimport \"../ownership/Ownable.sol\";\n\n/*\n * Killable\n * Base contract that can be killed by owner. All funds in contract will be sent to the owner.\n */\ncontract Killable is Ownable {\n  function kill() {\n    selfdestruct(owner);\n  }\n}\n",
-  "sourcePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/lifecycle/Killable.sol",
+  "bytecode":
+    "0x60606040525b60008054600160a060020a03191633600160a060020a03161790555b5b610158806100316000396000f300606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b581146100535780638da5cb5b14610068578063f2fde38b14610097575b600080fd5b341561005e57600080fd5b6100666100b8565b005b341561007357600080fd5b61007b6100c8565b604051600160a060020a03909116815260200160405180910390f35b34156100a257600080fd5b610066600160a060020a03600435166100d7565b005b600054600160a060020a0316ff5b565b600054600160a060020a031681565b60005433600160a060020a039081169116141561012657600160a060020a03811615610126576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a72305820fb82f434da63286bb35dd2668c7d8c331105915f99ccf060dd89d561c670fc290029",
+  "deployedBytecode":
+    "0x606060405263ffffffff7c010000000000000000000000000000000000000000000000000000000060003504166341c0e1b581146100535780638da5cb5b14610068578063f2fde38b14610097575b600080fd5b341561005e57600080fd5b6100666100b8565b005b341561007357600080fd5b61007b6100c8565b604051600160a060020a03909116815260200160405180910390f35b34156100a257600080fd5b610066600160a060020a03600435166100d7565b005b600054600160a060020a0316ff5b565b600054600160a060020a031681565b60005433600160a060020a039081169116141561012657600160a060020a03811615610126576000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b5b5b505600a165627a7a72305820fb82f434da63286bb35dd2668c7d8c331105915f99ccf060dd89d561c670fc290029",
+  "sourceMap":
+    "176:81:14:-;;;243:48:15;268:5;:18;;-1:-1:-1;;;;;;268:18:15;276:10;-1:-1:-1;;;;;268:18:15;;;;243:48;176:81:14;;;;;;;",
+  "deployedSourceMap":
+    "176:81:14:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;209:46;;;;;;;;;;;;;;218:20:15;;;;;;;;;;;;;;;-1:-1:-1;;;;;218:20:15;;;;;;;;;;;;;;363:110;;;;;;;;;;-1:-1:-1;;;;;363:110:15;;;;;;;209:46:14;244:5;;-1:-1:-1;;;;;244:5:14;231:19;209:46;:::o;218:20:15:-;;;-1:-1:-1;;;;;218:20:15;;:::o;363:110::-;340:5;;326:10;-1:-1:-1;;;;;326:19:15;;;340:5;;326:19;322:32;;;-1:-1:-1;;;;;428:22:15;;;424:44;;452:5;:16;;-1:-1:-1;;452:16:15;-1:-1:-1;;;;;452:16:15;;;;;424:44;353:1;322:32;363:110;;:::o",
+  "source":
+    "pragma solidity ^0.4.11;\n\nimport \"../ownership/Ownable.sol\";\n\n/*\n * Killable\n * Base contract that can be killed by owner. All funds in contract will be sent to the owner.\n */\ncontract Killable is Ownable {\n  function kill() {\n    selfdestruct(owner);\n  }\n}\n",
+  "sourcePath":
+    "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/lifecycle/Killable.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/lifecycle/Killable.sol",
+      "absolutePath":
+        "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/lifecycle/Killable.sol",
       "exportedSymbols": {
-        "Killable": [
-          3090
-        ]
+        "Killable": [3090]
       }
     },
     "children": [
       {
         "attributes": {
-          "literals": [
-            "solidity",
-            "^",
-            "0.4",
-            ".11"
-          ]
+          "literals": ["solidity", "^", "0.4", ".11"]
         },
         "id": 3078,
         "name": "PragmaDirective",
@@ -68,12 +68,11 @@
       {
         "attributes": {
           "SourceUnit": 3132,
-          "absolutePath": "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/ownership/Ownable.sol",
+          "absolutePath":
+            "/Users/orie/TransmuteIndustries/_CORE/transmute-framework/contracts/TransmuteFramework/zeppelin/ownership/Ownable.sol",
           "file": "../ownership/Ownable.sol",
           "scope": 3091,
-          "symbolAliases": [
-            null
-          ],
+          "symbolAliases": [null],
           "unitAlias": ""
         },
         "id": 3079,
@@ -82,25 +81,18 @@
       },
       {
         "attributes": {
-          "contractDependencies": [
-            3131
-          ],
+          "contractDependencies": [3131],
           "contractKind": "contract",
           "documentation": null,
           "fullyImplemented": true,
-          "linearizedBaseContracts": [
-            3090,
-            3131
-          ],
+          "linearizedBaseContracts": [3090, 3131],
           "name": "Killable",
           "scope": 3091
         },
         "children": [
           {
             "attributes": {
-              "arguments": [
-                null
-              ]
+              "arguments": [null]
             },
             "children": [
               {
@@ -124,9 +116,7 @@
               "constant": false,
               "implemented": true,
               "isConstructor": false,
-              "modifiers": [
-                null
-              ],
+              "modifiers": [null],
               "name": "kill",
               "payable": false,
               "scope": 3090,
@@ -135,9 +125,7 @@
             "children": [
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 3082,
@@ -146,9 +134,7 @@
               },
               {
                 "attributes": {
-                  "parameters": [
-                    null
-                  ]
+                  "parameters": [null]
                 },
                 "children": [],
                 "id": 3083,
@@ -167,9 +153,7 @@
                           "isPure": false,
                           "isStructConstructorCall": false,
                           "lValueRequested": false,
-                          "names": [
-                            null
-                          ],
+                          "names": [null],
                           "type": "tuple()",
                           "type_conversion": false
                         },
@@ -182,9 +166,7 @@
                                   "typeString": "address"
                                 }
                               ],
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 3138,
                               "type": "function (address)",
                               "value": "selfdestruct"
@@ -196,9 +178,7 @@
                           {
                             "attributes": {
                               "argumentTypes": null,
-                              "overloadedDeclarations": [
-                                null
-                              ],
+                              "overloadedDeclarations": [null],
                               "referencedDeclaration": 3094,
                               "type": "address",
                               "value": "owner"
@@ -238,17 +218,12 @@
     "src": "0:258:14"
   },
   "networks": {
-    "1234": {
-      "events": {},
-      "links": {},
-      "address": "0xcfb956b88ab316b7ebb90a22cba0fee299e28405"
-    },
     "1506902567943": {
       "events": {},
       "links": {},
-      "address": "0x993ab9312edf14039fcb82ab7d7eb4ffcf88509e"
+      "address": "0xa2ba23aee2c805e662447a7d930ae9135c54e31a"
     }
   },
   "schemaVersion": "1.0.0",
-  "updatedAt": "2017-10-02T22:04:58.936Z"
+  "updatedAt": "2017-10-04T01:36:49.857Z"
 }

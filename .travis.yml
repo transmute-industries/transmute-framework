@@ -1,19 +1,10 @@
 language: node_js
-branches:
-  only:
-    - master
-    - /^greenkeeper/.*$/
-cache:
-  yarn: true
-  directories:
-    - node_modules
+node_js: '6'
+cache: yarn
 notifications:
   email: false
-node_js:
-  - node
+# allow this once https://github.com/travis-ci/travis-ci/issues/6933 is fixed
+# install:
+#  - yarn
 script:
-  - npm run test:prod && npm run build
-after_success:
-  - npm run report-coverage
-  - npm run deploy-docs
-  - npm run semantic-release
+  - npm run build

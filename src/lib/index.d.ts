@@ -11,3 +11,5 @@ declare module "web3-provider-engine";
 declare module "web3-provider-engine/*";
 
 declare module "flux-standard-action";
+
+declare module "local-storage-fallback";
