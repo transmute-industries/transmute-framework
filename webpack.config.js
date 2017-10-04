@@ -1,6 +1,6 @@
 const { resolve } = require('path')
 const webpack = require('webpack')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const { getIfUtils, removeEmpty } = require('webpack-config-utils')
 
 const packageJSON = require('./package.json')
