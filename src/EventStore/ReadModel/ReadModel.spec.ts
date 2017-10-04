@@ -10,8 +10,6 @@ import { expect } from 'chai'
 
 import { readModel as factoryReadModel, reducer as factoryReducer } from '../Factory/Reducer'
 
-import { assert } from 'chai'
-
 import * as _ from 'lodash'
 
 describe('ReadModel', () => {
