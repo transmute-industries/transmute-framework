@@ -32,6 +32,10 @@ describe('ReadModel', () => {
     })
 
     it('should return an updated read model when passed a non-empty event array', async () => {
+      let tx = await factory.createEventStore({
+        from: fromAddress,
+        gas: 4000000,
+      })
       let events = await TransmuteFramework.EventStore.readFSAs(factory, fromAddress, 0)
       // console.log(events)
       let updatedReadModel = TransmuteFramework.ReadModel.readModelGenerator(factoryReadModel, factoryReducer, [
