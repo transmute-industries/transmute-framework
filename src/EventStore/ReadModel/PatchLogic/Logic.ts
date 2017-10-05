@@ -1,15 +1,14 @@
-
 export const isHeroBirthday = {
-    "and": [
+  and: [
+    {
+      "==": [
         {
-            "==": [
-                {
-                    "var": "hero.birthday"
-                },
-                {
-                    "var": "date"
-                }
-            ]
+          var: "hero.birthday"
+        },
+        {
+          var: "date"
         }
-    ]
+      ]
+    }
+  ]
 }

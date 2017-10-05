@@ -1,8 +1,9 @@
 const bs58 = require('bs58');
+const web3 = require('web3');
 const util = require('ethereumjs-util');
 
 const toAscii = (value) => {
-    return web3.toAscii(value).replace(/\u0000/g, '')
+    return web3.utils.toAscii(value).replace(/\u0000/g, '')
 }
 
 const isVmException = (e) => {
@@ -70,7 +71,7 @@ const convertValueToType = (_valueType, _value) => {
 const getValueFromType = (type, value) => {
     switch (type) {
         case 'A': return '0x' + value.split('0x000000000000000000000000')[1]
-        case 'U': return web3.toBigNumber(value).toNumber()
+        case 'U': return web3.utils.hexToNumber(value)
         case 'B': return value
         case 'X': return toAscii(value)
         case 'I': return hex2ipfshash(value)

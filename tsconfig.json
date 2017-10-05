@@ -1,29 +1,36 @@
 {
-  "ref": "master",
-  "path": "typings",
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es2015",
     "moduleResolution": "node",
-    "sourceMap": false,
-    "importHelpers": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "diagnostics": false,
-    "removeComments": true,
+    "module": "esnext",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "es2015",
+      "es2016",
+      "es2017"
+    ],
+    "strict": true,
     "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "forceConsistentCasingInFileNames": true,
+    "pretty": true,
+    "jsx": "react",
+    // change this to any hyperscript like function that you're using
+    "jsxFactory": "React.createElement",
+    "sourceMap": true,
+    "outDir": "lib",
     "declaration": true,
-    "noResolve": false,
-    "noEmitHelpers": true,
-    "outDir": "build"
+    "declarationDir": "typings",
+    "stripInternal": true
   },
+  "include": [
+    "./src"
+  ],
   "exclude": [
     "node_modules",
-    "typings/global",
-    "typings/index.d.ts"
+    "**/*.spec.ts"
   ],
-  "files": [
-    "./src/TransmuteFramework.ts",
-    "./src/CLI/index.ts"
-  ]
+  "compileOnSave": false,
+  "buildOnSave": false
 }

@@ -1,9 +1,10 @@
 # Transmute Framework
 
-An ethereum + ipfs dApp framework.
+typescript dapp framework
 
 ```
 $ npm install transmute-framework@latest --save
+$ yarn add transmute-framework@latest
 ```
 
 [![NPM version](https://img.shields.io/npm/v/transmute-framework.svg)](https://www.npmjs.com/package/transmute-framework)
@@ -12,16 +13,16 @@ $ npm install transmute-framework@latest --save
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 
 EventStore provides a simple javascript event based interface to the ethereum blockchain.
-Smart contract developers can annotate their contracts with "is EventStore" and instantly 
+Smart contract developers can annotate their contracts with "is EventStore" and instantly
 unlock awesome state mangement capabilities powered by redux.
 
-ReadModels represent views of the state of your smart contract. For example, a PLC for a 
+ReadModels represent views of the state of your smart contract. For example, a PLC for a
 nuclear facility might have an event stream containg firmware updates, commands, readings, etc...
 These events are reduced into a model which represents state of the controller over time.
 As actions are taken, events are processed and the state of the controller updates.
 
 Persistence provides a caching (and later encryption) layer for storing read models off the chain.
-Reading from the chain is expensive, and unnecessary, because all that is needed to maintain state 
+Reading from the chain is expensive, and unnecessary, because all that is needed to maintain state
 is the read model and any new events.
 
 By storing our read models in a realtime database, such as firebase, we provide a realtime view of
@@ -34,19 +35,17 @@ The end result is a familiar action, reducer, redux interface for your smart con
 
 ### Usage
 ```
-npm install            - install the package and its dependencies
-npm run clean          - clean the project of all build and debug data
-npm run testrpc        - run testrpc
-pm2 logs testrpc       - review testrpc logs
-npm run transmute      - transmute cli
-truffle migrate        - migrate truffle contracts
-truffle test           - test framework truffle contracts
-npm run test           - test framework module (web and nodejs)
-npm run test:cli       - test framework nodejs cli
-npm run build          - build the library
-npm run docs           - build the docs
-npm run docs:deploy    - deploy the docs to 
-npm run patch          - increment the package version and create a tag
+yarn install           - install the package and its dependencies
+yarn cleanup           - clean the project of all build and debug data
+yarn testrpc:start     - start testrpc
+yarn testrpc:stop      - stop testrpc
+yarn truffle:migrate   - migrate truffle contracts
+yarn truffle:test      - run truffle tests
+yarn test              - test framework with jest (not truffle tests)
+yarn build             - build the library
+yarn docs              - build the docs
+yarn docs:deploy       - deploy the docs
+npm version patch      - increment the package version and create a tag
 npm publish            - deploy the package to npm
 pm2 kill               - kill testrpc and any other pm2 processes
 ```
@@ -80,7 +79,7 @@ Our framework supports 3 kinds of payloads: `uint`, `address`, `string`. In addi
 For now, commands look like events, but have different meta data which indicated persistence extensions.
 A typical command from a transmute client will be to save an event which has happened.
 
-## IPLD 
+## IPLD
 
 What is IPLD? - https://ipld.io/
 
@@ -89,7 +88,7 @@ What is IPLD? - https://ipld.io/
 We use IPLD for object payloads. This means that by default any object payload will be converted to IPLD and persisted.
 This data conversion is transparent to the user.
 
-### Contributing 
+### Contributing
 
 Please fork and submit PRs. There are integration tests for truffle and javascript libraries that run in travis.
 If these fail, expect your PR to be rejected ; )
@@ -100,7 +99,7 @@ If these fail, expect your PR to be rejected ; )
 - https://github.com/transmute-industries/eth-faucet
 - https://github.com/AugurProject/augur/blob/master/src/modules/auth/actions/register.js
 - https://airbitz.co/developer-api-library/
-
+- https://github.com/Hotell/typescript-lib-starter
 
 
 

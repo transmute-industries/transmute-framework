@@ -5,7 +5,6 @@
 // import { expect } from 'chai'
 // import { Persistence } from "../Persistence";
 
-
 // let key = 'a-valid-key'
 // let value = {
 //     name: 'a valid value'
@@ -16,7 +15,7 @@
 // describe("Persistence.FireStore", () => {
 
 //     describe(".init", () => {
-//         it("should use transmute-framework firebase by default", () => {
+//         it("should use TransmuteFramework firebase by default", () => {
 //             let db = Persistence.FireStore.init()
 //             firebase.app('[DEFAULT]').delete();
 //         })
@@ -46,5 +45,3 @@
 //         firebase.app('[DEFAULT]').delete();
 //     })
 // })
-
-

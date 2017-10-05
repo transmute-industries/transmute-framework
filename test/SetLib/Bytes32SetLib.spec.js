@@ -2,14 +2,12 @@ var Web3 = require('web3')
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
 var Bytes32SetSpec = artifacts.require('./TransmuteFramework/SetLib/Bytes32Set/Bytes32SetSpec.sol')
 
+const { toAscii } = require('../Common')
 contract('bytes32Set', function(accounts) {
 
   let _bytes32Set;
   let size = 0
 
-  function toAscii(value) {
-    return web3.toAscii(value).replace(/\u0000/g, '')
-  }
 
   before(async function() {
     _bytes32Set = await Bytes32SetSpec.new();
