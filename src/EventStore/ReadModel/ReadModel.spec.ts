@@ -10,12 +10,19 @@ import { readModel as factoryReadModel, reducer as factoryReducer } from '../Fac
 
 import * as _ from 'lodash'
 
+declare var jest: any
+
+let factory
+let accountAddresses
+let account
+let fromAddress
+
 describe('ReadModel', () => {
-  let factory, account_addresses, account, fromAddress
+  jest.setTimeout(20 * 1000)
 
   beforeAll(async () => {
-    account_addresses = await TransmuteFramework.getAccounts()
-    account = account_addresses[0]
+    accountAddresses = await TransmuteFramework.getAccounts()
+    account = accountAddresses[0]
     fromAddress = account
     factory = await EventStoreFactoryContract.deployed()
   })
@@ -24,6 +31,8 @@ describe('ReadModel', () => {
     it('should return the initial read model when passed an empty array', () => {
       // This will usually be overidden by the consumer
       factoryReadModel.contractAddress = factory.address
+      factoryReadModel.readModelStoreKey = `${factoryReadModel.readModelType}:${factoryReadModel.contractAddress}`
+
       let updatedReadModel = TransmuteFramework.ReadModel.readModelGenerator(factoryReadModel, factoryReducer, [])
       expect(_.isEqual(factoryReadModel, updatedReadModel)).toBe(true)
     })
@@ -49,49 +58,63 @@ describe('ReadModel', () => {
     })
   })
 
-  describe('.maybeSyncReadModel', () => {
-    let eventStore
-    let updatedReadModel
-    let lastEvent
-    it('should return the same read model if it is up to date', async () => {
+  // describe('getCachedReadModel', () => {
+  //   it('return returns an update to date read model and reset the cache', async () => {
+  //     let updatedReadModel = await ReadModel.getCachedReadModel(factory, fromAddress, factoryReadModel, factoryReducer)
+  //     // console.log(updatedReadModel)
+  //     // Todo: Add more tests here...
+  //   })
+  // })
+})
+
+describe('.maybeSyncReadModel', () => {
+  let eventStore
+  let updatedReadModel
+  let lastEvent
+
+  it('should throw an error if passed a null readModel', async () => {
+    try {
       let updatedReadModel1 = await TransmuteFramework.ReadModel.maybeSyncReadModel(
         factory,
         fromAddress,
-        factoryReadModel,
+        null,
         factoryReducer
       )
-      let updatedReadModel2 = await TransmuteFramework.ReadModel.maybeSyncReadModel(
-        factory,
-        fromAddress,
-        factoryReadModel,
-        factoryReducer
-      )
-      expect(_.isEqual(updatedReadModel1, updatedReadModel2)).toBe(true)
-    })
-
-    it('should return an updated read model when new events have been saved', async () => {
-      let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(
-        factory,
-        fromAddress,
-        factoryReadModel,
-        factoryReducer
-      )
-      let { tx, events } = await TransmuteFramework.Factory.createEventStore(factory, fromAddress)
-      updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(
-        factory,
-        fromAddress,
-        factoryReadModel,
-        factoryReducer
-      )
-      expect(updatedReadModel.lastEvent).toEqual(events[0].meta.id)
-    })
+    } catch (e) {
+      expect(e.message).toBe('Cannot sync because readModel is broken: null')
+    }
   })
 
-  describe('getCachedReadModel', () => {
-    it('return returns an update to date read model and reset the cache', async () => {
-      let updatedReadModel = await ReadModel.getCachedReadModel(factory, fromAddress, factoryReadModel, factoryReducer)
-      // console.log(updatedReadModel)
-      // Todo: Add more tests here...
-    })
+  it('should return the same read model if it is up to date', async () => {
+    let updatedReadModel1 = await TransmuteFramework.ReadModel.maybeSyncReadModel(
+      factory,
+      fromAddress,
+      factoryReadModel,
+      factoryReducer
+    )
+    let updatedReadModel2 = await TransmuteFramework.ReadModel.maybeSyncReadModel(
+      factory,
+      fromAddress,
+      factoryReadModel,
+      factoryReducer
+    )
+    expect(_.isEqual(updatedReadModel1, updatedReadModel2)).toBe(true)
+  })
+
+  it('should return an updated read model when new events have been saved', async () => {
+    let updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(
+      factory,
+      fromAddress,
+      factoryReadModel,
+      factoryReducer
+    )
+    let { tx, events } = await TransmuteFramework.Factory.createEventStore(factory, fromAddress)
+    updatedReadModel = await TransmuteFramework.ReadModel.maybeSyncReadModel(
+      factory,
+      fromAddress,
+      factoryReadModel,
+      factoryReducer
+    )
+    expect(updatedReadModel.lastEvent).toEqual(events[0].meta.id)
   })
 })

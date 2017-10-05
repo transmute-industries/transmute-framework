@@ -1,8 +1,14 @@
-import storage from "local-storage-fallback";
+let FallbackLocalStorage = require('fallback-local-storage')
+let appStorage
+if (FallbackLocalStorage.getStorage().includes('localStorage')) {
+  appStorage = localStorage
+} else {
+  appStorage = new FallbackLocalStorage()
+}
 
 export namespace LocalStorage {
   // Auto detect supported storage adapter (default behavior)
-  let store = storage;
+  let store = appStorage
 
   /**
      * @param {String} key - a key for a stored object
@@ -10,14 +16,14 @@ export namespace LocalStorage {
      */
   export const getItem = (key: string): Promise<any> => {
     return new Promise((resolve, reject) => {
-      let itemAsString: any = store.getItem(key);
+      let itemAsString: any = store.getItem(key)
       try {
-        resolve(JSON.parse(itemAsString));
+        resolve(JSON.parse(itemAsString))
       } catch (e) {
-        resolve(itemAsString);
+        resolve(itemAsString)
       }
-    });
-  };
+    })
+  }
   /**
      * @param {String} key - a key for a stored object
      * @param {Object} value - the object to be stored
@@ -25,8 +31,8 @@ export namespace LocalStorage {
      */
   export const setItem = (key: string, value: Object): Promise<any> => {
     return new Promise((resolve, reject) => {
-      store.setItem(key, JSON.stringify(value));
-      resolve(value);
-    });
-  };
+      store.setItem(key, JSON.stringify(value))
+      resolve(value)
+    })
+  }
 }

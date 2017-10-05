@@ -2,6 +2,7 @@ import { ITransmuteFramework } from '../../transmute-framework'
 
 import * as Common from '../Utils/Common'
 
+import * as _ from 'lodash'
 export class ReadModel {
   constructor(public framework: ITransmuteFramework) {}
 
@@ -16,10 +17,22 @@ export class ReadModel {
     reducer: any,
     events: Array<Common.IFSAEvent>
   ): Common.IReadModel => {
+    if (!readModel) {
+      throw Error('readModelGenerator was passed a broken readModel!' + JSON.stringify(readModel))
+    }
+    if (!reducer) {
+      throw Error('readModelGenerator was passed a broken reducer!' + JSON.stringify(reducer))
+    }
+    if (!events) {
+      throw Error('readModelGenerator was passed a broken events!' + JSON.stringify(events))
+    }
     events.forEach(event => {
       readModel = reducer(readModel, event)
     })
-    return readModel as Common.IReadModel
+    if (readModel === undefined) {
+      throw Error('the reducer function returned undefined instead of a valid state object.')
+    }
+    return readModel
   }
 
   /**
@@ -35,29 +48,35 @@ export class ReadModel {
     readModel: Common.IReadModel,
     reducer: any
   ): Promise<Common.IReadModel> => {
-    // console.log('called: ')
-    // let d = eventStore
+    if (!readModel) {
+      throw Error('Cannot sync because readModel is broken: ' + JSON.stringify(readModel))
+    }
     let eventCount = (await eventStore.eventCount.call({
       from: fromAddress,
     })).toNumber()
-    // console.log('eventCount: ', eventCount)
+
     return this.framework.Persistence.LocalStore
       .getItem(readModel.readModelStoreKey)
       .then(async (_readModel: Common.IReadModel) => {
         if (!_readModel) {
+          // console.log('This read model has not been stored yet, lets initialize its index values')
           _readModel = readModel
+          _readModel.readModelStoreKey = `${readModel.readModelType}:${readModel.contractAddress}`
         }
         if (_readModel.lastEvent === eventCount) {
-          return readModel
+          _readModel = this.framework.Persistence.LocalStore.setItem(_readModel.readModelStoreKey, _readModel)
+        } else {
+          let startIndex = _readModel.lastEvent !== null ? _readModel.lastEvent + 1 : 0
+          let events = await this.framework.EventStore.readFSAs(eventStore, fromAddress, startIndex)
+
+          _readModel = this.readModelGenerator(_readModel, reducer, events)
+          if (!_readModel) {
+            throw Error('failed to get a read model from the generator!')
+          }
         }
-        // console.log('_readModel: ', _readModel)
-        let startIndex = _readModel.lastEvent !== null ? _readModel.lastEvent + 1 : 0
-        let events = await this.framework.EventStore.readFSAs(eventStore, fromAddress, startIndex)
-        // console.log('events: ', events)
-        let updatedReadModel = this.readModelGenerator(_readModel, reducer, events)
         return this.framework.Persistence.LocalStore.setItem(
-          updatedReadModel.readModelStoreKey,
-          updatedReadModel
+          _readModel.readModelStoreKey,
+          _readModel
         ) as Common.IReadModel
       })
   }

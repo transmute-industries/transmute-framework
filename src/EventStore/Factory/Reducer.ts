@@ -35,4 +35,5 @@ export const reducer = (state = readModel, action) => {
   if (handlers[action.type]) {
     return handlers[action.type](state, action)
   }
+  return state
 }
