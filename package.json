@@ -1,6 +1,6 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.44",
+  "version": "0.1.45",
   "description": "typescript dapp framework",
   "main": "umd/transmute-framework.js",
   "module": "lib/index.js",
@@ -22,7 +22,10 @@
     "truffle",
     "transmute"
   ],
-  "contributors": ["Eric Olszewski <eric@transmute.industries>", "Orie Steele <orie@transmute.industries>"],
+  "contributors": [
+    "Eric Olszewski <eric@transmute.industries>",
+    "Orie Steele <orie@transmute.industries>"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=6.9"
@@ -66,15 +69,26 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": ["npm run prettier:ts -- --write", "git add"]
+    "src/**/*.{ts,tsx}": [
+      "npm run prettier:ts -- --write",
+      "git add"
+    ]
   },
   "jest": {
-    "roots": ["<rootDir>/src"],
+    "roots": [
+      "<rootDir>/src"
+    ],
     "transform": {
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "json", "node"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
     "mapCoverage": true,
     "coveragePathIgnorePatterns": [
       "<rootDir>/node_modules/",
