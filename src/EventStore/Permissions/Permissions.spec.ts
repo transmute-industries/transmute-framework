@@ -29,10 +29,25 @@ describe('Permissions', () => {
 
   describe('.setGrant', () => {
     it('owner can grant admin role create:any eventstore', async () => {
-      let { tx, events } = await Permissions.setGrant(acc, fromAddress, 'admin', 'eventstore', 'create:any', ['*'])
+      let txWithEvents = await Permissions.setGrant(acc, fromAddress, 'admin', 'eventstore', 'create:any', ['*'])
+      // console.log(events)
+      assert.equal(txWithEvents.events[0].type, 'AC_GRANT_WRITTEN', 'expect AC_GRANT_WRITTEN event')
+
+      txWithEvents = await Permissions.setGrant(acc, fromAddress, 'admin', 'eventstore', 'delete:any', ['*'])
+      // console.log(events)
+      assert.equal(txWithEvents.events[0].type, 'AC_GRANT_WRITTEN', 'expect AC_GRANT_WRITTEN event')
+      // TODO: add more tests here...
+    })
+
+    it('owner can grant admin role create:any castle', async () => {
+      let { tx, events } = await Permissions.setGrant(acc, fromAddress, 'admin', 'castle', 'create:any', ['*'])
       // console.log(events)
       assert.equal(events[0].type, 'AC_GRANT_WRITTEN', 'expect AC_GRANT_WRITTEN event')
       // TODO: add more tests here...
+
+      let readModel = await TransmuteFramework.Permissions.getPermissionsReadModel(acc, fromAddress)
+
+      // console.log(readModel)
     })
   })
 

@@ -19,8 +19,8 @@ describe('Factory', () => {
   })
 
   describe('.getFactoryReadModel', () => {
-    jest.setTimeout(16 * 1000)
     it('return the current state of a factory', async () => {
+      jest.setTimeout(20 * 1000)
       let state = await Factory.getFactoryReadModel(factory, fromAddress)
       // console.log(state)
       // Add tests here...

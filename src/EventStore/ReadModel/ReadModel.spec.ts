@@ -4,8 +4,6 @@ import TransmuteFramework from '../../transmute-framework'
 
 const { web3, EventStoreFactoryContract, ReadModel } = TransmuteFramework.init()
 
-import { expect, assert } from 'chai'
-
 // import { EventStoreFactory } from './EventStoreFactory'
 
 import { readModel as factoryReadModel, reducer as factoryReducer } from '../Factory/Reducer'
@@ -23,12 +21,11 @@ describe('ReadModel', () => {
   })
 
   describe('.readModelGenerator', () => {
-    jest.setTimeout(16 * 1000)
     it('should return the initial read model when passed an empty array', () => {
       // This will usually be overidden by the consumer
       factoryReadModel.contractAddress = factory.address
       let updatedReadModel = TransmuteFramework.ReadModel.readModelGenerator(factoryReadModel, factoryReducer, [])
-      assert(_.isEqual(factoryReadModel, updatedReadModel), 'expected no changes from application of empty event array')
+      expect(_.isEqual(factoryReadModel, updatedReadModel)).toBe(true)
     })
 
     it('should return an updated read model when passed a non-empty event array', async () => {
@@ -41,7 +38,7 @@ describe('ReadModel', () => {
       let updatedReadModel = TransmuteFramework.ReadModel.readModelGenerator(factoryReadModel, factoryReducer, [
         events[0],
       ])
-      assert.equal(updatedReadModel.lastEvent, 0, 'expected event 0 to have been applied to the read model')
+      expect(updatedReadModel.lastEvent).toEqual(0)
     })
 
     it('should handle multiple events fine', async () => {
@@ -69,7 +66,7 @@ describe('ReadModel', () => {
         factoryReadModel,
         factoryReducer
       )
-      assert(_.isEqual(updatedReadModel1, updatedReadModel2), 'expected no changes when no new events have been saved')
+      expect(_.isEqual(updatedReadModel1, updatedReadModel2)).toBe(true)
     })
 
     it('should return an updated read model when new events have been saved', async () => {
@@ -86,7 +83,7 @@ describe('ReadModel', () => {
         factoryReadModel,
         factoryReducer
       )
-      assert.equal(updatedReadModel.lastEvent, events[0].meta.id, 'expected 1 more event to have been applied')
+      expect(updatedReadModel.lastEvent).toEqual(events[0].meta.id)
     })
   })
 

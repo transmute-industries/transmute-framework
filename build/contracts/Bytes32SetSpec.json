@@ -275,8 +275,16 @@
       },
       "address": "0x64f5906a7159c97ca9299bc057c6df77dae0a046",
       "updated_at": 1507084295671
+    },
+    "1507162172096": {
+      "events": {},
+      "links": {
+        "Bytes32SetLib": "0x898a6759976ed83f3345e8d35698b03cec473469"
+      },
+      "address": "0x10a1a65e6cb3b12020386aa43c18f6c710a770a9",
+      "updated_at": 1507162181412
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1507084295671
+  "updated_at": 1507162181412
 }

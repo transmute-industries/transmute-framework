@@ -275,8 +275,16 @@
       },
       "address": "0xa979ceab3fd8c6ef7386053d367ea979fa6b3da2",
       "updated_at": 1507084295671
+    },
+    "1507162172096": {
+      "events": {},
+      "links": {
+        "AddressSetLib": "0x21e185c04b0f0f4e56479bfe63addc355c558382"
+      },
+      "address": "0x9a2fbc24611f0011d5399fa65785ce86ab57e1a9",
+      "updated_at": 1507162181412
     }
   },
   "schema_version": "0.0.5",
-  "updated_at": 1507084295671
+  "updated_at": 1507162181412
 }
