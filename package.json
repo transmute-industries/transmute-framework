@@ -1,6 +1,6 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.46",
+  "version": "0.1.47",
   "description": "typescript dapp framework",
   "main": "umd/transmute-framework.js",
   "module": "lib/transmute-framework.js",
