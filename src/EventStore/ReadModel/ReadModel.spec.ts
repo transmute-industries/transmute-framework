@@ -98,7 +98,7 @@ describe('.maybeSyncReadModel', () => {
       factoryReadModel,
       factoryReducer
     )
-    expect(_.isEqual(updatedReadModel1, updatedReadModel2)).toBe(true)
+    expect(updatedReadModel1).toEqual(updatedReadModel2)
   })
 
   it('should return an updated read model when new events have been saved', async () => {
