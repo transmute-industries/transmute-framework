@@ -5,12 +5,11 @@
   "main": "umd/transmute-framework.js",
   "module": "lib/transmute-framework.js",
   "es2015": "lib-esm/transmute-framework.js",
-  "typings": "typings/index.d.ts",
+  "typings": "typings/transmute-framework.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://www.github.com/Hotell/transmute-framework"
+    "url": "https://www.github.com/transmute-industries/transmute-framework"
   },
-  "author": "Martin Hochel",
   "keywords": [
     "solidity",
     "ethereum",
@@ -36,7 +35,7 @@
     "build": " tsc && tsc --target es2017 --outDir lib-esm && webpack && webpack --env.prod",
     "build:fesm:min": "uglifyjs lib-fesm/index.js --compress --mangle --source-map --output lib-fesm/index.min.js",
     "docs": "typedoc -p . --gaID UA-99768185-1  --theme minimal --target 'es6' --excludeNotExported --excludePrivate --ignoreCompilerErrors --exclude \"**/src/**/*.{spec,mock}.*\" --out docs src/ && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html",
-    "docs:deploy": "firebase deploy",
+    "docs:deploy": "firebase deploy --only hosting",
     "ipfs": "npm run ipfs:allow && ipfs daemon",
     "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'",
     "truffle:test": "truffle test",
@@ -57,7 +56,8 @@
     "release:preflight": "irish-pub",
     "release:preflight:package": "npm pack",
     "size": "shx echo \"Gzipped Size:\" && cross-var strip-json-comments --no-whitespace $npm_package_main | gzip-size",
-    "docker:build": "docker build -t transmute/transmute-framework ."
+    "docker:build": "docker build -t transmute/transmute-framework .",
+    "smoke:node": "node ./smoke-test/node.js"
   },
   "config": {
     "commitizen": {
@@ -150,7 +150,7 @@
     "tslint-config-standard": "6.0.1",
     "tslint-react": "3.0.0",
     "typedoc": "0.7.1",
-    "typescript": "2.4.1",
+    "typescript": "2.5.3",
     "validate-commit-msg": "2.12.2",
     "webpack": "3.0.0",
     "webpack-config-utils": "2.3.0"
