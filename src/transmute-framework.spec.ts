@@ -14,12 +14,13 @@ const eventStoreFactoryArtifacts = require('../build/contracts/RBACEventStoreFac
 const bip39 = require('bip39')
 const hdkey = require('ethereumjs-wallet/hdkey')
 
+declare var jest: any
+
 describe('TransmuteFramework', () => {
   describe('.init', () => {
-    it.only('should use testrpc as default web3 provider', async () => {
+    it('should use testrpc as default web3 provider', async () => {
       TransmuteFramework.init()
       // TODO: add tests here...
-
       // console.log(TransmuteFramework.Persistence.store)
     })
     it('should support infura ropsten', async () => {
@@ -59,23 +60,28 @@ describe('TransmuteFramework', () => {
       assert(TransmuteFramework.EventStore.framework.TransmuteIpfs.config.host === 'localhost')
     })
 
-    // it.only('should support firebase config', async () => {
-    //   TransmuteFramework.init({
-    //     providerUrl: 'http://localhost:8545',
-    //     aca: accessControlArtifacts,
-    //     esa: eventStoreArtifacts,
-    //     esfa: eventStoreFactoryArtifacts,
-    //     firebaseConfig: {
-    //       apiKey: 'AIzaSyAz5HkV4suTR49_1Cj40bQYd9Jgiv634qQ',
-    //       authDomain: 'transmute-framework.firebaseapp.com',
-    //       databaseURL: 'https://transmute-framework.firebaseio.com',
-    //       projectId: 'transmute-framework',
-    //       storageBucket: 'transmute-framework.appspot.com',
-    //       messagingSenderId: '191884578641',
-    //     },
-    //   })
-    //   console.log(TransmuteFramework.config.firebaseConfig)
-
-    // })
+    it.only('should support firebase config and use firestore', async () => {
+      jest.setTimeout(30 * 1000)
+      let T = TransmuteFramework.init({
+        providerUrl: 'http://localhost:8545',
+        aca: accessControlArtifacts,
+        esa: eventStoreArtifacts,
+        esfa: eventStoreFactoryArtifacts,
+        firebaseConfig: {
+          apiKey: 'AIzaSyAz5HkV4suTR49_1Cj40bQYd9Jgiv634qQ',
+          authDomain: 'transmute-framework.firebaseapp.com',
+          databaseURL: 'https://transmute-framework.firebaseio.com',
+          projectId: 'transmute-framework',
+          storageBucket: 'transmute-framework.appspot.com',
+          messagingSenderId: '191884578641',
+        },
+      })
+      // console.log(TransmuteFramework.config.firebaseConfig)
+      let factory = await T.EventStoreFactoryContract.deployed()
+      let accountAddresses = await TransmuteFramework.getAccounts()
+      let account = accountAddresses[0]
+      let state = await T.Factory.getFactoryReadModel(factory, account)
+      console.log(state)
+    })
   })
 })

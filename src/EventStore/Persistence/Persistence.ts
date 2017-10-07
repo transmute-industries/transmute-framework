@@ -9,7 +9,8 @@ export default class Persistence {
     if (!framework.firebase) {
       this.store = LocalStore
     } else {
-      this.store = new FireStore(framework.firebase.firestore())
+      let db = framework.firebase.firestore()
+      this.store = new FireStore(db)
     }
   }
 

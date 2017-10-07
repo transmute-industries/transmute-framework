@@ -20,6 +20,10 @@ const WalletSubprovider = require('web3-provider-engine/subproviders/wallet.js')
 const Web3Subprovider = require('web3-provider-engine/subproviders/web3.js')
 
 const firebase = require('firebase')
+// Required for side-effects
+require('firebase/firestore')
+
+const admin = require('firebase-admin')
 
 export interface ITransmuteFrameworkConfig {
   providerUrl: string
@@ -129,9 +133,12 @@ export class TransmuteFramework implements ITransmuteFramework {
       },
     }
 
-    // if (this.config.firebaseConfig) {
-    //   this.firebase = firebase.initializeApp(this.config.firebaseConfig)
-    // }
+    if (this.config.firebaseConfig) {
+      this.firebase = admin.initializeApp({
+        credential: admin.credential.cert(require('../transmute-framework-ae7ad1443e90.json')),
+      })
+      // this.firebase = firebase.initializeApp(this.config.firebaseConfig)
+    }
 
     // This is initialized like so because it can be useful outside framework...
 

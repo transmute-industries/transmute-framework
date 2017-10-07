@@ -107,6 +107,7 @@
     }
   },
   "dependencies": {
+    "@types/lodash": "4.14.77",
     "bip39": "2.4.0",
     "bs58": "4.0.1",
     "chai": "4.1.2",
@@ -116,6 +117,8 @@
     "ethereumjs-util": "5.1.2",
     "ethereumjs-wallet": "0.6.0",
     "fallback-local-storage": "0.0.17",
+    "firebase": "4.5.0",
+    "firebase-admin": "5.4.1",
     "ipfs-api": "14.3.5",
     "ipld-dag-cbor": "0.11.1",
     "jiff": "0.7.3",
