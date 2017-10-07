@@ -98,6 +98,7 @@ describe('.maybeSyncReadModel', () => {
       factoryReadModel,
       factoryReducer
     )
+    // console.log(updatedReadModel2)
     expect(updatedReadModel1).toEqual(updatedReadModel2)
   })
 

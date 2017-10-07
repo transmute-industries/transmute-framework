@@ -4,17 +4,20 @@ import TransmuteFramework from '../../transmute-framework'
 
 const { web3, EventStoreFactoryContract, Factory } = TransmuteFramework.init()
 
-import { expect, assert } from 'chai'
-
 import * as _ from 'lodash'
 
+declare var jest: any
+
 describe('Factory', () => {
-  let factory, account_addresses, account, fromAddress
+  let factory
+  let accountAddresses
+  let account
+  let fromAddress
 
   beforeAll(async () => {
     factory = await EventStoreFactoryContract.deployed()
-    account_addresses = await TransmuteFramework.getAccounts()
-    account = account_addresses[0]
+    accountAddresses = await TransmuteFramework.getAccounts()
+    account = accountAddresses[0]
     fromAddress = account
   })
 
@@ -48,9 +51,9 @@ describe('Factory', () => {
   describe('.setAddressRole', () => {
     it('owner can make account 1 an admin', async () => {
       // console.log(factory.setAddressRole)
-      let { tx, events } = await Factory.setAddressRole(factory, fromAddress, account_addresses[1], 'admin')
-      assert.equal(events[0].type, 'AC_ROLE_ASSIGNED', 'expect AC_ROLE_ASSIGNED event')
-      assert.equal(events[0].payload[account_addresses[1]], 'admin', 'expect account1 to be assigned admin')
+      let { tx, events } = await Factory.setAddressRole(factory, fromAddress, accountAddresses[1], 'admin')
+      expect(events[0].type).toBe('AC_ROLE_ASSIGNED')
+      expect(events[0].payload[accountAddresses[1]]).toBe('admin')
       // TODO: add more tests here...
     })
   })
@@ -60,7 +63,7 @@ describe('Factory', () => {
       // console.log(factory.setAddressRole)
       let { tx, events } = await Factory.setGrant(factory, fromAddress, 'admin', 'eventstore', 'create:any', ['*'])
       // console.log(events)
-      assert.equal(events[0].type, 'AC_GRANT_WRITTEN', 'expect AC_GRANT_WRITTEN event')
+      expect(events[0].type).toBe('AC_GRANT_WRITTEN')
       // TODO: add more tests here...
     })
   })
@@ -70,7 +73,7 @@ describe('Factory', () => {
       // console.log(factory.setAddressRole)
       let granted = await Factory.canRoleActionResource(factory, fromAddress, 'admin', 'create:any', 'eventstore')
       // console.log(granted)
-      assert(granted, 'expect admin can create any event store')
+      expect(granted).toBe(true)
       // assert.equal(events[0].type, 'AC_GRANT_WRITTEN', 'expect AC_GRANT_WRITTEN event')
       // TODO: add more tests here...
     })
