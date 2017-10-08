@@ -60,28 +60,28 @@ describe('TransmuteFramework', () => {
       assert(TransmuteFramework.EventStore.framework.TransmuteIpfs.config.host === 'localhost')
     })
 
-    it('should support firestore node sdk', async () => {
-      jest.setTimeout(30 * 1000)
+    // it('should support firestore node sdk', async () => {
+    //   jest.setTimeout(30 * 1000)
 
-      const admin = require('firebase-admin')
-      admin.initializeApp({
-        credential: admin.credential.cert(require('../transmute-framework-ae7ad1443e90.json')),
-      })
+    //   const admin = require('firebase-admin')
+    //   admin.initializeApp({
+    //     credential: admin.credential.cert(require('../transmute-framework-ae7ad1443e90.json')),
+    //   })
 
-      let T = TransmuteFramework.init({
-        providerUrl: 'http://localhost:8545',
-        aca: accessControlArtifacts,
-        esa: eventStoreArtifacts,
-        esfa: eventStoreFactoryArtifacts,
-        firebaseAdmin: admin,
-      })
-      // console.log(TransmuteFramework.config.firebaseConfig)
-      let factory = await T.EventStoreFactoryContract.deployed()
-      let accountAddresses = await TransmuteFramework.getAccounts()
-      let account = accountAddresses[0]
-      let state = await T.Factory.getFactoryReadModel(factory, account)
-      console.log(state)
-    })
+    //   let T = TransmuteFramework.init({
+    //     providerUrl: 'http://localhost:8545',
+    //     aca: accessControlArtifacts,
+    //     esa: eventStoreArtifacts,
+    //     esfa: eventStoreFactoryArtifacts,
+    //     firebaseAdmin: admin,
+    //   })
+    //   // console.log(TransmuteFramework.config.firebaseConfig)
+    //   let factory = await T.EventStoreFactoryContract.deployed()
+    //   let accountAddresses = await TransmuteFramework.getAccounts()
+    //   let account = accountAddresses[0]
+    //   let state = await T.Factory.getFactoryReadModel(factory, account)
+    //   console.log(state)
+    // })
 
     // Believed to be failing due to jest env differences/
     // it.only('should support firestore web sdk', async () => {

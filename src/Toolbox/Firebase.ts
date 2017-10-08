@@ -1,6 +1,7 @@
 import { ITransmuteFramework } from '../transmute-framework'
 
-import QueryString from 'querystring'
+import * as QueryString from 'querystring'
+
 require('es6-promise').polyfill()
 require('isomorphic-fetch')
 
