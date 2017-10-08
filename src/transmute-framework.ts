@@ -19,12 +19,6 @@ const ProviderEngine = require('web3-provider-engine')
 const WalletSubprovider = require('web3-provider-engine/subproviders/wallet.js')
 const Web3Subprovider = require('web3-provider-engine/subproviders/web3.js')
 
-const firebase = require('firebase')
-// Required for side-effects
-require('firebase/firestore')
-
-const admin = require('firebase-admin')
-
 export interface ITransmuteFrameworkConfig {
   providerUrl: string
   aca: any
@@ -32,7 +26,7 @@ export interface ITransmuteFrameworkConfig {
   esfa: any
   ipfsConfig?: any
   wallet?: any
-  firebaseConfig?: any
+  db?: any
 }
 const config: ITransmuteFrameworkConfig = {
   providerUrl: 'http://localhost:8545',
@@ -55,7 +49,7 @@ export interface ITransmuteFramework {
   ReadModel: any
   Factory: any
 
-  firebase?: any
+  db?: any
 }
 
 declare var window: any
@@ -81,7 +75,7 @@ export class TransmuteFramework implements ITransmuteFramework {
   Factory: any
   PatchLogic: any
 
-  firebase: any
+  db: any
 
   public initWeb3 = (providerUrl: string) => {
     this.engine = new ProviderEngine()
@@ -133,15 +127,11 @@ export class TransmuteFramework implements ITransmuteFramework {
       },
     }
 
-    if (this.config.firebaseConfig) {
-      this.firebase = admin.initializeApp({
-        credential: admin.credential.cert(require('../transmute-framework-ae7ad1443e90.json')),
-      })
-      // this.firebase = firebase.initializeApp(this.config.firebaseConfig)
+    if (this.config.db) {
+      this.db = this.config.db
     }
 
     // This is initialized like so because it can be useful outside framework...
-
     this.TransmuteIpfs = TransmuteIpfs.init(ipfsConfig)
     this.Persistence = new Persistence(this)
     this.Factory = new Factory(this)

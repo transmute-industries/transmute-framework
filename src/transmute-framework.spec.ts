@@ -60,21 +60,23 @@ describe('TransmuteFramework', () => {
       assert(TransmuteFramework.EventStore.framework.TransmuteIpfs.config.host === 'localhost')
     })
 
-    it.only('should support firebase config and use firestore', async () => {
+    it('should support firestore node sdk', async () => {
       jest.setTimeout(30 * 1000)
+
+      const admin = require('firebase-admin')
+
+      admin.initializeApp({
+        credential: admin.credential.cert(require('../transmute-framework-ae7ad1443e90.json')),
+      })
+
+      const db = admin.firestore()
+
       let T = TransmuteFramework.init({
         providerUrl: 'http://localhost:8545',
         aca: accessControlArtifacts,
         esa: eventStoreArtifacts,
         esfa: eventStoreFactoryArtifacts,
-        firebaseConfig: {
-          apiKey: 'AIzaSyAz5HkV4suTR49_1Cj40bQYd9Jgiv634qQ',
-          authDomain: 'transmute-framework.firebaseapp.com',
-          databaseURL: 'https://transmute-framework.firebaseio.com',
-          projectId: 'transmute-framework',
-          storageBucket: 'transmute-framework.appspot.com',
-          messagingSenderId: '191884578641',
-        },
+        db,
       })
       // console.log(TransmuteFramework.config.firebaseConfig)
       let factory = await T.EventStoreFactoryContract.deployed()
@@ -83,5 +85,41 @@ describe('TransmuteFramework', () => {
       let state = await T.Factory.getFactoryReadModel(factory, account)
       console.log(state)
     })
+
+    // Believed to be failing due to jest env differences/
+    // it.only('should support firestore web sdk', async () => {
+    //   jest.setTimeout(30 * 1000)
+
+    //   const firebase = require('firebase')
+    //   // Required for side-effects
+    //   require('firebase/firestore')
+
+    //   firebase.initializeApp({
+    //     apiKey: 'AIzaSyAz5HkV4suTR49_1Cj40bQYd9Jgiv634qQ',
+    //     authDomain: 'transmute-framework.firebaseapp.com',
+    //     databaseURL: 'https://transmute-framework.firebaseio.com',
+    //     projectId: 'transmute-framework',
+    //     storageBucket: 'transmute-framework.appspot.com',
+    //     messagingSenderId: '191884578641',
+    //   })
+
+    //   // Initialize Cloud Firestore through Firebase
+    //   const db = firebase.firestore()
+
+    //   let T = TransmuteFramework.init({
+    //     providerUrl: 'http://localhost:8545',
+    //     aca: accessControlArtifacts,
+    //     esa: eventStoreArtifacts,
+    //     esfa: eventStoreFactoryArtifacts,
+    //     db,
+    //   })
+
+    //   // console.log(TransmuteFramework.config.firebaseConfig)
+    //   let factory = await T.EventStoreFactoryContract.deployed()
+    //   let accountAddresses = await TransmuteFramework.getAccounts()
+    //   let account = accountAddresses[0]
+    //   let state = await T.Factory.getFactoryReadModel(factory, account)
+    //   console.log(state)
+    // })
   })
 })

@@ -6,11 +6,10 @@ import FireStore from './FireStore'
 export default class Persistence {
   store: any
   constructor(public framework: ITransmuteFramework) {
-    if (!framework.firebase) {
+    if (!framework.db) {
       this.store = LocalStore
     } else {
-      let db = framework.firebase.firestore()
-      this.store = new FireStore(db)
+      this.store = new FireStore(this.framework.db)
     }
   }
 

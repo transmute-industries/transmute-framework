@@ -31,7 +31,7 @@ export default class FireStore {
     let parts = key.split(':')
     let collectionType = parts[0]
     let docId = parts[1]
-    // console.log("setting read model");
+    console.log('setting read model')
     if (
       !_.every(
         _.map([value.readModelType, value.contractAddress], value => {
