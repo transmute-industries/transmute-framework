@@ -1,6 +1,6 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.49",
+  "version": "0.1.49-firestore-test",
   "description": "typescript dapp framework",
   "main": "lib/transmute-framework.js",
   "module": "lib/transmute-framework.js",
