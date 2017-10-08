@@ -64,19 +64,16 @@ describe('TransmuteFramework', () => {
       jest.setTimeout(30 * 1000)
 
       const admin = require('firebase-admin')
-
       admin.initializeApp({
         credential: admin.credential.cert(require('../transmute-framework-ae7ad1443e90.json')),
       })
-
-      const db = admin.firestore()
 
       let T = TransmuteFramework.init({
         providerUrl: 'http://localhost:8545',
         aca: accessControlArtifacts,
         esa: eventStoreArtifacts,
         esfa: eventStoreFactoryArtifacts,
-        db,
+        firebaseAdmin: admin,
       })
       // console.log(TransmuteFramework.config.firebaseConfig)
       let factory = await T.EventStoreFactoryContract.deployed()

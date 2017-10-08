@@ -2,10 +2,12 @@ import { EventStore } from './EventStore/EventStore'
 import { ReadModel } from './EventStore/ReadModel/ReadModel'
 import { Factory } from './EventStore/Factory/Factory'
 import Persistence from './EventStore/Persistence/Persistence'
+
 import { PatchLogic } from './EventStore/ReadModel/PatchLogic/PatchLogic'
 import { Permissions, IPermissions } from './EventStore/Permissions/Permissions'
 import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
 import { Toolbox } from './Toolbox/Toolbox'
+import Firebase from './Toolbox/Firebase'
 const Web3 = require('web3')
 const contract = require('truffle-contract')
 
@@ -26,7 +28,8 @@ export interface ITransmuteFrameworkConfig {
   esfa: any
   ipfsConfig?: any
   wallet?: any
-  db?: any
+  firebaseApp?: any
+  firebaseAdmin?: any
 }
 const config: ITransmuteFrameworkConfig = {
   providerUrl: 'http://localhost:8545',
@@ -49,6 +52,10 @@ export interface ITransmuteFramework {
   ReadModel: any
   Factory: any
 
+  Firebase?: any
+
+  firebaseApp?: any
+  firebaseAdmin?: any
   db?: any
 }
 
@@ -75,7 +82,12 @@ export class TransmuteFramework implements ITransmuteFramework {
   Factory: any
   PatchLogic: any
 
-  db: any
+  Firebase?: any
+
+  db?: any
+
+  firebaseApp?: any
+  firebaseAdmin?: any
 
   public initWeb3 = (providerUrl: string) => {
     this.engine = new ProviderEngine()
@@ -127,8 +139,14 @@ export class TransmuteFramework implements ITransmuteFramework {
       },
     }
 
-    if (this.config.db) {
-      this.db = this.config.db
+    if (this.config.firebaseApp) {
+      this.firebaseApp = this.config.firebaseApp
+      this.db = this.firebaseApp.firestore()
+    }
+
+    if (this.config.firebaseAdmin) {
+      this.firebaseAdmin = this.config.firebaseAdmin
+      this.db = this.firebaseAdmin.firestore()
     }
 
     // This is initialized like so because it can be useful outside framework...
@@ -140,6 +158,7 @@ export class TransmuteFramework implements ITransmuteFramework {
     this.PatchLogic = new PatchLogic(this)
     this.Permissions = new Permissions(this)
     this.Toolbox = new Toolbox(this)
+    this.Firebase = new Firebase(this)
   }
 
   getAccounts = (): Promise<string[]> => {
