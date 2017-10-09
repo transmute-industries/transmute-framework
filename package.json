@@ -139,6 +139,8 @@
     "commitizen": "2.9.6",
     "cross-var": "1.0.3",
     "cz-conventional-changelog": "2.0.0",
+    "dotenv": "4.0.0",
+    "firebase-functions": "0.7.0",
     "gzip-size-cli": "2.0.0",
     "husky": "0.14.1",
     "irish-pub": "0.2.0",

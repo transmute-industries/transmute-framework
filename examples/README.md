@@ -76,3 +76,5 @@ What is IPLD? - https://ipld.io/
 
 We use IPLD for object payloads. This means that by default any object payload will be converted to IPLD and persisted.
 This data conversion is transparent to the user.
+
+
