@@ -26,6 +26,7 @@ export interface ITransmuteFrameworkConfig {
   aca: any
   esa: any
   esfa: any
+  TRANSMUTE_API_ROOT: any
   ipfsConfig?: any
   wallet?: any
   firebaseApp?: any
@@ -36,6 +37,7 @@ const config: ITransmuteFrameworkConfig = {
   aca: accessControlArtifacts,
   esa: eventStoreArtifacts,
   esfa: eventStoreFactoryArtifacts,
+  TRANSMUTE_API_ROOT: 'http://localhost:3001'
 }
 
 export interface ITransmuteFramework {
@@ -51,9 +53,7 @@ export interface ITransmuteFramework {
   Persistence: any
   ReadModel: any
   Factory: any
-
   Firebase?: any
-
   firebaseApp?: any
   firebaseAdmin?: any
   db?: any

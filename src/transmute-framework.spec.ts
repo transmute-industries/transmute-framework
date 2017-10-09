@@ -32,6 +32,7 @@ describe('TransmuteFramework', () => {
         aca: accessControlArtifacts,
         esa: eventStoreArtifacts,
         esfa: eventStoreFactoryArtifacts,
+        TRANSMUTE_API_ROOT: 'http://localhost:3001'
       })
       // TODO: add tests here...
     })
