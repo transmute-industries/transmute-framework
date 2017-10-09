@@ -11,3 +11,4 @@
 !contracts/**/*
 !migrations/**/*
 !test/**/*
+!firebaseConfig.json
