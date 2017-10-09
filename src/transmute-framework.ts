@@ -68,6 +68,8 @@ export class TransmuteFramework implements ITransmuteFramework {
   EventStore: any
   config = config
 
+  version: string = require('../package.json').version
+
   engine = new ProviderEngine()
   web3 = new Web3(this.engine)
 

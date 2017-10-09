@@ -3,7 +3,6 @@
 const contract = require('truffle-contract')
 
 import * as _ from 'lodash'
-import { expect, assert, should } from 'chai'
 
 import TransmuteFramework from './transmute-framework'
 
@@ -17,6 +16,10 @@ const hdkey = require('ethereumjs-wallet/hdkey')
 declare var jest: any
 
 describe('TransmuteFramework', () => {
+  it('should have a version', async () => {
+    expect(TransmuteFramework.version).toBe(require('../package.json').version)
+  })
+
   describe('.init', () => {
     it('should use testrpc as default web3 provider', async () => {
       TransmuteFramework.init()
@@ -52,71 +55,12 @@ describe('TransmuteFramework', () => {
 
     it('should use local ipfs as default ', async () => {
       TransmuteFramework.init()
-      assert(TransmuteFramework.TransmuteIpfs.config.host === 'localhost')
+      expect(TransmuteFramework.TransmuteIpfs.config.host === 'localhost').toBe(true)
     })
 
     it('should initialize EventStore with config', async () => {
       TransmuteFramework.init()
-      assert(TransmuteFramework.EventStore.framework.TransmuteIpfs.config.host === 'localhost')
+      expect(TransmuteFramework.EventStore.framework.TransmuteIpfs.config.host === 'localhost').toBe(true)
     })
-
-    // it('should support firestore node sdk', async () => {
-    //   jest.setTimeout(30 * 1000)
-
-    //   const admin = require('firebase-admin')
-    //   admin.initializeApp({
-    //     credential: admin.credential.cert(require('../transmute-framework-ae7ad1443e90.json')),
-    //   })
-
-    //   let T = TransmuteFramework.init({
-    //     providerUrl: 'http://localhost:8545',
-    //     aca: accessControlArtifacts,
-    //     esa: eventStoreArtifacts,
-    //     esfa: eventStoreFactoryArtifacts,
-    //     firebaseAdmin: admin,
-    //   })
-    //   // console.log(TransmuteFramework.config.firebaseConfig)
-    //   let factory = await T.EventStoreFactoryContract.deployed()
-    //   let accountAddresses = await TransmuteFramework.getAccounts()
-    //   let account = accountAddresses[0]
-    //   let state = await T.Factory.getFactoryReadModel(factory, account)
-    //   console.log(state)
-    // })
-
-    // Believed to be failing due to jest env differences/
-    // it.only('should support firestore web sdk', async () => {
-    //   jest.setTimeout(30 * 1000)
-
-    //   const firebase = require('firebase')
-    //   // Required for side-effects
-    //   require('firebase/firestore')
-
-    //   firebase.initializeApp({
-    //     apiKey: 'AIzaSyAz5HkV4suTR49_1Cj40bQYd9Jgiv634qQ',
-    //     authDomain: 'transmute-framework.firebaseapp.com',
-    //     databaseURL: 'https://transmute-framework.firebaseio.com',
-    //     projectId: 'transmute-framework',
-    //     storageBucket: 'transmute-framework.appspot.com',
-    //     messagingSenderId: '191884578641',
-    //   })
-
-    //   // Initialize Cloud Firestore through Firebase
-    //   const db = firebase.firestore()
-
-    //   let T = TransmuteFramework.init({
-    //     providerUrl: 'http://localhost:8545',
-    //     aca: accessControlArtifacts,
-    //     esa: eventStoreArtifacts,
-    //     esfa: eventStoreFactoryArtifacts,
-    //     db,
-    //   })
-
-    //   // console.log(TransmuteFramework.config.firebaseConfig)
-    //   let factory = await T.EventStoreFactoryContract.deployed()
-    //   let accountAddresses = await TransmuteFramework.getAccounts()
-    //   let account = accountAddresses[0]
-    //   let state = await T.Factory.getFactoryReadModel(factory, account)
-    //   console.log(state)
-    // })
   })
 })
