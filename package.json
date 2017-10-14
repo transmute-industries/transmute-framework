@@ -36,7 +36,7 @@
     "build:fesm:min": "uglifyjs lib-fesm/index.js --compress --mangle --source-map --output lib-fesm/index.min.js",
     "docs": "typedoc -p . --gaID UA-99768185-1  --theme minimal --target 'es6' --excludeNotExported --excludePrivate --ignoreCompilerErrors --exclude \"**/src/**/*.{spec,mock}.*\" --out docs src/ && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html",
     "docs:deploy": "firebase deploy --only hosting",
-    "ipfs": "npm run ipfs:allow && ipfs daemon",
+    "ipfs": "ipfs daemon",
     "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'",
     "truffle:test": "truffle test",
     "truffle:migrate": "truffle migrate",
