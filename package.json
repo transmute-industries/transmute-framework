@@ -57,7 +57,8 @@
     "release:preflight:package": "npm pack",
     "size": "shx echo \"Gzipped Size:\" && cross-var strip-json-comments --no-whitespace $npm_package_main | gzip-size",
     "docker:build": "docker build -t transmute/transmute-framework .",
-    "smoke:node": "node ./smoke-test/node.js"
+    "smoke:node": "node ./smoke-test/node.js",
+    "rebuild-dapp": "./examples/rebuild.sh"
   },
   "config": {
     "commitizen": {

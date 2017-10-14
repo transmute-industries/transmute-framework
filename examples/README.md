@@ -16,10 +16,32 @@ Setup from Clone _recommended_.
 transmute setup --reset --from ~/Code/secrets/.transmute/
 ```
 
+### ngrok
+
+In order to test many api integrations, you will need to use ngrok to expose your local functions to the internet.
+
+Example config:
+
+```yml
+authtoken: TOKEN
+tunnels:
+  functions:
+    addr: 3001
+    proto: http
+    hostname: functions.transmute.industries
+
+  testrpc:
+    addr: 8545
+    proto: http
+    hostname: testrpc.transmute.industries
 ```
-transmute init ./examples
-cd ./examples/dapp
-yarn install
-transmute serve
-yarn start
+
+Start ngrok.
+
+```sh
+ngrok start testrpc functions
 ```
+
+Alternatively, edit your environment.secret.env to use localhost, and avoid anything requiring internet callbacks.
+
+See rebuild.sh
