@@ -1,16 +1,15 @@
 {
   "name": "transmute-framework",
-  "version": "0.1.46",
+  "version": "0.1.49-firestore-test.7",
   "description": "typescript dapp framework",
-  "main": "umd/transmute-framework.js",
+  "main": "lib/transmute-framework.js",
   "module": "lib/transmute-framework.js",
   "es2015": "lib-esm/transmute-framework.js",
-  "typings": "typings/index.d.ts",
+  "typings": "typings/transmute-framework.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://www.github.com/Hotell/transmute-framework"
+    "url": "https://www.github.com/transmute-industries/transmute-framework"
   },
-  "author": "Martin Hochel",
   "keywords": [
     "solidity",
     "ethereum",
@@ -36,7 +35,7 @@
     "build": " tsc && tsc --target es2017 --outDir lib-esm && webpack && webpack --env.prod",
     "build:fesm:min": "uglifyjs lib-fesm/index.js --compress --mangle --source-map --output lib-fesm/index.min.js",
     "docs": "typedoc -p . --gaID UA-99768185-1  --theme minimal --target 'es6' --excludeNotExported --excludePrivate --ignoreCompilerErrors --exclude \"**/src/**/*.{spec,mock}.*\" --out docs src/ && /usr/bin/open -a '/Applications/Google Chrome.app' docs/index.html",
-    "docs:deploy": "firebase deploy",
+    "docs:deploy": "firebase deploy --only hosting",
     "ipfs": "npm run ipfs:allow && ipfs daemon",
     "ipfs:allow": "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '[\"http://127.0.0.1:1337\"]'",
     "truffle:test": "truffle test",
@@ -57,7 +56,9 @@
     "release:preflight": "irish-pub",
     "release:preflight:package": "npm pack",
     "size": "shx echo \"Gzipped Size:\" && cross-var strip-json-comments --no-whitespace $npm_package_main | gzip-size",
-    "docker:build": "docker build -t transmute/transmute-framework ."
+    "docker:build": "docker build -t transmute/transmute-framework .",
+    "smoke:node": "node ./smoke-test/node.js",
+    "rebuild-dapp": "./examples/rebuild.sh"
   },
   "config": {
     "commitizen": {
@@ -99,25 +100,31 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 70,
-        "functions": 70,
-        "lines": 70,
-        "statements": 70
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
       }
     }
   },
   "dependencies": {
+    "@types/lodash": "4.14.77",
+    "accesscontrol": "2.0.0",
     "bip39": "2.4.0",
     "bs58": "4.0.1",
     "chai": "4.1.2",
     "coveralls": "3.0.0",
+    "es6-promise": "4.1.1",
     "ethereumjs-testrpc": "4.1.3",
     "ethereumjs-tx": "1.3.3",
     "ethereumjs-util": "5.1.2",
     "ethereumjs-wallet": "0.6.0",
     "fallback-local-storage": "0.0.17",
+    "firebase": "4.5.0",
+    "firebase-admin": "5.4.1",
     "ipfs-api": "14.3.5",
     "ipld-dag-cbor": "0.11.1",
+    "isomorphic-fetch": "2.2.1",
     "jiff": "0.7.3",
     "json-logic-js": "1.2.0",
     "local-storage-fallback": "4.0.0",
@@ -134,6 +141,8 @@
     "commitizen": "2.9.6",
     "cross-var": "1.0.3",
     "cz-conventional-changelog": "2.0.0",
+    "dotenv": "4.0.0",
+    "firebase-functions": "0.7.0",
     "gzip-size-cli": "2.0.0",
     "husky": "0.14.1",
     "irish-pub": "0.2.0",
@@ -150,7 +159,7 @@
     "tslint-config-standard": "6.0.1",
     "tslint-react": "3.0.0",
     "typedoc": "0.7.1",
-    "typescript": "2.4.1",
+    "typescript": "2.5.3",
     "validate-commit-msg": "2.12.2",
     "webpack": "3.0.0",
     "webpack-config-utils": "2.3.0"

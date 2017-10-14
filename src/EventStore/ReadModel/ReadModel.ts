@@ -3,15 +3,16 @@ import { ITransmuteFramework } from '../../transmute-framework'
 import * as Common from '../Utils/Common'
 
 import * as _ from 'lodash'
+
 export class ReadModel {
   constructor(public framework: ITransmuteFramework) {}
 
   /**
-     * @type {Function} readModelGenerator - transform an event stream into a json object
-     * @param {Object} readModel - a json object representing the state of a given model
-     * @param {Function} reducer - a function which reduces events into a read model state object
-     * @param {Object[]} events - events from an eventStore contract
-     */
+   * @type {Function} readModelGenerator - transform an event stream into a json object
+   * @param {Object} readModel - a json object representing the state of a given model
+   * @param {Function} reducer - a function which reduces events into a read model state object
+   * @param {Object[]} events - events from an eventStore contract
+   */
   readModelGenerator = (
     readModel: Common.IReadModel,
     reducer: any,
@@ -36,12 +37,12 @@ export class ReadModel {
   }
 
   /**
-* @type {Function} maybeSyncReadModel - maybe update a json read model if it has new events
-* @param {Contract} eventStore - a contract instance which is an Event Store
-* @param {Object} readModel - a json object representing the state of a given model
-* @param {Function} reducer - a function which reduces events into a read model state object
-* @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
-*/
+  * @type {Function} maybeSyncReadModel - maybe update a json read model if it has new events
+  * @param {Contract} eventStore - a contract instance which is an Event Store
+  * @param {Object} readModel - a json object representing the state of a given model
+  * @param {Function} reducer - a function which reduces events into a read model state object
+  * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
+  */
   maybeSyncReadModel = async (
     eventStore: any,
     fromAddress: string,
@@ -55,7 +56,7 @@ export class ReadModel {
       from: fromAddress,
     })).toNumber()
 
-    return this.framework.Persistence.LocalStore
+    return this.framework.Persistence.store
       .getItem(readModel.readModelStoreKey)
       .then(async (_readModel: Common.IReadModel) => {
         if (!_readModel) {
@@ -64,7 +65,7 @@ export class ReadModel {
           _readModel.readModelStoreKey = `${readModel.readModelType}:${readModel.contractAddress}`
         }
         if (_readModel.lastEvent === eventCount) {
-          _readModel = this.framework.Persistence.LocalStore.setItem(_readModel.readModelStoreKey, _readModel)
+          _readModel = this.framework.Persistence.store.setItem(_readModel.readModelStoreKey, _readModel)
         } else {
           let startIndex = _readModel.lastEvent !== null ? _readModel.lastEvent + 1 : 0
           let events = await this.framework.EventStore.readFSAs(eventStore, fromAddress, startIndex)
@@ -74,10 +75,7 @@ export class ReadModel {
             throw Error('failed to get a read model from the generator!')
           }
         }
-        return this.framework.Persistence.LocalStore.setItem(
-          _readModel.readModelStoreKey,
-          _readModel
-        ) as Common.IReadModel
+        return this.framework.Persistence.store.setItem(_readModel.readModelStoreKey, _readModel) as Common.IReadModel
       })
   }
 
