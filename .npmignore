@@ -11,4 +11,9 @@
 !contracts/**/*
 !migrations/**/*
 !test/**/*
-!firebaseConfig.json
+!firebase-client-config.json
+
+# Be careful not to publish secrets!
+.transmute
+environment.secret.env
+firebase-service-account.json

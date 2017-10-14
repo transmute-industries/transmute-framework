@@ -2,6 +2,8 @@
 
 TypeScript dApp Framework
 
+Very alpha, expect breaking changes...
+
 ```
 $ npm install transmute-framework@latest --save
 $ yarn add transmute-framework@latest
@@ -32,7 +34,6 @@ pm2 kill               - kill testrpc and any other pm2 processes
 ### Contributing
 
 Please fork and submit PRs. There are integration tests for truffle and javascript libraries that run in travis.
-If these fail, expect your PR to be rejected ; )
 
 ### References
 
