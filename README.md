@@ -4,6 +4,9 @@ TypeScript dApp Framework
 
 Very alpha, expect breaking changes...
 
+Requires node: v8.6.0
+
+
 ```
 $ npm install transmute-framework@latest --save
 $ yarn add transmute-framework@latest
