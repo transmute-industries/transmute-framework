@@ -2,7 +2,19 @@
 
 import TransmuteFramework from '../../transmute-framework'
 
-const { web3, EventStoreFactoryContract, ReadModel } = TransmuteFramework.init()
+import { DEVELOPMENT, PRODUCTION } from '../../config/transmute'
+
+let contractArtifacts = {
+  aca: require('../../../build/contracts/RBAC'),
+  esa: require('../../../build/contracts/RBACEventStore'),
+  esfa: require('../../../build/contracts/RBACEventStoreFactory'),
+}
+
+let injectedConfig = Object.assign(DEVELOPMENT, contractArtifacts)
+
+let T = TransmuteFramework.init(injectedConfig)
+
+const { web3, EventStoreFactoryContract, ReadModel } = T
 
 // import { EventStoreFactory } from './EventStoreFactory'
 

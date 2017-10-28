@@ -1,3 +1,10 @@
+const Web3 = require('web3')
+const contract = require('truffle-contract')
+
+const ProviderEngine = require('web3-provider-engine')
+const WalletSubprovider = require('web3-provider-engine/subproviders/wallet.js')
+const Web3Subprovider = require('web3-provider-engine/subproviders/web3.js')
+
 import { EventStore } from './EventStore/EventStore'
 import { ReadModel } from './EventStore/ReadModel/ReadModel'
 import { Factory } from './EventStore/Factory/Factory'
@@ -8,37 +15,6 @@ import { Permissions, IPermissions } from './EventStore/Permissions/Permissions'
 import { TransmuteIpfs, ITransmuteIpfs } from './TransmuteIpfs/TransmuteIpfs'
 import { Toolbox } from './Toolbox/Toolbox'
 import Firebase from './Toolbox/Firebase'
-const Web3 = require('web3')
-const contract = require('truffle-contract')
-
-let web3
-
-const accessControlArtifacts = require('../build/contracts/RBAC')
-const eventStoreArtifacts = require('../build/contracts/RBACEventStore')
-const eventStoreFactoryArtifacts = require('../build/contracts/RBACEventStoreFactory')
-
-const ProviderEngine = require('web3-provider-engine')
-const WalletSubprovider = require('web3-provider-engine/subproviders/wallet.js')
-const Web3Subprovider = require('web3-provider-engine/subproviders/web3.js')
-
-export interface ITransmuteFrameworkConfig {
-  providerUrl: string
-  aca: any
-  esa: any
-  esfa: any
-  TRANSMUTE_API_ROOT: any
-  ipfsConfig?: any
-  wallet?: any
-  firebaseApp?: any
-  firebaseAdmin?: any
-}
-const config: ITransmuteFrameworkConfig = {
-  providerUrl: 'http://localhost:8545',
-  aca: accessControlArtifacts,
-  esa: eventStoreArtifacts,
-  esfa: eventStoreFactoryArtifacts,
-  TRANSMUTE_API_ROOT: 'http://localhost:3001'
-}
 
 export interface ITransmuteFramework {
   AccessControlContract: any
@@ -46,13 +22,15 @@ export interface ITransmuteFramework {
   EventStoreContract: any
   EventStore: any
   Toolbox: any
-  init: (confObj?: any) => any
-  config: any
+  init: (confObj: any) => any
+
   web3: any
   TransmuteIpfs: any
   Persistence: any
   ReadModel: any
   Factory: any
+
+  config?: any
   Firebase?: any
   firebaseApp?: any
   firebaseAdmin?: any
@@ -61,12 +39,15 @@ export interface ITransmuteFramework {
 
 declare var window: any
 
+let web3
+
 export class TransmuteFramework implements ITransmuteFramework {
   AccessControlContract: any
   EventStoreFactoryContract: any
   EventStoreContract: any
   EventStore: any
-  config = config
+
+  config: any
 
   version: string = require('../package.json').version
 
@@ -74,7 +55,6 @@ export class TransmuteFramework implements ITransmuteFramework {
   web3 = new Web3(this.engine)
 
   TransmuteIpfs: ITransmuteIpfs = TransmuteIpfs
-
   Permissions: IPermissions
   Toolbox: Toolbox
 
@@ -103,7 +83,10 @@ export class TransmuteFramework implements ITransmuteFramework {
     this.web3 = web3
   }
 
-  public init = (confObj = config) => {
+  public init = confObj => {
+    if (!confObj) {
+      throw new Error('.init requires a config object: try TransmuteFramework.init(config)')
+    }
     this.config = confObj
     this.initWeb3(this.config.providerUrl)
 

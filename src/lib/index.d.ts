@@ -15,3 +15,5 @@ declare module 'flux-standard-action'
 declare module 'local-storage-fallback'
 
 declare module 'isomorphic-fetch'
+
+declare module 'firebase'

@@ -2,16 +2,24 @@
 
 import TransmuteFramework from '../transmute-framework'
 
-const { web3, Toolbox } = TransmuteFramework.init()
+import { DEVELOPMENT, PRODUCTION } from '../config/transmute'
+
+let contractArtifacts = {
+  aca: require('../../build/contracts/RBAC'),
+  esa: require('../../build/contracts/RBACEventStore'),
+  esfa: require('../../build/contracts/RBACEventStoreFactory'),
+}
+
+let injectedConfig = Object.assign(DEVELOPMENT, contractArtifacts)
+
+let T = TransmuteFramework.init(injectedConfig)
+
+const { web3, Toolbox } = T
 
 import { expect, assert } from 'chai'
 
 import * as _ from 'lodash'
 import * as util from 'ethereumjs-util'
-
-const accessControlArtifacts = require('../../build/contracts/RBAC')
-const eventStoreArtifacts = require('../../build/contracts/RBACEventStore')
-const eventStoreFactoryArtifacts = require('../../build/contracts/RBACEventStoreFactory')
 
 import * as Com from './ECRecover/Common'
 
@@ -60,11 +68,9 @@ describe('Toolbox', () => {
       const mnemonic = 'couch solve unique spirit wine fine occur rhythm foot feature glory away'
       let wallet = Toolbox.getWalletFromMnemonic(defaultMnemonic)
       TransmuteFramework.init({
+        ...T.config,
         providerUrl: 'https://ropsten.infura.io',
         wallet: wallet,
-        aca: accessControlArtifacts,
-        esa: eventStoreArtifacts,
-        esfa: eventStoreFactoryArtifacts,
       })
       let addr = Toolbox.getDefaultAddressFromWallet(wallet)
       let signatureWithMeta = await Toolbox.sign(addr, 'hello')
@@ -73,7 +79,11 @@ describe('Toolbox', () => {
     })
 
     it('when wallet added later...', async () => {
-      TransmuteFramework.init()
+      const { DEVELOPMENT, PRODUCTION } = require('../config/transmute')
+
+      let injectedConfig = Object.assign(DEVELOPMENT, contractArtifacts)
+
+      let T = TransmuteFramework.init(injectedConfig)
 
       const mnemonic = Toolbox.generateMnemonic()
       let wallet = Toolbox.getWalletFromMnemonic(mnemonic)

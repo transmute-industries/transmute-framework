@@ -1,8 +1,22 @@
-const T = require('../lib/transmute-framework').default
+const TransmuteFramework = require('../lib/transmute-framework').default
+const os = require('os')
+const path = require('path')
 
-T.init()
+const firebase = require('firebase')
+require('firebase/firestore')
 
-const test = async () => {
+const DEVELOPMENT = {
+  providerUrl: 'http://localhost:8545',
+  TRANSMUTE_API_ROOT: 'http://localhost:3001',
+}
+
+let contractArtifacts = {
+  aca: require('../build/contracts/RBAC'),
+  esa: require('../build/contracts/RBACEventStore'),
+  esfa: require('../build/contracts/RBACEventStoreFactory'),
+}
+
+const testSignatures = async () => {
   const accounts = await T.getAccounts()
   const address = accounts[0]
   const message = 'hello'
@@ -17,4 +31,14 @@ const test = async () => {
   }
 }
 
-test()
+const testFirebaseLocal = async () => {
+  const firebaseApp = firebase.initializeApp(require(path.join(os.homedir(), '.transmute/firebase-client-config.json')))
+  let injectedConfig = Object.assign(DEVELOPMENT, contractArtifacts, {
+    firebaseApp,
+  })
+  let T = TransmuteFramework.init(injectedConfig)
+  let user = await T.Firebase.login()
+  console.log(user.uid)
+}
+
+testFirebase()

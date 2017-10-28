@@ -1,94 +1,88 @@
-"use strict";
-import * as _ from "lodash";
-import TransmuteFramework from "../transmute-framework";
+'use strict'
+import * as _ from 'lodash'
+import TransmuteFramework from '../transmute-framework'
 
-const {
-  web3,
-  EventStoreContract,
-  EventStoreFactoryContract
-} = TransmuteFramework.init();
+import { DEVELOPMENT, PRODUCTION } from '../config/transmute'
 
-import { assert, expect, should } from "chai";
+let contractArtifacts = {
+  aca: require('../../build/contracts/RBAC'),
+  esa: require('../../build/contracts/RBACEventStore'),
+  esfa: require('../../build/contracts/RBACEventStoreFactory'),
+}
 
-import { fsaCommands } from "./EventStore.mock";
+let injectedConfig = Object.assign(DEVELOPMENT, contractArtifacts)
 
-import {
-  readModel as permissionsReadModel,
-  reducer as permissionsReducer
-} from "./Permissions/Reducer";
+let T = TransmuteFramework.init(injectedConfig)
 
-describe("EventStore", () => {
-  let factory, eventStore, account_addresses, account, fromAddress;
+const { web3, EventStoreContract, EventStoreFactoryContract } = T
+
+import { assert, expect, should } from 'chai'
+
+import { fsaCommands } from './EventStore.mock'
+
+import { readModel as permissionsReadModel, reducer as permissionsReducer } from './Permissions/Reducer'
+
+describe('EventStore', () => {
+  let factory, eventStore, account_addresses, account, fromAddress
 
   beforeAll(async () => {
-    account_addresses = await TransmuteFramework.getAccounts();
-    account = account_addresses[0];
-    fromAddress = account;
-    eventStore = await EventStoreContract.deployed();
-    factory = await EventStoreFactoryContract.deployed();
-  });
+    account_addresses = await TransmuteFramework.getAccounts()
+    account = account_addresses[0]
+    fromAddress = account
+    eventStore = await EventStoreContract.deployed()
+    factory = await EventStoreFactoryContract.deployed()
+  })
 
-  describe("can write IFSACommand and read IFSAEvent", () => {
+  describe('can write IFSACommand and read IFSAEvent', () => {
     fsaCommands.forEach(fsac => {
       describe(fsac.type, async () => {
         let fn = async () => {
-          let eventId;
-          let shouldThrow;
-          beforeEach(() => (shouldThrow = "error" in fsac ? true : false));
+          let eventId
+          let shouldThrow
+          beforeEach(() => (shouldThrow = 'error' in fsac ? true : false))
 
-          it(
-            ".writeFSA " +
-              (fsac["error"] === undefined ? "expected error" : ""),
-            () =>
-              TransmuteFramework.EventStore
-                .writeFSA(eventStore, account, fsac)
-                .then(fsaEvent => {
-                  assert.equal(
-                    fsaEvent.type,
-                    fsac.type,
-                    "expected types to match"
-                  );
-                  eventId = fsaEvent.meta.id;
-                })
-                .catch(error => {
-                  //    console.log(error)
-                  if (!shouldThrow) {
-                    throw error;
-                  }
-                })
-          );
+          it('.writeFSA ' + (fsac['error'] === undefined ? 'expected error' : ''), () =>
+            TransmuteFramework.EventStore
+              .writeFSA(eventStore, account, fsac)
+              .then(fsaEvent => {
+                assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
+                eventId = fsaEvent.meta.id
+              })
+              .catch(error => {
+                //    console.log(error)
+                if (!shouldThrow) {
+                  throw error
+                }
+              })
+          )
 
-          it(".readFSA", () =>
+          it('.readFSA', () =>
             TransmuteFramework.EventStore
               .readFSA(eventStore, account, eventId)
               .then(fsaEvent => {
-                assert.equal(
-                  fsaEvent.type,
-                  fsac.type,
-                  "expected types to match"
-                );
-                eventId = fsaEvent.meta.id;
+                assert.equal(fsaEvent.type, fsac.type, 'expected types to match')
+                eventId = fsaEvent.meta.id
               })
               .catch(error => {
                 if (!shouldThrow) {
-                  throw error;
+                  throw error
                 }
-              }));
-        };
+              }))
+        }
 
         // This should be refactored to catch the specific errors thrown in seperate it's
         try {
-          if (fsac.hasOwnProperty("error")) {
-            await assert.throws(fn);
+          if (fsac.hasOwnProperty('error')) {
+            await assert.throws(fn)
           } else {
-            await fn();
+            await fn()
           }
         } catch (e) {
-          console.log;
+          console.log
         }
-      });
-    });
-  });
+      })
+    })
+  })
 
   // These need to be rewritten....
   //   describe('.readTransmuteEvents', () => {
@@ -114,4 +108,4 @@ describe("EventStore", () => {
   //         // add more tests here...
   //     })
   // })
-});
+})
