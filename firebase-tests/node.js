@@ -2,6 +2,7 @@ const TransmuteFramework = require('../lib/transmute-framework').default
 const os = require('os')
 const path = require('path')
 
+const admin = require('firebase-admin')
 const firebase = require('firebase')
 require('firebase/firestore')
 
@@ -42,7 +43,8 @@ const testFirebaseLocal = async () => {
 }
 
 // https://github.com/transmute-industries/transmute-cli/issues/3
-const testFirestore = async () => {
+// BROKEN
+const testFirestoreLocalClient = async () => {
   const firebaseApp = firebase.initializeApp(require(path.join(os.homedir(), '.transmute/firebase-client-config.json')))
   let injectedConfig = Object.assign(DEVELOPMENT, contractArtifacts, {
     firebaseApp,
@@ -53,14 +55,33 @@ const testFirestore = async () => {
     .collection('token_challenges')
     .get()
     .then(querySnapshot => {
-      console.log(querySnapshot.docs)
-      // querySnapshot.forEach(function(doc) {
-      //   console.log(doc.id, ' => ', doc.data())
-      // })
+      console.log(querySnapshot.docs[0].data())
     })
     .catch(err => {
       console.log(err)
     })
 }
 
-testFirestore()
+// https://github.com/transmute-industries/transmute-cli/issues/3
+// WORKS
+const testFirestoreLocalAdmin = async () => {
+  let serviceAccount = require(path.join(os.homedir(), '.transmute/firebase-service-account.json'))
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  })
+  let injectedConfig = Object.assign(DEVELOPMENT, contractArtifacts, {
+    firebaseAdmin: admin,
+  })
+  let T = TransmuteFramework.init(injectedConfig)
+  return T.db
+    .collection('token_challenges')
+    .get()
+    .then(querySnapshot => {
+      console.log(querySnapshot.docs[0].data())
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+testFirebaseLocal()
