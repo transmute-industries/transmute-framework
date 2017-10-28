@@ -24,5 +24,12 @@ export const PRODUCTION = {
 
 export const DEVELOPMENT = {
   providerUrl: 'http://localhost:8545',
+  ipfsConfig: {
+    host: 'localhost',
+    port: '5001',
+    options: {
+      protocol: 'http',
+    },
+  },
   TRANSMUTE_API_ROOT: 'http://localhost:3001',
 }

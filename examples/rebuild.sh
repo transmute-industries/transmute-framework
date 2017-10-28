@@ -1,4 +1,3 @@
-transmute setup --reset --from ~/Code/secrets/.transmute/
-transmute init ./examples
-cd ./examples/dapp
-yarn install
+transmute init --basic ./examples
+cd ./examples/transmute-dapp
+yarn install && yarn start

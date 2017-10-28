@@ -28,7 +28,7 @@ transmute setup --reset
 # make sure checkout ~/.transmute and update the files there before proceeding.
 
 # create a new dapp
-transmute init .
+transmute init --basic .
 
 # build and run your dapp
 cd dapp

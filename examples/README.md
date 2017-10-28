@@ -7,13 +7,13 @@ Build a Firestore Create React App with Transmute Framework and CLI from scratch
 Setup Manually:
 
 ```
-transmute setup --reset
+transmute setup
 ```
 
 Setup from Clone _recommended_.
 
 ```
-transmute setup --reset --from ~/Code/secrets/.transmute/
+transmute setup --from ~/Code/secrets/.transmute/
 ```
 
 ### ngrok
