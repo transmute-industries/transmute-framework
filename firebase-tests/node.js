@@ -41,4 +41,26 @@ const testFirebaseLocal = async () => {
   console.log(user.uid)
 }
 
-testFirebase()
+// https://github.com/transmute-industries/transmute-cli/issues/3
+const testFirestore = async () => {
+  const firebaseApp = firebase.initializeApp(require(path.join(os.homedir(), '.transmute/firebase-client-config.json')))
+  let injectedConfig = Object.assign(DEVELOPMENT, contractArtifacts, {
+    firebaseApp,
+  })
+  let T = TransmuteFramework.init(injectedConfig)
+
+  return T.db
+    .collection('token_challenges')
+    .get()
+    .then(querySnapshot => {
+      console.log(querySnapshot.docs)
+      // querySnapshot.forEach(function(doc) {
+      //   console.log(doc.id, ' => ', doc.data())
+      // })
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+testFirestore()
