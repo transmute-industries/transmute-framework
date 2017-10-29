@@ -36,18 +36,12 @@ export class ReadModel {
     return readModel
   }
 
-  /**
-  * @type {Function} maybeSyncReadModel - maybe update a json read model if it has new events
-  * @param {Contract} eventStore - a contract instance which is an Event Store
-  * @param {Object} readModel - a json object representing the state of a given model
-  * @param {Function} reducer - a function which reduces events into a read model state object
-  * @return {Promise<ReadModel, Error>} json object representing the state of a ReadModel for an EventStore
-  */
   maybeSyncReadModel = async (
     eventStore: any,
     fromAddress: string,
     readModel: Common.IReadModel,
     reducer: any
+    eventResolverConfig?: Common.IEventResolverConfig
   ): Promise<Common.IReadModel> => {
     if (!readModel) {
       throw Error('Cannot sync because readModel is broken: ' + JSON.stringify(readModel))
@@ -69,6 +63,20 @@ export class ReadModel {
         } else {
           let startIndex = _readModel.lastEvent !== null ? _readModel.lastEvent + 1 : 0
           let events = await this.framework.EventStore.readFSAs(eventStore, fromAddress, startIndex)
+
+          if (eventResolverConfig) {
+            if (eventResolverConfig.filters) {
+              eventResolverConfig.filters.forEach(_filter => {
+                events = _.filter(events, _filter)
+              })
+            }
+            if (eventResolverConfig.mappers) {
+              eventResolverConfig.mappers.forEach(_mapper => {
+                events = events.map(_mapper)
+              })
+              events = await Promise.all(events)
+            }
+          }
 
           _readModel = this.readModelGenerator(_readModel, reducer, events)
           if (!_readModel) {

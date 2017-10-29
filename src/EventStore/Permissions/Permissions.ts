@@ -1,21 +1,13 @@
-import * as _ from "lodash";
+import * as _ from 'lodash'
 
-import { ITransmuteFramework } from "../../transmute-framework";
+import { ITransmuteFramework } from '../../transmute-framework'
 
-import * as Common from "../Utils/Common";
+import * as Common from '../Utils/Common'
 
-import {
-  readModel as permissionsReadModel,
-  reducer as permissionsReducer
-} from "./Reducer";
+import { readModel as permissionsReadModel, reducer as permissionsReducer } from './Reducer'
 
 export interface IPermissions {
-  setAddressRole: (
-    acc: any,
-    fromAddress: string,
-    targetAddress: string,
-    targetRole: string
-  ) => Promise<any>;
+  setAddressRole: (acc: any, fromAddress: string, targetAddress: string, targetRole: string) => Promise<any>
 
   setGrant: (
     acc: any,
@@ -24,9 +16,9 @@ export interface IPermissions {
     resource: string,
     action: string,
     attributes: string[]
-  ) => Promise<any>;
+  ) => Promise<any>
 
-  getGrant: (acc: any, fromAddress: string, index: number) => Promise<any>;
+  getGrant: (acc: any, fromAddress: string, index: number) => Promise<any>
 
   canRoleActionResource: (
     acc: any,
@@ -34,33 +26,25 @@ export interface IPermissions {
     role: string,
     action: string,
     resource: string
-  ) => Promise<boolean>;
+  ) => Promise<boolean>
 
-  getPermissionsReadModel: (
-    acc: any,
-    fromAddress: string
-  ) => Promise<Common.IReadModel>;
+  getPermissionsReadModel: (acc: any, fromAddress: string) => Promise<Common.IReadModel>
 }
 
 export class Permissions implements IPermissions {
   constructor(public framework: ITransmuteFramework) {}
 
-  setAddressRole = async (
-    acc,
-    fromAddress,
-    targetAddress: string,
-    targetRole: string
-  ) => {
+  setAddressRole = async (acc, fromAddress, targetAddress: string, targetRole: string) => {
     let tx = await acc.setAddressRole(targetAddress, targetRole, {
       from: fromAddress,
-      gas: 4000000
-    });
-    let fsa = Common.getFSAFromEventArgs(tx.logs[0].args);
+      gas: 4000000,
+    })
+    let fsa = Common.getFSAFromEventArgs(tx.logs[0].args)
     return {
       events: [fsa],
-      tx: tx
-    };
-  };
+      tx: tx,
+    }
+  }
 
   setGrant = async (
     acc: any,
@@ -72,23 +56,23 @@ export class Permissions implements IPermissions {
   ) => {
     let tx = await acc.setGrant(role, resource, action, attributes, {
       from: fromAddress,
-      gas: 4000000
-    });
+      gas: 4000000,
+    })
     // second event is EsEvent...
-    let fsa = Common.getFSAFromEventArgs(tx.logs[1].args);
+    let fsa = Common.getFSAFromEventArgs(tx.logs[1].args)
     return {
       events: [fsa],
-      tx: tx
-    };
-  };
+      tx: tx,
+    }
+  }
 
   getGrant = async (acc, fromAddress, index: number) => {
     let grantVals = await acc.getGrant.call(index, {
-      from: fromAddress
-    });
-    let grant = Common.grantItemFromValues(grantVals);
-    return grant;
-  };
+      from: fromAddress,
+    })
+    let grant = Common.grantItemFromValues(grantVals)
+    return grant
+  }
 
   canRoleActionResource = async (
     acc: any,
@@ -98,37 +82,37 @@ export class Permissions implements IPermissions {
     resource: string
   ): Promise<boolean> => {
     let vals = await acc.canRoleActionResource.call(role, action, resource, {
-      from: fromAddress
-    });
-    return vals[0];
-  };
+      from: fromAddress,
+    })
+    return vals[0]
+  }
 
-  // NOT OPTIMIZED - WILL BE SLOW
-  // NEED TO IMPLEMENT CACHIN...
+  // This is a nice example of why we built the framework
+  // Here we are reading events from an EventStore on chain, and then reading
+  // a smart contract and augmenting the event with the data in just a few lines.
+  // maybeSyncReadModel is very powerfull function which handles any event sourced object
+  // construction from a stream, and caches in either a document store or locally.
   async getPermissionsReadModel(acc: any, fromAddress: string): Promise<any> {
-    // console.log('getGrants...')
-    let events = await this.framework.EventStore.readFSAs(acc, fromAddress, 0);
-    // console.log(events)
-    events = _.filter(events, (event: Common.IFSAEvent) => {
-      return event.type === "AC_GRANT_WRITTEN";
-    });
-    events = events.map(async event => {
-      event.payload.grant = await this.getGrant(
-        acc,
-        fromAddress,
-        event.payload.index
-      );
-      event.meta.extended = ["grant"];
-      return event;
-    });
-    events = await Promise.all(events);
-    let readModel = this.framework.ReadModel.readModelGenerator(
+    const eventResolverConfig = {
+      filters: [
+        (event: Common.IFSAEvent) => {
+          return event.type === 'AC_GRANT_WRITTEN'
+        },
+      ],
+      mappers: [
+        async event => {
+          event.payload.grant = await this.getGrant(acc, fromAddress, event.payload.index)
+          event.meta.extended = ['grant']
+          return event
+        },
+      ],
+    }
+    return this.framework.ReadModel.maybeSyncReadModel(
+      acc,
+      fromAddress,
       permissionsReadModel,
       permissionsReducer,
-      events
-    );
-    readModel.contractAddress = acc.address;
-    readModel.readModelStoreKey = `${readModel.readModelType}:${readModel.contractAddress}`;
-    return readModel;
+      eventResolverConfig
+    )
   }
 }

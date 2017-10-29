@@ -16,25 +16,29 @@ let T = TransmuteFramework.init(injectedConfig)
 
 const { web3, AccessControlContract, Permissions } = T
 
-import { assert, expect, should } from 'chai'
+declare var jest: any
 
 describe('Permissions', () => {
   let acc
 
-  let factory, account_addresses, account, fromAddress
+  let factory
+  let accountAddresses
+  let account
+  let fromAddress
+
   jest.setTimeout(16 * 1000)
   beforeAll(async () => {
-    account_addresses = await TransmuteFramework.getAccounts()
-    account = account_addresses[0]
+    accountAddresses = await TransmuteFramework.getAccounts()
+    account = accountAddresses[0]
     fromAddress = account
     acc = await AccessControlContract.deployed()
   })
 
   describe('.setAddressRole', () => {
     it('owner can make account 1 an admin', async () => {
-      let { tx, events } = await Permissions.setAddressRole(acc, fromAddress, account_addresses[1], 'admin')
-      assert.equal(events[0].type, 'AC_ROLE_ASSIGNED', 'expect AC_ROLE_ASSIGNED event')
-      assert.equal(events[0].payload[account_addresses[1]], 'admin', 'expect account1 to be assigned admin')
+      let { tx, events } = await Permissions.setAddressRole(acc, fromAddress, accountAddresses[1], 'admin')
+      expect(events[0].type === 'AC_ROLE_ASSIGNED')
+      expect(events[0].payload[accountAddresses[1]] === 'admin')
       // TODO: add more tests here...
     })
   })
@@ -43,22 +47,19 @@ describe('Permissions', () => {
     it('owner can grant admin role create:any eventstore', async () => {
       let txWithEvents = await Permissions.setGrant(acc, fromAddress, 'admin', 'eventstore', 'create:any', ['*'])
       // console.log(events)
-      assert.equal(txWithEvents.events[0].type, 'AC_GRANT_WRITTEN', 'expect AC_GRANT_WRITTEN event')
-
+      expect(txWithEvents.events[0].type === 'AC_GRANT_WRITTEN')
       txWithEvents = await Permissions.setGrant(acc, fromAddress, 'admin', 'eventstore', 'delete:any', ['*'])
       // console.log(events)
-      assert.equal(txWithEvents.events[0].type, 'AC_GRANT_WRITTEN', 'expect AC_GRANT_WRITTEN event')
+      expect(txWithEvents.events[0].type === 'AC_GRANT_WRITTEN')
       // TODO: add more tests here...
     })
 
     it('owner can grant admin role create:any castle', async () => {
       let { tx, events } = await Permissions.setGrant(acc, fromAddress, 'admin', 'castle', 'create:any', ['*'])
       // console.log(events)
-      assert.equal(events[0].type, 'AC_GRANT_WRITTEN', 'expect AC_GRANT_WRITTEN event')
+      expect(events[0].type === 'AC_GRANT_WRITTEN')
       // TODO: add more tests here...
-
       let readModel = await TransmuteFramework.Permissions.getPermissionsReadModel(acc, fromAddress)
-
       // console.log(readModel)
     })
   })
@@ -75,7 +76,7 @@ describe('Permissions', () => {
     it('owner can check if role is granted action on resource', async () => {
       let granted = await Permissions.canRoleActionResource(acc, fromAddress, 'admin', 'create:any', 'eventstore')
       // console.log(granted)
-      assert(granted, 'expect admin can create any event store')
+      expect(granted)
       // TODO: add more tests here...
     })
   })
